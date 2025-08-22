@@ -31,6 +31,54 @@
 
   perClientInstance = cfgF:
     lib.mkMerge (lib.mapAttrsToList (_: instance: cfgF instance) config.nixcraft.client.instances);
+
+  perServerInstance = cfgF:
+    lib.mkMerge (lib.mapAttrsToList (_: instance: cfgF instance) config.nixcraft.server.instances);
+
+  # TODO: generalize this / reduce code duplication
+  # placing files set to dirFiles using home.file
+  placeFilesFromDirFiles = dirFiles: instanceDirInHome: {
+    file = lib.mapAttrs' (fileName: fileAttr: let
+      # NOTE: Some files need to be mutable. Unfortunately, home manager does not provide
+      # a clean way to do that.
+      # The strategy is to place the alternate path using home.file and then use its
+      # onChange directive to place the actual file as a rewritable copy
+      placePath = fileAttr.target;
+
+      # Get the dir and the file name so that we can place a renamed version of the file
+      placePathDir = builtins.dirOf placePath;
+      placePathFile = builtins.baseNameOf placePath;
+
+      placePathAlt = "${placePathDir}/.hm-placed.${placePathFile}";
+
+      # Create version of each path with home prefix
+      placePath'home = "${config.home.homeDirectory}/${instanceDirInHome}/${placePath}";
+      placePathAlt'home = "${config.home.homeDirectory}/${instanceDirInHome}/${placePathAlt}";
+    in
+      if fileAttr.mutable
+      then {
+        name = builtins.unsafeDiscardStringContext "${instanceDirInHome}/${placePathAlt}";
+        value = {
+          enable = fileAttr.enable;
+          source = fileAttr.source;
+          onChange = ''
+            if [ ! -f "${placePath'home}" ]; then
+              # rm -f "${placePath'home}"
+              cp "${placePathAlt'home}" "${placePath'home}"
+              chmod u+w "${placePath'home}"
+            fi
+          '';
+        };
+      }
+      else {
+        name = builtins.unsafeDiscardStringContext "${instanceDirInHome}/${placePath}";
+        value = {
+          enable = fileAttr.enable;
+          source = fileAttr.source;
+        };
+      })
+    dirFiles;
+  };
 in {
   options = {
     nixcraft = lib.mkOption {
@@ -77,49 +125,34 @@ in {
                 };
               })
 
-              # placing files set to dirFiles using home.file
+              (placeFilesFromDirFiles instance.settings.dirFiles instanceDirInHome)
+            ]);
+        }
+
+        # Managing server
+        {
+          home = perServerInstance (instance: let
+            instanceDirInHome = ".local/share/nixcraft/server/instances/${instance.settings.name}";
+            absoluteDirPath = "${config.home.homeDirectory}/${instanceDirInHome}";
+          in
+            lib.mkMerge [
+              # Place run file at instances/<name>/run which can be executed
               {
-                file = lib.mapAttrs' (fileName: fileAttr: let
-                  # NOTE: Some files need to be mutable. Unfortunately, home manager does not provide
-                  # a clean way to do that.
-                  # The strategy is to place the alternate path using home.file and then use its
-                  # onChange directive to place the actual file as a rewritable copy
-                  placePath = fileAttr.target;
+                file."${instanceDirInHome}/run" = {
+                  executable = true;
+                  text = ''
+                    #!${pkgs.bash}/bin/bash
 
-                  # Get the dir and the file name so that we can place a renamed version of the file
-                  placePathDir = builtins.dirOf placePath;
-                  placePathFile = builtins.baseNameOf placePath;
+                    ${lib.nixcraft.mkExportedEnvVars instance.settings.envVars}
 
-                  placePathAlt = "${placePathDir}/.hm-placed.${placePathFile}";
+                    cd "${absoluteDirPath}"
 
-                  # Create version of each path with home prefix
-                  placePath'home = "${config.home.homeDirectory}/${instanceDirInHome}/${placePath}";
-                  placePathAlt'home = "${config.home.homeDirectory}/${instanceDirInHome}/${placePathAlt}";
-                in
-                  if fileAttr.mutable
-                  then {
-                    name = builtins.unsafeDiscardStringContext "${instanceDirInHome}/${placePathAlt}";
-                    value = {
-                      enable = fileAttr.enable;
-                      source = fileAttr.source;
-                      onChange = ''
-                        if [ ! -f "${placePath'home}" ]; then
-                          # rm -f "${placePath'home}"
-                          cp "${placePathAlt'home}" "${placePath'home}"
-                          chmod u+w "${placePath'home}"
-                        fi
-                      '';
-                    };
-                  }
-                  else {
-                    name = builtins.unsafeDiscardStringContext "${instanceDirInHome}/${placePath}";
-                    value = {
-                      enable = fileAttr.enable;
-                      source = fileAttr.source;
-                    };
-                  })
-                instance.settings.dirFiles;
+                    exec "${instance.settings.java.package}/bin/java" ${instance.settings.java.finalArgumentShellString} ${instance._mainClass} ${instance.finalArgumentShellString} "$@"
+                  '';
+                };
               }
+
+              (placeFilesFromDirFiles instance.settings.dirFiles instanceDirInHome)
             ]);
         }
       ]

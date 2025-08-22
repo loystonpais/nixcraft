@@ -16,6 +16,10 @@ in
         unzip "${src}" -d $out
         find $out -type d -exec chmod 755 {} \;
         find $out -type f -exec chmod 644 {} \;
+
+        mkdir -p $out/overrides
+        mkdir -p $out/client-overrides
+        mkdir -p $out/server-overrides
       '';
 
     index = readJSON "${unpacked}/modrinth.index.json";

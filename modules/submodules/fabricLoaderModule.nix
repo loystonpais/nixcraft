@@ -8,6 +8,8 @@
   ...
 }: {
   options = {
+    enable = lib.mkEnableOption "fabric loader";
+
     version = lib.mkOption {
       type = lib.types.str;
     };
@@ -32,7 +34,7 @@
         loaderVersion = config.version;
         client = config._instanceType == "client";
         server = config._instanceType == "server";
-        sha256Hash = config.hash;
+        hash = config.hash;
       };
     };
 
@@ -41,7 +43,12 @@
       readOnly = true;
       default = {
         clientMainClass = "net.fabricmc.loader.impl.launch.knot.KnotClient";
+        serverMainClass = "net.fabricmc.loader.impl.launch.knot.KnotServer";
       };
     };
+  };
+
+  config = {
+    hash = lib.mkOptionDefault lib.fakeHash;
   };
 }

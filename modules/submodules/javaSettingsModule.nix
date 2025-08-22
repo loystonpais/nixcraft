@@ -53,8 +53,8 @@
 
   config = lib.mkMerge [
     (lib.mkIf (config.memory != null) {
-      maxMemory = lib.mkOptionDefault config.memory;
-      minMemory = lib.mkOptionDefault config.memory;
+      maxMemory = config.memory;
+      minMemory = config.memory;
     })
 
     {

@@ -25,12 +25,12 @@
 
   placeNativeLibs =
     concatMapStringsSep "\n" (nativeLibrary: ''
-      mkdir -p $out
       unzip ${nativeLibrary} -d $out && rm -rf $out/META-INF
     '')
     nativeLibrariesZippedList;
 
   script = ''
+    mkdir -p $out
     ${placeNativeLibs}
   '';
 in

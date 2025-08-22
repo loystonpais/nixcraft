@@ -9,7 +9,12 @@ Example home manager configuration (might break)
   lib,
   inputs,
   ...
-}: {
+}: let
+  simply-optimized-mrpack = pkgs.fetchurl {
+    url = "https://cdn.modrinth.com/data/BYfVnHa7/versions/vZZwrcPm/Simply%20Optimized-1.21.1-5.0.mrpack";
+    hash = "sha256-n2BxHMmqpOEMsvDqRRYFfamcDCCT4ophUw7QAJQqXmg=";
+  };
+in {
   imports = [
     inputs.nixcraft.homeModules.default
   ];
@@ -18,8 +23,44 @@ Example home manager configuration (might break)
     nixcraft = {
       enable = true;
 
+      server = {
+        instances = {
+          smp = {
+            enable = true;
+
+            settings.version = "1.21.1";
+
+            agreeToEula = true;
+
+            settings.fabricLoader = {
+              enable = true;
+              version = "0.17.2";
+              hash = "sha256-hCQBYgdxfBqskQ100Ae0xfCbAZB2xkCxdKyImpkiB4U=";
+            };
+          };
+        };
+
+        instances = {
+          simop = {
+            enable = true;
+            settings.mrpack.file = simply-optimized-mrpack;
+            agreeToEula = true;
+            settings.java.memory = 2000;
+            settings.fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg";
+          };
+        };
+      };
+
       client = {
         instances = {
+          simop = {
+            enable = true;
+
+            settings.mrpack.file = simply-optimized-mrpack;
+
+            settings.fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg=";
+          };
+
           fsg = {
             enable = true;
 

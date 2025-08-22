@@ -101,37 +101,27 @@ in
             };
           };
       };
-
-      meta = {
-        versionData = lib.mkOption {
-          type = lib.types.attrs;
-          readOnly = true;
-          default =
-            lib.nixcraft.readJSON
-            (fetchSha1 sources."normalized-manifest.nix".versions.${config.settings.version.value});
-        };
-      };
     };
 
     config = lib.mkMerge [
       {
         # Settings stuff that the user usually doesn't need to alter
         _classSettings = {
-          mainClass = lib.mkDefault config.meta.versionData.mainClass;
-          version = config.meta.versionData.id;
-          assetIndex = config.meta.versionData.assets;
-          assetsDir = mkAssetsDir {versionData = config.meta.versionData;};
+          mainClass = lib.mkDefault config.settings.meta.versionData.mainClass;
+          version = config.settings.meta.versionData.id;
+          assetIndex = config.settings.meta.versionData.assets;
+          assetsDir = mkAssetsDir {versionData = config.settings.meta.versionData;};
 
           # TODO: fix this. not sure how to set this
           gameDir = lib.mkDefault null;
         };
 
         # List and assign jar files from generated lib dir
-        settings.java.cp = listJarFilesRecursive (mkLibDir {versionData = config.meta.versionData;});
+        settings.java.cp = listJarFilesRecursive (mkLibDir {versionData = config.settings.meta.versionData;});
 
         # Pass native libraries
         # TODO: in javaSettingsModule try to implement this as an actual option
-        settings.java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.meta.versionData;}}"];
+        settings.java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.settings.meta.versionData;}}"];
 
         settings.libs = with pkgs; [
           openal
@@ -152,12 +142,7 @@ in
         # Set the instance name from attr
         settings.name = lib.mkOptionDefault name;
 
-        # Set the default java package for client instances
-        # TODO: Fix this stupidity
-        settings.java.package = lib.mkOptionDefault (pkgs."jdk${toString config.meta.versionData.javaVersion.majorVersion}");
-
         # inform generic settings module the instance type
-        # this is required for
         settings._instanceType = "client";
 
         # set waywall stuff
@@ -182,7 +167,7 @@ in
       })
 
       # Set values from fabricLoader
-      (lib.mkIf (config.settings.fabricLoader != null) {
+      (lib.mkIf (config.settings.fabricLoader.enable) {
         _classSettings.mainClass = config.settings.fabricLoader.meta.clientMainClass;
       })
 

@@ -6,6 +6,8 @@
   mrpackModule,
   javaSettingsModule,
   fileModule,
+  fetchSha1,
+  sources,
   ...
 }: let
   inherit (lib.filesystem) listFilesRecursive;
@@ -26,8 +28,7 @@ in
       };
 
       fabricLoader = lib.mkOption {
-        type = with lib.types; nullOr (submodule fabricLoaderModule);
-        default = null;
+        type = with lib.types; (submodule fabricLoaderModule);
       };
 
       forgeLoader = lib.mkOption {
@@ -63,36 +64,75 @@ in
         type = lib.types.listOf lib.types.path;
         default = [];
       };
+
+      meta = {
+        versionData = lib.mkOption {
+          type = lib.types.attrs;
+          readOnly = true;
+          default =
+            lib.nixcraft.readJSON
+            (fetchSha1 sources."normalized-manifest.nix".versions.${config.version.value});
+        };
+      };
     };
 
     config = lib.mkMerge [
+      # Set default options
+      # TODO: set more default options
+      {
+        fabricLoader.minecraftVersion = lib.mkOptionDefault config.version.value;
+      }
+
       # Set values from mrpack
+      # TODO: make mrpack non-nullable
       (lib.mkIf (config.mrpack != null) {
-        fabricLoader.version = lib.mkOptionDefault config.mrpack.fabricLoaderVersion;
-        fabricLoader.minecraftVersion = lib.mkOptionDefault config.mrpack.minecraftVersion;
-        version = lib.mkOptionDefault config.mrpack.minecraftVersion;
+        # Settings up fabricloader
+        fabricLoader.enable = config.mrpack._parsedMrpack.fabricLoaderVersion != null;
+        fabricLoader.version = config.mrpack.fabricLoaderVersion;
+        fabricLoader.minecraftVersion = config.mrpack.minecraftVersion;
+
+        version = config.mrpack.minecraftVersion;
 
         dirFiles = lib.mkMerge [
           # Set overrides
-          # TODO: implement client and server only overrides
+          # TODO: implement client and server only overrides (FIXED)
           (lib.mkIf config.mrpack.placeOverrides (
             let
               parsedMrpack = config.mrpack._parsedMrpack;
-              files = listFilesRecursive "${parsedMrpack}/overrides";
-            in
-              builtins.listToAttrs (
-                map (path: let
-                  placePath = lib.removePrefix "${parsedMrpack}/overrides/" path;
-                in {
-                  name = builtins.unsafeDiscardStringContext placePath;
-                  value = {
-                    # overrides need to be mutable
-                    mutable = true;
-                    source = path;
-                  };
-                })
-                files
-              )
+              files = let
+                overrides = builtins.listToAttrs (
+                  map
+                  (path: {
+                    name = builtins.unsafeDiscardStringContext (lib.removePrefix "${parsedMrpack}/overrides/" path);
+                    value = path;
+                  }) (listFilesRecursive "${parsedMrpack}/overrides")
+                );
+
+                client-overrides = builtins.listToAttrs (
+                  map (path: {
+                    name = builtins.unsafeDiscardStringContext (lib.removePrefix "${parsedMrpack}/client-overrides/" path);
+                    value = path;
+                  }) (listFilesRecursive "${parsedMrpack}/client-overrides")
+                );
+
+                server-overrides = builtins.listToAttrs (
+                  map (path: {
+                    name = builtins.unsafeDiscardStringContext (lib.removePrefix "${parsedMrpack}/server-overrides/" path);
+                    value = path;
+                  }) (listFilesRecursive "${parsedMrpack}/server-overrides")
+                );
+
+                overrides-plus-client-overrides = overrides // client-overrides;
+                overrides-plus-server-overrides = overrides // server-overrides;
+              in
+                if config._instanceType == "client"
+                then overrides-plus-client-overrides
+                else overrides-plus-server-overrides;
+            in (builtins.mapAttrs (placePath: path: {
+                mutable = true;
+                source = path;
+              })
+              files)
           ))
 
           # Set mods (files)
@@ -123,11 +163,29 @@ in
         ];
       })
 
+      {
+        # Set the default java package for client instances
+        # TODO: Fix this stupidity
+        java.package = lib.mkOptionDefault (pkgs."jdk${toString config.meta.versionData.javaVersion.majorVersion}");
+      }
+
+      # if fabric loader is enabled
       # Set values from fabricLoader
-      (lib.mkIf (config.fabricLoader != null) {
-        # List and assign jar files from generated lib dir
-        java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
-      })
+      (lib.mkIf config.fabricLoader.enable (lib.mkMerge [
+        # if the instance type is a client
+        (lib.mkIf (config._instanceType == "client") {
+          # List and assign jar files from generated lib dir
+          java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
+        })
+
+        # if the instance type is server
+        (lib.mkIf (config._instanceType == "server") {
+          # Pass the server jar to java
+          # # not do this  #  java.extraArguments = ["-jar" "${config.fabricLoader._impurePackage}"];
+          # List and assign jar files from generated lib dir
+          java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
+        })
+      ]))
 
       # Settings stuff that the user usually doesn't need to alter
       {

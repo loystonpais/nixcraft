@@ -1,6 +1,7 @@
 {
   lib,
   clientModule,
+  serverModule,
   ...
 }: {
   name,
@@ -12,6 +13,10 @@
 
     client = lib.mkOption {
       type = lib.types.submodule clientModule;
+    };
+
+    server = lib.mkOption {
+      type = lib.types.submodule serverModule;
     };
   };
 }

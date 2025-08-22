@@ -13,7 +13,7 @@ in
   {
     mcVersion,
     loaderVersion,
-    sha256Hash,
+    hash,
     client ? true,
     server ? false,
     jre ? pkgs.jre,
@@ -28,9 +28,8 @@ in
   in
     runCommand "fabric-loader-mc${mcVersion}-v${loaderVersion}" {
       buildInputs = [jre];
-      outputHashAlgo = "sha256";
       outputHashMode = "recursive";
-      outputHash = sha256Hash;
+      outputHash = hash;
     } ''
       mkdir -p $out
       java -jar ${fabricInstaller} ${mode} \
@@ -39,4 +38,5 @@ in
         -loader ${escapeShellArg loaderVersion} \
         -noprofile
       rm -rf $out/versions
+      rm -rf $out/fabric-server-launch.jar
     ''
