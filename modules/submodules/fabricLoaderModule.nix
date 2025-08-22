@@ -1,0 +1,47 @@
+{
+  lib,
+  fetchFabricLoaderImpure,
+  ...
+}: {
+  name,
+  config,
+  ...
+}: {
+  options = {
+    version = lib.mkOption {
+      type = lib.types.str;
+    };
+
+    minecraftVersion = lib.mkOption {
+      type = lib.nixcraft.types.minecraftVersion;
+    };
+
+    hash = lib.mkOption {
+      type = lib.types.str;
+    };
+
+    _instanceType = lib.mkOption {
+      type = lib.types.enum ["client" "server"];
+    };
+
+    _impurePackage = lib.mkOption {
+      type = lib.types.package;
+      readOnly = true;
+      default = fetchFabricLoaderImpure {
+        mcVersion = config.minecraftVersion.value;
+        loaderVersion = config.version;
+        client = config._instanceType == "client";
+        server = config._instanceType == "server";
+        sha256Hash = config.hash;
+      };
+    };
+
+    meta = lib.mkOption {
+      type = lib.types.attrs;
+      readOnly = true;
+      default = {
+        clientMainClass = "net.fabricmc.loader.impl.launch.knot.KnotClient";
+      };
+    };
+  };
+}

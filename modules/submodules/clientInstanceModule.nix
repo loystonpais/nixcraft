@@ -1,0 +1,197 @@
+{
+  lib,
+  pkgs,
+  forgeLoaderModule,
+  fabricLoaderModule,
+  mrpackModule,
+  javaSettingsModule,
+  genericInstanceSettingsModule,
+  waywallModule,
+  sources,
+  fetchSha1,
+  mkAssetsDir,
+  mkLibDir,
+  mkNativeLibDir,
+  inputs,
+  system,
+  ...
+}: let
+  inherit (lib) escapeShellArgs escapeShellArg concatStringsSep;
+  inherit (lib.nixcraft.filesystem) listJarFilesRecursive;
+in
+  {
+    name,
+    config,
+    ...
+  }: {
+    options = {
+      enable = lib.mkEnableOption "client instance";
+
+      settings = lib.mkOption {
+        type = lib.types.submodule genericInstanceSettingsModule;
+      };
+
+      waywall = lib.mkOption {
+        type = lib.types.submodule waywallModule;
+      };
+
+      enableNvidiaOffload = lib.mkEnableOption "nvidia offload";
+
+      enableFastAssetDownload = lib.mkEnableOption "fast asset downloading using aria2c (hash needs to be provided)";
+
+      assetHash = lib.mkOption {
+        type = lib.types.str;
+      };
+
+      _classSettings = lib.mkOption {
+        type = with lib.types;
+          submodule {
+            options = {
+              mainClass = lib.mkOption {
+                type = lib.types.str;
+              };
+
+              version = lib.mkOption {
+                type = lib.types.str;
+              };
+
+              assetsDir = lib.mkOption {
+                type = lib.types.path;
+              };
+
+              assetIndex = lib.mkOption {
+                type = lib.types.str;
+              };
+
+              gameDir = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+              };
+
+              # We are using accessTokenPath instead of accessToken
+              accessTokenPath = lib.mkOption {
+                type = lib.types.str;
+                default = "${pkgs.writeText "dummy" "dummy"}";
+              };
+
+              finalArgumentShellString = lib.mkOption {
+                type = lib.types.str;
+                readOnly = true;
+                default = with lib;
+                  concatStringsSep " " [
+                    (
+                      escapeShellArgs (
+                        concatLists [
+                          ["--version" config._classSettings.version]
+                          ["--assetsDir" config._classSettings.assetsDir]
+                          ["--assetIndex" config._classSettings.assetIndex]
+                          (
+                            let
+                              cond = config._classSettings.gameDir != null;
+                            in
+                              (optional cond "--gameDir") ++ (optional cond config._classSettings.gameDir)
+                          )
+                        ]
+                      )
+                    )
+                    "--accessToken"
+                    "$(cat ${escapeShellArg config._classSettings.accessTokenPath})"
+                  ];
+              };
+            };
+          };
+      };
+
+      meta = {
+        versionData = lib.mkOption {
+          type = lib.types.attrs;
+          readOnly = true;
+          default =
+            lib.nixcraft.readJSON
+            (fetchSha1 sources."normalized-manifest.nix".versions.${config.settings.version.value});
+        };
+      };
+    };
+
+    config = lib.mkMerge [
+      {
+        # Settings stuff that the user usually doesn't need to alter
+        _classSettings = {
+          mainClass = lib.mkDefault config.meta.versionData.mainClass;
+          version = config.meta.versionData.id;
+          assetIndex = config.meta.versionData.assets;
+          assetsDir = mkAssetsDir {versionData = config.meta.versionData;};
+
+          # TODO: fix this. not sure how to set this
+          gameDir = lib.mkDefault null;
+        };
+
+        # List and assign jar files from generated lib dir
+        settings.java.cp = listJarFilesRecursive (mkLibDir {versionData = config.meta.versionData;});
+
+        # Pass native libraries
+        # TODO: in javaSettingsModule try to implement this as an actual option
+        settings.java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.meta.versionData;}}"];
+
+        settings.libs = with pkgs; [
+          openal
+
+          libpulseaudio
+          alsa-lib
+          libjack2
+          pipewire
+
+          xorg.libXcursor
+          xorg.libXrandr
+          xorg.libXxf86vm # Needed only for versions <1.13
+          libGL
+        ];
+      }
+
+      {
+        # Set the instance name from attr
+        settings.name = lib.mkOptionDefault name;
+
+        # Set the default java package for client instances
+        # TODO: Fix this stupidity
+        settings.java.package = lib.mkOptionDefault (pkgs."jdk${toString config.meta.versionData.javaVersion.majorVersion}");
+
+        # inform generic settings module the instance type
+        # this is required for
+        settings._instanceType = "client";
+
+        # set waywall stuff
+        waywall = {
+          package = pkgs.waywall;
+        };
+      }
+
+      # Fast asset download
+      (lib.mkIf config.enableFastAssetDownload {
+        assetHash = lib.mkOptionDefault lib.fakeHash;
+      })
+
+      # If nvidiaOffload is enabled
+      (lib.mkIf config.enableNvidiaOffload {
+        settings.envVars = {
+          __NV_PRIME_RENDER_OFFLOAD = "1";
+          __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
+          __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+          __VK_LAYER_NV_optimus = "NVIDIA_only";
+        };
+      })
+
+      # Set values from fabricLoader
+      (lib.mkIf (config.settings.fabricLoader != null) {
+        _classSettings.mainClass = config.settings.fabricLoader.meta.clientMainClass;
+      })
+
+      # If waywall is enabled
+      (lib.mkIf config.waywall.enable {
+        # waywall uses custom libglfw.so
+        settings.java.extraArguments = [
+          "-Dorg.lwjgl.glfw.libname=${inputs.self.packages.${system}.glfw3-waywall}/lib/libglfw.so"
+        ];
+      })
+    ];
+  }
