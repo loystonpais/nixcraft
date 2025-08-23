@@ -1,3 +1,4 @@
+# Waywall is a wayland compositor that runs minecraft. Used for mcsr (minecraft speedrunning)
 {lib, ...}: {
   name,
   config,

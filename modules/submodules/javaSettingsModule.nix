@@ -33,20 +33,27 @@
       default = [];
     };
 
+    finalArguments = lib.mkOption {
+      type = with lib.types; listOf str;
+      readOnly = true;
+      default = with lib;
+        concatLists [
+          (optional (config.minMemory != null) "-Xms${toString config.minMemory}m")
+          (optional (config.maxMemory != null) "-Xmx${toString config.maxMemory}m")
+
+          (optional (config.cp != null) "-cp")
+          (optional (config.cp != null) (concatStringsSep ":" config.cp))
+
+          config.extraArguments
+        ];
+    };
+
     finalArgumentShellString = lib.mkOption {
       type = lib.types.str;
       readOnly = true;
       default = with lib;
         escapeShellArgs (
-          concatLists [
-            (optional (config.minMemory != null) "-Xms${toString config.minMemory}m")
-            (optional (config.maxMemory != null) "-Xmx${toString config.maxMemory}m")
-
-            (optional (config.cp != null) "-cp")
-            (optional (config.cp != null) (concatStringsSep ":" config.cp))
-
-            config.extraArguments
-          ]
+          config.finalArguments
         );
     };
   };

@@ -1,0 +1,10 @@
+# Nix
+result
+result-*
+.direnv
+
+# Custom
+ignored
+
+# Misc
+.mypy_cache

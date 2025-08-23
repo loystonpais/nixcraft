@@ -32,7 +32,7 @@
         default = true;
       };
 
-    agreeToEula = lib.mkEnableOption "agreen to EULA";
+    agreeToEula = lib.mkEnableOption "agree to EULA";
 
     extraArguments = lib.mkOption {
       type = with lib.types; listOf str;
@@ -49,6 +49,41 @@
             config.extraArguments
           ]
         );
+    };
+
+    launchShellCommandString = lib.mkOption {
+      type = lib.types.str;
+      readOnly = true;
+      default = with lib;
+        concatStringsSep " " [
+          ''"${config.settings.java.package}/bin/java"''
+          "${config.settings.java.finalArgumentShellString}"
+          (escapeShellArg config._mainClass)
+          (config.finalArgumentShellString)
+        ];
+    };
+
+    serverProperties = lib.mkOption {
+      type = with lib.types; nullOr (attrsOf (nullOr (oneOf [bool int str])));
+      default = null;
+    };
+
+    service = lib.mkOption {
+      type = with lib.types;
+        submodule ({
+          name,
+          config,
+          ...
+        }: {
+          options = {
+            enable = lib.mkEnableOption "systemd user service";
+            autoStart = lib.mkEnableOption "enables by default";
+          };
+        });
+      default = {
+        enable = false;
+        autoStart = true;
+      };
     };
   };
 
@@ -68,8 +103,6 @@
       # TODO: make it net.minecraft.server.Main for versions older than 1.17
       _mainClass = lib.mkDefault "net.minecraft.bundler.Main";
 
-      # # not do this # settings.java.extraArguments = ["-jar" "${config._serverJar}"];
-      #
       settings.java.cp = ["${config._serverJar}"];
     }
 
@@ -84,6 +117,11 @@
         # Agreed using nixcraft config
         eula=true
       '';
+    })
+
+    # makes setting server properties easier
+    (lib.mkIf (config.serverProperties != null) {
+      settings.dirFiles."server.properties".text = lib.nixcraft.toMinecraftServerProperties config.serverProperties;
     })
   ];
 }

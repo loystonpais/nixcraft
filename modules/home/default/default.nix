@@ -107,7 +107,7 @@ in {
 
                     cd "${absoluteDirPath}"
 
-                    exec "${instance.settings.java.package}/bin/java" ${instance.settings.java.finalArgumentShellString} ${instance._classSettings.mainClass} ${instance._classSettings.finalArgumentShellString} "$@"
+                    exec ${instance.launchShellCommandString} "$@"
                   '';
                 };
               }
@@ -147,13 +147,41 @@ in {
 
                     cd "${absoluteDirPath}"
 
-                    exec "${instance.settings.java.package}/bin/java" ${instance.settings.java.finalArgumentShellString} ${instance._mainClass} ${instance.finalArgumentShellString} "$@"
+                    exec ${instance.launchShellCommandString} "$@"
                   '';
                 };
               }
 
               (placeFilesFromDirFiles instance.settings.dirFiles instanceDirInHome)
             ]);
+
+          # setting systemd user services
+          systemd = perServerInstance (
+            instance: let
+              serviceName = "nixcraft-server-${instance.settings.name}";
+              instanceDirInHome = ".local/share/nixcraft/server/instances/${instance.settings.name}";
+              absoluteDirPath = "${config.home.homeDirectory}/${instanceDirInHome}";
+              runScriptAbsolutePath = "${absoluteDirPath}/run";
+            in
+              lib.mkMerge [
+                (lib.mkIf instance.service.enable {
+                  user.services.${serviceName} = {
+                    Unit = {
+                      Description = "Minecraft Server ${instance.settings.name}";
+                      After = ["network.target"];
+                      Wants = ["network.target"];
+                    };
+                    Service = {
+                      ExecStart = "${runScriptAbsolutePath}";
+                      Restart = "on-failure";
+                    };
+                    Install = lib.mkIf instance.service.autoStart {
+                      WantedBy = ["default.target"];
+                    };
+                  };
+                })
+              ]
+          );
         }
       ]
     ))

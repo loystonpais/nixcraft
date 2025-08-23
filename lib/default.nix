@@ -101,6 +101,25 @@ in rec {
     listJarFilesRecursive = drv: filter (path: isJarFile (toString path)) (lib.filesystem.listFilesRecursive drv);
   };
 
+  toMinecraftServerProperties = attrs:
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (
+        key: value: "${key}=${
+          if lib.isBool value
+          then
+            (
+              if value
+              then "true"
+              else "false"
+            )
+          else if builtins.isNull value
+          then ""
+          else toString value
+        }"
+      )
+      attrs
+    );
+
   modules = {
     # Crazy function
     # https://discourse.nixos.org/t/infinite-recursion-in-module-with-mkmerge/10989/13
