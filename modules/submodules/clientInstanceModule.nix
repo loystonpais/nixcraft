@@ -5,7 +5,7 @@
   fabricLoaderModule,
   mrpackModule,
   javaSettingsModule,
-  genericInstanceSettingsModule,
+  genericInstanceModule,
   waywallModule,
   minecraftAccountModule,
   sources,
@@ -25,12 +25,10 @@ in
     config,
     ...
   }: {
+    imports = [genericInstanceModule];
+
     options = {
       enable = lib.mkEnableOption "client instance";
-
-      settings = lib.mkOption {
-        type = lib.types.submodule genericInstanceSettingsModule;
-      };
 
       waywall = lib.mkOption {
         type = lib.types.submodule waywallModule;
@@ -52,8 +50,8 @@ in
         type = lib.types.str;
         readOnly = true;
         default = concatStringsSep " " [
-          ''"${config.settings.java.package}/bin/java"''
-          "${config.settings.java.finalArgumentShellString}"
+          ''"${config.java.package}/bin/java"''
+          "${config.java.finalArgumentShellString}"
           (escapeShellArg config._classSettings.mainClass)
           (escapeShellArgs config.finalArguments)
 
@@ -181,23 +179,23 @@ in
       {
         # Settings stuff that the user usually doesn't need to alter
         _classSettings = {
-          mainClass = lib.mkDefault config.settings.meta.versionData.mainClass;
-          version = config.settings.meta.versionData.id;
-          assetIndex = config.settings.meta.versionData.assets;
-          assetsDir = mkAssetsDir {versionData = config.settings.meta.versionData;};
+          mainClass = lib.mkDefault config.meta.versionData.mainClass;
+          version = config.meta.versionData.id;
+          assetIndex = config.meta.versionData.assets;
+          assetsDir = mkAssetsDir {versionData = config.meta.versionData;};
 
           # TODO: fix this. not sure how to set this
           gameDir = lib.mkDefault null;
         };
 
         # List and assign jar files from generated lib dir
-        settings.java.cp = listJarFilesRecursive (mkLibDir {versionData = config.settings.meta.versionData;});
+        java.cp = listJarFilesRecursive (mkLibDir {versionData = config.meta.versionData;});
 
         # Pass native libraries
         # TODO: in javaSettingsModule try to implement this as an actual option
-        settings.java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.settings.meta.versionData;}}"];
+        java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.meta.versionData;}}"];
 
-        settings.libs = with pkgs; [
+        libs = with pkgs; [
           openal
 
           libpulseaudio
@@ -213,11 +211,11 @@ in
       }
 
       {
-        # Set the instance name from attr
-        settings.name = lib.mkOptionDefault name;
+        # # Set the instance name from attr
+        name = lib.mkOptionDefault name;
 
         # inform generic settings module the instance type
-        settings._instanceType = "client";
+        _instanceType = "client";
 
         # set waywall stuff
         waywall = {
@@ -232,7 +230,7 @@ in
 
       # If nvidiaOffload is enabled
       (lib.mkIf config.enableNvidiaOffload {
-        settings.envVars = {
+        envVars = {
           __NV_PRIME_RENDER_OFFLOAD = "1";
           __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
           __GLX_VENDOR_LIBRARY_NAME = "nvidia";
@@ -241,14 +239,14 @@ in
       })
 
       # Set values from fabricLoader
-      (lib.mkIf (config.settings.fabricLoader.enable) {
-        _classSettings.mainClass = config.settings.fabricLoader.meta.clientMainClass;
+      (lib.mkIf (config.fabricLoader.enable) {
+        _classSettings.mainClass = config.fabricLoader.meta.clientMainClass;
       })
 
       # If waywall is enabled
       (lib.mkIf config.waywall.enable {
         # waywall uses custom libglfw.so
-        settings.java.extraArguments = [
+        java.extraArguments = [
           "-Dorg.lwjgl.glfw.libname=${inputs.self.packages.${system}.glfw3-waywall}/lib/libglfw.so"
         ];
       })

@@ -26,8 +26,8 @@ in {
     nixcraft = {
       /*
       * Options starting with underscore such as _clientSettings are for advanced use case
-      * options under instance.<name>.settings are common minecraft settings that are shared between client and servers
-      * Settings are mostly inferred to avoid duplication.
+      * Most instance options (such as java, mod loaders) are generic. There are also client/server specific options
+      * Options are mostly inferred to avoid duplication.
         Ex: minecraft versions and mod loader versions are automatically inferred if mrpack is set
 
       * Instances are placed under ~/.local/share/nixcraft/client/instances/<name> or ~/.local/share/nixcraft/server/instances/<name>
@@ -36,6 +36,7 @@ in {
         Ex: ~/.local/share/nixcraft/client/instances/my-instance/run
 
       * Read files found under modules/submodules for more options
+      * Read modules/submodules/genericInstanceModule.nix for generic options
       */
 
       enable = true;
@@ -45,13 +46,11 @@ in {
           # Example server with bare fabric loader
           smp = {
             enable = true;
-            settings = {
-              version = "1.21.1";
-              fabricLoader = {
-                enable = true;
-                version = "0.17.2";
-                hash = "sha256-hCQBYgdxfBqskQ100Ae0xfCbAZB2xkCxdKyImpkiB4U=";
-              };
+            version = "1.21.1";
+            fabricLoader = {
+              enable = true;
+              version = "0.17.2";
+              hash = "sha256-hCQBYgdxfBqskQ100Ae0xfCbAZB2xkCxdKyImpkiB4U=";
             };
             agreeToEula = true;
           };
@@ -60,11 +59,9 @@ in {
           simop = {
             enable = true;
             agreeToEula = true;
-            settings = {
-              mrpack.file = simply-optimized-mrpack;
-              java.memory = 2000;
-              fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg";
-            };
+            mrpack.file = simply-optimized-mrpack;
+            java.memory = 2000;
+            fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg";
             serverProperties = {
               level-seed = "6969";
               online-mode = false;
@@ -95,17 +92,16 @@ in {
             enable = true;
             # (currently the account needs to be set manually)
             account = config.nixcraft.client.accounts.loystonlive;
-            settings = {
-              mrpack.file = simply-optimized-mrpack;
-              fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg=";
-            };
+
+            mrpack.file = simply-optimized-mrpack;
+            fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg=";
           };
 
           # Example bare bones client
           nomods = {
             enable = true;
             account = config.nixcraft.client.accounts.loystonlive;
-            settings.version = "1.21.1";
+            version = "1.21.1";
           };
 
           # Example client customized for minecraft speedrunning
@@ -113,7 +109,7 @@ in {
             enable = true;
             account = config.nixcraft.client.accounts.loystonlive;
 
-            # this advanced option accepts common arguments that are passed the client
+            # this advanced option accepts common arguments that are passed to the client
             _classSettings = {
               fullscreen = true;
               # height = 1080;
@@ -122,49 +118,47 @@ in {
               username = "loystonlive";
             };
 
-            settings = {
-              # version = "1.16.1"; # need not be set (inferred)
+            # version = "1.16.1"; # need not be set (inferred)
 
-              mrpack.file = pkgs.fetchurl {
-                url = "https://cdn.modrinth.com/data/1uJaMUOm/versions/jIrVgBRv/SpeedrunPack-mc1.16.1-v5.3.0.mrpack";
-                hash = "sha256-uH/fGFrqP2UpyCupyGjzFB87LRldkPkcab3MzjucyPQ=";
+            mrpack.file = pkgs.fetchurl {
+              url = "https://cdn.modrinth.com/data/1uJaMUOm/versions/jIrVgBRv/SpeedrunPack-mc1.16.1-v5.3.0.mrpack";
+              hash = "sha256-uH/fGFrqP2UpyCupyGjzFB87LRldkPkcab3MzjucyPQ=";
+            };
+
+            fabricLoader.hash = "sha256-go+Y7m4gD+4ALBuYxKhM9u8Oo/T8n5LAYO3QWAMfnMQ=";
+
+            envVars = {
+              __GL_THREADED_OPTIMIZATIONS = "0";
+            };
+
+            # place custom files
+            dirFiles = {
+              # mods can also be manually set
+              "mods/fsg-mod.jar".source = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/XZOGBIpM/versions/TcTlTNlF/fsg-mod-5.1.0%2BMC1.16.1.jar";
+                hash = "sha256-gQfbJMsp+QEnuz4T7dC1jEVoGRa5dmK4fXO/Ea/iM+A=";
               };
 
-              fabricLoader.hash = "sha256-go+Y7m4gD+4ALBuYxKhM9u8Oo/T8n5LAYO3QWAMfnMQ=";
-
-              envVars = {
-                __GL_THREADED_OPTIMIZATIONS = "0";
+              # setting config files
+              "config/mcsr/standardsettings.json".source = ./standardsettings.json;
+              "options.txt" = {
+                source = ./options.txt;
+                mutable = true;
               };
+            };
 
-              # place custom files
-              dirFiles = {
-                # mods can also be manually set
-                "mods/fsg-mod.jar".source = pkgs.fetchurl {
-                  url = "https://cdn.modrinth.com/data/XZOGBIpM/versions/TcTlTNlF/fsg-mod-5.1.0%2BMC1.16.1.jar";
-                  hash = "sha256-gQfbJMsp+QEnuz4T7dC1jEVoGRa5dmK4fXO/Ea/iM+A=";
-                };
-
-                # setting config files
-                "config/mcsr/standardsettings.json".source = ./standardsettings.json;
-                "options.txt" = {
-                  source = ./options.txt;
-                  mutable = true;
-                };
-              };
-
-              java = {
-                extraArguments = [
-                  "-XX:+UseZGC"
-                  "-XX:+AlwaysPreTouch"
-                  "-Dgraal.TuneInlinerExploration=1"
-                  "-XX:NmethodSweepActivity=1"
-                ];
-                # override java package. This mrpack needs java 17
-                package = pkgs.jdk17;
-                # set memory in MBs
-                maxMemory = 3500;
-                minMemory = 3500;
-              };
+            java = {
+              extraArguments = [
+                "-XX:+UseZGC"
+                "-XX:+AlwaysPreTouch"
+                "-Dgraal.TuneInlinerExploration=1"
+                "-XX:NmethodSweepActivity=1"
+              ];
+              # override java package. This mrpack needs java 17
+              package = pkgs.jdk17;
+              # set memory in MBs
+              maxMemory = 3500;
+              minMemory = 3500;
             };
 
             # waywall can be enabled

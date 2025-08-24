@@ -1,6 +1,6 @@
 {
   lib,
-  genericInstanceSettingsModule,
+  genericInstanceModule,
   sources,
   fetchSha1,
   ...
@@ -9,17 +9,19 @@
   config,
   ...
 }: {
+  imports = [genericInstanceModule];
+
   options = {
     enable = lib.mkEnableOption "server instance";
 
-    settings = lib.mkOption {
-      type = lib.types.submodule genericInstanceSettingsModule;
-    };
+    # settings = lib.mkOption {
+    #   type = lib.types.submodule genericInstanceModule;
+    # };
 
     _serverJar = lib.mkOption {
       type = lib.types.package;
       readOnly = true;
-      default = fetchSha1 config.settings.meta.versionData.downloads.server;
+      default = fetchSha1 config.meta.versionData.downloads.server;
     };
 
     _mainClass = lib.mkOption {
@@ -56,8 +58,8 @@
       readOnly = true;
       default = with lib;
         concatStringsSep " " [
-          ''"${config.settings.java.package}/bin/java"''
-          "${config.settings.java.finalArgumentShellString}"
+          ''"${config.java.package}/bin/java"''
+          "${config.java.finalArgumentShellString}"
           (escapeShellArg config._mainClass)
           (config.finalArgumentShellString)
         ];
@@ -90,10 +92,10 @@
   config = lib.mkMerge [
     {
       # Set the instance name from attr
-      settings.name = lib.mkOptionDefault name;
+      name = lib.mkOptionDefault name;
 
-      # inform generic settings module the instance type
-      settings._instanceType = "server";
+      # inform generic instance module the instance type
+      _instanceType = "server";
 
       # set the default main class
       # ? Apparently the server main class is not found in manifest
@@ -105,21 +107,21 @@
         inherit (lib.nixcraft.minecraftVersion) ls;
       in
         # if settings.version < 1.17
-        if ls config.settings.version.value "1.17"
+        if ls config.version.value "1.17"
         then "net.minecraft.server.MinecraftServer"
         else "net.minecraft.bundler.Main");
 
-      settings.java.cp = ["${config._serverJar}"];
+      java.cp = ["${config._serverJar}"];
     }
 
-    (lib.mkIf config.settings.fabricLoader.enable {
+    (lib.mkIf config.fabricLoader.enable {
       # set fabric's main class
-      _mainClass = config.settings.fabricLoader.meta.serverMainClass;
+      _mainClass = config.fabricLoader.meta.serverMainClass;
     })
 
     # If user agrees to EULA
     (lib.mkIf config.agreeToEula {
-      settings.dirFiles."eula.txt".text = ''
+      dirFiles."eula.txt".text = ''
         # Agreed using nixcraft config
         eula=true
       '';
@@ -127,7 +129,7 @@
 
     # makes setting server properties easier
     (lib.mkIf (config.serverProperties != null) {
-      settings.dirFiles."server.properties".text = lib.nixcraft.toMinecraftServerProperties config.serverProperties;
+      dirFiles."server.properties".text = lib.nixcraft.toMinecraftServerProperties config.serverProperties;
     })
   ];
 }

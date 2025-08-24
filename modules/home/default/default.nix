@@ -92,7 +92,7 @@ in {
         # Managing client
         {
           home = perClientInstance (instance: let
-            instanceDirInHome = ".local/share/nixcraft/client/instances/${instance.settings.name}";
+            instanceDirInHome = ".local/share/nixcraft/client/instances/${instance.name}";
             absoluteDirPath = "${config.home.homeDirectory}/${instanceDirInHome}";
           in
             lib.mkMerge [
@@ -103,7 +103,7 @@ in {
                   text = ''
                     #!${pkgs.bash}/bin/bash
 
-                    ${lib.nixcraft.mkExportedEnvVars instance.settings.envVars}
+                    ${lib.nixcraft.mkExportedEnvVars instance.envVars}
 
                     cd "${absoluteDirPath}"
 
@@ -125,14 +125,14 @@ in {
                 };
               })
 
-              (placeFilesFromDirFiles instance.settings.dirFiles instanceDirInHome)
+              (placeFilesFromDirFiles instance.dirFiles instanceDirInHome)
             ]);
         }
 
         # Managing server
         {
           home = perServerInstance (instance: let
-            instanceDirInHome = ".local/share/nixcraft/server/instances/${instance.settings.name}";
+            instanceDirInHome = ".local/share/nixcraft/server/instances/${instance.name}";
             absoluteDirPath = "${config.home.homeDirectory}/${instanceDirInHome}";
           in
             lib.mkMerge [
@@ -143,7 +143,7 @@ in {
                   text = ''
                     #!${pkgs.bash}/bin/bash
 
-                    ${lib.nixcraft.mkExportedEnvVars instance.settings.envVars}
+                    ${lib.nixcraft.mkExportedEnvVars instance.envVars}
 
                     cd "${absoluteDirPath}"
 
@@ -152,14 +152,14 @@ in {
                 };
               }
 
-              (placeFilesFromDirFiles instance.settings.dirFiles instanceDirInHome)
+              (placeFilesFromDirFiles instance.dirFiles instanceDirInHome)
             ]);
 
           # setting systemd user services
           systemd = perServerInstance (
             instance: let
-              serviceName = "nixcraft-server-${instance.settings.name}";
-              instanceDirInHome = ".local/share/nixcraft/server/instances/${instance.settings.name}";
+              serviceName = "nixcraft-server-${instance.name}";
+              instanceDirInHome = ".local/share/nixcraft/server/instances/${instance.name}";
               absoluteDirPath = "${config.home.homeDirectory}/${instanceDirInHome}";
               runScriptAbsolutePath = "${absoluteDirPath}/run";
             in
@@ -167,7 +167,7 @@ in {
                 (lib.mkIf instance.service.enable {
                   user.services.${serviceName} = {
                     Unit = {
-                      Description = "Minecraft Server ${instance.settings.name}";
+                      Description = "Minecraft Server ${instance.name}";
                       After = ["network.target"];
                       Wants = ["network.target"];
                     };
