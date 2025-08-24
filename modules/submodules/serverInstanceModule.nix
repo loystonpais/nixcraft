@@ -100,8 +100,14 @@
       # ? so lets hardcode it
       # ? the server jar file is a bundle which
       # ? is why a different class name is used as opposed to net.minecraft.server.Main
-      # TODO: make it net.minecraft.server.Main for versions older than 1.17
-      _mainClass = lib.mkDefault "net.minecraft.bundler.Main";
+      # TODO: make it net.minecraft.server.MinecraftServer for versions older than 1.17 (FIXED)
+      _mainClass = lib.mkDefault (let
+        inherit (lib.nixcraft.minecraftVersion) ls;
+      in
+        # if settings.version < 1.17
+        if ls config.settings.version.value "1.17"
+        then "net.minecraft.server.MinecraftServer"
+        else "net.minecraft.bundler.Main");
 
       settings.java.cp = ["${config._serverJar}"];
     }

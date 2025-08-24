@@ -6,7 +6,7 @@
   ...
 }: {
   sha1,
-  assetSha256 ? sources."asset-sha256.json",
+  assetSha256 ? sources.asset-sha256,
 }: let
   assetHashPath = lib.nixcraft.manifest.mkAssetHashPath sha1;
   url =

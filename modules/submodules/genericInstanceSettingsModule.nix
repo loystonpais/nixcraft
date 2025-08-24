@@ -71,7 +71,7 @@ in
           readOnly = true;
           default =
             lib.nixcraft.readJSON
-            (fetchSha1 sources."normalized-manifest.nix".versions.${config.version.value});
+            (fetchSha1 sources.normalized-manifest.versions.${config.version.value});
         };
       };
     };

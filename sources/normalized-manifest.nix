@@ -11,4 +11,6 @@ in {
     })
     manifest.versions
   );
+
+  versionListOrdered = lib.nixcraft.versionManifestV2.getAllVersions manifest;
 }

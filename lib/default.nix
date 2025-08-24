@@ -28,20 +28,26 @@
 in rec {
   importSubmodules = dir: args: let
     dirContent = readDir'nixFiles dir;
-    submodules = mapAttrs' (name: value: nameValuePair (removeNixSuffix name) (import (joinPathAndString dir name) (args // submodules))) dirContent;
+    submodules = mapAttrs' (name: value: nameValuePair (removeNixExt name) (import (joinPathAndString dir name) (args // submodules))) dirContent;
   in
     submodules;
 
   importBuilders = dir: args: let
     dirContent = readDir'nixFiles dir;
-    builders = mapAttrs' (name: value: nameValuePair (removeNixSuffix name) (import (joinPathAndString dir name) (args // builders))) dirContent;
+    builders = mapAttrs' (name: value: nameValuePair (removeNixExt name) (import (joinPathAndString dir name) (args // builders))) dirContent;
   in
     builders;
 
   importSources = dir: let
     dirContent = readDir'files dir;
     sources = mapAttrs' (name: value:
-      nameValuePair name (let
+      nameValuePair (
+        if isJsonFile name
+        then removeJsonExt name
+        else if isNixFile name
+        then removeNixExt name
+        else name
+      ) (let
         filePath = joinPathAndString dir name;
         fileContent =
           if isJsonFile name
@@ -79,7 +85,9 @@ in rec {
 
   isYamlFile = file: hasExtension "yaml" file || hasExtension "yml" file;
 
-  removeNixSuffix = lib.strings.removeSuffix ".nix";
+  removeNixExt = lib.strings.removeSuffix ".nix";
+
+  removeJsonExt = lib.strings.removeSuffix ".json";
 
   isDefaultNixFile = s: s == "default.nix";
 
@@ -202,13 +210,31 @@ in rec {
     };
   };
 
+  minecraftVersion = rec {
+    compare = v1: v2: let
+      versionList = sources.normalized-manifest.versionListOrdered;
+      index1 = lib.lists.findFirstIndex (x: x == v1) (-1) versionList;
+      index2 = lib.lists.findFirstIndex (x: x == v2) (-1) versionList;
+    in
+      if index1 == -1 || index2 == -1
+      then throw "Invalid minecraft versions '${v1}' or '${v2}'"
+      else lib.compare index1 index2;
+
+    eq = v1: v2: (compare v1 v2) == 0;
+    gr = v1: v2: (compare v1 v2) == -1;
+    ls = v1: v2: (compare v1 v2) == 1;
+
+    grEq = v1: v2: gr v1 v2 || eq v1 v2;
+    lsEq = v1: v2: ls v1 v2 || eq v1 v2;
+  };
+
   types = {
     minecraftVersion = lib.mkOptionType {
       name = "minecraftVersion";
       description = "Minecraft version";
       check = version:
         lib.assertMsg
-        (elem version (versionManifestV2.getAllVersions (sources."version_manifest_v2.json")))
+        (elem version (versionManifestV2.getAllVersions (sources.version_manifest_v2)))
         "Minecraft version '${version}' does not exist.";
       merge = loc: defs: lib.head defs;
     };
