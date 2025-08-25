@@ -29,11 +29,16 @@ in
 
       fabricLoader = lib.mkOption {
         type = with lib.types; (submodule fabricLoaderModule);
+        default = {
+          enable = false;
+        };
       };
 
       forgeLoader = lib.mkOption {
-        type = with lib.types; nullOr (submodule forgeLoaderModule);
-        default = null;
+        type = with lib.types; (submodule forgeLoaderModule);
+        default = {
+          enable = false;
+        };
       };
 
       mrpack = lib.mkOption {
@@ -56,13 +61,14 @@ in
         type = lib.types.submodule javaSettingsModule;
       };
 
-      _instanceType = lib.mkOption {
-        type = lib.types.enum ["client" "server"];
-      };
-
       libs = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [];
+      };
+
+      _instanceType = lib.mkOption {
+        internal = true;
+        type = lib.types.enum ["client" "server"];
       };
 
       meta = {
@@ -80,7 +86,16 @@ in
       # Set default options
       # TODO: set more default options
       {
-        fabricLoader.minecraftVersion = lib.mkOptionDefault config.version.value;
+        fabricLoader = {
+          minecraftVersion = lib.mkOptionDefault config.version.value;
+        };
+        forgeLoader = {
+          minecraftVersion = lib.mkOptionDefault config.version.value;
+        };
+
+        # Prevents file from being GC-ed
+        dirFiles.".nixcraft/manifest-version-data.json".source =
+          fetchSha1 sources.normalized-manifest.versions.${config.version.value};
       }
 
       # Set values from mrpack
@@ -94,8 +109,12 @@ in
         version = config.mrpack.minecraftVersion;
 
         dirFiles = lib.mkMerge [
+          {
+            # Prevents file from being GC-ed
+            ".nixcraft/mrpack".source = config.mrpack.file;
+          }
+
           # Set overrides
-          # TODO: implement client and server only overrides (FIXED)
           (lib.mkIf config.mrpack.placeOverrides (
             let
               parsedMrpack = config.mrpack._parsedMrpack;
@@ -196,10 +215,21 @@ in
         fabricLoader._instanceType = config._instanceType;
       }
 
-      {
-        _module.check =
-          lib.asserts.assertMsg (!(config.fabricLoader != null && config.forgeLoader != null))
-          "Can't have multiple mod loaders enabled";
-      }
+      # TODO: find correct way to do validations
+      (let
+        prefixMsg = "${config._instanceType} instance '${config.name}'";
+      in {
+        _module.check = lib.all (a: a) [
+          # If more than one type of mod loader is enabled then fail
+          (
+            let
+              enabledLoaders = lib.count (modLoader: modLoader.enable) [config.forgeLoader config.fabricLoader];
+            in
+              # count of enabled mod loaders must be below or equal to 1
+              lib.assertMsg (enabledLoaders <= 1)
+              "${prefixMsg}: can't have multiple (${toString enabledLoaders}) mod loaders enabled at the same time."
+          )
+        ];
+      })
     ];
   }

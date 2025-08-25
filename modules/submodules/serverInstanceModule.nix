@@ -1,6 +1,7 @@
 {
   lib,
   genericInstanceModule,
+  paperServerModule,
   sources,
   fetchSha1,
   ...
@@ -14,18 +15,29 @@
   options = {
     enable = lib.mkEnableOption "server instance";
 
-    # settings = lib.mkOption {
-    #   type = lib.types.submodule genericInstanceModule;
-    # };
+    paper = lib.mkOption {
+      type = lib.types.submodule paperServerModule;
+      default = {
+        enable = false;
+      };
+    };
 
     _serverJar = lib.mkOption {
       type = lib.types.package;
-      readOnly = true;
+      internal = true;
       default = fetchSha1 config.meta.versionData.downloads.server;
     };
 
     _mainClass = lib.mkOption {
       type = lib.types.str;
+      internal = true;
+      default = let
+        inherit (lib.nixcraft.minecraftVersion) ls;
+      in
+        # if settings.version < 1.17
+        if ls config.version.value "1.17"
+        then "net.minecraft.server.MinecraftServer"
+        else "net.minecraft.bundler.Main";
     };
 
     noGui =
@@ -97,22 +109,18 @@
       # inform generic instance module the instance type
       _instanceType = "server";
 
-      # set the default main class
-      # ? Apparently the server main class is not found in manifest
-      # ? so lets hardcode it
-      # ? the server jar file is a bundle which
-      # ? is why a different class name is used as opposed to net.minecraft.server.Main
-      # TODO: make it net.minecraft.server.MinecraftServer for versions older than 1.17 (FIXED)
-      _mainClass = lib.mkDefault (let
-        inherit (lib.nixcraft.minecraftVersion) ls;
-      in
-        # if settings.version < 1.17
-        if ls config.version.value "1.17"
-        then "net.minecraft.server.MinecraftServer"
-        else "net.minecraft.bundler.Main");
-
       java.cp = ["${config._serverJar}"];
+
+      paper.minecraftVersion = config.version.value;
     }
+
+    # If paper server is enabled
+    (lib.mkIf config.paper.enable {
+      # set the custom server jar from paper
+      _serverJar = config.paper._serverJar;
+      # set paper's main class
+      _mainClass = config.paper._mainClass;
+    })
 
     (lib.mkIf config.fabricLoader.enable {
       # set fabric's main class
@@ -130,6 +138,19 @@
     # makes setting server properties easier
     (lib.mkIf (config.serverProperties != null) {
       dirFiles."server.properties".text = lib.nixcraft.toMinecraftServerProperties config.serverProperties;
+    })
+
+    # TODO: find correct way to do validations
+    (let
+      prefixMsg = "instance '${config.name}'";
+    in {
+      _module.check = lib.all (a: a) [
+        # if paper is enabled along with other mod loaders then fail
+        (
+          lib.assertMsg (config.paper.enable -> (config.forgeLoader.enable == false && config.fabricLoader.enable == false))
+          "${prefixMsg}: can't have paper server enabled while mod loaders are enabled."
+        )
+      ];
     })
   ];
 }

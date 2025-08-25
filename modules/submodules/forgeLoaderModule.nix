@@ -4,6 +4,8 @@
   ...
 }: {
   options = {
+    enable = lib.mkEnableOption "forge loader";
+
     version = lib.mkOption {
       type = lib.types.str;
     };

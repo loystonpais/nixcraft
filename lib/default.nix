@@ -39,7 +39,7 @@ in rec {
     builders;
 
   importSources = dir: let
-    dirContent = readDir'files dir;
+    dirFiles = readDir'files dir;
     sources = mapAttrs' (name: value:
       nameValuePair (
         if isJsonFile name
@@ -57,9 +57,24 @@ in rec {
           else readFile filePath;
       in
         fileContent))
-    dirContent;
+    dirFiles;
+
+    dirDirs = readDir'dirs dir;
+    sources'subdir =
+      mapAttrs' (
+        name: value:
+          nameValuePair
+          name
+          (
+            let
+              subDirPath = joinPathAndString dir name;
+            in
+              import subDirPath {inherit lib;}
+          )
+      )
+      dirDirs;
   in
-    sources;
+    sources // sources'subdir;
 
   forAllSystems = lib.genAttrs lib.systems.flakeExposed;
 
@@ -107,6 +122,11 @@ in rec {
 
   filesystem = {
     listJarFilesRecursive = drv: filter (path: isJarFile (toString path)) (lib.filesystem.listFilesRecursive drv);
+  };
+
+  lists = {
+    max = list: lib.foldl' lib.max (builtins.head list) list;
+    min = list: lib.foldl' lib.min (builtins.head list) list;
   };
 
   toMinecraftServerProperties = attrs:

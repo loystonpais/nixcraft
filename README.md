@@ -74,6 +74,16 @@ in {
               autoStart = false;
             };
           };
+
+          # Example paper server
+          paper-server = {
+            version = "1.21.1";
+            enable = true;
+            paper.enable = true;
+            agreeToEula = true;
+            java.memory = 2000;
+            serverProperties.online-mode = false;
+          };
         };
       };
 
