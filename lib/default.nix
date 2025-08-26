@@ -6,18 +6,12 @@
     mapAttrs
     readFile
     fromJSON
-    toJSON
-    attrValues
-    concatStringsSep
-    dirOf
-    toFile
     ;
   inherit
     (lib)
     mapAttrs'
     nameValuePair
     foldl'
-    concatMapStringsSep
     filter
     getAttrs
     mkMerge
@@ -257,19 +251,6 @@ in rec {
         (elem version (versionManifestV2.getAllVersions (sources.version_manifest_v2)))
         "Minecraft version '${version}' does not exist.";
       merge = loc: defs: lib.head defs;
-    };
-
-    memorySize = lib.mkOptionType {
-      name = "memorySize";
-      description = "Memory size with units (e.g., '3GiB', '3000MiB', '4096KiB')";
-      check = value: let
-        pattern = "^([0-9]+)(KiB|MiB|GiB|TiB)$";
-        matches = builtins.match pattern (toString value);
-      in
-        lib.assertMsg
-        (lib.isString value && matches != null)
-        "Invalid memory size: '${toString value}'. Use format like '3GiB', '3000MiB', or '4096KiB'.";
-      merge = loc: defs: (lib.head defs).value;
     };
 
     javaMemorySize = lib.mkOptionType {

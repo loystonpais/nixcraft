@@ -83,22 +83,33 @@ in
     };
 
     config = lib.mkMerge [
-      # Set default options
-      # TODO: set more default options
       {
-        fabricLoader = {
-          minecraftVersion = lib.mkOptionDefault config.version.value;
-        };
-        forgeLoader = {
-          minecraftVersion = lib.mkOptionDefault config.version.value;
-        };
+        fabricLoader.minecraftVersion = lib.mkOptionDefault config.version.value;
+
+        forgeLoader.minecraftVersion = lib.mkOptionDefault config.version.value;
 
         # Prevents file from being GC-ed
         dirFiles.".nixcraft/manifest-version-data.json".source =
           fetchSha1 sources.normalized-manifest.versions.${config.version.value};
+
+        # Set the default java package for client instances
+        # TODO: Fix this stupidity
+        java.package = lib.mkOptionDefault (pkgs."jdk${toString config.meta.versionData.javaVersion.majorVersion}");
       }
 
-      # Set values from mrpack
+      # Settings stuff that the user usually doesn't need to alter
+      {
+        # Set LD_LIBRARY_PATH env var from libs
+        envVars.LD_LIBRARY_PATH = lib.makeLibraryPath config.libs;
+
+        # inform fabric about the instance type
+        fabricLoader._instanceType = config._instanceType;
+      }
+
+      (lib.mkIf config.fabricLoader.enable {
+        java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
+      })
+
       # TODO: make mrpack non-nullable
       (lib.mkIf (config.mrpack != null) {
         # Settings up fabricloader
@@ -181,39 +192,6 @@ in
           )
         ];
       })
-
-      {
-        # Set the default java package for client instances
-        # TODO: Fix this stupidity
-        java.package = lib.mkOptionDefault (pkgs."jdk${toString config.meta.versionData.javaVersion.majorVersion}");
-      }
-
-      # if fabric loader is enabled
-      # Set values from fabricLoader
-      (lib.mkIf config.fabricLoader.enable (lib.mkMerge [
-        # if the instance type is a client
-        (lib.mkIf (config._instanceType == "client") {
-          # List and assign jar files from generated lib dir
-          java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
-        })
-
-        # if the instance type is server
-        (lib.mkIf (config._instanceType == "server") {
-          # Pass the server jar to java
-          # # not do this  #  java.extraArguments = ["-jar" "${config.fabricLoader._impurePackage}"];
-          # List and assign jar files from generated lib dir
-          java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
-        })
-      ]))
-
-      # Settings stuff that the user usually doesn't need to alter
-      {
-        # Set LD_LIBRARY_PATH env var from libs
-        envVars.LD_LIBRARY_PATH = lib.makeLibraryPath config.libs;
-
-        # inform fabric about the instance type
-        fabricLoader._instanceType = config._instanceType;
-      }
 
       # TODO: find correct way to do validations
       (let

@@ -103,31 +103,22 @@
 
   config = lib.mkMerge [
     {
-      # Set the instance name from attr
       name = lib.mkOptionDefault name;
-
-      # inform generic instance module the instance type
       _instanceType = "server";
-
       java.cp = ["${config._serverJar}"];
 
       paper.minecraftVersion = config.version.value;
     }
 
-    # If paper server is enabled
     (lib.mkIf config.paper.enable {
-      # set the custom server jar from paper
       _serverJar = config.paper._serverJar;
-      # set paper's main class
       _mainClass = config.paper._mainClass;
     })
 
     (lib.mkIf config.fabricLoader.enable {
-      # set fabric's main class
       _mainClass = config.fabricLoader.meta.serverMainClass;
     })
 
-    # If user agrees to EULA
     (lib.mkIf config.agreeToEula {
       dirFiles."eula.txt".text = ''
         # Agreed using nixcraft config
@@ -135,7 +126,6 @@
       '';
     })
 
-    # makes setting server properties easier
     (lib.mkIf (config.serverProperties != null) {
       dirFiles."server.properties".text = lib.nixcraft.toMinecraftServerProperties config.serverProperties;
     })

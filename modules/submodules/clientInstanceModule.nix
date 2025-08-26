@@ -168,8 +168,6 @@ in
                 type = lib.types.nullOr lib.types.ints.positive;
                 default = null;
               };
-
-              # NOTE: We are using accessTokenPath (defined in instance) instead of accessToken
             };
           };
       };
@@ -177,7 +175,15 @@ in
 
     config = lib.mkMerge [
       {
-        # Settings stuff that the user usually doesn't need to alter
+        name = lib.mkOptionDefault name;
+
+        # set waywall stuff
+        waywall = {
+          package = pkgs.waywall;
+        };
+      }
+
+      {
         _classSettings = {
           mainClass = lib.mkDefault config.meta.versionData.mainClass;
           version = config.meta.versionData.id;
@@ -188,10 +194,8 @@ in
           gameDir = lib.mkDefault null;
         };
 
-        # List and assign jar files from generated lib dir
         java.cp = listJarFilesRecursive (mkLibDir {versionData = config.meta.versionData;});
 
-        # Pass native libraries
         # TODO: in javaSettingsModule try to implement this as an actual option
         java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.meta.versionData;}}"];
 
@@ -208,27 +212,16 @@ in
           xorg.libXxf86vm # Needed only for versions <1.13
           libGL
         ];
-      }
-
-      {
-        # # Set the instance name from attr
-        name = lib.mkOptionDefault name;
 
         # inform generic settings module the instance type
         _instanceType = "client";
-
-        # set waywall stuff
-        waywall = {
-          package = pkgs.waywall;
-        };
       }
 
-      # Fast asset download
+      # TODO: implement fast asset download
       (lib.mkIf config.enableFastAssetDownload {
         assetHash = lib.mkOptionDefault lib.fakeHash;
       })
 
-      # If nvidiaOffload is enabled
       (lib.mkIf config.enableNvidiaOffload {
         envVars = {
           __NV_PRIME_RENDER_OFFLOAD = "1";
@@ -238,12 +231,10 @@ in
         };
       })
 
-      # Set values from fabricLoader
-      (lib.mkIf (config.fabricLoader.enable) {
+      (lib.mkIf config.fabricLoader.enable {
         _classSettings.mainClass = config.fabricLoader.meta.clientMainClass;
       })
 
-      # If waywall is enabled
       (lib.mkIf config.waywall.enable {
         # waywall uses custom libglfw.so
         java.extraArguments = [
@@ -251,7 +242,6 @@ in
         ];
       })
 
-      # if account is set
       (lib.mkIf (config.account
         != null) {
         _classSettings.uuid = lib.mkIf (config.account.uuid != null) config.account.uuid;
