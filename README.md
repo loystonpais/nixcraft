@@ -88,9 +88,13 @@ in {
       };
 
       client = {
-        # Setting client accounts
-        accounts = {
-          loystonlive = {
+        # Config to share with all instances
+        shared = {
+          dirFiles."screenshots".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Pictures";
+
+          # Common account
+          account = {
+            username = "loystonlive";
             uuid = "2909ee95-d459-40c4-bcbb-65a0cc413110";
             offline = true;
           };
@@ -100,8 +104,6 @@ in {
           # Example instance with simply-optimized mrpack
           simop = {
             enable = true;
-            # (currently the account needs to be set manually)
-            account = config.nixcraft.client.accounts.loystonlive;
 
             mrpack.file = simply-optimized-mrpack;
             fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg=";
@@ -110,14 +112,23 @@ in {
           # Example bare bones client
           nomods = {
             enable = true;
-            account = config.nixcraft.client.accounts.loystonlive;
             version = "1.21.1";
+          };
+
+          # Audio doesn't seem to work in old versions
+          old = {
+            enable = true;
+            version = "1.7.1";
+          };
+
+          one-three = {
+            enable = true;
+            version = "1.13";
           };
 
           # Example client customized for minecraft speedrunning
           fsg = {
             enable = true;
-            account = config.nixcraft.client.accounts.loystonlive;
 
             # this advanced option accepts common arguments that are passed to the client
             _classSettings = {
@@ -184,5 +195,6 @@ in {
     };
   };
 }
+
 
 ```
