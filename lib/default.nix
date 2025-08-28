@@ -32,6 +32,23 @@ in rec {
   in
     builders;
 
+  importPackages = dir: pkgs: args: let
+    nixFiles = readDir'nixFiles dir;
+    packages'nixfiles =
+      mapAttrs'
+      (name: value: nameValuePair (removeNixExt name) (pkgs.callPackage (joinPathAndString dir name) args))
+      nixFiles;
+
+    subdirs = readDir'dirs dir;
+    packages'subdir =
+      mapAttrs'
+      (name: value: nameValuePair name (pkgs.callPackage (joinPathAndString dir name) args))
+      subdirs;
+
+    pacakges = packages'nixfiles // packages'subdir;
+  in
+    pacakges;
+
   importSources = dir: let
     dirFiles = readDir'files dir;
     sources = mapAttrs' (name: value:

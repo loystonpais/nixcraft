@@ -2,29 +2,28 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    # The name "snowfall-lib" is required due to how Snowfall Lib processes your
-    # flake's inputs.
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   # We will handle this in the next section.
-  outputs = inputs:
-    inputs.snowfall-lib.mkFlake {
+  outputs = inputs @ {
+    flake-parts,
+    nixpkgs,
+    ...
+  }: let
+    lib = nixpkgs.lib.extend (self: super: {
+      nixcraft = import ./lib {inherit lib;};
+    });
+  in
+    flake-parts.lib.mkFlake {
       inherit inputs;
-
-      src = ./.;
-
-      snowfall = {
-        namespace = "nixcraft";
-
-        meta = {
-          name = "nixcraft";
-
-          title = "Minecraft in Nix";
-        };
-      };
+      specialArgs = {inherit lib;};
+    } {
+      imports = [
+        ./modules/flakeModules/default
+      ];
     };
 }
