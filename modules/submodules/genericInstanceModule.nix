@@ -21,6 +21,9 @@ in
     options = {
       name = lib.mkOption {
         type = lib.types.str;
+        readOnly = true;
+        internal = true;
+        default = name;
       };
 
       version = lib.mkOption {

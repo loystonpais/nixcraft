@@ -23,6 +23,7 @@ in
   {
     name,
     config,
+    shared ? {},
     ...
   }: {
     imports = [genericInstanceModule];
@@ -174,9 +175,9 @@ in
     };
 
     config = lib.mkMerge [
-      {
-        name = lib.mkOptionDefault name;
+      shared
 
+      {
         # set waywall stuff
         waywall = {
           package = pkgs.waywall;

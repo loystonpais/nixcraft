@@ -8,6 +8,7 @@
 }: {
   name,
   config,
+  shared ? {},
   ...
 }: {
   imports = [genericInstanceModule];
@@ -103,7 +104,6 @@
 
   config = lib.mkMerge [
     {
-      name = lib.mkOptionDefault name;
       _instanceType = "server";
       java.cp = ["${config._serverJar}"];
 
