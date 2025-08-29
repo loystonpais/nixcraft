@@ -14,20 +14,6 @@
       // flakeModuleArgs);
   };
 in {
-  imports = [
-    (
-      flake-parts-lib.mkTransposedPerSystemModule
-      {
-        name = "scripts";
-        option = lib.mkOption {
-          type = lib.types.lazyAttrsOf lib.types.raw;
-          default = {};
-        };
-        file = ./default.nix;
-      }
-    )
-  ];
-
   config = {
     systems = ["x86_64-linux"];
     flake = {
@@ -47,35 +33,44 @@ in {
         inherit system;
       };
 
-      update-asset-sha256 =
-        pkgs.writers.writePython3Bin "update-asset-sha256" {
-          flakeIgnore = ["E501" "E265"];
-        }
-        (sources."update-asset-sha256.py");
-      update-version-manifest-v2 =
-        pkgs.writeShellScriptBin "update-version-manifest-v2"
-        (sources."update-version-manifest-v2.sh");
+      runInRepoRoot = {
+        update-asset-sha256 =
+          pkgs.writers.writePython3Bin "update-asset-sha256" {
+            doCheck = false;
+          }
+          (sources."update-asset-sha256.py");
 
-      update-asset-sha256-for-versions =
+        update-version-manifest-v2 =
+          pkgs.writeShellScriptBin "update-version-manifest-v2"
+          (sources."update-version-manifest-v2.sh");
+
+        update-paper-servers = pkgs.writers.writePython3Bin "update-paper-servers" {
+          doCheck = false;
+          libraries = with pkgs.python3Packages; [requests];
+        } (builtins.readFile "${self}/sources/paper-servers/update.py");
+      };
+
+      runInRepoRootUpdateAssetSha256For =
         lib.mapAttrs' (
           version: versionInfo:
-            lib.nameValuePair (lib.replaceString "." "-" "update-asset-sha256-for-${version}")
+            lib.nameValuePair (lib.replaceString "." "-" "${version}")
             (pkgs.writeShellScriptBin "update-asset-sha256-for-${version}" ''
-              ${lib.getExe update-asset-sha256} "${builders.mkAssetsDir {
+              ${lib.getExe runInRepoRoot.update-asset-sha256} "${builders.mkAssetsDir {
                 versionData = lib.nixcraft.readJSON (builders.fetchSha1 versionInfo);
               }}/objects"
             '')
         )
         sources.normalized-manifest.versions;
 
+      legacyPackages = {
+        inherit runInRepoRoot runInRepoRootUpdateAssetSha256For;
+      };
+
       packages =
-        (lib.nixcraft.importPackages "${self}/packages" pkgs {})
-        // {
-          inherit update-asset-sha256 update-version-manifest-v2;
-        }
-        // update-asset-sha256-for-versions;
+        lib.nixcraft.importPackages "${self}/packages" pkgs {};
     in {
       inherit packages;
+      inherit legacyPackages;
     };
   };
 }

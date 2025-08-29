@@ -68,6 +68,6 @@ def main(lock, client):
 
 
 if __name__ == "__main__":
-    folder = Path(__file__).parent
+    folder = Path() / "sources" / "paper-servers"
     lock_path = folder / "lock.json"
     main(open(lock_path, "w"), make_client())
