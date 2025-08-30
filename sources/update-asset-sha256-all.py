@@ -43,8 +43,6 @@ for version in version_manifest["versions"]:
     version_id = version["id"]
     version_url = version["url"]
 
-    print(f"Working on {version_id}")
-
     version_data = fetch_json(version_url)
     asset_index = fetch_json(version_data["assetIndex"]["url"])
     objects = asset_index["objects"]
@@ -61,7 +59,7 @@ for version in version_manifest["versions"]:
 for asset_path in assets_to_download:
   url = RESOURCE_URL_BASE + "/" + asset_path
 
-  print(f"Downloading... {url}")
+  print(f"Downloading... {asset_path}")
 
   filebytes = fetch_file(url)
   file_hash_256 = nix_sha256_sri_from_bytes(filebytes)

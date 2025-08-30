@@ -26,8 +26,7 @@ jobs:
             echo "Manifest unchanged. Skipping asset SHA updates."
           else
             echo "Manifest changed. Running SHA update scripts..."
-            nix run .#legacyPackages.x86_64-linux.runInRepoRootUpdateAssetSha256For.latest-release
-            nix run .#legacyPackages.x86_64-linux.runInRepoRootUpdateAssetSha256For.latest-snapshot
+            nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-asset-sha256-all
           fi
 
           nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-paper-servers
