@@ -115,6 +115,10 @@ in {
               #   };
               # })
 
+              (lib.mkIf instance.binEntry.enable {
+                packages = [instance.binEntry.finalBin];
+              })
+
               (placeFilesFromDirFiles instance.dirFiles instance.dir)
             ]);
 
@@ -147,6 +151,10 @@ in {
                   text = instance.finalLaunchShellScript;
                 };
               }
+
+              (lib.mkIf instance.binEntry.enable {
+                packages = [instance.binEntry.finalBin];
+              })
 
               (placeFilesFromDirFiles instance.dirFiles instance.dir)
             ]);

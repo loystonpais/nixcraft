@@ -56,6 +56,25 @@ in
         default = null;
       };
 
+      binEntry = lib.mkOption {
+        type = lib.types.submodule {
+          options = {
+            enable = lib.mkEnableOption "bin entry";
+            name = lib.mkOption {
+              type = lib.types.nonEmptyStr;
+            };
+            finalBin = lib.mkOption {
+              type = lib.types.package;
+              readOnly = true;
+              default = pkgs.writeScriptBin config.binEntry.name config.finalLaunchShellScript;
+            };
+          };
+        };
+        default = {
+          name = "nixcraft-${config._instanceType}-${name}";
+        };
+      };
+
       envVars =
         lib.nixcraft.options.envVars
         // {

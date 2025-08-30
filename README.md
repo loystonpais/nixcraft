@@ -204,6 +204,12 @@ in {
             # waywall can be enabled
             waywall.enable = true;
 
+            # Add executable to path
+            binEntry = {
+              enable = true;
+              name = "fsg";
+            };
+
             desktopEntry = {
               enable = true;
               name = "Nixcraft FSG";
