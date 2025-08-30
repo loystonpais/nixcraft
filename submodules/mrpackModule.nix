@@ -12,9 +12,7 @@
       type = lib.types.package;
     };
 
-    minecraftVersion = lib.mkOption {
-      type = lib.types.str;
-    };
+    minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
 
     fabricLoaderVersion = lib.mkOption {
       type = lib.types.nonEmptyStr;

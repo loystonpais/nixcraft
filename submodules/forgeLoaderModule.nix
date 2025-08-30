@@ -10,9 +10,7 @@
       type = lib.types.nonEmptyStr;
     };
 
-    minecraftVersion = lib.mkOption {
-      type = lib.types.str;
-    };
+    minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
 
     hash = lib.mkOption {
       type = lib.types.nonEmptyStr;
