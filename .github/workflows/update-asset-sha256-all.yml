@@ -1,0 +1,33 @@
+name: Update Asset Sha256 All
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v17
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update sources
+        run: |
+          nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-asset-sha256-all
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add sources/
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update sources"
+            git push
+          fi

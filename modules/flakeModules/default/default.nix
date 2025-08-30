@@ -40,6 +40,12 @@ in {
           }
           (sources."update-asset-sha256.py");
 
+        update-asset-sha256-all =
+          pkgs.writers.writePython3Bin "update-asset-sha256-all" {
+            doCheck = false;
+          }
+          (sources."update-asset-sha256-all.py");
+
         update-version-manifest-v2 =
           pkgs.writers.writePython3Bin "update-version-manifest-v2" {
             doCheck = false;
