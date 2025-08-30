@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   genericInstanceModule,
   paperServerModule,
   sources,
@@ -9,6 +10,8 @@
   name,
   config,
   shared ? {},
+  instanceDirPrefix,
+  rootDir,
   ...
 }: {
   imports = [genericInstanceModule];
@@ -66,18 +69,6 @@
         );
     };
 
-    launchShellCommandString = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      default = with lib;
-        concatStringsSep " " [
-          ''"${config.java.package}/bin/java"''
-          "${config.java.finalArgumentShellString}"
-          (escapeShellArg config._mainClass)
-          (config.finalArgumentShellString)
-        ];
-    };
-
     serverProperties = lib.mkOption {
       type = with lib.types; nullOr (attrsOf (nullOr (oneOf [bool int str])));
       default = null;
@@ -103,7 +94,30 @@
   };
 
   config = lib.mkMerge [
+    shared
+
     {
+      finalLaunchShellCommandString = with lib;
+        concatStringsSep " " [
+          ''"${config.java.package}/bin/java"''
+          "${config.java.finalArgumentShellString}"
+          (escapeShellArg config._mainClass)
+          (config.finalArgumentShellString)
+        ];
+
+      finalLaunchShellScript = ''
+        #!${pkgs.bash}/bin/bash
+
+        ${lib.nixcraft.mkExportedEnvVars config.envVars}
+
+        cd "${config.absoluteDir}"
+
+        exec ${config.finalLaunchShellCommandString} "$@"
+      '';
+
+      dir = lib.mkDefault "${instanceDirPrefix}/${config.name}";
+      absoluteDir = "${rootDir}/${config.dir}";
+
       _instanceType = "server";
       java.cp = ["${config._serverJar}"];
 

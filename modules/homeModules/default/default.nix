@@ -79,81 +79,82 @@ in {
   };
 
   config = lib.mkMerge [
+    {
+      nixcraft = {
+        client = {
+          instanceDirPrefix = ".local/share/nixcraft/client/instances";
+          rootDir = config.home.homeDirectory;
+        };
+        server = {
+          instanceDirPrefix = ".local/share/nixcraft/server/instances";
+          rootDir = config.home.homeDirectory;
+        };
+      };
+    }
+
     (lib.mkIf config.nixcraft.enable (
       lib.mkMerge [
         # Managing client
         {
-          home = perClientInstance (instance: let
-            instanceDirInHome = ".local/share/nixcraft/client/instances/${instance.name}";
-            absoluteDirPath = "${config.home.homeDirectory}/${instanceDirInHome}";
-          in
+          home = perClientInstance (instance:
             lib.mkMerge [
               # Place run file at instances/<name>/run which can be executed
               {
-                file."${instanceDirInHome}/run" = {
+                file."${instance.dir}/run" = {
                   executable = true;
-                  text = ''
-                    #!${pkgs.bash}/bin/bash
-
-                    ${lib.nixcraft.mkExportedEnvVars instance.envVars}
-
-                    cd "${absoluteDirPath}"
-
-                    exec ${instance.launchShellCommandString} "$@"
-                  '';
+                  text = instance.finalLaunchShellScript;
                 };
               }
 
-              # If waywall is enabled, place waywall-run at instances/<name>/waywall-run
-              # which can be executed
-              (lib.mkIf instance.waywall.enable {
-                file."${instanceDirInHome}/waywall-run" = {
-                  executable = true;
-                  text = ''
-                    #!${pkgs.bash}/bin/bash
+              # # If waywall is enabled, place waywall-run at instances/<name>/waywall-run
+              # # which can be executed
+              # (lib.mkIf instance.waywall.enable {
+              #   file."${instance.dir}/waywall-run" = {
+              #     executable = true;
+              #     text = instance.waywall.launchShellScript;
+              #   };
+              # })
 
-                    exec "${pkgs.waywall}/bin/waywall" wrap -- "${absoluteDirPath}/run" "$@"
-                  '';
-                };
-              })
-
-              (placeFilesFromDirFiles instance.dirFiles instanceDirInHome)
+              (placeFilesFromDirFiles instance.dirFiles instance.dir)
             ]);
+
+          # Place desktop entries
+          xdg = perClientInstance (instance: let
+            entryName = "nixcraft-${instance.name}";
+          in
+            lib.mkIf instance.desktopEntry.enable (
+              lib.mkMerge [
+                {
+                  desktopEntries.${entryName} =
+                    {
+                      exec = lib.mkDefault "${instance.absoluteDir}/run";
+                      name = lib.mkDefault instance.desktopEntry.name;
+                    }
+                    // instance.desktopEntry.extraConfig;
+                }
+              ]
+            ));
         }
 
         # Managing server
         {
-          home = perServerInstance (instance: let
-            instanceDirInHome = ".local/share/nixcraft/server/instances/${instance.name}";
-            absoluteDirPath = "${config.home.homeDirectory}/${instanceDirInHome}";
-          in
+          home = perServerInstance (instance:
             lib.mkMerge [
               # Place run file at instances/<name>/run which can be executed
               {
-                file."${instanceDirInHome}/run" = {
+                file."${instance.dir}/run" = {
                   executable = true;
-                  text = ''
-                    #!${pkgs.bash}/bin/bash
-
-                    ${lib.nixcraft.mkExportedEnvVars instance.envVars}
-
-                    cd "${absoluteDirPath}"
-
-                    exec ${instance.launchShellCommandString} "$@"
-                  '';
+                  text = instance.finalLaunchShellScript;
                 };
               }
 
-              (placeFilesFromDirFiles instance.dirFiles instanceDirInHome)
+              (placeFilesFromDirFiles instance.dirFiles instance.dir)
             ]);
 
           # setting systemd user services
           systemd = perServerInstance (
             instance: let
               serviceName = "nixcraft-server-${instance.name}";
-              instanceDirInHome = ".local/share/nixcraft/server/instances/${instance.name}";
-              absoluteDirPath = "${config.home.homeDirectory}/${instanceDirInHome}";
-              runScriptAbsolutePath = "${absoluteDirPath}/run";
             in
               lib.mkMerge [
                 (lib.mkIf instance.service.enable {
@@ -164,7 +165,12 @@ in {
                       Wants = ["network.target"];
                     };
                     Service = {
-                      ExecStart = "${runScriptAbsolutePath}";
+                      ExecStart = "${pkgs.writeTextFile
+                        {
+                          name = "run";
+                          text = instance.finalLaunchShellScript;
+                          executable = true;
+                        }}";
                       Restart = "on-failure";
                     };
                     Install = lib.mkIf instance.service.autoStart {

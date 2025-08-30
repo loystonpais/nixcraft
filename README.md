@@ -42,6 +42,12 @@ in {
       enable = true;
 
       server = {
+        # Config shared with all instances
+        shared = {
+          agreeToEula = true;
+          serverProperties.online-mode = false;
+        };
+
         instances = {
           # Example server with bare fabric loader
           smp = {
@@ -52,13 +58,11 @@ in {
               version = "0.17.2";
               hash = "sha256-hCQBYgdxfBqskQ100Ae0xfCbAZB2xkCxdKyImpkiB4U=";
             };
-            agreeToEula = true;
           };
 
           # Example server with simply-optimized mrpack loaded
           simop = {
             enable = true;
-            agreeToEula = true;
             mrpack.file = simply-optimized-mrpack;
             java.memory = 2000;
             fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg";
@@ -80,7 +84,6 @@ in {
             version = "1.21.1";
             enable = true;
             paper.enable = true;
-            agreeToEula = true;
             java.memory = 2000;
             serverProperties.online-mode = false;
           };
@@ -90,6 +93,7 @@ in {
       client = {
         # Config to share with all instances
         shared = {
+          # Symlink screenshots dir from all instances
           dirFiles."screenshots".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Pictures";
 
           # Common account
@@ -98,12 +102,20 @@ in {
             uuid = "2909ee95-d459-40c4-bcbb-65a0cc413110";
             offline = true;
           };
+
+          # Game is passed to the gpu (set if you have nvidia gpu)
+          enableNvidiaOffload = true;
         };
 
         instances = {
           # Example instance with simply-optimized mrpack
           simop = {
             enable = true;
+
+            # Add a desktop entry
+            desktopEntry = {
+              enable = true;
+            };
 
             mrpack.file = simply-optimized-mrpack;
             fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg=";
@@ -183,18 +195,21 @@ in {
             };
 
             # waywall can be enabled
-            # Waywall can be executed by runnig waywall-run file found within the game dir
-            # Ex: ~/.local/share/nixcraft/client/instances/fsg/waywall-run
             waywall.enable = true;
 
-            # Game is passed to the gpu (set if you have nvidia gpu)
-            enableNvidiaOffload = true;
+            desktopEntry = {
+              enable = true;
+              name = "Nixcraft FSG";
+              extraConfig = {
+                # TODO: fix icons not working
+                # icon = "${inputs.self}/assets/minecraft/dirt.svg";
+                terminal = true;
+              };
+            };
           };
         };
       };
     };
   };
 }
-
-
 ```

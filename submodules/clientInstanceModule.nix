@@ -24,6 +24,8 @@ in
     name,
     config,
     shared ? {},
+    instanceDirPrefix,
+    rootDir,
     ...
   }: {
     imports = [genericInstanceModule];
@@ -43,26 +45,27 @@ in
         type = lib.types.str;
       };
 
-      account = lib.mkOption {
-        type = with lib.types; nullOr (submodule minecraftAccountModule);
+      desktopEntry = lib.mkOption {
+        type = lib.types.submodule {
+          options = {
+            enable = lib.mkEnableOption "desktop entry";
+            name = lib.mkOption {
+              type = lib.types.str;
+              default = "Nixcraft Instance ${config.name}";
+            };
+            extraConfig = lib.mkOption {
+              type = lib.types.attrs;
+              default = {};
+            };
+          };
+        };
+        default = {
+          enable = false;
+        };
       };
 
-      launchShellCommandString = lib.mkOption {
-        type = lib.types.str;
-        readOnly = true;
-        default = concatStringsSep " " [
-          ''"${config.java.package}/bin/java"''
-          "${config.java.finalArgumentShellString}"
-          (escapeShellArg config._classSettings.mainClass)
-          (escapeShellArgs config.finalArguments)
-
-          # unmodded client doesn't launch if access token is not provided
-          "--accessToken $(cat ${
-            if (config.account != null && config.account.accessTokenPath != null)
-            then escapeShellArg config.account.accessTokenPath
-            else pkgs.writeText "dummy" "dummy"
-          })"
-        ];
+      account = lib.mkOption {
+        type = with lib.types; nullOr (submodule minecraftAccountModule);
       };
 
       extraArguments = lib.mkOption {
@@ -178,6 +181,47 @@ in
       shared
 
       {
+        finalLaunchShellCommandString = concatStringsSep " " [
+          ''"${config.java.package}/bin/java"''
+          "${config.java.finalArgumentShellString}"
+          (escapeShellArg config._classSettings.mainClass)
+          (escapeShellArgs config.finalArguments)
+
+          # unmodded client doesn't launch if access token is not provided
+          "--accessToken $(cat ${
+            if (config.account != null && config.account.accessTokenPath != null)
+            then escapeShellArg config.account.accessTokenPath
+            else pkgs.writeText "dummy" "dummy"
+          })"
+        ];
+
+        finalLaunchShellScript = let
+          defaultScript = ''
+            #!${pkgs.bash}/bin/bash
+
+            ${lib.nixcraft.mkExportedEnvVars config.envVars}
+
+            cd "${config.absoluteDir}"
+
+            exec ${config.finalLaunchShellCommandString} "$@"
+          '';
+        in
+          if config.waywall.enable
+          then ''
+            #!${pkgs.bash}/bin/bash
+
+            exec "${config.waywall.package}/bin/waywall" wrap -- "${pkgs.writeTextFile
+              {
+                name = "run";
+                text = defaultScript;
+                executable = true;
+              }}" "$@"
+          ''
+          else defaultScript;
+
+        dir = lib.mkDefault "${instanceDirPrefix}/${config.name}";
+        absoluteDir = "${rootDir}/${config.dir}";
+
         # set waywall stuff
         waywall = {
           package = pkgs.waywall;

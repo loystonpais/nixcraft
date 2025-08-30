@@ -26,6 +26,15 @@ in
         default = name;
       };
 
+      dir = lib.mkOption {
+        type = lib.types.str;
+      };
+
+      absoluteDir = lib.mkOption {
+        type = lib.types.str;
+        readOnly = true;
+      };
+
       version = lib.mkOption {
         type = lib.nixcraft.types.minecraftVersion;
       };
@@ -67,6 +76,16 @@ in
       libs = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [];
+      };
+
+      finalLaunchShellCommandString = lib.mkOption {
+        type = lib.types.str;
+        readOnly = true;
+      };
+
+      finalLaunchShellScript = lib.mkOption {
+        type = lib.types.str;
+        readOnly = true;
       };
 
       _instanceType = lib.mkOption {
