@@ -70,9 +70,6 @@ in
             };
           };
         };
-        default = {
-          name = "nixcraft-${config._instanceType}-${name}";
-        };
       };
 
       envVars =
@@ -134,6 +131,8 @@ in
         # Set the default java package for client instances
         # TODO: Fix this stupidity
         java.package = lib.mkOptionDefault (pkgs."jdk${toString config.meta.versionData.javaVersion.majorVersion}");
+
+        binEntry.name = lib.mkOptionDefault "nixcraft-${config._instanceType}-${name}";
       }
 
       # Settings stuff that the user usually doesn't need to alter
