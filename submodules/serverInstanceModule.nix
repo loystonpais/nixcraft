@@ -39,7 +39,7 @@
         inherit (lib.nixcraft.minecraftVersion) ls;
       in
         # if settings.version < 1.17
-        if ls config.version.value "1.17"
+        if ls config.version "1.17"
         then "net.minecraft.server.MinecraftServer"
         else "net.minecraft.bundler.Main";
     };
@@ -121,7 +121,7 @@
       _instanceType = "server";
       java.cp = ["${config._serverJar}"];
 
-      paper.minecraftVersion = config.version.value;
+      paper.minecraftVersion = config.version;
     }
 
     (lib.mkIf config.paper.enable {

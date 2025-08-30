@@ -239,6 +239,18 @@ in rec {
             lib.filterAttrs (n: v: v != null) attrs
           );
     };
+
+    minecraftVersionDyn = lib.mkOption {
+      type = with lib.types; either (enum ["latest-release" "latest-snapshot"]) types.minecraftVersion;
+      description = "Minecraft version, or one of: latest-release, latest-snapshot";
+
+      apply = version:
+        if version == "latest-release"
+        then sources.version_manifest_v2.latest.release
+        else if version == "latest-snapshot"
+        then sources.version_manifest_v2.latest.snapshot
+        else version;
+    };
   };
 
   minecraftVersion = rec {
@@ -267,7 +279,7 @@ in rec {
         lib.assertMsg
         (elem version (versionManifestV2.getAllVersions (sources.version_manifest_v2)))
         "Minecraft version '${version}' does not exist.";
-      merge = loc: defs: lib.head defs;
+      merge = loc: defs: (lib.head defs).value;
     };
 
     javaMemorySize = lib.mkOptionType {

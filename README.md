@@ -127,6 +127,13 @@ in {
             version = "1.21.1";
           };
 
+          # Example client whose version is "latest-release"
+          # Supports "latest-snapshot" too
+          latest = {
+            enable = true;
+            version = "latest-release";
+          };
+
           # Audio doesn't seem to work in old versions
           old = {
             enable = true;
@@ -212,4 +219,5 @@ in {
     };
   };
 }
+
 ```

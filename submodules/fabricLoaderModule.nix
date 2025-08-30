@@ -14,9 +14,7 @@
       type = lib.types.str;
     };
 
-    minecraftVersion = lib.mkOption {
-      type = lib.nixcraft.types.minecraftVersion;
-    };
+    minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
 
     hash = lib.mkOption {
       type = lib.types.str;
@@ -30,7 +28,7 @@
       type = lib.types.package;
       readOnly = true;
       default = fetchFabricLoaderImpure {
-        mcVersion = config.minecraftVersion.value;
+        mcVersion = config.minecraftVersion;
         loaderVersion = config.version;
         client = config._instanceType == "client";
         server = config._instanceType == "server";

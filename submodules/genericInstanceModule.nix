@@ -35,9 +35,7 @@ in
         readOnly = true;
       };
 
-      version = lib.mkOption {
-        type = lib.nixcraft.types.minecraftVersion;
-      };
+      version = lib.nixcraft.options.minecraftVersionDyn;
 
       fabricLoader = lib.mkOption {
         type = with lib.types; (submodule fabricLoaderModule);
@@ -99,20 +97,20 @@ in
           readOnly = true;
           default =
             lib.nixcraft.readJSON
-            (fetchSha1 sources.normalized-manifest.versions.${config.version.value});
+            (fetchSha1 sources.normalized-manifest.versions.${config.version});
         };
       };
     };
 
     config = lib.mkMerge [
       {
-        fabricLoader.minecraftVersion = lib.mkOptionDefault config.version.value;
+        fabricLoader.minecraftVersion = lib.mkOptionDefault config.version;
 
-        forgeLoader.minecraftVersion = lib.mkOptionDefault config.version.value;
+        forgeLoader.minecraftVersion = lib.mkOptionDefault config.version;
 
         # Prevents file from being GC-ed
         dirFiles.".nixcraft/manifest-version-data.json".source =
-          fetchSha1 sources.normalized-manifest.versions.${config.version.value};
+          fetchSha1 sources.normalized-manifest.versions.${config.version};
 
         # Set the default java package for client instances
         # TODO: Fix this stupidity

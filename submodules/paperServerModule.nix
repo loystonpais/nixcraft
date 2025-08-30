@@ -16,9 +16,7 @@
       default = lib.last (builtins.attrNames (config.meta.builds));
     };
 
-    minecraftVersion = lib.mkOption {
-      type = lib.nixcraft.types.minecraftVersion;
-    };
+    minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
 
     _serverJar = lib.mkOption {
       readOnly = true;
@@ -39,7 +37,7 @@
       type = lib.types.attrs;
       readOnly = true;
       default = {
-        builds = sources.paper-servers."${config.minecraftVersion.value}";
+        builds = sources.paper-servers."${config.minecraftVersion}";
         mainClass = "io.papermc.paperclip.Paperclip";
       };
     };
