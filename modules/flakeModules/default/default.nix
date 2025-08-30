@@ -41,8 +41,10 @@ in {
           (sources."update-asset-sha256.py");
 
         update-version-manifest-v2 =
-          pkgs.writeShellScriptBin "update-version-manifest-v2"
-          (sources."update-version-manifest-v2.sh");
+          pkgs.writers.writePython3Bin "update-version-manifest-v2" {
+            doCheck = false;
+          }
+          (sources."update-version-manifest-v2.py");
 
         update-paper-servers = pkgs.writers.writePython3Bin "update-paper-servers" {
           doCheck = false;
