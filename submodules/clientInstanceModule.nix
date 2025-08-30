@@ -42,7 +42,7 @@ in
       enableFastAssetDownload = lib.mkEnableOption "fast asset downloading using aria2c (hash needs to be provided)";
 
       assetHash = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nonEmptyStr;
       };
 
       desktopEntry = lib.mkOption {
@@ -50,7 +50,7 @@ in
           options = {
             enable = lib.mkEnableOption "desktop entry";
             name = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.nonEmptyStr;
               default = "Nixcraft Instance ${config.name}";
             };
             extraConfig = lib.mkOption {
@@ -69,7 +69,7 @@ in
       };
 
       extraArguments = lib.mkOption {
-        type = with lib.types; listOf str;
+        type = with lib.types; listOf nonEmptyStr;
         default = [];
       };
 
@@ -128,11 +128,11 @@ in
           submodule {
             options = {
               mainClass = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.nonEmptyStr;
               };
 
               version = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.nonEmptyStr;
               };
 
               assetsDir = lib.mkOption {
@@ -140,21 +140,21 @@ in
               };
 
               assetIndex = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.nonEmptyStr;
               };
 
               gameDir = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
+                type = lib.types.nullOr lib.types.nonEmptyStr;
                 default = null;
               };
 
               username = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
+                type = lib.types.nullOr lib.types.nonEmptyStr;
                 default = null;
               };
 
               uuid = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
+                type = lib.types.nullOr lib.types.nonEmptyStr;
                 default = null;
               };
 

@@ -20,18 +20,18 @@ in
   }: {
     options = {
       name = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nonEmptyStr;
         readOnly = true;
         internal = true;
         default = name;
       };
 
       dir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nonEmptyStr;
       };
 
       absoluteDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nonEmptyStr;
         readOnly = true;
       };
 
@@ -77,12 +77,12 @@ in
       };
 
       finalLaunchShellCommandString = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nonEmptyStr;
         readOnly = true;
       };
 
       finalLaunchShellScript = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nonEmptyStr;
         readOnly = true;
       };
 

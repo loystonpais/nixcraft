@@ -12,7 +12,7 @@
     enable = lib.mkEnableOption "paper";
 
     buildNumber = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
       default = lib.last (builtins.attrNames (config.meta.builds));
     };
 
@@ -29,7 +29,7 @@
 
     _mainClass = lib.mkOption {
       readOnly = true;
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
       default = config.meta.mainClass;
     };
 

@@ -11,7 +11,7 @@
     enable = (lib.mkEnableOption name) // {default = true;};
 
     target = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
       default = name;
     };
 

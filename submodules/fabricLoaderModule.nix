@@ -11,13 +11,13 @@
     enable = lib.mkEnableOption "fabric loader";
 
     version = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
     };
 
     minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
 
     hash = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
     };
 
     _instanceType = lib.mkOption {

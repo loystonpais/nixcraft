@@ -33,7 +33,7 @@
     };
 
     _mainClass = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
       internal = true;
       default = let
         inherit (lib.nixcraft.minecraftVersion) ls;
@@ -53,7 +53,7 @@
     agreeToEula = lib.mkEnableOption "agree to EULA";
 
     extraArguments = lib.mkOption {
-      type = with lib.types; listOf str;
+      type = with lib.types; listOf nonEmptyStr;
       default = [];
     };
 

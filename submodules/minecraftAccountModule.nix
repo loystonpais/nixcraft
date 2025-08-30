@@ -5,7 +5,7 @@
 }: {
   options = {
     username = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
       default = name;
     };
 
@@ -15,12 +15,12 @@
     };
 
     uuid = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
+      type = lib.types.nullOr lib.types.nonEmptyStr;
       default = null;
     };
 
     accessTokenPath = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
+      type = lib.types.nullOr lib.types.nonEmptyStr;
       default = null;
     };
   };

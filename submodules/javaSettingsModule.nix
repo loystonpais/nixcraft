@@ -29,7 +29,7 @@
     };
 
     extraArguments = lib.mkOption {
-      type = with lib.types; listOf str;
+      type = with lib.types; listOf nonEmptyStr;
       default = [];
     };
 
@@ -49,7 +49,7 @@
     };
 
     finalArgumentShellString = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
       readOnly = true;
       default = with lib;
         escapeShellArgs (

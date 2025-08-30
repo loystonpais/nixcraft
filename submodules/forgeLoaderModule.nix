@@ -7,7 +7,7 @@
     enable = lib.mkEnableOption "forge loader";
 
     version = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
     };
 
     minecraftVersion = lib.mkOption {
@@ -15,7 +15,7 @@
     };
 
     hash = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
       default = lib.fakeHash;
     };
   };

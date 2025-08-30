@@ -32,13 +32,13 @@
     };
 
     instanceDirPrefix = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
       readOnly = true;
       internal = true;
     };
 
     rootDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
       readOnly = true;
       internal = true;
     };

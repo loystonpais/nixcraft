@@ -17,7 +17,7 @@
     };
 
     fabricLoaderVersion = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.nonEmptyStr;
     };
 
     enableOptionalMods = (lib.mkEnableOption "optional mods") // {default = true;};
