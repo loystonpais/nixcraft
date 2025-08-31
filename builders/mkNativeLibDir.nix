@@ -25,7 +25,7 @@
 
   placeNativeLibs =
     concatMapStringsSep "\n" (nativeLibrary: ''
-      unzip ${nativeLibrary} -d $out && rm -rf $out/META-INF
+      unzip -o ${nativeLibrary} -d $out && rm -rf $out/META-INF
     '')
     nativeLibrariesZippedList;
 
