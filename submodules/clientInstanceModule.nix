@@ -244,18 +244,39 @@ in
         # TODO: in javaSettingsModule try to implement this as an actual option
         java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.meta.versionData;}}"];
 
-        libs = with pkgs; [
+        # Default libs copied over from
+        # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/pr/prismlauncher/package.nix#L78
+        libs = with pkgs;
+        with xorg; [
+          (lib.getLib stdenv.cc.cc)
+          ## native versions
+          glfw3-minecraft
           openal
 
-          libpulseaudio
+          ## openal
           alsa-lib
           libjack2
+          libpulseaudio
           pipewire
 
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXxf86vm # Needed only for versions <1.13
+          ## glfw
           libGL
+          libX11
+          libXcursor
+          libXext
+          libXrandr
+          libXxf86vm
+
+          udev # oshi
+
+          vulkan-loader # VulkanMod's lwjgl
+
+          flite # TTS
+        ];
+
+        runtimePrograms = with pkgs;
+        with xorg; [
+          xrandr # This is needed for 1.12.x versions to not crash
         ];
 
         # inform generic settings module the instance type

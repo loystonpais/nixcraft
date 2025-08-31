@@ -87,6 +87,15 @@ in {
             java.memory = 2000;
             serverProperties.online-mode = false;
           };
+
+          old-server = {
+            version = "1.12.1";
+            enable = true;
+            agreeToEula = true;
+            # Old versions fail to start if server poperties is immutable
+            serverProperties = lib.mkForce null;
+            binEntry.enable = true;
+          };
         };
       };
 
@@ -105,6 +114,13 @@ in {
 
           # Game is passed to the gpu (set if you have nvidia gpu)
           enableNvidiaOffload = true;
+
+          envVars = {
+            # Fixes bug with nvidia
+            __GL_THREADED_OPTIMIZATIONS = "0";
+          };
+
+          binEntry.enable = true;
         };
 
         instances = {
@@ -137,12 +153,12 @@ in {
           # Audio doesn't seem to work in old versions
           old = {
             enable = true;
-            version = "1.7.1";
+            version = "1.5.1";
           };
 
-          one-three = {
+          one-two = {
             enable = true;
-            version = "1.13";
+            version = "1.12.1";
           };
 
           # Example client customized for minecraft speedrunning
@@ -166,10 +182,6 @@ in {
             };
 
             fabricLoader.hash = "sha256-go+Y7m4gD+4ALBuYxKhM9u8Oo/T8n5LAYO3QWAMfnMQ=";
-
-            envVars = {
-              __GL_THREADED_OPTIMIZATIONS = "0";
-            };
 
             # place custom files
             dirFiles = {

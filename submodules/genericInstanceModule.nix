@@ -92,6 +92,11 @@ in
         default = [];
       };
 
+      runtimePrograms = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [];
+      };
+
       finalLaunchShellCommandString = lib.mkOption {
         type = lib.types.nonEmptyStr;
         readOnly = true;
@@ -139,6 +144,12 @@ in
       {
         # Set LD_LIBRARY_PATH env var from libs
         envVars.LD_LIBRARY_PATH = lib.makeLibraryPath config.libs;
+
+        # Add busybox to runtime programs (need cat command)
+        runtimePrograms = with pkgs; [busybox];
+
+        # Set PATH from runtime programs
+        envVars.PATH = lib.makeBinPath config.runtimePrograms;
 
         # inform fabric about the instance type
         fabricLoader._instanceType = config._instanceType;
