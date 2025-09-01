@@ -84,6 +84,13 @@ in
 
             (
               let
+                cond = config._classSettings.userProperties != null;
+              in
+                (optional cond "--userProperties") ++ (optional cond (builtins.toJSON config._classSettings.userProperties))
+            )
+
+            (
+              let
                 cond = config._classSettings.gameDir != null;
               in
                 (optional cond "--gameDir") ++ (optional cond config._classSettings.gameDir)
@@ -141,6 +148,11 @@ in
 
               assetIndex = lib.mkOption {
                 type = lib.types.nonEmptyStr;
+              };
+
+              userProperties = lib.mkOption {
+                type = lib.types.nullOr lib.types.attrs;
+                default = null;
               };
 
               gameDir = lib.mkOption {
@@ -307,6 +319,14 @@ in
           "-Dorg.lwjgl.glfw.libname=${inputs.self.packages.${system}.glfw3-waywall}/lib/libglfw.so"
         ];
       })
+
+      # If version >= 1.6 && version <= 1.12
+      (with lib.nixcraft.minecraftVersion;
+        lib.mkIf ((grEq config.version "1.6") && (lsEq config.version "1.12"))
+        {
+          # Fixes versions crashing without userProperties
+          _classSettings.userProperties = lib.mkDefault {};
+        })
 
       (lib.mkIf (config.account
         != null) {
