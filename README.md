@@ -35,8 +35,8 @@ in {
       * To run an instance: simply execute the run file found within the instance dir
         Ex: ~/.local/share/nixcraft/client/instances/my-instance/run
 
-      * Read files found under modules/submodules for more options
-      * Read modules/submodules/genericInstanceModule.nix for generic options
+      * Read files found under submodules for more options
+      * Read submodules/genericInstanceModule.nix for generic options
       */
 
       enable = true;
