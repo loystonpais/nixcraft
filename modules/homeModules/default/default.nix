@@ -96,37 +96,30 @@ in {
       lib.mkMerge [
         # Managing client
         {
-          home = perClientInstance (instance:
-            lib.mkMerge [
-              # Place run file at instances/<name>/run which can be executed
-              {
-                file."${instance.dir}/run" = {
-                  executable = true;
-                  text = instance.finalLaunchShellScript;
-                };
-              }
+          home = perClientInstance (
+            instance:
+              lib.mkIf instance.enable (lib.mkMerge [
+                # Place run file at instances/<name>/run which can be executed
+                {
+                  file."${instance.dir}/run" = {
+                    executable = true;
+                    text = instance.finalLaunchShellScript;
+                  };
+                }
 
-              # # If waywall is enabled, place waywall-run at instances/<name>/waywall-run
-              # # which can be executed
-              # (lib.mkIf instance.waywall.enable {
-              #   file."${instance.dir}/waywall-run" = {
-              #     executable = true;
-              #     text = instance.waywall.launchShellScript;
-              #   };
-              # })
+                (lib.mkIf instance.binEntry.enable {
+                  packages = [instance.binEntry.finalBin];
+                })
 
-              (lib.mkIf instance.binEntry.enable {
-                packages = [instance.binEntry.finalBin];
-              })
-
-              (placeFilesFromDirFiles instance.dirFiles instance.dir)
-            ]);
+                (placeFilesFromDirFiles instance.dirFiles instance.dir)
+              ])
+          );
 
           # Place desktop entries
           xdg = perClientInstance (instance: let
             entryName = "nixcraft-${instance.name}";
           in
-            lib.mkIf instance.desktopEntry.enable (
+            lib.mkIf (instance.enable && instance.desktopEntry.enable) (
               lib.mkMerge [
                 {
                   desktopEntries.${entryName} =
@@ -142,22 +135,24 @@ in {
 
         # Managing server
         {
-          home = perServerInstance (instance:
-            lib.mkMerge [
-              # Place run file at instances/<name>/run which can be executed
-              {
-                file."${instance.dir}/run" = {
-                  executable = true;
-                  text = instance.finalLaunchShellScript;
-                };
-              }
+          home = perServerInstance (
+            instance:
+              lib.mkIf instance.enable (lib.mkMerge [
+                # Place run file at instances/<name>/run which can be executed
+                {
+                  file."${instance.dir}/run" = {
+                    executable = true;
+                    text = instance.finalLaunchShellScript;
+                  };
+                }
 
-              (lib.mkIf instance.binEntry.enable {
-                packages = [instance.binEntry.finalBin];
-              })
+                (lib.mkIf instance.binEntry.enable {
+                  packages = [instance.binEntry.finalBin];
+                })
 
-              (placeFilesFromDirFiles instance.dirFiles instance.dir)
-            ]);
+                (placeFilesFromDirFiles instance.dirFiles instance.dir)
+              ])
+          );
 
           # setting systemd user services
           systemd = perServerInstance (
@@ -165,7 +160,7 @@ in {
               serviceName = "nixcraft-server-${instance.name}";
             in
               lib.mkMerge [
-                (lib.mkIf instance.service.enable {
+                (lib.mkIf (instance.enable && instance.service.enable) {
                   user.services.${serviceName} = {
                     Unit = {
                       Description = "Minecraft Server ${instance.name}";
