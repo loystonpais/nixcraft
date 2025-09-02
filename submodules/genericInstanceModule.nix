@@ -178,40 +178,17 @@ in
           (lib.mkIf config.mrpack.placeOverrides (
             let
               parsedMrpack = config.mrpack._parsedMrpack;
-              files = let
-                overrides = builtins.listToAttrs (
-                  map
-                  (path: {
-                    name = builtins.unsafeDiscardStringContext (lib.removePrefix "${parsedMrpack}/overrides/" path);
-                    value = path;
-                  }) (listFilesRecursive "${parsedMrpack}/overrides")
-                );
-
-                client-overrides = builtins.listToAttrs (
-                  map (path: {
-                    name = builtins.unsafeDiscardStringContext (lib.removePrefix "${parsedMrpack}/client-overrides/" path);
-                    value = path;
-                  }) (listFilesRecursive "${parsedMrpack}/client-overrides")
-                );
-
-                server-overrides = builtins.listToAttrs (
-                  map (path: {
-                    name = builtins.unsafeDiscardStringContext (lib.removePrefix "${parsedMrpack}/server-overrides/" path);
-                    value = path;
-                  }) (listFilesRecursive "${parsedMrpack}/server-overrides")
-                );
-
-                overrides-plus-client-overrides = overrides // client-overrides;
-                overrides-plus-server-overrides = overrides // server-overrides;
-              in
+              files =
                 if config._instanceType == "client"
-                then overrides-plus-client-overrides
-                else overrides-plus-server-overrides;
-            in (builtins.mapAttrs (placePath: path: {
-                mutable = true;
+                then parsedMrpack.overrides-plus-client-overrides
+                else parsedMrpack.overrides-plus-server-overrides;
+            in (
+              builtins.mapAttrs (placePath: path: {
+                mutable = config.mrpack.mutableOverrides;
                 source = path;
               })
-              files)
+              files
+            )
           ))
 
           # Set mods (files)

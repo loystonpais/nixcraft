@@ -22,6 +22,8 @@
 
     placeOverrides = (lib.mkEnableOption "placing overrides") // {default = true;};
 
+    mutableOverrides = (lib.mkEnableOption "mutable overrides") // {default = true;};
+
     _parsedMrpack = lib.mkOption {
       type = lib.types.attrs;
     };
