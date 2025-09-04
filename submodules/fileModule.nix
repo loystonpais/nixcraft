@@ -11,11 +11,28 @@
     enable = (lib.mkEnableOption name) // {default = true;};
 
     target = lib.mkOption {
-      type = lib.types.nonEmptyStr;
+      type = lib.types.pathWith {absolute = false;};
       default = name;
     };
 
-    mutable = lib.mkEnableOption "mutability";
+    method = lib.mkOption {
+      type = lib.types.enum ["default" "copy"];
+      default = "default";
+      description = ''
+        Method to place the file in target location
+          copy     - copy once during init (suitable for config files from modpacks)
+          default - hand over file management to external module (if possible)
+                    If using home-manager then it handles the file
+      '';
+    };
+
+    force = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Overwrite previously existing file/symlink/dir
+      '';
+    };
 
     source = lib.mkOption {
       type = lib.types.path;
@@ -24,6 +41,11 @@
     text = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
+    };
+
+    extraConfig = lib.mkOption {
+      type = lib.types.attrs;
+      default = {};
     };
   };
 

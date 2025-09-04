@@ -27,49 +27,21 @@
   perServerInstance = cfgF:
     lib.mkMerge (lib.mapAttrsToList (_: instance: cfgF instance) config.nixcraft.server.instances);
 
-  # TODO: generalize this / reduce code duplication
   # placing files set to dirFiles using home.file
   placeFilesFromDirFiles = dirFiles: instanceDirInHome: {
-    file = lib.mapAttrs' (fileName: fileAttr: let
-      # NOTE: Some files need to be mutable. Unfortunately, home manager does not provide
-      # a clean way to do that.
-      # The strategy is to place the alternate path using home.file and then use its
-      # onChange directive to place the actual file as a rewritable copy
-      placePath = fileAttr.target;
-
-      # Get the dir and the file name so that we can place a renamed version of the file
-      placePathDir = builtins.dirOf placePath;
-      placePathFile = builtins.baseNameOf placePath;
-
-      placePathAlt = "${placePathDir}/.hm-placed.${placePathFile}";
-
-      # Create version of each path with home prefix
-      placePath'home = "${config.home.homeDirectory}/${instanceDirInHome}/${placePath}";
-      placePathAlt'home = "${config.home.homeDirectory}/${instanceDirInHome}/${placePathAlt}";
-    in
-      if fileAttr.mutable
-      then {
-        name = builtins.unsafeDiscardStringContext "${instanceDirInHome}/${placePathAlt}";
-        value = {
-          enable = fileAttr.enable;
-          source = fileAttr.source;
-          onChange = ''
-            if [ ! -f "${placePath'home}" ]; then
-              # rm -f "${placePath'home}"
-              cp "${placePathAlt'home}" "${placePath'home}"
-              chmod u+w "${placePath'home}"
-            fi
-          '';
-        };
-      }
-      else {
+    file =
+      lib.mapAttrs' (fileName: fileAttr: let
+        placePath = fileAttr.target;
+      in {
         name = builtins.unsafeDiscardStringContext "${instanceDirInHome}/${placePath}";
-        value = {
-          enable = fileAttr.enable;
-          source = fileAttr.source;
-        };
+        value =
+          {
+            enable = fileAttr.enable;
+            source = fileAttr.source;
+          }
+          // fileAttr.extraConfig;
       })
-    dirFiles;
+      dirFiles;
   };
 in {
   options = {
@@ -96,24 +68,26 @@ in {
       lib.mkMerge [
         # Managing client
         {
-          home = perClientInstance (
-            instance:
-              lib.mkIf instance.enable (lib.mkMerge [
-                # Place run file at instances/<name>/run which can be executed
-                {
-                  file."${instance.dir}/run" = {
-                    executable = true;
-                    text = instance.finalLaunchShellScript;
-                  };
-                }
+          home = lib.mkMerge [
+            (perClientInstance (
+              instance:
+                lib.mkIf instance.enable (lib.mkMerge [
+                  (lib.mkIf instance.binEntry.enable {
+                    packages = [instance.binEntry.finalBin];
+                  })
 
-                (lib.mkIf instance.binEntry.enable {
-                  packages = [instance.binEntry.finalBin];
-                })
+                  {
+                    file."${instance.dir}/.nixcraft/hm-init" = {
+                      text = "";
+                      onChange = instance.finalFileCopyShellScript;
+                    };
+                  }
 
-                (placeFilesFromDirFiles instance.dirFiles instance.dir)
-              ])
-          );
+                  (placeFilesFromDirFiles (lib.filterAttrs (name: file: file.method == "default") instance.files)
+                    instance.dir)
+                ])
+            ))
+          ];
 
           # Place desktop entries
           xdg = perClientInstance (instance: let
@@ -124,7 +98,7 @@ in {
                 {
                   desktopEntries.${entryName} =
                     {
-                      exec = lib.mkDefault "${instance.absoluteDir}/run";
+                      exec = lib.mkDefault "${lib.getExe instance.binEntry.finalBin}";
                       name = lib.mkDefault instance.desktopEntry.name;
                     }
                     // instance.desktopEntry.extraConfig;
@@ -138,19 +112,19 @@ in {
           home = perServerInstance (
             instance:
               lib.mkIf instance.enable (lib.mkMerge [
-                # Place run file at instances/<name>/run which can be executed
-                {
-                  file."${instance.dir}/run" = {
-                    executable = true;
-                    text = instance.finalLaunchShellScript;
-                  };
-                }
-
                 (lib.mkIf instance.binEntry.enable {
                   packages = [instance.binEntry.finalBin];
                 })
 
-                (placeFilesFromDirFiles instance.dirFiles instance.dir)
+                {
+                  file."${instance.dir}/.nixcraft/hm-init" = {
+                    text = "";
+                    onChange = instance.finalFileCopyShellScript;
+                  };
+                }
+
+                (placeFilesFromDirFiles (lib.filterAttrs (name: file: file.method == "default") instance.files)
+                  instance.dir)
               ])
           );
 
@@ -168,12 +142,7 @@ in {
                       Wants = ["network.target"];
                     };
                     Service = {
-                      ExecStart = "${pkgs.writeTextFile
-                        {
-                          name = "run";
-                          text = instance.finalLaunchShellScript;
-                          executable = true;
-                        }}";
+                      ExecStart = "${lib.getExe instance.binEntry.finalBin}";
                       Restart = "on-failure";
                     };
                     Install = lib.mkIf instance.service.autoStart {

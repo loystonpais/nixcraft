@@ -10,7 +10,7 @@
   sources,
   ...
 }: let
-  inherit (lib.filesystem) listFilesRecursive;
+  inherit (lib) escapeShellArg filterAttrs;
   inherit (lib.nixcraft.filesystem) listJarFilesRecursive;
 in
   {
@@ -52,8 +52,10 @@ in
       };
 
       mrpack = lib.mkOption {
-        type = with lib.types; nullOr (submodule mrpackModule);
-        default = null;
+        type = with lib.types; (submodule mrpackModule);
+        default = {
+          enable = false;
+        };
       };
 
       binEntry = lib.mkOption {
@@ -78,7 +80,7 @@ in
           default = {};
         };
 
-      dirFiles = lib.mkOption {
+      files = lib.mkOption {
         type = with lib.types; attrsOf (submodule fileModule);
         default = {};
       };
@@ -95,6 +97,14 @@ in
       runtimePrograms = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [];
+      };
+
+      finalFileCopyShellScript = lib.mkOption {
+        type = lib.types.str;
+        readOnly = true;
+        description = ''
+          Shell script that places "copy" files
+        '';
       };
 
       finalLaunchShellCommandString = lib.mkOption {
@@ -130,8 +140,11 @@ in
         forgeLoader.minecraftVersion = lib.mkOptionDefault config.version;
 
         # Prevents file from being GC-ed
-        dirFiles.".nixcraft/manifest-version-data.json".source =
-          fetchSha1 sources.normalized-manifest.versions.${config.version};
+        files.".nixcraft/manifest-version-data.json" = {
+          source =
+            fetchSha1 sources.normalized-manifest.versions.${config.version};
+          method = "default";
+        };
 
         # Set the default java package for client instances
         # TODO: Fix this stupidity
@@ -145,7 +158,7 @@ in
         # Set LD_LIBRARY_PATH env var from libs
         envVars.LD_LIBRARY_PATH = lib.makeLibraryPath config.libs;
 
-        # Add busybox to runtime programs (need cat command)
+        # Add busybox to runtime programs (needed for init script)
         runtimePrograms = with pkgs; [busybox];
 
         # Set PATH from runtime programs
@@ -159,8 +172,7 @@ in
         java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
       })
 
-      # TODO: make mrpack non-nullable
-      (lib.mkIf (config.mrpack != null) {
+      (lib.mkIf config.mrpack.enable {
         # Settings up fabricloader
         fabricLoader.enable = config.mrpack._parsedMrpack.fabricLoaderVersion != null;
         fabricLoader.version = config.mrpack.fabricLoaderVersion;
@@ -168,7 +180,7 @@ in
 
         version = config.mrpack.minecraftVersion;
 
-        dirFiles = lib.mkMerge [
+        files = lib.mkMerge [
           {
             # Prevents file from being GC-ed
             ".nixcraft/mrpack".source = config.mrpack.file;
@@ -184,7 +196,7 @@ in
                 else parsedMrpack.overrides-plus-server-overrides;
             in (
               builtins.mapAttrs (placePath: path: {
-                mutable = config.mrpack.mutableOverrides;
+                method = "copy";
                 source = path;
               })
               files
@@ -218,6 +230,36 @@ in
           )
         ];
       })
+
+      {
+        finalFileCopyShellScript = let
+          script =
+            lib.concatMapAttrsStringSep "\n" (
+              name: file: let
+                absolutePath = "${config.absoluteDir}/${file.target}";
+                dirName = builtins.dirOf absolutePath;
+              in ''
+                ${lib.optionalString file.force ''
+                  if [ -e ${escapeShellArg absolutePath} ] || [ -L ${escapeShellArg absolutePath} ]; then
+                    echo "Forcing replacement of ${absolutePath}"
+                    rm -rf ${escapeShellArg absolutePath}
+                  fi
+                ''}
+
+                if [ ! -e ${escapeShellArg absolutePath} ] && [ ! -L ${escapeShellArg absolutePath} ]; then
+                  mkdir -p ${escapeShellArg dirName}
+                  echo "Placing file (once) ${absolutePath}"
+                  cp ${escapeShellArg file.source} ${escapeShellArg absolutePath}
+                  chmod u+w ${escapeShellArg absolutePath}
+                fi
+              ''
+            )
+            (filterAttrs (name: file: file.enable && file.method == "copy") config.files);
+        in ''
+          mkdir -p ${escapeShellArg config.absoluteDir}
+          ${script}
+        '';
+      }
 
       # TODO: find correct way to do validations
       (let

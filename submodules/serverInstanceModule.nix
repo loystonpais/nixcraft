@@ -134,14 +134,14 @@
     })
 
     (lib.mkIf config.agreeToEula {
-      dirFiles."eula.txt".text = ''
+      files."eula.txt".text = ''
         # Agreed using nixcraft config
         eula=true
       '';
     })
 
     (lib.mkIf (config.serverProperties != null) {
-      dirFiles."server.properties".text = lib.nixcraft.toMinecraftServerProperties config.serverProperties;
+      files."server.properties".text = lib.nixcraft.toMinecraftServerProperties config.serverProperties;
     })
 
     # TODO: find correct way to do validations

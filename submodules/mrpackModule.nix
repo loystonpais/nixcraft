@@ -8,6 +8,8 @@
   ...
 }: {
   options = {
+    enable = lib.mkEnableOption "enable mrpack";
+
     file = lib.mkOption {
       type = lib.types.package;
     };

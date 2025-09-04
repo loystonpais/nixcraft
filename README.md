@@ -32,8 +32,9 @@ in {
 
       * Instances are placed under ~/.local/share/nixcraft/client/instances/<name> or ~/.local/share/nixcraft/server/instances/<name>
 
-      * To run an instance: simply execute the run file found within the instance dir
-        Ex: ~/.local/share/nixcraft/client/instances/my-instance/run
+      * Executable to run the instance will be put in path as nixcraft-<server/client>-<name>
+      * Ex: nixcraft-client-myclient
+      * See the binEntry option for customization
 
       * Read files found under submodules for more options
       * Read submodules/genericInstanceModule.nix for generic options
@@ -46,6 +47,8 @@ in {
         shared = {
           agreeToEula = true;
           serverProperties.online-mode = false;
+
+          binEntry.enable = true;
         };
 
         instances = {
@@ -63,7 +66,10 @@ in {
           # Example server with simply-optimized mrpack loaded
           simop = {
             enable = true;
-            mrpack.file = simply-optimized-mrpack;
+            mrpack = {
+              enable = true;
+              file = simply-optimized-mrpack;
+            };
             java.memory = 2000;
             fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg";
             serverProperties = {
@@ -88,12 +94,23 @@ in {
             serverProperties.online-mode = false;
           };
 
-          old-server = {
+          onepoint5 = {
+            enable = true;
+            version = "1.5.1";
+          };
+
+          onepoint8 = {
+            enable = true;
+            version = "1.8";
+          };
+
+          onepoint12 = {
             version = "1.12.1";
             enable = true;
             agreeToEula = true;
             # Old versions fail to start if server poperties is immutable
-            serverProperties = lib.mkForce null;
+            # So copy the file instead
+            files."server.properties".method = lib.mkForce "copy";
             binEntry.enable = true;
           };
         };
@@ -103,7 +120,7 @@ in {
         # Config to share with all instances
         shared = {
           # Symlink screenshots dir from all instances
-          dirFiles."screenshots".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Pictures";
+          files."screenshots".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Pictures";
 
           # Common account
           account = {
@@ -132,8 +149,10 @@ in {
             desktopEntry = {
               enable = true;
             };
-
-            mrpack.file = simply-optimized-mrpack;
+            mrpack = {
+              enable = true;
+              file = simply-optimized-mrpack;
+            };
             fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg=";
           };
 
@@ -151,12 +170,17 @@ in {
           };
 
           # Audio doesn't seem to work in old versions
-          old = {
+          onepoint5 = {
             enable = true;
             version = "1.5.1";
           };
 
-          one-two = {
+          onepoint8 = {
+            enable = true;
+            version = "1.8";
+          };
+
+          onepoint12 = {
             enable = true;
             version = "1.12.1";
           };
@@ -173,18 +197,20 @@ in {
               uuid = "2909ee95-d459-40c4-bcbb-65a0cc413110";
               username = "loystonlive";
             };
-
             # version = "1.16.1"; # need not be set (inferred)
 
-            mrpack.file = pkgs.fetchurl {
-              url = "https://cdn.modrinth.com/data/1uJaMUOm/versions/jIrVgBRv/SpeedrunPack-mc1.16.1-v5.3.0.mrpack";
-              hash = "sha256-uH/fGFrqP2UpyCupyGjzFB87LRldkPkcab3MzjucyPQ=";
+            mrpack = {
+              enable = true;
+              file = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/1uJaMUOm/versions/jIrVgBRv/SpeedrunPack-mc1.16.1-v5.3.0.mrpack";
+                hash = "sha256-uH/fGFrqP2UpyCupyGjzFB87LRldkPkcab3MzjucyPQ=";
+              };
             };
 
             fabricLoader.hash = "sha256-go+Y7m4gD+4ALBuYxKhM9u8Oo/T8n5LAYO3QWAMfnMQ=";
 
             # place custom files
-            dirFiles = {
+            files = {
               # mods can also be manually set
               "mods/fsg-mod.jar".source = pkgs.fetchurl {
                 url = "https://cdn.modrinth.com/data/XZOGBIpM/versions/TcTlTNlF/fsg-mod-5.1.0%2BMC1.16.1.jar";
@@ -195,7 +221,6 @@ in {
               "config/mcsr/standardsettings.json".source = ./standardsettings.json;
               "options.txt" = {
                 source = ./options.txt;
-                mutable = true;
               };
             };
 
@@ -219,6 +244,7 @@ in {
             # Add executable to path
             binEntry = {
               enable = true;
+              # Set executable name
               name = "fsg";
             };
 

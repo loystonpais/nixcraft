@@ -248,7 +248,7 @@ in
           assetsDir = mkAssetsDir {versionData = config.meta.versionData;};
 
           # TODO: fix this. not sure how to set this
-          gameDir = lib.mkDefault null;
+          gameDir = lib.mkDefault config.absoluteDir;
         };
 
         java.cp = listJarFilesRecursive (mkLibDir {versionData = config.meta.versionData;});
