@@ -60,6 +60,7 @@ in {
         update-modloader-locks =
           pkgs.writers.writePython3Bin "update-modloader-locks" {
             doCheck = false;
+            libraries = with pkgs.python3Packages; [requests];
           }
           (sources."update-modloader-locks.py");
       };
