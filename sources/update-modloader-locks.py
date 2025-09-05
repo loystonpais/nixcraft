@@ -164,9 +164,11 @@ def update_loaders(
     for maven_obj in all_maven_objs:
         try:
             if maven_obj.dep not in maven_libraries:
+                print(f"Fetching {maven_obj}...")
                 try:
                     sha256 = fetch_file(maven_obj.download_url_sha256()).decode()
                 except Exception:
+                    print("No sha256 file..")
                     sha256 = bytes_to_sha256_hex(
                         fetch_file(maven_obj.download_url())
                     )
