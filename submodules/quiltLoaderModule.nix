@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFabricLoaderImpure,
   sources,
   ...
 }: {
@@ -9,7 +8,7 @@
   ...
 }: {
   options = {
-    enable = lib.mkEnableOption "fabric loader";
+    enable = lib.mkEnableOption "quilt loader";
 
     version = lib.mkOption {
       type = lib.types.nonEmptyStr;
@@ -25,18 +24,6 @@
       type = lib.types.enum ["client" "server"];
     };
 
-    _impurePackage = lib.mkOption {
-      type = lib.types.package;
-      readOnly = true;
-      default = fetchFabricLoaderImpure {
-        mcVersion = config.minecraftVersion;
-        loaderVersion = config.version;
-        client = config._instanceType == "client";
-        server = config._instanceType == "server";
-        hash = config.hash;
-      };
-    };
-
     classes = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       readOnly = true;
@@ -45,15 +32,10 @@
     meta = lib.mkOption {
       type = lib.types.attrs;
       readOnly = true;
-      default =
-        {
-          clientMainClass = "net.fabricmc.loader.impl.launch.knot.KnotClient";
-          serverMainClass = "net.fabricmc.loader.impl.launch.knot.KnotServer";
-        }
-        // {
-          lock = sources.fabric.lock.${config.version};
-          gameLock = sources.fabric.game-lock.${config.minecraftVersion};
-        };
+      default = {
+        lock = sources.quilt.lock.${config.version};
+        gameLock = sources.quilt.game-lock.${config.minecraftVersion};
+      };
     };
   };
 

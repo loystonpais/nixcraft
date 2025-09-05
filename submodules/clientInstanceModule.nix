@@ -313,6 +313,10 @@ in
         _classSettings.mainClass = config.fabricLoader.meta.clientMainClass;
       })
 
+      (lib.mkIf config.quiltLoader.enable {
+        _classSettings.mainClass = config.quiltLoader.meta.lock.mainClass.client;
+      })
+
       (lib.mkIf config.waywall.enable {
         # waywall uses custom libglfw.so
         java.extraArguments = [

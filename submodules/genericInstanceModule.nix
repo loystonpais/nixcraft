@@ -3,6 +3,7 @@
   pkgs,
   forgeLoaderModule,
   fabricLoaderModule,
+  quiltLoaderModule,
   mrpackModule,
   javaSettingsModule,
   fileModule,
@@ -39,6 +40,13 @@ in
 
       fabricLoader = lib.mkOption {
         type = with lib.types; (submodule fabricLoaderModule);
+        default = {
+          enable = false;
+        };
+      };
+
+      quiltLoader = lib.mkOption {
+        type = with lib.types; (submodule quiltLoaderModule);
         default = {
           enable = false;
         };
@@ -135,10 +143,6 @@ in
 
     config = lib.mkMerge [
       {
-        fabricLoader.minecraftVersion = lib.mkOptionDefault config.version;
-
-        forgeLoader.minecraftVersion = lib.mkOptionDefault config.version;
-
         # Prevents file from being GC-ed
         files.".nixcraft/manifest-version-data.json" = {
           source =
@@ -163,13 +167,37 @@ in
 
         # Set PATH from runtime programs
         envVars.PATH = lib.makeBinPath config.runtimePrograms;
+      }
 
-        # inform fabric about the instance type
-        fabricLoader._instanceType = config._instanceType;
+      # Forge loader stuff
+      {
+        forgeLoader.minecraftVersion = lib.mkOptionDefault config.version;
+      }
+
+      # fabric loader stuff
+      {
+        fabricLoader = {
+          minecraftVersion = lib.mkOptionDefault config.version;
+          _instanceType = config._instanceType;
+        };
+      }
+
+      # quilt loader stuff
+      {
+        quiltLoader = {
+          minecraftVersion = lib.mkOptionDefault config.version;
+          _instanceType = config._instanceType;
+        };
       }
 
       (lib.mkIf config.fabricLoader.enable {
-        java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
+        # java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
+        java.cp = config.fabricLoader.classes;
+      })
+
+      (lib.mkIf config.quiltLoader.enable {
+        # java.cp = listJarFilesRecursive config.quiltLoader._impurePackage;
+        java.cp = config.quiltLoader.classes;
       })
 
       (lib.mkIf config.mrpack.enable {
@@ -269,7 +297,11 @@ in
           # If more than one type of mod loader is enabled then fail
           (
             let
-              enabledLoaders = lib.count (modLoader: modLoader.enable) [config.forgeLoader config.fabricLoader];
+              enabledLoaders = lib.count (modLoader: modLoader.enable) [
+                config.forgeLoader
+                config.fabricLoader
+                config.quiltLoader
+              ];
             in
               # count of enabled mod loaders must be below or equal to 1
               lib.assertMsg (enabledLoaders <= 1)

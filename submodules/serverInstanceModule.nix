@@ -122,6 +122,8 @@
       java.cp = ["${config._serverJar}"];
 
       paper.minecraftVersion = config.version;
+
+      libs = with pkgs; [udev];
     }
 
     (lib.mkIf config.paper.enable {
@@ -131,6 +133,10 @@
 
     (lib.mkIf config.fabricLoader.enable {
       _mainClass = config.fabricLoader.meta.serverMainClass;
+    })
+
+    (lib.mkIf config.quiltLoader.enable {
+      _mainClass = config.quiltLoader.meta.lock.mainClass.server;
     })
 
     (lib.mkIf config.agreeToEula {
@@ -151,7 +157,13 @@
       _module.check = lib.all (a: a) [
         # if paper is enabled along with other mod loaders then fail
         (
-          lib.assertMsg (config.paper.enable -> (config.forgeLoader.enable == false && config.fabricLoader.enable == false))
+          lib.assertMsg (config.paper.enable
+            -> (
+              config.forgeLoader.enable
+              == false
+              && config.fabricLoader.enable == false
+              && config.quiltLoader.enable == false
+            ))
           "${prefixMsg}: can't have paper server enabled while mod loaders are enabled."
         )
       ];

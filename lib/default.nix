@@ -295,4 +295,16 @@ in rec {
   versionManifestV2 = {
     getAllVersions = manifest: map (attr: attr.id) manifest.versions;
   };
+
+  maven = {
+    mkLibUrl = url: libString: let
+      inherit (lib) splitString replaceString;
+      inherit (builtins) elemAt;
+      libStringParts = splitString ":" libString;
+      dotDir = elemAt libStringParts 0;
+      dir = replaceString "." "/" dotDir;
+      name = elemAt libStringParts 1;
+      version = elemAt libStringParts 2;
+    in "${url}/${dir}/${name}/${version}/${name}-${version}.jar";
+  };
 }

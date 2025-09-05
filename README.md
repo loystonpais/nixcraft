@@ -59,7 +59,6 @@ in {
             fabricLoader = {
               enable = true;
               version = "0.17.2";
-              hash = "sha256-hCQBYgdxfBqskQ100Ae0xfCbAZB2xkCxdKyImpkiB4U=";
             };
           };
 
@@ -71,7 +70,6 @@ in {
               file = simply-optimized-mrpack;
             };
             java.memory = 2000;
-            fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg";
             serverProperties = {
               level-seed = "6969";
               online-mode = false;
@@ -113,6 +111,16 @@ in {
             files."server.properties".method = lib.mkForce "copy";
             binEntry.enable = true;
           };
+
+          # Example server with quilt loader
+          quilt-server = {
+            enable = true;
+            version = "1.21.1";
+            quiltLoader = {
+              enable = true;
+              version = "0.29.1";
+            };
+          };
         };
       };
 
@@ -153,7 +161,6 @@ in {
               enable = true;
               file = simply-optimized-mrpack;
             };
-            fabricLoader.hash = "sha256-2UAt7yP28tIQb6OTizbREVnoeu4aD8U1jpy7DSKUyVg=";
           };
 
           # Example bare bones client
@@ -185,6 +192,16 @@ in {
             version = "1.12.1";
           };
 
+          # Example client with quilt loader
+          quilt-client = {
+            enable = true;
+            version = "1.21.1";
+            quiltLoader = {
+              enable = true;
+              version = "0.29.1";
+            };
+          };
+
           # Example client customized for minecraft speedrunning
           fsg = {
             enable = true;
@@ -206,8 +223,6 @@ in {
                 hash = "sha256-uH/fGFrqP2UpyCupyGjzFB87LRldkPkcab3MzjucyPQ=";
               };
             };
-
-            fabricLoader.hash = "sha256-go+Y7m4gD+4ALBuYxKhM9u8Oo/T8n5LAYO3QWAMfnMQ=";
 
             # place custom files
             files = {
@@ -258,10 +273,63 @@ in {
               };
             };
           };
+
+          rsg = {
+            enable = true;
+
+            _classSettings = {
+              fullscreen = true;
+              uuid = "2909ee95-d459-40c4-bcbb-65a0cc413110";
+              username = "loystonlive";
+            };
+
+            mrpack = {
+              enable = true;
+              file = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/1uJaMUOm/versions/jIrVgBRv/SpeedrunPack-mc1.16.1-v5.3.0.mrpack";
+                hash = "sha256-uH/fGFrqP2UpyCupyGjzFB87LRldkPkcab3MzjucyPQ=";
+              };
+            };
+
+            # place custom files
+            files = {
+              # setting config files
+              "config/mcsr/standardsettings.json".source = ./standardsettings.json;
+              "options.txt" = {
+                source = ./options.txt;
+              };
+            };
+
+            java = {
+              extraArguments = [
+                "-XX:+UseZGC"
+                "-XX:+AlwaysPreTouch"
+                "-Dgraal.TuneInlinerExploration=1"
+                "-XX:NmethodSweepActivity=1"
+              ];
+              package = pkgs.jdk17;
+              maxMemory = 4000;
+              minMemory = 4000;
+            };
+
+            waywall.enable = true;
+
+            binEntry = {
+              enable = true;
+              name = "rsg";
+            };
+
+            desktopEntry = {
+              enable = true;
+              name = "Nixcraft RSG";
+              extraConfig = {
+                terminal = true;
+              };
+            };
+          };
         };
       };
     };
   };
 }
-
 ```
