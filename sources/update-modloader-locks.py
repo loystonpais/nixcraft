@@ -1,6 +1,6 @@
 import os
 import json
-import urllib.request
+import requests
 import hashlib
 import logging
 from pathlib import Path
@@ -8,6 +8,7 @@ from time import sleep
 from functools import cache
 from dataclasses import dataclass
 import re
+from collections import defaultdict
 
 
 SEMVER_PATTERN = re.compile(r"^\d+\.\d+\.\d+$")
@@ -39,15 +40,13 @@ def save_json(path: Path, data: dict) -> None:
 @cache
 def fetch_json(url: str):
     sleep(FETCH_DELAY)
-    with urllib.request.urlopen(url) as r:
-        return json.load(r)
+    return requests.get(url).json()
 
 
 @cache
 def fetch_file(url: str) -> bytes:
     sleep(FETCH_DELAY)
-    with urllib.request.urlopen(url) as r:
-        return r.read()
+    return requests.get(url).content
 
 
 @dataclass(frozen=True)
@@ -91,17 +90,38 @@ class FabricMavenDep(MavenDep):
         super().__init__(dep=dep, url="https://maven.fabricmc.net")
 
 
-
-
 def update_loaders(
     meta_url: str,
     lockfile: Path,
+    gamelockfile: Path,
     dep_class,
 ):
+    all_maven_objs: set[MavenDep] = set()
+
     lock_data = load_json(lockfile)
 
     logging.info(f"Fetching loaders from {meta_url}..")
-    loaders = fetch_json(meta_url)
+    versions = fetch_json(meta_url)
+
+    gamelock: dict = defaultdict(lambda: defaultdict(list))
+
+    intermediary = fetch_json(meta_url + "/intermediary")
+
+    for data in intermediary:
+        version = data["version"]
+        maven = data["maven"]
+        gamelock[version]["dependencies"].append( maven )
+        all_maven_objs.add(FabricMavenDep(maven))
+
+    for data in versions.get("hashed", []):
+        version = data["version"]
+        maven = data["maven"]
+        gamelock[version]["dependencies"].append( maven )
+        all_maven_objs.add(dep_class(maven))
+
+    save_json(gamelockfile, gamelock)
+
+    loaders = versions["loader"]
 
     for loader in loaders:
         version = loader.get("version")
@@ -121,6 +141,7 @@ def update_loaders(
                 return [lib["name"] for lib in libs]
 
             lock_data[version] = {
+                "name": loader["maven"],
                 "dependencies": {
                     "client": clean_libs(libraries["client"]),
                     "common": clean_libs(libraries["common"]),
@@ -133,25 +154,28 @@ def update_loaders(
                 libraries["client"] + libraries["common"] + libraries["server"]
             )
 
-            all_maven_objs = [
+            all_maven_objs.update([
                 MavenDep(dep=lib["name"], url=lib["url"]) for lib in all_libraries
-            ] + [loader_dep]
-
-            for maven_obj in all_maven_objs:
-                if maven_obj.dep not in maven_libraries:
-                    try:
-                        sha256 = fetch_file(maven_obj.download_url_sha256()).decode()
-                    except Exception:
-                        sha256 = bytes_to_sha256_hex(
-                            fetch_file(maven_obj.download_url())
-                        )
-                    maven_libraries[maven_obj.dep] = {
-                        "url": maven_obj.url,
-                        "sha256": sha256,
-                    }
+            ] + [loader_dep])
 
         except Exception as e:
             logging.error(f"Failed on version {version}: {e}")
+
+    for maven_obj in all_maven_objs:
+        try:
+            if maven_obj.dep not in maven_libraries:
+                try:
+                    sha256 = fetch_file(maven_obj.download_url_sha256()).decode()
+                except Exception:
+                    sha256 = bytes_to_sha256_hex(
+                        fetch_file(maven_obj.download_url())
+                    )
+                maven_libraries[maven_obj.dep] = {
+                    "url": maven_obj.url,
+                    "sha256": sha256,
+                }
+        except Exception as e:
+            logging.error(f"Failed on maven obj {maven_obj}: {e}")
 
     save_json(lockfile, lock_data)
 
@@ -160,13 +184,15 @@ maven_libraries = load_json(SOURCES_DIR / "maven-libraries.json")
 if __name__ == "__main__":
     try:
         update_loaders(
-            meta_url="https://meta.quiltmc.org/v3/versions/loader",
+            meta_url="https://meta.quiltmc.org/v3/versions",
             lockfile=SOURCES_DIR / "quilt/lock.json",
+            gamelockfile=SOURCES_DIR / "quilt/game-lock.json",
             dep_class=QuiltMavenDep,
         )
         update_loaders(
-            meta_url="https://meta.fabricmc.net/v2/versions/loader",
+            meta_url="https://meta.fabricmc.net/v2/versions",
             lockfile=SOURCES_DIR / "fabric/lock.json",
+            gamelockfile=SOURCES_DIR / "fabric/game-lock.json",
             dep_class=FabricMavenDep,
         )
     finally:

@@ -1,5 +1,6 @@
 {
   "0.17.2": {
+    "name": "net.fabricmc:fabric-loader:0.17.2",
     "dependencies": {
       "client": [],
       "common": [
@@ -18,6 +19,7 @@
     }
   },
   "0.17.1": {
+    "name": "net.fabricmc:fabric-loader:0.17.1",
     "dependencies": {
       "client": [],
       "common": [
@@ -36,6 +38,7 @@
     }
   },
   "0.17.0": {
+    "name": "net.fabricmc:fabric-loader:0.17.0",
     "dependencies": {
       "client": [],
       "common": [
@@ -54,6 +57,7 @@
     }
   },
   "0.16.14": {
+    "name": "net.fabricmc:fabric-loader:0.16.14",
     "dependencies": {
       "client": [],
       "common": [
@@ -72,6 +76,7 @@
     }
   },
   "0.16.13": {
+    "name": "net.fabricmc:fabric-loader:0.16.13",
     "dependencies": {
       "client": [],
       "common": [
@@ -90,6 +95,7 @@
     }
   },
   "0.16.12": {
+    "name": "net.fabricmc:fabric-loader:0.16.12",
     "dependencies": {
       "client": [],
       "common": [
@@ -108,6 +114,7 @@
     }
   },
   "0.16.11": {
+    "name": "net.fabricmc:fabric-loader:0.16.11",
     "dependencies": {
       "client": [],
       "common": [
@@ -126,6 +133,7 @@
     }
   },
   "0.16.10": {
+    "name": "net.fabricmc:fabric-loader:0.16.10",
     "dependencies": {
       "client": [],
       "common": [
@@ -144,6 +152,7 @@
     }
   },
   "0.16.9": {
+    "name": "net.fabricmc:fabric-loader:0.16.9",
     "dependencies": {
       "client": [],
       "common": [
@@ -162,6 +171,7 @@
     }
   },
   "0.16.8": {
+    "name": "net.fabricmc:fabric-loader:0.16.8",
     "dependencies": {
       "client": [],
       "common": [
@@ -180,6 +190,7 @@
     }
   },
   "0.16.7": {
+    "name": "net.fabricmc:fabric-loader:0.16.7",
     "dependencies": {
       "client": [],
       "common": [
@@ -198,6 +209,7 @@
     }
   },
   "0.16.6": {
+    "name": "net.fabricmc:fabric-loader:0.16.6",
     "dependencies": {
       "client": [],
       "common": [
@@ -216,6 +228,7 @@
     }
   },
   "0.16.5": {
+    "name": "net.fabricmc:fabric-loader:0.16.5",
     "dependencies": {
       "client": [],
       "common": [
@@ -234,6 +247,7 @@
     }
   },
   "0.16.4": {
+    "name": "net.fabricmc:fabric-loader:0.16.4",
     "dependencies": {
       "client": [],
       "common": [
@@ -252,6 +266,7 @@
     }
   },
   "0.16.3": {
+    "name": "net.fabricmc:fabric-loader:0.16.3",
     "dependencies": {
       "client": [],
       "common": [
@@ -270,6 +285,7 @@
     }
   },
   "0.16.2": {
+    "name": "net.fabricmc:fabric-loader:0.16.2",
     "dependencies": {
       "client": [],
       "common": [
@@ -288,6 +304,7 @@
     }
   },
   "0.16.1": {
+    "name": "net.fabricmc:fabric-loader:0.16.1",
     "dependencies": {
       "client": [],
       "common": [
@@ -306,6 +323,7 @@
     }
   },
   "0.16.0": {
+    "name": "net.fabricmc:fabric-loader:0.16.0",
     "dependencies": {
       "client": [],
       "common": [
@@ -324,6 +342,7 @@
     }
   },
   "0.15.11": {
+    "name": "net.fabricmc:fabric-loader:0.15.11",
     "dependencies": {
       "client": [],
       "common": [
@@ -342,6 +361,7 @@
     }
   },
   "0.15.10": {
+    "name": "net.fabricmc:fabric-loader:0.15.10",
     "dependencies": {
       "client": [],
       "common": [
@@ -360,6 +380,7 @@
     }
   },
   "0.15.9": {
+    "name": "net.fabricmc:fabric-loader:0.15.9",
     "dependencies": {
       "client": [],
       "common": [
@@ -378,6 +399,7 @@
     }
   },
   "0.15.8": {
+    "name": "net.fabricmc:fabric-loader:0.15.8",
     "dependencies": {
       "client": [],
       "common": [
@@ -396,6 +418,7 @@
     }
   },
   "0.15.7": {
+    "name": "net.fabricmc:fabric-loader:0.15.7",
     "dependencies": {
       "client": [],
       "common": [
@@ -414,6 +437,7 @@
     }
   },
   "0.15.6": {
+    "name": "net.fabricmc:fabric-loader:0.15.6",
     "dependencies": {
       "client": [],
       "common": [
@@ -432,6 +456,7 @@
     }
   },
   "0.15.5": {
+    "name": "net.fabricmc:fabric-loader:0.15.5",
     "dependencies": {
       "client": [],
       "common": [
@@ -450,6 +475,7 @@
     }
   },
   "0.15.4": {
+    "name": "net.fabricmc:fabric-loader:0.15.4",
     "dependencies": {
       "client": [],
       "common": [
@@ -468,6 +494,7 @@
     }
   },
   "0.15.3": {
+    "name": "net.fabricmc:fabric-loader:0.15.3",
     "dependencies": {
       "client": [],
       "common": [
@@ -486,6 +513,7 @@
     }
   },
   "0.15.2": {
+    "name": "net.fabricmc:fabric-loader:0.15.2",
     "dependencies": {
       "client": [],
       "common": [
@@ -504,6 +532,7 @@
     }
   },
   "0.15.1": {
+    "name": "net.fabricmc:fabric-loader:0.15.1",
     "dependencies": {
       "client": [],
       "common": [
@@ -522,6 +551,7 @@
     }
   },
   "0.15.0": {
+    "name": "net.fabricmc:fabric-loader:0.15.0",
     "dependencies": {
       "client": [],
       "common": [
@@ -540,6 +570,7 @@
     }
   },
   "0.14.25": {
+    "name": "net.fabricmc:fabric-loader:0.14.25",
     "dependencies": {
       "client": [],
       "common": [
@@ -561,6 +592,7 @@
     }
   },
   "0.14.24": {
+    "name": "net.fabricmc:fabric-loader:0.14.24",
     "dependencies": {
       "client": [],
       "common": [
@@ -582,6 +614,7 @@
     }
   },
   "0.14.23": {
+    "name": "net.fabricmc:fabric-loader:0.14.23",
     "dependencies": {
       "client": [],
       "common": [
@@ -603,6 +636,7 @@
     }
   },
   "0.14.22": {
+    "name": "net.fabricmc:fabric-loader:0.14.22",
     "dependencies": {
       "client": [],
       "common": [
@@ -624,6 +658,7 @@
     }
   },
   "0.14.21": {
+    "name": "net.fabricmc:fabric-loader:0.14.21",
     "dependencies": {
       "client": [],
       "common": [
@@ -645,6 +680,7 @@
     }
   },
   "0.14.20": {
+    "name": "net.fabricmc:fabric-loader:0.14.20",
     "dependencies": {
       "client": [],
       "common": [
@@ -666,6 +702,7 @@
     }
   },
   "0.14.19": {
+    "name": "net.fabricmc:fabric-loader:0.14.19",
     "dependencies": {
       "client": [],
       "common": [
@@ -687,6 +724,7 @@
     }
   },
   "0.14.18": {
+    "name": "net.fabricmc:fabric-loader:0.14.18",
     "dependencies": {
       "client": [],
       "common": [
@@ -708,6 +746,7 @@
     }
   },
   "0.14.17": {
+    "name": "net.fabricmc:fabric-loader:0.14.17",
     "dependencies": {
       "client": [],
       "common": [
@@ -729,6 +768,7 @@
     }
   },
   "0.14.16": {
+    "name": "net.fabricmc:fabric-loader:0.14.16",
     "dependencies": {
       "client": [],
       "common": [
@@ -750,6 +790,7 @@
     }
   },
   "0.14.15": {
+    "name": "net.fabricmc:fabric-loader:0.14.15",
     "dependencies": {
       "client": [],
       "common": [
@@ -771,6 +812,7 @@
     }
   },
   "0.14.14": {
+    "name": "net.fabricmc:fabric-loader:0.14.14",
     "dependencies": {
       "client": [],
       "common": [
@@ -792,6 +834,7 @@
     }
   },
   "0.14.13": {
+    "name": "net.fabricmc:fabric-loader:0.14.13",
     "dependencies": {
       "client": [],
       "common": [
@@ -813,6 +856,7 @@
     }
   },
   "0.14.12": {
+    "name": "net.fabricmc:fabric-loader:0.14.12",
     "dependencies": {
       "client": [],
       "common": [
@@ -834,6 +878,7 @@
     }
   },
   "0.14.11": {
+    "name": "net.fabricmc:fabric-loader:0.14.11",
     "dependencies": {
       "client": [],
       "common": [
@@ -855,6 +900,7 @@
     }
   },
   "0.14.10": {
+    "name": "net.fabricmc:fabric-loader:0.14.10",
     "dependencies": {
       "client": [],
       "common": [
@@ -876,6 +922,7 @@
     }
   },
   "0.14.9": {
+    "name": "net.fabricmc:fabric-loader:0.14.9",
     "dependencies": {
       "client": [],
       "common": [
@@ -897,6 +944,7 @@
     }
   },
   "0.14.8": {
+    "name": "net.fabricmc:fabric-loader:0.14.8",
     "dependencies": {
       "client": [],
       "common": [
@@ -918,6 +966,7 @@
     }
   },
   "0.14.7": {
+    "name": "net.fabricmc:fabric-loader:0.14.7",
     "dependencies": {
       "client": [],
       "common": [
@@ -939,6 +988,7 @@
     }
   },
   "0.14.6": {
+    "name": "net.fabricmc:fabric-loader:0.14.6",
     "dependencies": {
       "client": [],
       "common": [
@@ -960,6 +1010,7 @@
     }
   },
   "0.14.5": {
+    "name": "net.fabricmc:fabric-loader:0.14.5",
     "dependencies": {
       "client": [],
       "common": [
@@ -981,6 +1032,7 @@
     }
   },
   "0.14.4": {
+    "name": "net.fabricmc:fabric-loader:0.14.4",
     "dependencies": {
       "client": [],
       "common": [
@@ -1002,6 +1054,7 @@
     }
   },
   "0.14.3": {
+    "name": "net.fabricmc:fabric-loader:0.14.3",
     "dependencies": {
       "client": [],
       "common": [
@@ -1023,6 +1076,7 @@
     }
   },
   "0.14.2": {
+    "name": "net.fabricmc:fabric-loader:0.14.2",
     "dependencies": {
       "client": [],
       "common": [
@@ -1044,6 +1098,7 @@
     }
   },
   "0.14.1": {
+    "name": "net.fabricmc:fabric-loader:0.14.1",
     "dependencies": {
       "client": [],
       "common": [
@@ -1065,6 +1120,7 @@
     }
   },
   "0.14.0": {
+    "name": "net.fabricmc:fabric-loader:0.14.0",
     "dependencies": {
       "client": [],
       "common": [
@@ -1086,6 +1142,7 @@
     }
   },
   "0.13.3": {
+    "name": "net.fabricmc:fabric-loader:0.13.3",
     "dependencies": {
       "client": [],
       "common": [
@@ -1107,6 +1164,7 @@
     }
   },
   "0.13.2": {
+    "name": "net.fabricmc:fabric-loader:0.13.2",
     "dependencies": {
       "client": [],
       "common": [
@@ -1128,6 +1186,7 @@
     }
   },
   "0.13.1": {
+    "name": "net.fabricmc:fabric-loader:0.13.1",
     "dependencies": {
       "client": [],
       "common": [
@@ -1149,6 +1208,7 @@
     }
   },
   "0.13.0": {
+    "name": "net.fabricmc:fabric-loader:0.13.0",
     "dependencies": {
       "client": [],
       "common": [
@@ -1170,6 +1230,7 @@
     }
   },
   "0.12.12": {
+    "name": "net.fabricmc:fabric-loader:0.12.12",
     "dependencies": {
       "client": [],
       "common": [
@@ -1191,6 +1252,7 @@
     }
   },
   "0.12.11": {
+    "name": "net.fabricmc:fabric-loader:0.12.11",
     "dependencies": {
       "client": [],
       "common": [
@@ -1212,6 +1274,7 @@
     }
   },
   "0.12.10": {
+    "name": "net.fabricmc:fabric-loader:0.12.10",
     "dependencies": {
       "client": [],
       "common": [
@@ -1233,6 +1296,7 @@
     }
   },
   "0.12.9": {
+    "name": "net.fabricmc:fabric-loader:0.12.9",
     "dependencies": {
       "client": [],
       "common": [
@@ -1254,6 +1318,7 @@
     }
   },
   "0.12.8": {
+    "name": "net.fabricmc:fabric-loader:0.12.8",
     "dependencies": {
       "client": [],
       "common": [
@@ -1275,6 +1340,7 @@
     }
   },
   "0.12.7": {
+    "name": "net.fabricmc:fabric-loader:0.12.7",
     "dependencies": {
       "client": [],
       "common": [
@@ -1296,6 +1362,7 @@
     }
   },
   "0.12.6": {
+    "name": "net.fabricmc:fabric-loader:0.12.6",
     "dependencies": {
       "client": [],
       "common": [
@@ -1317,6 +1384,7 @@
     }
   },
   "0.12.5": {
+    "name": "net.fabricmc:fabric-loader:0.12.5",
     "dependencies": {
       "client": [],
       "common": [
@@ -1338,6 +1406,7 @@
     }
   },
   "0.12.4": {
+    "name": "net.fabricmc:fabric-loader:0.12.4",
     "dependencies": {
       "client": [],
       "common": [
@@ -1359,6 +1428,7 @@
     }
   },
   "0.12.3": {
+    "name": "net.fabricmc:fabric-loader:0.12.3",
     "dependencies": {
       "client": [],
       "common": [
@@ -1380,6 +1450,7 @@
     }
   },
   "0.12.2": {
+    "name": "net.fabricmc:fabric-loader:0.12.2",
     "dependencies": {
       "client": [],
       "common": [
@@ -1401,6 +1472,7 @@
     }
   },
   "0.12.1": {
+    "name": "net.fabricmc:fabric-loader:0.12.1",
     "dependencies": {
       "client": [],
       "common": [
@@ -1422,6 +1494,7 @@
     }
   },
   "0.12.0": {
+    "name": "net.fabricmc:fabric-loader:0.12.0",
     "dependencies": {
       "client": [],
       "common": [
@@ -1443,6 +1516,7 @@
     }
   },
   "0.11.7": {
+    "name": "net.fabricmc:fabric-loader:0.11.7",
     "dependencies": {
       "client": [],
       "common": [
@@ -1468,6 +1542,7 @@
     }
   },
   "0.11.6": {
+    "name": "net.fabricmc:fabric-loader:0.11.6",
     "dependencies": {
       "client": [],
       "common": [
@@ -1493,6 +1568,7 @@
     }
   },
   "0.11.5": {
+    "name": "net.fabricmc:fabric-loader:0.11.5",
     "dependencies": {
       "client": [],
       "common": [
@@ -1518,6 +1594,7 @@
     }
   },
   "0.11.3": {
+    "name": "net.fabricmc:fabric-loader:0.11.3",
     "dependencies": {
       "client": [],
       "common": [
@@ -1543,6 +1620,7 @@
     }
   },
   "0.11.2": {
+    "name": "net.fabricmc:fabric-loader:0.11.2",
     "dependencies": {
       "client": [],
       "common": [
@@ -1568,6 +1646,7 @@
     }
   },
   "0.11.1": {
+    "name": "net.fabricmc:fabric-loader:0.11.1",
     "dependencies": {
       "client": [],
       "common": [
@@ -1593,6 +1672,7 @@
     }
   },
   "0.11.0": {
+    "name": "net.fabricmc:fabric-loader:0.11.0",
     "dependencies": {
       "client": [],
       "common": [
@@ -1618,6 +1698,7 @@
     }
   },
   "0.10.8": {
+    "name": "net.fabricmc:fabric-loader:0.10.8",
     "dependencies": {
       "client": [],
       "common": [
@@ -1643,6 +1724,7 @@
     }
   },
   "0.10.7": {
+    "name": "net.fabricmc:fabric-loader:0.10.7",
     "dependencies": {
       "client": [],
       "common": [
