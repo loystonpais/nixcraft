@@ -1,0 +1,65 @@
+{
+  "0.29.2-beta.5": {
+    "dependencies": {
+      "client": [],
+      "common": [
+        "net.fabricmc:sponge-mixin:0.16.3+mixin.0.8.7",
+        "org.quiltmc:quilt-json5:1.0.4+final",
+        "org.ow2.asm:asm:9.8",
+        "org.ow2.asm:asm-analysis:9.8",
+        "org.ow2.asm:asm-commons:9.8",
+        "org.ow2.asm:asm-tree:9.8",
+        "org.ow2.asm:asm-util:9.8",
+        "org.quiltmc:quilt-config:1.3.1"
+      ],
+      "server": []
+    },
+    "mainClass": {
+      "client": "org.quiltmc.loader.impl.launch.knot.KnotClient",
+      "server": "org.quiltmc.loader.impl.launch.knot.KnotServer",
+      "serverLauncher": "org.quiltmc.loader.impl.launch.server.QuiltServerLauncher"
+    }
+  },
+  "0.29.2-beta.4": {
+    "dependencies": {
+      "client": [],
+      "common": [
+        "net.fabricmc:sponge-mixin:0.16.3+mixin.0.8.7",
+        "org.quiltmc:quilt-json5:1.0.4+final",
+        "org.ow2.asm:asm:9.8",
+        "org.ow2.asm:asm-analysis:9.8",
+        "org.ow2.asm:asm-commons:9.8",
+        "org.ow2.asm:asm-tree:9.8",
+        "org.ow2.asm:asm-util:9.8",
+        "org.quiltmc:quilt-config:1.3.1"
+      ],
+      "server": []
+    },
+    "mainClass": {
+      "client": "org.quiltmc.loader.impl.launch.knot.KnotClient",
+      "server": "org.quiltmc.loader.impl.launch.knot.KnotServer",
+      "serverLauncher": "org.quiltmc.loader.impl.launch.server.QuiltServerLauncher"
+    }
+  },
+  "0.29.2-beta.2": {
+    "dependencies": {
+      "client": [],
+      "common": [
+        "net.fabricmc:sponge-mixin:0.16.3+mixin.0.8.7",
+        "org.quiltmc:quilt-json5:1.0.4+final",
+        "org.ow2.asm:asm:9.8",
+        "org.ow2.asm:asm-analysis:9.8",
+        "org.ow2.asm:asm-commons:9.8",
+        "org.ow2.asm:asm-tree:9.8",
+        "org.ow2.asm:asm-util:9.8",
+        "org.quiltmc:quilt-config:1.3.1"
+      ],
+      "server": []
+    },
+    "mainClass": {
+      "client": "org.quiltmc.loader.impl.launch.knot.KnotClient",
+      "server": "org.quiltmc.loader.impl.launch.knot.KnotServer",
+      "serverLauncher": "org.quiltmc.loader.impl.launch.server.QuiltServerLauncher"
+    }
+  }
+}

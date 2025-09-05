@@ -30,6 +30,7 @@ jobs:
           fi
 
           nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-paper-servers
+          nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-modloader-locks
 
       - name: Commit and push if changed
         run: |

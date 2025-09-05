@@ -56,6 +56,12 @@ in {
           doCheck = false;
           libraries = with pkgs.python3Packages; [requests];
         } (builtins.readFile "${self}/sources/paper-servers/update.py");
+
+        update-modloader-locks =
+          pkgs.writers.writePython3Bin "update-modloader-locks" {
+            doCheck = false;
+          }
+          (sources."update-modloader-locks.py");
       };
 
       runInRepoRootUpdateAssetSha256For =
