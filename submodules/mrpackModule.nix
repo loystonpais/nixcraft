@@ -17,7 +17,11 @@
     minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
 
     fabricLoaderVersion = lib.mkOption {
-      type = lib.types.nonEmptyStr;
+      type = lib.types.nullOr lib.types.nonEmptyStr;
+    };
+
+    quiltLoaderVersion = lib.mkOption {
+      type = lib.types.nullOr lib.types.nonEmptyStr;
     };
 
     enableOptionalMods = (lib.mkEnableOption "optional mods") // {default = true;};
@@ -35,7 +39,14 @@
     {
       _parsedMrpack = parseMrpack config.file;
       minecraftVersion = lib.mkOptionDefault config._parsedMrpack.minecraftVersion;
+    }
+
+    {
       fabricLoaderVersion = lib.mkOptionDefault config._parsedMrpack.fabricLoaderVersion;
+    }
+
+    {
+      quiltLoaderVersion = lib.mkOptionDefault config._parsedMrpack.quiltLoaderVersion;
     }
   ];
 }

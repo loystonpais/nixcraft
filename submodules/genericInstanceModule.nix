@@ -196,15 +196,23 @@ in
       })
 
       (lib.mkIf config.quiltLoader.enable {
-        # java.cp = listJarFilesRecursive config.quiltLoader._impurePackage;
         java.cp = config.quiltLoader.classes;
       })
 
       (lib.mkIf config.mrpack.enable {
         # Settings up fabricloader
-        fabricLoader.enable = config.mrpack._parsedMrpack.fabricLoaderVersion != null;
-        fabricLoader.version = config.mrpack.fabricLoaderVersion;
-        fabricLoader.minecraftVersion = config.mrpack.minecraftVersion;
+        fabricLoader = lib.mkIf (config.mrpack.fabricLoaderVersion != null) {
+          enable = true;
+          version = config.mrpack.fabricLoaderVersion;
+          minecraftVersion = config.mrpack.minecraftVersion;
+        };
+
+        # Setting up quilt
+        quiltLoader = lib.mkIf (config.mrpack.quiltLoaderVersion != null) {
+          enable = true;
+          version = config.mrpack.quiltLoaderVersion;
+          minecraftVersion = config.mrpack.minecraftVersion;
+        };
 
         version = config.mrpack.minecraftVersion;
 

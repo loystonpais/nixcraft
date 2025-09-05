@@ -34,6 +34,8 @@ in
       then index.dependencies.fabric-loader
       else null;
 
+    quiltLoaderVersion = index.dependencies.quilt-loader or null;
+
     overrides = listToAttrs (
       map
       (path: {
@@ -67,6 +69,7 @@ in
       overrides-plus-client-overrides
       overrides-plus-server-overrides
       fabricLoaderVersion
+      quiltLoaderVersion
       ;
     inherit (index) name versionId formatVersion;
     minecraftVersion = minecraftVersion;
