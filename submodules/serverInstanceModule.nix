@@ -108,6 +108,8 @@
       finalLaunchShellScript = ''
         #!${pkgs.bash}/bin/bash
 
+        set -e
+
         ${lib.nixcraft.mkExportedEnvVars config.envVars}
 
         cd "${config.absoluteDir}"

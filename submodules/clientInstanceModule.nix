@@ -211,6 +211,8 @@ in
           defaultScript = ''
             #!${pkgs.bash}/bin/bash
 
+            set -e
+
             ${lib.nixcraft.mkExportedEnvVars config.envVars}
 
             cd "${config.absoluteDir}"
@@ -221,6 +223,8 @@ in
           if config.waywall.enable
           then ''
             #!${pkgs.bash}/bin/bash
+
+            set -e
 
             exec "${config.waywall.package}/bin/waywall" wrap -- "${pkgs.writeTextFile
               {
