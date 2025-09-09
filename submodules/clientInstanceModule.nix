@@ -249,7 +249,15 @@ in
           mainClass = lib.mkDefault config.meta.versionData.mainClass;
           version = config.meta.versionData.id;
           assetIndex = config.meta.versionData.assets;
-          assetsDir = mkAssetsDir {versionData = config.meta.versionData;};
+          assetsDir =
+            if config.enableFastAssetDownload
+            then
+              (mkAssetsDir {
+                versionData = config.meta.versionData;
+                hash = config.assetHash;
+                useAria2c = config.enableFastAssetDownload;
+              })
+            else mkAssetsDir {versionData = config.meta.versionData;};
 
           # TODO: fix this. not sure how to set this
           gameDir = lib.mkDefault config.absoluteDir;
