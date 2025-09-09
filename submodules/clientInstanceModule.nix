@@ -262,7 +262,7 @@ in
 
         # Default libs copied over from
         # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/pr/prismlauncher/package.nix#L78
-        libs = with pkgs;
+        runtimeLibs = with pkgs;
         with xorg; [
           (lib.getLib stdenv.cc.cc)
           ## native versions

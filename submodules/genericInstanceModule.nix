@@ -97,7 +97,7 @@ in
         type = lib.types.submodule javaSettingsModule;
       };
 
-      libs = lib.mkOption {
+      runtimeLibs = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [];
       };
@@ -160,7 +160,7 @@ in
       # Settings stuff that the user usually doesn't need to alter
       {
         # Set LD_LIBRARY_PATH env var from libs
-        envVars.LD_LIBRARY_PATH = lib.makeLibraryPath config.libs;
+        envVars.LD_LIBRARY_PATH = lib.makeLibraryPath config.runtimeLibs;
 
         # Add busybox to runtime programs (needed for init script)
         runtimePrograms = with pkgs; [busybox];

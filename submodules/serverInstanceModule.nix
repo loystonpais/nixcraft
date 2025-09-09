@@ -125,7 +125,7 @@
 
       paper.minecraftVersion = config.version;
 
-      libs = with pkgs; [udev];
+      runtimeLibs = with pkgs; [udev];
     }
 
     (lib.mkIf config.paper.enable {
