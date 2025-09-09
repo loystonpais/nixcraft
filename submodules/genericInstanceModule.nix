@@ -151,8 +151,31 @@ in
         };
 
         # Set the default java package for client instances
-        # TODO: Fix this stupidity
-        java.package = lib.mkOptionDefault (pkgs."jdk${toString config.meta.versionData.javaVersion.majorVersion}");
+        # is this Good enough ?
+        java.package = lib.mkOptionDefault (let
+          inherit (lib.nixcraft.minecraftVersion) lsEq;
+          versionLsOrEqTo = lsEq config.version;
+
+          # Sometimes java version is not mentioned in the manifest ???
+          versionFromManifest = config.meta.versionData.javaVersion.majorVersion or null;
+
+          versionGuessed =
+            if versionLsOrEqTo "1.16.5"
+            then 8
+            else if versionLsOrEqTo "1.17.1"
+            then 16
+            else if versionLsOrEqTo "1.20.6"
+            then 17
+            else 21;
+
+          finalVersion =
+            if versionFromManifest != null
+            then versionFromManifest
+            else versionGuessed;
+
+          javaPkg = pkgs."jdk${toString finalVersion}" or pkgs.jdk;
+        in
+          javaPkg);
 
         binEntry.name = lib.mkOptionDefault "nixcraft-${config._instanceType}-${name}";
       }
