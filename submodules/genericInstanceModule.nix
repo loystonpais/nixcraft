@@ -107,20 +107,27 @@ in
         default = [];
       };
 
-      finalFileCopyShellScript = lib.mkOption {
-        type = lib.types.str;
-        readOnly = true;
-        description = ''
-          Shell script that places "copy" files
-        '';
-      };
-
       finalLaunchShellCommandString = lib.mkOption {
         type = lib.types.nonEmptyStr;
         readOnly = true;
       };
 
+      finalPreLaunchShellScript = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        readOnly = true;
+      };
+
       finalLaunchShellScript = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        readOnly = true;
+      };
+
+      finalActivationShellScript = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        readOnly = true;
+      };
+
+      finalFilePlacementShellScript = lib.mkOption {
         type = lib.types.nonEmptyStr;
         readOnly = true;
       };
@@ -147,7 +154,6 @@ in
         files.".nixcraft/manifest-version-data.json" = {
           source =
             fetchSha1 sources.normalized-manifest.versions.${config.version};
-          method = "default";
         };
 
         # Set the default java package for client instances
@@ -255,7 +261,7 @@ in
                 else parsedMrpack.overrides-plus-server-overrides;
             in (
               builtins.mapAttrs (placePath: path: {
-                method = "copy";
+                method = "copy-init";
                 source = path;
               })
               files
@@ -291,32 +297,93 @@ in
       })
 
       {
-        finalFileCopyShellScript = let
-          script =
-            lib.concatMapAttrsStringSep "\n" (
-              name: file: let
-                absolutePath = "${config.absoluteDir}/${file.target}";
-                dirName = builtins.dirOf absolutePath;
-              in ''
-                ${lib.optionalString file.force ''
-                  if [ -e ${escapeShellArg absolutePath} ] || [ -L ${escapeShellArg absolutePath} ]; then
-                    echo "Forcing replacement of ${absolutePath}"
-                    rm -rf ${escapeShellArg absolutePath}
-                  fi
-                ''}
+        finalFilePlacementShellScript = let
+          esc = lib.escapeShellArg;
+          entryFilePath = "${config.absoluteDir}/.nixcraft/files";
+          initFilePath = "${config.absoluteDir}/.nixcraft/init";
 
-                if [ ! -e ${escapeShellArg absolutePath} ] && [ ! -L ${escapeShellArg absolutePath} ]; then
-                  mkdir -p ${escapeShellArg dirName}
-                  echo "Placing file (once) ${absolutePath}"
-                  cp ${escapeShellArg file.source} ${escapeShellArg absolutePath}
-                  chmod u+w ${escapeShellArg absolutePath}
-                fi
-              ''
-            )
-            (filterAttrs (name: file: file.enable && file.method == "copy") config.files);
+          enabledFiles = filterAttrs (name: file: file.enable) config.files;
+
+          files'copy = filterAttrs (name: file: file.method == "copy") enabledFiles;
+          files'symlink = filterAttrs (name: file: file.method == "symlink") enabledFiles;
+          files'copy-init = filterAttrs (name: file: file.method == "copy-init") enabledFiles;
+
+          files'entries = filterAttrs (name: file: file.method == "copy-init" || file.method == "symlink") enabledFiles;
+
+          script'copy-init =
+            lib.concatMapAttrsStringSep "\n" (name: file: let
+              fileAbsPath = "${config.absoluteDir}/${file.target}";
+              fileAbsDirPath = builtins.dirOf fileAbsPath;
+            in ''
+              mkdir -p ${esc fileAbsDirPath}
+              # echo "copy-init (once) ${esc file.source} -> ${esc fileAbsPath}"
+              rm -rf ${esc fileAbsPath}
+              cp ${esc file.source} ${esc fileAbsPath}
+              chmod u+w ${esc fileAbsPath}
+            '')
+            files'copy-init;
+
+          script'copy =
+            lib.concatMapAttrsStringSep "\n" (name: file: let
+              fileAbsPath = "${config.absoluteDir}/${file.target}";
+              fileAbsDirPath = builtins.dirOf fileAbsPath;
+            in ''
+              mkdir -p ${esc fileAbsDirPath}
+              # echo "copy (always) ${esc file.source} -> ${esc fileAbsPath}"
+              rm -rf ${esc fileAbsPath}
+              cp ${esc file.source} ${esc fileAbsPath}
+              chmod u+w ${esc fileAbsPath}
+            '')
+            files'copy;
+
+          script'symlink =
+            lib.concatMapAttrsStringSep "\n" (name: file: let
+              fileAbsPath = "${config.absoluteDir}/${file.target}";
+              fileAbsDirPath = builtins.dirOf fileAbsPath;
+            in ''
+              mkdir -p ${esc fileAbsDirPath}
+              # echo "symlink ${esc file.source} -> ${esc fileAbsPath}"
+              rm -rf ${esc fileAbsPath}
+              ln -s ${esc file.source} ${esc fileAbsPath}
+            '')
+            files'symlink;
         in ''
-          mkdir -p ${escapeShellArg config.absoluteDir}
-          ${script}
+          mkdir -p ${esc config.absoluteDir}
+          mkdir -p ${esc config.absoluteDir}/.nixcraft
+
+          if [ -f ${esc entryFilePath} ]; then
+            # echo "Removing old files..."
+            while IFS= read -r f; do
+                # echo "Removing $f"
+                rm -rf "$f"
+                rmdir --ignore-fail-on-non-empty "$(dirname "$f")" 2>/dev/null || true
+            done < ${esc entryFilePath}
+            rm -f ${esc entryFilePath}
+          fi
+
+          # echo "Placing files for" ${esc config.name}
+
+          ${script'copy}
+          ${script'symlink}
+
+          if [ ! -e ${esc initFilePath} ]; then
+            ${script'copy-init}
+            touch ${esc initFilePath}
+          fi
+
+          rm -rf ${esc entryFilePath}
+          cp ${builtins.toFile "entries" (
+            lib.concatMapAttrsStringSep "\n" (name: file: "${config.absoluteDir}/${file.target}") files'entries
+          )}  ${esc entryFilePath}
+        '';
+
+        finalActivationShellScript = ''
+          # do nothing
+        '';
+
+        finalPreLaunchShellScript = ''
+          # do nothing
+          ${config.finalFilePlacementShellScript}
         '';
       }
 

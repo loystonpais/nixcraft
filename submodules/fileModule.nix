@@ -16,13 +16,13 @@
     };
 
     method = lib.mkOption {
-      type = lib.types.enum ["default" "copy"];
-      default = "default";
+      type = lib.types.enum ["copy" "copy-init" "symlink"];
+      default = "symlink";
       description = ''
         Method to place the file in target location
-          copy     - copy once during init (suitable for config files from modpacks)
-          default - hand over file management to external module (if possible)
-                    If using home-manager then it handles the file
+          copy-init     - copy once during init (suitable for config files from modpacks)
+          copy          - copy every rebuild
+          symlink - symlink every rebuild
       '';
     };
 

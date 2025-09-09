@@ -112,6 +112,8 @@
 
         ${lib.nixcraft.mkExportedEnvVars config.envVars}
 
+        ${config.finalFilePlacementShellScript}
+
         cd "${config.absoluteDir}"
 
         exec ${config.finalLaunchShellCommandString} "$@"

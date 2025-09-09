@@ -7,7 +7,7 @@
   pkgs,
   config,
   ...
-}: let
+} @ hmModuleArgs: let
   passThroughArgs =
     flakeModuleArgs
     // {
@@ -66,6 +66,11 @@ in {
 
     (lib.mkIf config.nixcraft.enable (
       lib.mkMerge [
+        # Generic
+        {
+          home.activation.nixcraftActivation = hmModuleArgs.lib.hm.dag.entryAfter ["writeBoundary"] (config.nixcraft.finalActivationShellScript);
+        }
+
         # Managing client
         {
           home = lib.mkMerge [
@@ -75,13 +80,6 @@ in {
                   (lib.mkIf instance.binEntry.enable {
                     packages = [instance.binEntry.finalBin];
                   })
-
-                  {
-                    file."${instance.dir}/.nixcraft/hm-init" = {
-                      text = "";
-                      onChange = instance.finalFileCopyShellScript;
-                    };
-                  }
 
                   (placeFilesFromDirFiles (lib.filterAttrs (name: file: file.method == "default") instance.files)
                     instance.dir)
@@ -115,13 +113,6 @@ in {
                 (lib.mkIf instance.binEntry.enable {
                   packages = [instance.binEntry.finalBin];
                 })
-
-                {
-                  file."${instance.dir}/.nixcraft/hm-init" = {
-                    text = "";
-                    onChange = instance.finalFileCopyShellScript;
-                  };
-                }
 
                 (placeFilesFromDirFiles (lib.filterAttrs (name: file: file.method == "default") instance.files)
                   instance.dir)

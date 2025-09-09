@@ -215,6 +215,8 @@ in
 
             ${lib.nixcraft.mkExportedEnvVars config.envVars}
 
+            ${config.finalFilePlacementShellScript}
+
             cd "${config.absoluteDir}"
 
             exec ${config.finalLaunchShellCommandString} "$@"
@@ -259,7 +261,6 @@ in
               })
             else mkAssetsDir {versionData = config.meta.versionData;};
 
-          # TODO: fix this. not sure how to set this
           gameDir = lib.mkDefault config.absoluteDir;
         };
 
