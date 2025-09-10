@@ -25,18 +25,29 @@ in {
       type = lib.types.submodule serverModule;
     };
 
+    activationShellScript = lib.mkOption {
+      type = lib.types.lines;
+    };
+
     finalActivationShellScript = lib.mkOption {
       readOnly = true;
-      type = lib.types.str;
+      type = lib.types.lines;
     };
   };
 
   config = lib.mkMerge [
     {
-      finalActivationShellScript = lib.concatStringsSep "\n" [
-        (lib.concatMapAttrsStringSep "\n" (name: instance: instance.finalActivationShellScript) config.client.instances)
-        (lib.concatMapAttrsStringSep "\n" (name: instance: instance.finalActivationShellScript) config.server.instances)
-      ];
+      finalActivationShellScript = ''
+        ${config.activationShellScript}
+      '';
+    }
+
+    {
+      activationShellScript = lib.concatMapAttrsStringSep "\n" (name: instance: instance.finalActivationShellScript) config.client.instances;
+    }
+
+    {
+      activationShellScript = lib.concatMapAttrsStringSep "\n" (name: instance: instance.finalActivationShellScript) config.server.instances;
     }
   ];
 }
