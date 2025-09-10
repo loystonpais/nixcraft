@@ -21,19 +21,19 @@
   librariesListWithPath = map (
     artif: {
       src = fetchSha1 artif.downloads.artifact;
-      path = dirOf artif.downloads.artifact.path;
+      path = artif.downloads.artifact.path;
     }
   ) (lib.filter (x: !(x.downloads ? "classifiers")) artifacts);
 
   placeClient = ''
-    mkdir -p $out/libraries
-    ln -s ${client} $out/libraries/client.jar
+    mkdir -p $out
+    ln -s ${client} $out/client.jar
   '';
 
   placeLibs =
     concatMapStringsSep "\n" (library: ''
       mkdir -p $out
-      mkdir -p $out/${library.path}
+      mkdir -p $out/${dirOf library.path}
       ln -s ${library.src} $out/${library.path}
     '')
     librariesListWithPath;
