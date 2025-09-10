@@ -93,6 +93,22 @@ in
         default = {};
       };
 
+      placeFilesAtActivation =
+        (lib.mkEnableOption "placing files during activation")
+        // {
+          default = false;
+        };
+
+      preLaunchShellScript = lib.mkOption {
+        type = lib.types.lines;
+        default = '''';
+      };
+
+      activationShellScript = lib.mkOption {
+        type = lib.types.lines;
+        default = '''';
+      };
+
       java = lib.mkOption {
         type = lib.types.submodule javaSettingsModule;
       };
@@ -108,27 +124,27 @@ in
       };
 
       finalLaunchShellCommandString = lib.mkOption {
-        type = lib.types.nonEmptyStr;
+        type = lib.types.lines;
         readOnly = true;
       };
 
       finalPreLaunchShellScript = lib.mkOption {
-        type = lib.types.nonEmptyStr;
+        type = lib.types.lines;
         readOnly = true;
       };
 
       finalLaunchShellScript = lib.mkOption {
-        type = lib.types.nonEmptyStr;
+        type = lib.types.lines;
         readOnly = true;
       };
 
       finalActivationShellScript = lib.mkOption {
-        type = lib.types.nonEmptyStr;
+        type = lib.types.lines;
         readOnly = true;
       };
 
       finalFilePlacementShellScript = lib.mkOption {
-        type = lib.types.nonEmptyStr;
+        type = lib.types.lines;
         readOnly = true;
       };
 
@@ -261,7 +277,7 @@ in
                 else parsedMrpack.overrides-plus-server-overrides;
             in (
               builtins.mapAttrs (placePath: path: {
-                method = "copy-init";
+                method = lib.mkDefault "copy-init";
                 source = path;
               })
               files
@@ -296,6 +312,18 @@ in
         ];
       })
 
+      (lib.mkIf (config.placeFilesAtActivation) {
+        activationShellScript = ''
+          ${config.finalFilePlacementShellScript}
+        '';
+      })
+
+      (lib.mkIf (config.placeFilesAtActivation == false) {
+        preLaunchShellScript = ''
+          ${config.finalFilePlacementShellScript}
+        '';
+      })
+
       {
         finalFilePlacementShellScript = let
           esc = lib.escapeShellArg;
@@ -316,9 +344,9 @@ in
               fileAbsDirPath = builtins.dirOf fileAbsPath;
             in ''
               mkdir -p ${esc fileAbsDirPath}
-              # echo "copy-init (once) ${esc file.source} -> ${esc fileAbsPath}"
+              # echo "copy-init (once) ${esc file.finalSource} -> ${esc fileAbsPath}"
               rm -rf ${esc fileAbsPath}
-              cp ${esc file.source} ${esc fileAbsPath}
+              cp ${esc file.finalSource} ${esc fileAbsPath}
               chmod u+w ${esc fileAbsPath}
             '')
             files'copy-init;
@@ -329,9 +357,9 @@ in
               fileAbsDirPath = builtins.dirOf fileAbsPath;
             in ''
               mkdir -p ${esc fileAbsDirPath}
-              # echo "copy (always) ${esc file.source} -> ${esc fileAbsPath}"
+              # echo "copy (always) ${esc file.finalSource} -> ${esc fileAbsPath}"
               rm -rf ${esc fileAbsPath}
-              cp ${esc file.source} ${esc fileAbsPath}
+              cp ${esc file.finalSource} ${esc fileAbsPath}
               chmod u+w ${esc fileAbsPath}
             '')
             files'copy;
@@ -342,9 +370,9 @@ in
               fileAbsDirPath = builtins.dirOf fileAbsPath;
             in ''
               mkdir -p ${esc fileAbsDirPath}
-              # echo "symlink ${esc file.source} -> ${esc fileAbsPath}"
+              # echo "symlink ${esc file.finalSource} -> ${esc fileAbsPath}"
               rm -rf ${esc fileAbsPath}
-              ln -s ${esc file.source} ${esc fileAbsPath}
+              ln -s ${esc file.finalSource} ${esc fileAbsPath}
             '')
             files'symlink;
         in ''
@@ -375,15 +403,6 @@ in
           cp ${builtins.toFile "entries" (
             lib.concatMapAttrsStringSep "\n" (name: file: "${config.absoluteDir}/${file.target}") files'entries
           )}  ${esc entryFilePath}
-        '';
-
-        finalActivationShellScript = ''
-          # do nothing
-        '';
-
-        finalPreLaunchShellScript = ''
-          # do nothing
-          ${config.finalFilePlacementShellScript}
         '';
       }
 

@@ -215,7 +215,7 @@ in
 
             ${lib.nixcraft.mkExportedEnvVars config.envVars}
 
-            ${config.finalFilePlacementShellScript}
+            ${config.finalPreLaunchShellScript}
 
             cd "${config.absoluteDir}"
 
@@ -236,6 +236,14 @@ in
               }}" "$@"
           ''
           else defaultScript;
+
+        finalActivationShellScript = ''
+          ${config.activationShellScript}
+        '';
+
+        finalPreLaunchShellScript = ''
+          ${config.preLaunchShellScript}
+        '';
 
         dir = lib.mkDefault "${instanceDirPrefix}/${config.name}";
         absoluteDir = "${rootDir}/${config.dir}";

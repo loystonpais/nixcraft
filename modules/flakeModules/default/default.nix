@@ -13,12 +13,21 @@
       }
       // flakeModuleArgs);
   };
+
+  nixosModules = {
+    default = flake-parts-lib.importApply "${self}/modules/nixosModules/default" ({
+        localFlake = self;
+        inherit sources;
+      }
+      // flakeModuleArgs);
+  };
 in {
   config = {
     systems = ["x86_64-linux"];
     flake = {
       lib = lib.nixcraft;
       inherit homeModules;
+      inherit nixosModules;
     };
     perSystem = {
       config,

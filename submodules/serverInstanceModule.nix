@@ -112,11 +112,19 @@
 
         ${lib.nixcraft.mkExportedEnvVars config.envVars}
 
-        ${config.finalFilePlacementShellScript}
+        ${config.finalPreLaunchShellScript}
 
         cd "${config.absoluteDir}"
 
         exec ${config.finalLaunchShellCommandString} "$@"
+      '';
+
+      finalActivationShellScript = ''
+        ${config.activationShellScript}
+      '';
+
+      finalPreLaunchShellScript = ''
+        ${config.preLaunchShellScript}
       '';
 
       dir = lib.mkDefault "${instanceDirPrefix}/${config.name}";

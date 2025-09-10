@@ -159,6 +159,23 @@ in rec {
       attrs
     );
 
+  toMinecraftOptionsTxt = attrs:
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (
+        key: value: "${key}:${
+          if lib.isBool value
+          then
+            (
+              if value
+              then "true"
+              else "false"
+            )
+          else toString value
+        }"
+      )
+      (lib.filterAttrs (n: v: v != null) attrs)
+    );
+
   modules = {
     # Crazy function
     # https://discourse.nixos.org/t/infinite-recursion-in-module-with-mkmerge/10989/13
