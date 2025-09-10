@@ -4186,5 +4186,13 @@
   "org.quiltmc:hashed:1.18-pre8": {
     "url": "https://maven.quiltmc.org/repository/release",
     "sha256": "80a3d6736826a0a2fccdee31088b6e4a438b9ded0a44c2245e4ca8b332b295ed"
+  },
+  "net.fabricmc:intermediary:25w37a": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "fb4695acf93f20c4ee2d258d495213e3ec963d48dc116e25d565d6dec2d57140"
+  },
+  "org.quiltmc:hashed:25w37a": {
+    "url": "https://maven.quiltmc.org/repository/release",
+    "sha256": "320e36aaedd239d78d91d6890da24064144890ce7f387b8a1433868bcd1a62c2"
   }
 }
