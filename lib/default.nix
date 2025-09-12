@@ -186,25 +186,8 @@ in rec {
       );
   };
 
-  manifest = rec {
+  manifest = {
     mkAssetHashPath = sha1: (builtins.substring 0 2 sha1) + "/" + sha1;
-
-    isArtifactAllowed = OS: artifact: let
-      lemma1 = acc: rule:
-        if rule.action == "allow"
-        then
-          if rule ? os
-          then rule.os.name == OS
-          else true
-        else if rule ? os
-        then rule.os.name != OS
-        else false;
-    in
-      if artifact ? rules
-      then foldl' lemma1 false artifact.rules
-      else true;
-
-    filterArtifacts = OS: artifacts: filter (isArtifactAllowed OS) artifacts;
   };
 
   # source: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/config/shells-environment.nix#L14
@@ -329,7 +312,7 @@ in rec {
     mkInputEntries = entries: lib.concatMapStringsSep "\n" (entry: mkInputEntry entry) entries;
   };
 
-  maven = {
+  maven = rec {
     mkLibUrl = url: libString: let
       inherit (lib) splitString replaceString;
       inherit (builtins) elemAt;
@@ -339,5 +322,31 @@ in rec {
       name = elemAt libStringParts 1;
       version = elemAt libStringParts 2;
     in "${url}/${dir}/${name}/${version}/${name}-${version}.jar";
+
+    isLibraryAllowedForOS = OS: library: let
+      lemma1 = acc: rule:
+        if rule.action == "allow"
+        then
+          if rule ? os
+          then rule.os.name == OS
+          else true
+        else if rule ? os
+        then rule.os.name != OS
+        else false;
+    in
+      if library ? rules
+      then foldl' lemma1 false library.rules
+      else true;
+
+    filterLibrariesByOS = OS: libraries: filter (isLibraryAllowedForOS OS) libraries;
+
+    filterClassifiers = library: lib.filter (x: !(x.downloads ? "classifiers")) library;
+
+    filterEmptyArtifactUrl = lib.filter (x: !(x.downloads.artifact.url == ""));
+
+    librariesByName = libraries:
+      lib.listToAttrs (map (library: nameValuePair library.name library) libraries);
+
+    toLibraryArtifactLinkTree = fetcher: libraries: lib.mapAttrs' (name: library: nameValuePair library.downloads.artifact.path (fetcher library.downloads.artifact)) (librariesByName libraries);
   };
 }

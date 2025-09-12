@@ -13,10 +13,10 @@
   unzip ? pkgs.unzip,
 }: let
   inherit (lib) concatMapStringsSep;
-  inherit (lib.nixcraft.manifest) filterArtifacts;
+  inherit (lib.nixcraft.maven) filterLibrariesByOS;
 
   # TODO: add support for osx
-  artifacts = filterArtifacts "linux" versionData.libraries;
+  artifacts = filterLibrariesByOS "linux" versionData.libraries;
 
   # Native libraries come zipped
   nativeLibrariesZippedList = map (

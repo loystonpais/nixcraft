@@ -257,7 +257,7 @@ in
       {
         _classSettings = {
           mainClass = lib.mkDefault config.meta.versionData.mainClass;
-          version = config.meta.versionData.id;
+          version = lib.mkOptionDefault config.meta.versionData.id;
           assetIndex = config.meta.versionData.assets;
           assetsDir =
             if config.enableFastAssetDownload
@@ -272,7 +272,9 @@ in
           gameDir = lib.mkDefault config.absoluteDir;
         };
 
-        java.cp = listJarFilesRecursive (mkLibDir {versionData = config.meta.versionData;});
+        libraries = config.meta.versionData.libraries;
+
+        mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
 
         # TODO: in javaSettingsModule try to implement this as an actual option
         java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.meta.versionData;}}"];
@@ -328,6 +330,14 @@ in
           __GLX_VENDOR_LIBRARY_NAME = "nvidia";
           __VK_LAYER_NV_optimus = "NVIDIA_only";
         };
+      })
+
+      (lib.mkIf config.forgeLoader.enable {
+        _classSettings.mainClass = "net.minecraftforge.bootstrap.ForgeBootstrap";
+        _classSettings.version = config.forgeLoader.parsedForgeLoader.versionId;
+        extraArguments = ["--launchTarget" "forge_client"];
+        mainJar = let installDir = config.forgeLoader.parsedForgeLoader.clientInstallDirWithClientJar (fetchSha1 config.meta.versionData.downloads.client); in "${installDir}/libraries/net/minecraftforge/forge/${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}/forge-${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}-client.jar";
+        libraries = config.forgeLoader.parsedForgeLoader.versionLibraries;
       })
 
       (lib.mkIf config.fabricLoader.enable {

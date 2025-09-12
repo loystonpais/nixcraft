@@ -24,8 +24,8 @@
     };
 
     cp = lib.mkOption {
-      type = with lib.types; nullOr (listOf path);
-      default = null;
+      type = with lib.types; (listOf path);
+      default = [];
     };
 
     extraArguments = lib.mkOption {
@@ -41,8 +41,8 @@
           (optional (config.minMemory != null) "-Xms${toString config.minMemory}m")
           (optional (config.maxMemory != null) "-Xmx${toString config.maxMemory}m")
 
-          (optional (config.cp != null) "-cp")
-          (optional (config.cp != null) (concatStringsSep ":" config.cp))
+          (optional (config.cp != []) "-cp")
+          (optional (config.cp != []) (concatStringsSep ":" config.cp))
 
           config.extraArguments
         ];

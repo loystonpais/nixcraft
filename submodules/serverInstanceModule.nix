@@ -26,12 +26,6 @@
       };
     };
 
-    _serverJar = lib.mkOption {
-      type = lib.types.package;
-      internal = true;
-      default = fetchSha1 config.meta.versionData.downloads.server;
-    };
-
     _mainClass = lib.mkOption {
       type = lib.types.nonEmptyStr;
       internal = true;
@@ -131,7 +125,10 @@
       absoluteDir = "${rootDir}/${config.dir}";
 
       _instanceType = "server";
-      java.cp = ["${config._serverJar}"];
+
+      mainJar = lib.mkDefault (
+        fetchSha1 config.meta.versionData.downloads.server
+      );
 
       paper.minecraftVersion = config.version;
 
@@ -139,7 +136,7 @@
     }
 
     (lib.mkIf config.paper.enable {
-      _serverJar = config.paper._serverJar;
+      mainJar = config.paper._serverJar;
       _mainClass = config.paper._mainClass;
     })
 
@@ -159,7 +156,10 @@
     })
 
     (lib.mkIf (config.serverProperties != null) {
-      files."server.properties".text = lib.nixcraft.toMinecraftServerProperties config.serverProperties;
+      files."server.properties" = {
+        type = "properties";
+        value = config.serverProperties;
+      };
     })
 
     # TODO: find correct way to do validations

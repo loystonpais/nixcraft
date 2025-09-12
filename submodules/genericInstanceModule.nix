@@ -8,6 +8,7 @@
   javaSettingsModule,
   fileModule,
   fetchSha1,
+  mkLibDir,
   sources,
   ...
 }: let
@@ -113,6 +114,15 @@ in
         type = lib.types.submodule javaSettingsModule;
       };
 
+      libraries = lib.mkOption {
+        type = lib.types.listOf lib.types.attrs;
+        default = [];
+      };
+
+      mainJar = lib.mkOption {
+        type = lib.types.path;
+      };
+
       runtimeLibs = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [];
@@ -212,11 +222,43 @@ in
 
         # Set PATH from runtime programs
         envVars.PATH = lib.makeBinPath config.runtimePrograms;
+
+        # Make lib dir out of all libraries and then
+        # pass them to java class paths
+        java.cp = let
+          normalLibDir = mkLibDir {
+            libraries = config.libraries;
+          };
+
+          # Fix bug with jopt-simple which gets an invalid module name
+          # due to it being a symlink
+          patchedForgeLibDir = normalLibDir.overrideAttrs (final: prev: {
+            buildCommand = ''
+              ${prev.buildCommand}
+              if [ -d $out/net/sf/jopt-simple ]; then
+                chmod -R u+w $out/net/sf/jopt-simple
+                for f in $(find $out/net/sf/jopt-simple -type l); do
+                  cp --remove-destination $(readlink $f) $f
+                done
+              fi
+            '';
+          });
+
+          libDir =
+            if config.forgeLoader.enable
+            then patchedForgeLibDir
+            else normalLibDir;
+        in
+          (listJarFilesRecursive libDir)
+          ++ [config.mainJar];
       }
 
       # Forge loader stuff
       {
-        forgeLoader.minecraftVersion = lib.mkOptionDefault config.version;
+        forgeLoader = {
+          minecraftVersion = lib.mkOptionDefault config.version;
+          _instanceType = config._instanceType;
+        };
       }
 
       # fabric loader stuff

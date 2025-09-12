@@ -42,6 +42,16 @@ in {
         inherit system;
       };
 
+      debugging = {
+        testFetchForgeImpure1 = builders.mkForgeDir {
+          forgeInstaller = pkgs.fetchurl {
+            url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.21.8-58.1.0/forge-1.21.8-58.1.0-installer.jar";
+            hash = "sha256-jeh6IYS6WL3uwxvAtY2wEH3w/I1ORwRRbFVR92YsUcc=";
+          };
+          mcVersion = "1.21.8";
+        };
+      };
+
       runInRepoRoot = {
         update-asset-sha256 =
           pkgs.writers.writePython3Bin "update-asset-sha256" {
@@ -87,7 +97,7 @@ in {
         sources.normalized-manifest.versions;
 
       legacyPackages = {
-        inherit runInRepoRoot runInRepoRootUpdateAssetSha256For;
+        inherit runInRepoRoot runInRepoRootUpdateAssetSha256For debugging;
       };
 
       packages =

@@ -1,4 +1,11 @@
-{lib, ...}: {
+{
+  lib,
+  sources,
+  pkgs,
+  parseForgeInstaller,
+  fetchSha1,
+  ...
+}: {
   name,
   config,
   ...
@@ -11,6 +18,21 @@
     };
 
     minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
+
+    _instanceType = lib.mkOption {
+      type = lib.types.enum ["client" "server"];
+    };
+
+    parsedForgeLoader = lib.mkOption {
+      type = lib.types.attrs;
+      readOnly = true;
+      default = parseForgeInstaller {
+        jar = pkgs.fetchurl {
+          url = "https://maven.minecraftforge.net/net/minecraftforge/forge/${config.minecraftVersion}-${config.version}/forge-${config.minecraftVersion}-${config.version}-installer.jar";
+          hash = config.hash;
+        };
+      };
+    };
 
     hash = lib.mkOption {
       type = lib.types.nonEmptyStr;
