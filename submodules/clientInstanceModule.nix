@@ -68,6 +68,17 @@ in
         type = with lib.types; nullOr (submodule minecraftAccountModule);
       };
 
+      saves = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.path);
+        default = {};
+        description = ''
+          World saves. Placed only if the directory already doesn't exist
+          {
+            "My World" = /path/to/world
+          }
+        '';
+      };
+
       extraArguments = lib.mkOption {
         type = with lib.types; listOf nonEmptyStr;
         default = [];
@@ -252,6 +263,21 @@ in
         waywall = {
           package = pkgs.waywall;
         };
+      }
+
+      # Place saves
+      {
+        preLaunchShellScript =
+          lib.concatMapAttrsStringSep "\n" (name: path: let
+            absPlacePath = "${config.absoluteDir}/saves/${name}";
+          in ''
+            if [ ! -d ${escapeShellArg absPlacePath} ]; then
+              rm -rf ${escapeShellArg absPlacePath}
+              cp -R ${escapeShellArg path} ${escapeShellArg absPlacePath}
+              chmod -R u+w ${escapeShellArg absPlacePath}
+            fi
+          '')
+          config.saves;
       }
 
       {
