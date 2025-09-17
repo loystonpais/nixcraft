@@ -1,4 +1,10 @@
 {
+  "1.21.9-pre1": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.9-pre1",
+      "org.quiltmc:hashed:1.21.9-pre1"
+    ]
+  },
   "25w37a": {
     "dependencies": [
       "net.fabricmc:intermediary:25w37a",
