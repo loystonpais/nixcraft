@@ -14,8 +14,7 @@
           modules = [serverInstanceModule];
           specialArgs = {
             shared = config.shared;
-            instanceDirPrefix = config.instanceDirPrefix;
-            rootDir = config.rootDir;
+            dirPrefix = "${config.rootDir}/${config.dirPrefix}";
           };
         });
     };
@@ -25,13 +24,13 @@
       default = {};
     };
 
-    instanceDirPrefix = lib.mkOption {
-      type = lib.types.nonEmptyStr;
+    dirPrefix = lib.mkOption {
+      type = lib.types.pathWith {absolute = false;};
       internal = true;
     };
 
     rootDir = lib.mkOption {
-      type = lib.types.nonEmptyStr;
+      type = lib.types.pathWith {absolute = true;};
       readOnly = true;
       internal = true;
     };

@@ -24,8 +24,6 @@ in
     name,
     config,
     shared ? {},
-    instanceDirPrefix,
-    rootDir,
     ...
   }: {
     imports = [genericInstanceModule];
@@ -255,9 +253,6 @@ in
         finalPreLaunchShellScript = ''
           ${config.preLaunchShellScript}
         '';
-
-        dir = lib.mkDefault "${instanceDirPrefix}/${config.name}";
-        absoluteDir = "${rootDir}/${config.dir}";
 
         # set waywall stuff
         waywall = {

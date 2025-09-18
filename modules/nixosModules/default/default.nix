@@ -37,11 +37,11 @@ in {
     {
       nixcraft = {
         client = {
-          instanceDirPrefix = "client/instances";
+          dirPrefix = "client/instances";
           rootDir = "/var/lib/nixcraft";
         };
         server = {
-          instanceDirPrefix = "server/instances";
+          dirPrefix = "server/instances";
           rootDir = "/var/lib/nixcraft";
         };
       };

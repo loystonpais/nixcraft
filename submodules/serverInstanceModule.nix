@@ -10,8 +10,6 @@
   name,
   config,
   shared ? {},
-  instanceDirPrefix,
-  rootDir,
   ...
 }: {
   imports = [genericInstanceModule];
@@ -120,9 +118,6 @@
       finalPreLaunchShellScript = ''
         ${config.preLaunchShellScript}
       '';
-
-      dir = lib.mkDefault "${instanceDirPrefix}/${config.name}";
-      absoluteDir = "${rootDir}/${config.dir}";
 
       _instanceType = "server";
 

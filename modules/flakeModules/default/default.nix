@@ -42,6 +42,17 @@ in {
         inherit system;
       };
 
+      submoduleArgs =
+        flakeModuleArgs
+        // {
+          inherit pkgs;
+          inherit system;
+          inherit sources;
+        }
+        // builders;
+
+      submodules = lib.nixcraft.importSubmodules "${self}/submodules" submoduleArgs;
+
       debugging = {
         testFetchForgeImpure1 = builders.mkForgeDir {
           forgeInstaller = pkgs.fetchurl {
@@ -100,8 +111,11 @@ in {
         inherit runInRepoRoot runInRepoRootUpdateAssetSha256For debugging;
       };
 
-      packages =
-        lib.nixcraft.importPackages "${self}/packages" pkgs {};
+      packages = lib.nixcraft.importPackages "${self}/packages" pkgs {
+        inherit sources;
+        inherit builders;
+        inherit submodules;
+      };
     in {
       inherit packages;
       inherit legacyPackages;

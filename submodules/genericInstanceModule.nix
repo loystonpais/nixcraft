@@ -18,6 +18,7 @@ in
   {
     name,
     config,
+    dirPrefix,
     ...
   }: {
     options = {
@@ -28,14 +29,16 @@ in
         default = name;
       };
 
-      dir = lib.mkOption {
-        type = lib.types.nonEmptyStr;
-      };
-
-      absoluteDir = lib.mkOption {
-        type = lib.types.nonEmptyStr;
-        readOnly = true;
-      };
+      absoluteDir = lib.mkOption ({
+          type = lib.types.pathWith {absolute = true;};
+        }
+        // (
+          if dirPrefix != null
+          then {
+            default = "${dirPrefix}/${name}";
+          }
+          else {}
+        ));
 
       version = lib.nixcraft.options.minecraftVersionDyn;
 

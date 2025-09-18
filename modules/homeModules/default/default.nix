@@ -54,11 +54,11 @@ in {
     {
       nixcraft = {
         client = {
-          instanceDirPrefix = ".local/share/nixcraft/client/instances";
+          dirPrefix = ".local/share/nixcraft/client/instances";
           rootDir = config.home.homeDirectory;
         };
         server = {
-          instanceDirPrefix = ".local/share/nixcraft/server/instances";
+          dirPrefix = ".local/share/nixcraft/server/instances";
           rootDir = config.home.homeDirectory;
         };
       };
