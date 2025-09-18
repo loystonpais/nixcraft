@@ -1,9 +1,50 @@
 # Nixcraft (WIP)
 
-Example home manager configuration (might break)
+Nixcraft - A declarative minecraft launcher in nix
+
+Warning - This project is a work in progress. Do expect things to break.
+
+## Features
+
+  1. Supports clients and servers
+  2. Supports Mod Loaders (Fabric loader, Quilt loader & paper servers)
+  3. Supports Modpacks (modrinth .mrpack)
+  4. MCSR - Supports speedrunning related content
+
+## TODO
+
+  1. Support Forge
+  2. Support more modpacks such as packwiz
+
+## Usage
+
+You can run a minecraft instance right off the bat.
+
+Example one-liner commands to run in the current dir
+
+```sh
+# server
+nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.server.override { config = { version = "1.21.1"; absoluteDir = builtins.getEnv "PWD"; agreeToEula = true; }; }'
+
+# client
+nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { config = { version = "1.16.1"; account = {  }; absoluteDir = builtins.getEnv "PWD"; }; }'
+```
+
+## Usage (home-manager)
+
+Nixcraft module can be integrated with home-manager and nixos modules.
 
 ```nix
-# This config showcases several nixcraft's features (home manager only)
+# in flake.nix inputs add
+nixcraft = {
+    url = "github:loystonpais/nixcraft";
+    inputs.follows.nixpkgs = "nixpkgs"; # Set correct anixpkgs name
+};
+
+```
+
+```nix
+# Config showcasing nixcraft's features
 {
   config,
   pkgs,
