@@ -3,18 +3,17 @@
   lib,
   submodules,
   config ? {},
-  name ? "minecraft-client",
+  name ? "minecraft-server",
   ...
 }: let
-  clientInstanceModule = submodules.clientInstanceModule;
+  serverInstanceModule = submodules.serverInstanceModule;
 
   evaluated = lib.evalModules {
     modules = [
-      clientInstanceModule
+      serverInstanceModule
       config
       {
         version = lib.mkDefault "latest-version";
-        account = lib.mkDefault {};
       }
     ];
     specialArgs = {
@@ -25,6 +24,6 @@
   };
 in
   # For some reason, passing just the finalBin doesn't work???
-  pkgs.writeShellScriptBin "minecraft-client" ''
+  pkgs.writeShellScriptBin "minecraft-server" ''
     ${lib.getExe evaluated.config.binEntry.finalBin}
   ''
