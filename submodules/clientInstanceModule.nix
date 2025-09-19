@@ -82,71 +82,69 @@ in
         default = [];
       };
 
-      finalArguments = lib.mkOption {
-        type = with lib.types; listOf str;
+      finalArgumentShellString = lib.mkOption {
+        type = with lib.types; nonEmptyStr;
         readOnly = true;
         default = with lib;
-          concatLists [
-            ["--version" config._classSettings.version]
-            ["--assetsDir" "${config._classSettings.assetsDir}"]
-            ["--assetIndex" config._classSettings.assetIndex]
+          escapeShellArgs (
+            concatLists [
+              ["--version" config._classSettings.version]
+              ["--assetsDir" "${config._classSettings.assetsDir}"]
+              ["--assetIndex" config._classSettings.assetIndex]
 
-            (
-              let
-                cond = config._classSettings.userProperties != null;
-              in
-                (optional cond "--userProperties") ++ (optional cond (builtins.toJSON config._classSettings.userProperties))
-            )
+              (
+                let
+                  cond = config._classSettings.userProperties != null;
+                in
+                  (optional cond "--userProperties") ++ (optional cond (builtins.toJSON config._classSettings.userProperties))
+              )
 
-            (
-              let
-                cond = config._classSettings.gameDir != null;
-              in
-                (optional cond "--gameDir") ++ (optional cond config._classSettings.gameDir)
-            )
+              (
+                let
+                  cond = config._classSettings.gameDir != null;
+                in
+                  (optional cond "--gameDir") ++ (optional cond config._classSettings.gameDir)
+              )
 
-            (
-              let
-                cond = config._classSettings.username != null;
-              in
-                (optional cond "--username") ++ (optional cond config._classSettings.username)
-            )
+              (
+                let
+                  cond = config._classSettings.username != null;
+                in
+                  (optional cond "--username") ++ (optional cond config._classSettings.username)
+              )
 
-            (
-              let
-                cond = config._classSettings.uuid != null;
-              in
-                (optional cond "--uuid") ++ (optional cond config._classSettings.uuid)
-            )
+              (
+                let
+                  cond = config._classSettings.uuid != null;
+                in
+                  (optional cond "--uuid") ++ (optional cond config._classSettings.uuid)
+              )
 
-            (
-              let
-                cond = config._classSettings.height != null;
-              in
-                (optional cond "--height") ++ (optional cond (toString config._classSettings.height))
-            )
+              (
+                let
+                  cond = config._classSettings.height != null;
+                in
+                  (optional cond "--height") ++ (optional cond (toString config._classSettings.height))
+              )
 
-            (
-              let
-                cond = config._classSettings.width != null;
-              in
-                (optional cond "--width") ++ (optional cond (toString config._classSettings.width))
-            )
+              (
+                let
+                  cond = config._classSettings.width != null;
+                in
+                  (optional cond "--width") ++ (optional cond (toString config._classSettings.width))
+              )
 
-            (optional (config._classSettings.fullscreen) "--fullscreen")
+              (optional (config._classSettings.fullscreen) "--fullscreen")
 
-            config.extraArguments
-          ];
+              config.extraArguments
+            ]
+          );
       };
 
       _classSettings = lib.mkOption {
         type = with lib.types;
           submodule {
             options = {
-              mainClass = lib.mkOption {
-                type = lib.types.nonEmptyStr;
-              };
-
               version = lib.mkOption {
                 type = lib.types.nonEmptyStr;
               };
@@ -204,9 +202,8 @@ in
       {
         finalLaunchShellCommandString = concatStringsSep " " [
           ''"${config.java.package}/bin/java"''
-          "${config.java.finalArgumentShellString}"
-          (escapeShellArg config._classSettings.mainClass)
-          (escapeShellArgs config.finalArguments)
+          config.java.finalArgumentShellString
+          config.finalArgumentShellString
 
           # unmodded client doesn't launch if access token is not provided
           "--accessToken $(cat ${
@@ -277,7 +274,6 @@ in
 
       {
         _classSettings = {
-          mainClass = lib.mkDefault config.meta.versionData.mainClass;
           version = lib.mkOptionDefault config.meta.versionData.id;
           assetIndex = config.meta.versionData.assets;
           assetsDir =
@@ -299,6 +295,8 @@ in
 
         # TODO: in javaSettingsModule try to implement this as an actual option
         java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.meta.versionData;}}"];
+
+        java.mainClass = lib.mkDefault config.meta.versionData.mainClass;
 
         # Default libs copied over from
         # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/pr/prismlauncher/package.nix#L78
@@ -354,7 +352,7 @@ in
       })
 
       (lib.mkIf config.forgeLoader.enable {
-        _classSettings.mainClass = "net.minecraftforge.bootstrap.ForgeBootstrap";
+        java.mainClass = "net.minecraftforge.bootstrap.ForgeBootstrap";
         _classSettings.version = config.forgeLoader.parsedForgeLoader.versionId;
         extraArguments = ["--launchTarget" "forge_client"];
         mainJar = let installDir = config.forgeLoader.parsedForgeLoader.clientInstallDirWithClientJar (fetchSha1 config.meta.versionData.downloads.client); in "${installDir}/libraries/net/minecraftforge/forge/${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}/forge-${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}-client.jar";
@@ -362,11 +360,11 @@ in
       })
 
       (lib.mkIf config.fabricLoader.enable {
-        _classSettings.mainClass = config.fabricLoader.meta.clientMainClass;
+        java.mainClass = config.fabricLoader.meta.clientMainClass;
       })
 
       (lib.mkIf config.quiltLoader.enable {
-        _classSettings.mainClass = config.quiltLoader.meta.lock.mainClass.client;
+        java.mainClass = config.quiltLoader.meta.lock.mainClass.client;
       })
 
       (lib.mkIf config.waywall.enable {

@@ -28,6 +28,16 @@
       default = [];
     };
 
+    jar = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+    };
+
+    mainClass = lib.mkOption {
+      type = lib.types.nullOr lib.types.nonEmptyStr;
+      default = null;
+    };
+
     extraArguments = lib.mkOption {
       type = with lib.types; listOf nonEmptyStr;
       default = [];
@@ -45,6 +55,11 @@
           (optional (config.cp != []) (concatStringsSep ":" config.cp))
 
           config.extraArguments
+
+          (optional (config.jar != null) "-jar")
+          (optional (config.jar != null) "${config.jar}")
+
+          (optional (config.mainClass != null) config.mainClass)
         ];
     };
 
@@ -69,6 +84,12 @@
         lib.asserts.assertMsg (config.minMemory <= config.maxMemory)
         "Java min memory can't be more than max memory"
       );
+    }
+
+    {
+      _module.check =
+        lib.assertMsg ((config.mainClass != null -> config.jar == null) && (config.jar != null -> config.mainClass == null))
+        "Either .jar or .mainClass needs to be provided not both";
     }
   ];
 }

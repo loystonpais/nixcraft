@@ -92,9 +92,8 @@
       finalLaunchShellCommandString = with lib;
         concatStringsSep " " [
           ''"${config.java.package}/bin/java"''
-          "${config.java.finalArgumentShellString}"
-          (escapeShellArg config._mainClass)
-          (config.finalArgumentShellString)
+          config.java.finalArgumentShellString
+          config.finalArgumentShellString
         ];
 
       finalLaunchShellScript = ''
@@ -128,19 +127,25 @@
       paper.minecraftVersion = config.version;
 
       runtimeLibs = with pkgs; [udev];
+
+      java.jar = lib.mkDefault config.mainJar;
+      java.mainClass = lib.mkDefault null;
     }
 
     (lib.mkIf config.paper.enable {
+      java.mainClass = lib.mkForce null;
+      java.jar = config.mainJar;
       mainJar = config.paper._serverJar;
-      _mainClass = config.paper._mainClass;
     })
 
     (lib.mkIf config.fabricLoader.enable {
-      _mainClass = config.fabricLoader.meta.serverMainClass;
+      java.jar = lib.mkForce null;
+      java.mainClass = config.fabricLoader.meta.serverMainClass;
     })
 
     (lib.mkIf config.quiltLoader.enable {
-      _mainClass = config.quiltLoader.meta.lock.mainClass.server;
+      java.jar = lib.mkForce null;
+      java.mainClass = config.quiltLoader.meta.lock.mainClass.server;
     })
 
     (lib.mkIf config.agreeToEula {
