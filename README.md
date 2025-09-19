@@ -265,6 +265,15 @@ in {
               };
             };
 
+            # Set custom world saves
+            saves = {
+              "Practice Map" = pkgs.fetchzip {
+                url = "https://github.com/Dibedy/The-MCSR-Practice-Map/releases/download/1.0.1/MCSR.Practice.v1.0.1.zip";
+                stripRoot = false;
+                hash = "sha256-ukedZCk6T+KyWqEtFNP1soAQSFSSzsbJKB3mU3kTbqA=";
+              };
+            };
+
             # place custom files
             files = {
               # mods can also be manually set
