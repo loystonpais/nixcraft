@@ -1,4 +1,9 @@
 {
+  "1.21.9-pre2": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.9-pre2"
+    ]
+  },
   "1.21.9-pre1": {
     "dependencies": [
       "net.fabricmc:intermediary:1.21.9-pre1"

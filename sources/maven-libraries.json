@@ -4202,5 +4202,13 @@
   "net.fabricmc:intermediary:1.21.9-pre1": {
     "url": "https://maven.fabricmc.net",
     "sha256": "43e9745201699750852c5efb6dc83319839d821d936c5485ab17097838772f22"
+  },
+  "net.fabricmc:intermediary:1.21.9-pre2": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "e7efad54222b44b1ed7879bfbc3ae8cccfd04be239aa570307528160898c20ba"
+  },
+  "org.quiltmc:hashed:1.21.9-pre2": {
+    "url": "https://maven.quiltmc.org/repository/release",
+    "sha256": "b7b9b14656dc4810d507e109196d548db73673dee66e9569a5e1205aaf419091"
   }
 }
