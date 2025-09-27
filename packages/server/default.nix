@@ -2,8 +2,8 @@
   pkgs,
   lib,
   submodules,
-  config ? {},
-  name ? "minecraft-server",
+  cfg ? {},
+  name ? "default",
   ...
 }: let
   serverInstanceModule = submodules.serverInstanceModule;
@@ -11,9 +11,10 @@
   evaluated = lib.evalModules {
     modules = [
       serverInstanceModule
-      config
+      cfg
       {
-        version = lib.mkDefault "latest-version";
+        version = lib.mkDefault "latest-release";
+        absoluteDir = lib.mkDefault "/tmp/nixcraft-server/${name}";
       }
     ];
     specialArgs = {
@@ -23,7 +24,4 @@
     };
   };
 in
-  # For some reason, passing just the finalBin doesn't work???
-  pkgs.writeShellScriptBin "minecraft-server" ''
-    ${lib.getExe evaluated.config.binEntry.finalBin}
-  ''
+  evaluated.config.binEntry.finalBin

@@ -22,12 +22,16 @@ You can run a minecraft instance right off the bat.
 
 Example one-liner commands to run in the current dir
 
-```sh
-# server
-nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.server.override { config = { version = "1.21.1"; absoluteDir = builtins.getEnv "PWD"; agreeToEula = true; }; }'
+### server
 
-# client
-nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { config = { version = "1.16.1"; account = {  }; absoluteDir = builtins.getEnv "PWD"; }; }'
+```sh
+nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.server.override { cfg = { version = "1.21.1"; absoluteDir = builtins.getEnv "PWD"; agreeToEula = true; }; }'
+```
+
+### client
+
+```sh
+nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { cfg = { version = "1.16.1"; account = {  }; absoluteDir = builtins.getEnv "PWD"; }; }'
 ```
 
 ## Usage (home-manager)

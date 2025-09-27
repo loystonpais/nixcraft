@@ -2,8 +2,8 @@
   pkgs,
   lib,
   submodules,
-  config ? {},
-  name ? "minecraft-client",
+  cfg ? {},
+  name ? "default",
   ...
 }: let
   clientInstanceModule = submodules.clientInstanceModule;
@@ -11,9 +11,10 @@
   evaluated = lib.evalModules {
     modules = [
       clientInstanceModule
-      config
+      cfg
       {
-        version = lib.mkDefault "latest-version";
+        version = lib.mkDefault "latest-release";
+        absoluteDir = lib.mkDefault "/tmp/nixcraft-client/${name}";
         account = lib.mkDefault {};
       }
     ];
@@ -24,7 +25,4 @@
     };
   };
 in
-  # For some reason, passing just the finalBin doesn't work???
-  pkgs.writeShellScriptBin "minecraft-client" ''
-    ${lib.getExe evaluated.config.binEntry.finalBin}
-  ''
+  evaluated.config.binEntry.finalBin
