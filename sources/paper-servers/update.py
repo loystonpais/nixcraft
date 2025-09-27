@@ -13,6 +13,7 @@ ENDPOINT = "https://api.papermc.io/v2/projects/paper"
 TIMEOUT = 5
 RETRIES = 5
 
+
 class TimeoutHTTPAdapter(HTTPAdapter):
     def __init__(self, *args, **kwargs):
         self.timeout = TIMEOUT
@@ -30,8 +31,10 @@ class TimeoutHTTPAdapter(HTTPAdapter):
 
 def make_client():
     http = requests.Session()
-    retries = Retry(total=RETRIES, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
-    http.mount('https://', TimeoutHTTPAdapter(max_retries=retries))
+    retries = Retry(
+        total=RETRIES, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504]
+    )
+    http.mount("https://", TimeoutHTTPAdapter(max_retries=retries))
     return http
 
 
@@ -44,7 +47,7 @@ def get_game_versions(client):
 def get_builds(version, client):
     print(f"Fetching builds for {version}")
     data = client.get(f"{ENDPOINT}/versions/{version}/builds").json()
-    return data["builds"]
+    return data
 
 
 def main(lock, client):
@@ -53,7 +56,14 @@ def main(lock, client):
 
     for version in get_game_versions(client):
         output[version] = {}
-        for build in get_builds(version, client):
+        builds = get_builds(version, client)
+
+        if "builds" not in builds:
+            print(f"Error parsing paper server builds for {version}")
+            print(f"{builds = }")
+            continue
+
+        for build in builds["builds"]:
             build_number = build["build"]
             build_sha256 = build["downloads"]["application"]["sha256"]
             build_filename = build["downloads"]["application"]["name"]
