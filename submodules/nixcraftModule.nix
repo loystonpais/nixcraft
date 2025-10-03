@@ -6,23 +6,29 @@
 }: {
   name,
   config,
+  clientDirPrefix,
+  serverDirPrefix,
   ...
-}: let
-  perClientInstance = cfgF:
-    lib.mkMerge (lib.mapAttrsToList (_: instance: cfgF instance) config.client.instances);
-
-  perServerInstance = cfgF:
-    lib.mkMerge (lib.mapAttrsToList (_: instance: cfgF instance) config.server.instances);
-in {
+}: {
   options = {
     enable = lib.mkEnableOption name;
 
     client = lib.mkOption {
-      type = lib.types.submodule clientModule;
+      type = lib.types.submoduleWith {
+        modules = [clientModule];
+        specialArgs = {
+          dir = clientDirPrefix;
+        };
+      };
     };
 
     server = lib.mkOption {
-      type = lib.types.submodule serverModule;
+      type = lib.types.submoduleWith {
+        modules = [serverModule];
+        specialArgs = {
+          dir = serverDirPrefix;
+        };
+      };
     };
 
     activationShellScript = lib.mkOption {

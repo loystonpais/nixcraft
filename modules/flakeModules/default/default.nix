@@ -22,13 +22,20 @@
       // flakeModuleArgs);
   };
 in {
+  imports = [
+    inputs.devenv.flakeModule
+  ];
   config = {
+    debug = true;
+
     systems = ["x86_64-linux"];
+
     flake = {
       lib = lib.nixcraft;
       inherit homeModules;
       inherit nixosModules;
     };
+
     perSystem = {
       config,
       system,
@@ -116,9 +123,82 @@ in {
         inherit builders;
         inherit submodules;
       };
+
+      optionDocs = {
+        nixcraft = let
+          evaluated = lib.evalModules {
+            modules = with submodules; [
+              nixcraftModule
+            ];
+
+            specialArgs = {
+              clientDirPrefix = "/(root)/.local/share/nixcraft/client/instances";
+              serverDirPrefix = "/(root)/.local/share/nixcraft/server/instances";
+              name = "nixcraft";
+            };
+          };
+        in
+          pkgs.nixosOptionsDoc {
+            options = builtins.removeAttrs evaluated.options ["_module"];
+            warningsAreErrors = false;
+          };
+      };
+
+      devenv = {
+        shells.default = {
+          config = {
+            env.GREET = "devenv";
+
+            packages = with pkgs; [
+              # Generating docs
+              mdbook
+            ];
+
+            tasks = {
+              "docs:generate" = {
+                exec = ''
+                  rm -f NIXCRAFT-OPTIONS.gen.md
+                  install -m 0644 \
+                    ${optionDocs.nixcraft.optionsCommonMark} \
+                    NIXCRAFT-OPTIONS.gen.md
+                '';
+                cwd = "docs";
+                execIfModified = [
+                  "submodules/*.nix"
+                  "modules/flakeModules/**/*.nix"
+                  "docs"
+                ];
+                before = ["docs:build"];
+              };
+
+              "docs:build" = {
+                exec = "mdbook build";
+                cwd = "docs";
+                before = ["devenv:processes:open-docs"];
+              };
+            };
+
+            processes = {
+              open-docs = {
+                exec = "mdbook serve -p 4000 -o";
+                cwd = "docs";
+              };
+            };
+
+            enterTest = ''
+              echo "Running tests"
+              git --version | grep --color=auto "${pkgs.git.version}"
+            '';
+
+            # https://devenv.sh/git-hooks/
+            # git-hooks.hooks.shellcheck.enable = true;
+          };
+        };
+      };
     in {
       inherit packages;
       inherit legacyPackages;
+      inherit devenv;
     };
   };
 }

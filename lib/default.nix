@@ -131,6 +131,14 @@ in rec {
 
   readJSON = path: fromJSON (readFile path);
 
+  portFromString = string: let
+    hash = builtins.hashString "md5" string;
+    part = builtins.substring 0 15 hash;
+    num = (builtins.fromTOML "v=0x${part}").v;
+    port = (lib.mod num 16384) + 49152;
+  in
+    port;
+
   filesystem = {
     listJarFilesRecursive = drv: filter (path: isJarFile (toString path)) (lib.filesystem.listFilesRecursive drv);
   };

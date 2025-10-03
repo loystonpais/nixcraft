@@ -4,8 +4,8 @@
   minecraftAccountModule,
   ...
 }: {
-  name,
   config,
+  dir,
   ...
 }: {
   options = {
@@ -15,7 +15,7 @@
           modules = [clientInstanceModule];
           specialArgs = {
             shared = config.shared;
-            dirPrefix = "${config.rootDir}/${config.dirPrefix}";
+            dirPrefix = "${config.dir}";
           };
         });
     };
@@ -30,15 +30,9 @@
       default = {};
     };
 
-    dirPrefix = lib.mkOption {
-      type = lib.types.pathWith {absolute = false;};
-      internal = true;
-    };
-
-    rootDir = lib.mkOption {
+    dir = lib.mkOption {
       type = lib.types.pathWith {absolute = true;};
-      readOnly = true;
-      internal = true;
+      default = dir;
     };
   };
 }

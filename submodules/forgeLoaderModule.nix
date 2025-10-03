@@ -32,6 +32,7 @@
           hash = config.hash;
         };
       };
+      defaultText = ''parsedForgeLoader'';
     };
 
     hash = lib.mkOption {

@@ -49,7 +49,7 @@ in
             enable = lib.mkEnableOption "desktop entry";
             name = lib.mkOption {
               type = lib.types.nonEmptyStr;
-              default = "Nixcraft Instance ${config.name}";
+              default = "Nixcraft Instance ${name}";
             };
             extraConfig = lib.mkOption {
               type = lib.types.attrs;
@@ -64,6 +64,7 @@ in
 
       account = lib.mkOption {
         type = with lib.types; nullOr (submodule minecraftAccountModule);
+        default = null;
       };
 
       saves = lib.mkOption {

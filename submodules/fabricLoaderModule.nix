@@ -3,11 +3,7 @@
   fetchFabricLoaderImpure,
   sources,
   ...
-}: {
-  name,
-  config,
-  ...
-}: {
+}: {config, ...}: {
   options = {
     enable = lib.mkEnableOption "fabric loader";
 
@@ -28,6 +24,7 @@
     _impurePackage = lib.mkOption {
       type = lib.types.package;
       readOnly = true;
+      defaultText = ''package'';
       default = fetchFabricLoaderImpure {
         mcVersion = config.minecraftVersion;
         loaderVersion = config.version;
@@ -45,6 +42,7 @@
     meta = lib.mkOption {
       type = lib.types.attrs;
       readOnly = true;
+      defaultText = ''meta'';
       default =
         {
           clientMainClass = "net.fabricmc.loader.impl.launch.knot.KnotClient";

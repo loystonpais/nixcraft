@@ -14,9 +14,14 @@
     buildNumber = lib.mkOption {
       type = lib.types.nonEmptyStr;
       default = lib.last (builtins.attrNames (config.meta.builds));
+      defaultText = ''<inferred>'';
     };
 
-    minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
+    minecraftVersion =
+      lib.nixcraft.options.minecraftVersionDyn
+      // {
+        defaultText = ''<inferred>'';
+      };
 
     _serverJar = lib.mkOption {
       readOnly = true;
@@ -25,12 +30,14 @@
         url = config.meta.builds.${config.buildNumber}.url;
         sha256 = config.meta.builds.${config.buildNumber}.sha256;
       };
+      defaultText = ''serverJar'';
     };
 
     _mainClass = lib.mkOption {
       readOnly = true;
       type = lib.types.nonEmptyStr;
       default = config.meta.mainClass;
+      defaultText = ''<inferred>'';
     };
 
     meta = lib.mkOption {
@@ -40,6 +47,7 @@
         builds = sources.paper-servers."${config.minecraftVersion}";
         mainClass = "io.papermc.paperclip.Paperclip";
       };
+      defaultText = ''meta'';
     };
   };
 }

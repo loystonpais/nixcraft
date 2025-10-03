@@ -46,7 +46,13 @@
 in {
   options = {
     nixcraft = lib.mkOption {
-      type = lib.types.submodule nixcraftModule;
+      type = lib.types.submoduleWith {
+        modules = [nixcraftModule];
+        specialArgs = {
+          clientDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/instances";
+          serverDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/server/instances";
+        };
+      };
     };
   };
 
@@ -54,12 +60,8 @@ in {
     {
       nixcraft = {
         client = {
-          dirPrefix = ".local/share/nixcraft/client/instances";
-          rootDir = config.home.homeDirectory;
         };
         server = {
-          dirPrefix = ".local/share/nixcraft/server/instances";
-          rootDir = config.home.homeDirectory;
         };
       };
     }

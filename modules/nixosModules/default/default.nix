@@ -29,7 +29,13 @@
 in {
   options = {
     nixcraft = lib.mkOption {
-      type = lib.types.submodule nixcraftModule;
+      type = lib.types.submoduleWith {
+        modules = [nixcraftModule];
+        specialArgs = {
+          clientDirPrefix = "/var/lib/nixcraft/client/instances";
+          serverDirPrefix = "/var/lib/nixcraft/server/instances";
+        };
+      };
     };
   };
 
@@ -37,12 +43,8 @@ in {
     {
       nixcraft = {
         client = {
-          dirPrefix = "client/instances";
-          rootDir = "/var/lib/nixcraft";
         };
         server = {
-          dirPrefix = "server/instances";
-          rootDir = "/var/lib/nixcraft";
         };
       };
     }

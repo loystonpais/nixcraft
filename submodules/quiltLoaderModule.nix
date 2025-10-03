@@ -2,11 +2,7 @@
   lib,
   sources,
   ...
-}: {
-  name,
-  config,
-  ...
-}: {
+}: {config, ...}: {
   options = {
     enable = lib.mkEnableOption "quilt loader";
 
@@ -36,6 +32,7 @@
         lock = sources.quilt.lock.${config.version};
         gameLock = sources.quilt.game-lock.${config.minecraftVersion};
       };
+      defaultText = ''meta'';
     };
   };
 

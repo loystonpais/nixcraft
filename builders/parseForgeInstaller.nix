@@ -33,6 +33,8 @@
   versionLibraries = versionJson.libraries;
   installProfileLibraries = installProfileJson.libraries;
 
+  mojmapsExists = installProfileJson.data ? MOJMAPS_SHA;
+
   clientMojmapsSha1 = removeQuotes installProfileJson.data.MOJMAPS_SHA.client;
   serverMojmapsSha1 = removeQuotes installProfileJson.data.MOJMAPS_SHA.server;
 
@@ -76,8 +78,10 @@
       cp -a ${allLibrariesDir} $out/libraries
       chmod u+w -R $out/libraries
 
-      mkdir -p $out/libraries/net/minecraft/${mode}/${esc mcVersion}
-      ln -s ${mojmaps} $out/libraries/net/minecraft/${mode}/${esc mcVersion}/${mode}-${esc mcVersion}-mappings.tsrg
+      ${lib.optionalString mojmapsExists ''
+        mkdir -p $out/libraries/net/minecraft/${mode}/${esc mcVersion}
+        ln -s ${mojmaps} $out/libraries/net/minecraft/${mode}/${esc mcVersion}/${mode}-${esc mcVersion}-mappings.tsrg
+      ''}
 
       ${
         if mode == "client"

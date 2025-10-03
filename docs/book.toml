@@ -1,0 +1,11 @@
+[book]
+authors = ["loystonpais"]
+language = "en"
+src = "."
+title = "Nixcraft"
+
+[output.html]
+git-repository-url = "https://github.com/loystonpais/nixcraft"
+preferred-dark-theme = "ayu"
+default-theme = "dark"
+enable-search = true

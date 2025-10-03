@@ -40,12 +40,19 @@ in
           else {}
         ));
 
-      version = lib.nixcraft.options.minecraftVersionDyn;
+      version =
+        lib.nixcraft.options.minecraftVersionDyn
+        // {
+          default = "latest-release";
+          defaultText = ''latest-release'';
+        };
 
       fabricLoader = lib.mkOption {
         type = with lib.types; (submodule fabricLoaderModule);
         default = {
           enable = false;
+          minecraftVersion = lib.mkOptionDefault config.version;
+          _instanceType = config._instanceType;
         };
       };
 
@@ -53,6 +60,8 @@ in
         type = with lib.types; (submodule quiltLoaderModule);
         default = {
           enable = false;
+          minecraftVersion = lib.mkOptionDefault config.version;
+          _instanceType = config._instanceType;
         };
       };
 
@@ -60,6 +69,8 @@ in
         type = with lib.types; (submodule forgeLoaderModule);
         default = {
           enable = false;
+          minecraftVersion = lib.mkOptionDefault config.version;
+          _instanceType = config._instanceType;
         };
       };
 
@@ -67,6 +78,7 @@ in
         type = with lib.types; (submodule mrpackModule);
         default = {
           enable = false;
+          minecraftVersion = lib.mkOptionDefault config.version;
         };
       };
 
@@ -129,6 +141,9 @@ in
       runtimeLibs = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [];
+        description = ''
+          Libraries available at runtime
+        '';
       };
 
       runtimePrograms = lib.mkOption {
@@ -173,6 +188,7 @@ in
           default =
             lib.nixcraft.readJSON
             (fetchSha1 sources.normalized-manifest.versions.${config.version});
+          defaultText = ''versionData'';
         };
       };
     };

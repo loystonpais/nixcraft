@@ -66,6 +66,30 @@
       default = null;
     };
 
+    lazymc = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          enable = lib.mkEnableOption "lazymc";
+          package = lib.mkOption {
+            type = lib.types.package;
+            default = pkgs.lazymc;
+          };
+          settings = lib.mkOption {
+            type = lib.types.attrs;
+            default = {};
+          };
+        };
+      };
+    };
+
+    world = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Path to world dir. Only placed if the directory doesn't exist
+      '';
+    };
+
     service = lib.mkOption {
       type = with lib.types;
         submodule ({
@@ -107,7 +131,11 @@
 
         cd "${config.absoluteDir}"
 
-        exec ${config.finalLaunchShellCommandString} "$@"
+        ${
+          if config.lazymc.enable
+          then ''exec "${lib.getExe config.lazymc.package}" --config ${config.absoluteDir}/lazymc.toml''
+          else ''exec ${config.finalLaunchShellCommandString} "$@"''
+        }
       '';
 
       finalActivationShellScript = ''
@@ -130,6 +158,17 @@
 
       java.jar = lib.mkDefault config.mainJar;
       java.mainClass = lib.mkDefault null;
+
+      lazymc.settings = {
+        public.address = lib.mkDefault "0.0.0.0:25565";
+        public.version = config.version;
+
+        server.directory = config.absoluteDir;
+        server.forge = config.forgeLoader.enable;
+        server.command = config.finalLaunchShellCommandString;
+
+        config.version = lib.mkDefault "0.2.11";
+      };
     }
 
     (lib.mkIf config.paper.enable {
@@ -161,6 +200,35 @@
         value = config.serverProperties;
       };
     })
+
+    (lib.mkIf config.lazymc.enable {
+      files."lazymc.toml" = {
+        type = "toml";
+        value = config.lazymc.settings;
+      };
+
+      serverProperties = {
+        max-tick-time = -1;
+      };
+
+      # Lazymc overwrites a lotta things in server properties
+      # so set it to copy instead of symlinking
+      files."server.properties".method = lib.mkDefault "copy";
+    })
+
+    # Place world dir
+    (lib.mkIf (config.world != null) (let
+      esc = lib.escapeShellArg;
+      absPlacePath = "${config.absoluteDir}/world";
+    in {
+      preLaunchShellScript = ''
+        if [ ! -d ${esc absPlacePath} ]; then
+          rm -rf ${esc absPlacePath}
+          cp -R ${esc config.world} ${esc absPlacePath}
+          chmod -R u+w ${esc absPlacePath}
+        fi
+      '';
+    }))
 
     # TODO: find correct way to do validations
     (let
