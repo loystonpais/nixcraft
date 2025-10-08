@@ -1,4 +1,10 @@
 {
+  "1.21.10": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.10",
+      "org.quiltmc:hashed:1.21.10"
+    ]
+  },
   "1.21.10-rc1": {
     "dependencies": [
       "net.fabricmc:intermediary:1.21.10-rc1",
