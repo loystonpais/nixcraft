@@ -1,4 +1,10 @@
 {
+  "25w41a": {
+    "dependencies": [
+      "net.fabricmc:intermediary:25w41a",
+      "org.quiltmc:hashed:25w41a"
+    ]
+  },
   "1.21.10": {
     "dependencies": [
       "net.fabricmc:intermediary:1.21.10",
