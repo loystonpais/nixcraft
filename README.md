@@ -2,7 +2,7 @@
 
 Nixcraft - A declarative minecraft launcher in nix
 
-Warning - This project is a work in progress. Do expect things to break.
+Warning - This project is in a usable state but stil a work in progress. Do expect things to break.
 
 ## Features
 
@@ -34,15 +34,49 @@ nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outpu
 nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { cfg = { version = "1.16.1"; account = {  }; absoluteDir = builtins.getEnv "PWD"; }; }'
 ```
 
+## Usage (nix profile)
+
+This in my opinion is the best way to install a nixcraft instance.
+
+Pros:
+
+  1. Easy to use and convenient
+  2. Automatically adds binary and desktop item to path
+  3. No nixos rebuilding required
+  4. Not garbage collected until removed
+  5. No root needed
+
+Here's how you would install a client. Same applies for a server instance.
+
+```nix
+nix profile add --impure --expr '
+(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override {
+  name = "profile-demo";
+  cfg = {
+    version = "1.16.1";
+    account = {};
+    desktopEntry.name = "Nixcraft Profile Demo";
+    absoluteDir = "${builtins.getEnv "HOME"}/profile-demo"; # game dir set to $HOME/profile-demo
+  };
+}
+'
+```
+
+Upon running the above command a package `profile-demo` will be added to your profile. To remove it, simply run `nix profile remove profile-demo`.
+
+Checkout the home-manager usage for additional configuration options.
+
 ## Usage (home-manager)
 
 Nixcraft module can be integrated with home-manager and nixos modules.
+
+See `docs` for all available options.
 
 ```nix
 # in flake.nix inputs add
 nixcraft = {
     url = "github:loystonpais/nixcraft";
-    inputs.follows.nixpkgs = "nixpkgs"; # Set correct anixpkgs name
+    inputs.follows.nixpkgs = "nixpkgs"; # Set correct nixpkgs name
 };
 
 ```
