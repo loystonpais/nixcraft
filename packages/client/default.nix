@@ -24,5 +24,23 @@
       inherit name;
     };
   };
+
+  # Combines both bin entry and desktop entry
+  finalEntry = pkgs.symlinkJoin {
+    name = name;
+    paths = [
+      (
+        pkgs.makeDesktopItem (evaluated.config.desktopEntry.extraConfig
+          // {
+            exec = "${lib.getExe evaluated.config.binEntry.finalBin}";
+            desktopName = evaluated.config.desktopEntry.name;
+            name = evaluated.config.binEntry.name;
+          })
+      )
+      evaluated.config.binEntry.finalBin
+    ];
+
+    meta.mainProgram = evaluated.config.binEntry.name;
+  };
 in
-  evaluated.config.binEntry.finalBin
+  finalEntry
