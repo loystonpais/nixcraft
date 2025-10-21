@@ -16,6 +16,8 @@
         version = lib.mkDefault "latest-release";
         absoluteDir = lib.mkDefault "/tmp/nixcraft-client/${name}";
         account = lib.mkDefault {};
+        binEntry.enable = lib.mkDefault true;
+        desktopEntry.enable = lib.mkDefault true;
       }
     ];
     specialArgs = {
