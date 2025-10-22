@@ -4302,5 +4302,9 @@
   "net.fabricmc:intermediary:25w42a": {
     "url": "https://maven.fabricmc.net",
     "sha256": "c985934d3dde3793b242f1ebccb574fe4f15f8d99c457890fdf9f7cdec0346c0"
+  },
+  "net.fabricmc:intermediary:25w43a": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "dfd5d184f833b7c350018688b88b6b43067255722500efec786722f74dab22d4"
   }
 }
