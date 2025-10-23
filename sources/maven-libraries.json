@@ -4306,5 +4306,9 @@
   "net.fabricmc:intermediary:25w43a": {
     "url": "https://maven.fabricmc.net",
     "sha256": "dfd5d184f833b7c350018688b88b6b43067255722500efec786722f74dab22d4"
+  },
+  "org.quiltmc:hashed:25w43a": {
+    "url": "https://maven.quiltmc.org/repository/release",
+    "sha256": "2bb757475a6350fa04b2a9755b1f350c4da9799aee66ac8fe52406b92c96fdf0"
   }
 }
