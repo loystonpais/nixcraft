@@ -21,6 +21,7 @@
 
     _instanceType = lib.mkOption {
       type = lib.types.enum ["client" "server"];
+      internal = true;
     };
 
     parsedForgeLoader = lib.mkOption {
