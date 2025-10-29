@@ -15,7 +15,7 @@
 
   unpacked =
     pkgs.runCommand "forge-installer-unpacked" {
-      buildInputs = [pkgs.unzip];
+      nativeBuildInputs = [pkgs.unzip];
     } ''
       mkdir -p $out
       cd $out
@@ -48,7 +48,7 @@
 
   fetchMojmaps = side: sha1:
     pkgs.runCommand "forge-mojmaps" {
-      buildInputs = [pkgs.jdk];
+      nativeBuildInputs = [pkgs.jdk];
       outputHashAlgo = "sha1";
       outputHash = sha1;
     } ''
@@ -71,7 +71,7 @@
     mojmaps = fetchMojmaps mode clientMojmapsSha1;
   in
     pkgs.runCommand "forge-install-dir" {
-      buildInputs = [pkgs.jdk];
+      nativeBuildInputs = [pkgs.jdk];
     }
     ''
       mkdir -p $out

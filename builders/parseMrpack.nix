@@ -14,7 +14,7 @@ in
     # so we need to fix them
     unpacked =
       runCommand "mrpack-unpacked" {
-        buildInputs = [unzip];
+        nativeBuildInputs = [unzip];
       } ''
         unzip "${src}" -d $out
         find $out -type d -exec chmod 755 {} \;

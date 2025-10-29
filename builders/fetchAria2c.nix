@@ -11,7 +11,7 @@
   extraArgs ? [],
 }:
 pkgs.runCommand name {
-  buildInputs = [pkgs.aria2];
+  nativeBuildInputs = [pkgs.aria2];
   outputHashMode = "recursive";
   outputHash = hash;
 }

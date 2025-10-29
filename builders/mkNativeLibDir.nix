@@ -35,6 +35,6 @@
   '';
 in
   runCommand "minecraft-native-lib-dir" {
-    buildInputs = [unzip];
+    nativeBuildInputs = [unzip];
   }
   script
