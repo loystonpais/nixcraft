@@ -21,6 +21,8 @@
       shared = {};
       dirPrefix = null;
       inherit name;
+      inherit pkgs;
+      inherit lib;
     };
   };
 in
