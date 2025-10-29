@@ -37,10 +37,16 @@ in
 
       enableNvidiaOffload = lib.mkEnableOption "nvidia offload";
 
-      enableFastAssetDownload = lib.mkEnableOption "fast asset downloading using aria2c (hash needs to be provided)";
+      # Hide these two option for now
+      enableFastAssetDownload =
+        (lib.mkEnableOption "fast asset downloading using aria2c (hash needs to be provided)")
+        // {
+          internal = true;
+        };
 
       assetHash = lib.mkOption {
         type = lib.types.nonEmptyStr;
+        internal = true;
       };
 
       desktopEntry = lib.mkOption {
