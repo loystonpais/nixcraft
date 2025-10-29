@@ -216,11 +216,13 @@ in {
             offline = true;
           };
 
+          useDiscreteGPU = true; # Enabled by default
+
           # Game is passed to the gpu (set if you have nvidia gpu)
-          enableNvidiaOffload = true;
+          enableNvidiaOffload = true; # Enabled by default
 
           envVars = {
-            # Fixes bug with nvidia
+            # Fixes bug with nvidia (applied by default)
             __GL_THREADED_OPTIMIZATIONS = "0";
           };
 

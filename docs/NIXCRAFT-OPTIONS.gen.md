@@ -189,11 +189,11 @@ boolean
 
 
 
-## client\.instances\.\<name>\.enableFastAssetDownload
+## client\.instances\.\<name>\.enableDriPrime
 
 
 
-Whether to enable fast asset downloading using aria2c (hash needs to be provided)\.
+Whether to enable dri prime (mesa)\.
 
 
 
@@ -539,19 +539,6 @@ strings concatenated with “\\n”
 
 
 
-## client\.instances\.\<name>\.assetHash
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-non-empty string
-
-
-
 ## client\.instances\.\<name>\.binEntry
 
 
@@ -768,7 +755,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.8";
+    content = "1.21.10";
     priority = 1500;
   };
 }
@@ -814,19 +801,6 @@ package *(read only)*
 
 *Default:*
 ` "package" `
-
-
-
-## client\.instances\.\<name>\.fabricLoader\._instanceType
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-one of “client”, “server”
 
 
 
@@ -1161,7 +1135,7 @@ non-empty string *(read only)*
 
 
 *Default:*
-` "--version 1.21.8 --assetsDir /nix/store/m6zx8cakid3lpx35gh9lz7v2ijsn76kz-minecraft-asset-dir --assetIndex 26 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'" `
+` "--version 1.21.10 --assetsDir /nix/store/90016v5nsqq5mk93jj7naxiyng1x8gxn-minecraft-asset-dir --assetIndex 27 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'" `
 
 
 
@@ -1238,7 +1212,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.8";
+    content = "1.21.10";
     priority = 1500;
   };
 }
@@ -1266,19 +1240,6 @@ boolean
 
 *Example:*
 ` true `
-
-
-
-## client\.instances\.\<name>\.forgeLoader\._instanceType
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-one of “client”, “server”
 
 
 
@@ -1601,7 +1562,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.8";
+    content = "1.21.10";
     priority = 1500;
   };
 }
@@ -1768,6 +1729,8 @@ null or non-empty string
 
 ## client\.instances\.\<name>\.placeFilesAtActivation
 
+
+
 Whether to enable placing files during activation\.
 
 
@@ -1826,7 +1789,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.8";
+    content = "1.21.10";
     priority = 1500;
   };
 }
@@ -1857,22 +1820,7 @@ boolean
 
 
 
-## client\.instances\.\<name>\.quiltLoader\._instanceType
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-one of “client”, “server”
-
-
-
 ## client\.instances\.\<name>\.quiltLoader\.classes
-
-
 
 This option has no description\.
 
@@ -1997,6 +1945,29 @@ attribute set of absolute path
 
 
 
+## client\.instances\.\<name>\.useDiscreteGPU
+
+
+
+Whether to enable discrete GPU\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+
+
+*Example:*
+` true `
+
+
+
 ## client\.instances\.\<name>\.version
 
 
@@ -2061,6 +2032,78 @@ This option has no description\.
 
 *Type:*
 package
+
+
+
+## client\.instances\.\<name>\.waywall\.configDir
+
+
+
+Path to a dir containing waywall scripts such as init\.lua
+If not set then $XDG_CONFIG_HOME/waywall is used as usual
+
+
+
+*Type:*
+null or absolute path
+
+
+
+*Default:*
+` null `
+
+
+
+*Example:*
+
+```
+''
+  pkgs.linkFarm {
+    "init.lua" = builtins.toFile "init.lua" "<content>";
+  };
+''
+```
+
+
+
+## client\.instances\.\<name>\.waywall\.configText
+
+
+
+Lua script passed as init\.lua
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
+
+
+
+## client\.instances\.\<name>\.waywall\.profile
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
+
+
+
+*Example:*
+` "foo" `
 
 
 
@@ -2355,7 +2398,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.8";
+    content = "1.21.10";
     priority = 1500;
   };
 }
@@ -2401,19 +2444,6 @@ package *(read only)*
 
 *Default:*
 ` "package" `
-
-
-
-## server\.instances\.\<name>\.fabricLoader\._instanceType
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-one of “client”, “server”
 
 
 
@@ -2825,7 +2855,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.8";
+    content = "1.21.10";
     priority = 1500;
   };
 }
@@ -2853,19 +2883,6 @@ boolean
 
 *Example:*
 ` true `
-
-
-
-## server\.instances\.\<name>\.forgeLoader\._instanceType
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-one of “client”, “server”
 
 
 
@@ -3260,7 +3277,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.8";
+    content = "1.21.10";
     priority = 1500;
   };
 }
@@ -3532,6 +3549,8 @@ package *(read only)*
 
 ## server\.instances\.\<name>\.paper\.buildNumber
 
+
+
 This option has no description\.
 
 
@@ -3547,8 +3566,6 @@ non-empty string
 
 
 ## server\.instances\.\<name>\.paper\.meta
-
-
 
 This option has no description\.
 
@@ -3644,7 +3661,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.8";
+    content = "1.21.10";
     priority = 1500;
   };
 }
@@ -3672,19 +3689,6 @@ boolean
 
 *Example:*
 ` true `
-
-
-
-## server\.instances\.\<name>\.quiltLoader\._instanceType
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-one of “client”, “server”
 
 
 
