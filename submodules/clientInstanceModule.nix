@@ -244,18 +244,35 @@ in
           '';
         in
           if config.waywall.enable
-          then ''
-            #!${pkgs.bash}/bin/bash
+          then
+            (let
+              configDirStr = lib.optionalString (config.waywall.configDir != null) "XDG_CONFIG_HOME=${(pkgs.linkFarm "waywall-config-dir" {
+                waywall = config.waywall.configDir;
+              })}";
 
-            set -e
+              configTextStr = lib.optionalString (config.waywall.configText != null) "XDG_CONFIG_HOME=${(pkgs.linkFarm "waywall-config-dir" {
+                "waywall/init.lua" = pkgs.writeTextFile {
+                  name = "init.lua";
+                  text = config.waywall.configText;
+                };
+              })}";
 
-            exec "${config.waywall.package}/bin/waywall" wrap -- "${pkgs.writeTextFile
-              {
-                name = "run";
-                text = defaultScript;
-                executable = true;
-              }}" "$@"
-          ''
+              profileStr = lib.optionalString (config.waywall.profile != null) "--profile ${lib.escapeShellArg config.waywall.profile}";
+
+              runScript =
+                pkgs.writeTextFile
+                {
+                  name = "run";
+                  text = defaultScript;
+                  executable = true;
+                };
+            in ''
+              #!${pkgs.bash}/bin/bash
+
+              set -e
+
+              ${configDirStr} ${configTextStr} exec "${config.waywall.package}/bin/waywall" wrap ${profileStr} -- "${runScript}" "$@"
+            '')
           else defaultScript;
 
         finalActivationShellScript = ''
