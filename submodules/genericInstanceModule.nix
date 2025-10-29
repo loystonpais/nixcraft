@@ -151,6 +151,13 @@ in
         default = [];
       };
 
+      fixBugs =
+        (lib.mkEnableOption "fixing trivial bugs if any")
+        // {
+          default = true;
+          internal = true;
+        };
+
       finalLaunchShellCommandString = lib.mkOption {
         type = lib.types.lines;
         readOnly = true;

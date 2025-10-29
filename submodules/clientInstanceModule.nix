@@ -377,6 +377,13 @@ in
         enableNvidiaOffload = true;
       })
 
+      (lib.mkIf config.fixBugs (lib.mkMerge [
+        (lib.mkIf config.enableNvidiaOffload {
+          # Prevents minecraft from segfaulting on exit
+          envVars.__GL_THREADED_OPTIMIZATIONS = "0";
+        })
+      ]))
+
       (lib.mkIf config.forgeLoader.enable {
         java.mainClass = "net.minecraftforge.bootstrap.ForgeBootstrap";
         _classSettings.version = config.forgeLoader.parsedForgeLoader.versionId;
