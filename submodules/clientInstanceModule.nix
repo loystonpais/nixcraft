@@ -37,6 +37,14 @@ in
 
       enableNvidiaOffload = lib.mkEnableOption "nvidia offload";
 
+      enableDriPrime = lib.mkEnableOption "dri prime (mesa)";
+
+      useDiscreteGPU =
+        (lib.mkEnableOption "discrete GPU")
+        // {
+          default = true;
+        };
+
       # Hide these two option for now
       enableFastAssetDownload =
         (lib.mkEnableOption "fast asset downloading using aria2c (hash needs to be provided)")
@@ -356,6 +364,17 @@ in
           __GLX_VENDOR_LIBRARY_NAME = "nvidia";
           __VK_LAYER_NV_optimus = "NVIDIA_only";
         };
+      })
+
+      (lib.mkIf config.enableDriPrime {
+        envVars = {
+          DRI_PRIME = "1";
+        };
+      })
+
+      (lib.mkIf config.useDiscreteGPU {
+        enableDriPrime = true;
+        enableNvidiaOffload = true;
       })
 
       (lib.mkIf config.forgeLoader.enable {
