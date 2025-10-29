@@ -60,16 +60,6 @@ in {
 
       submodules = lib.nixcraft.importSubmodules "${self}/submodules" submoduleArgs;
 
-      debugging = {
-        testFetchForgeImpure1 = builders.mkForgeDir {
-          forgeInstaller = pkgs.fetchurl {
-            url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.21.8-58.1.0/forge-1.21.8-58.1.0-installer.jar";
-            hash = "sha256-jeh6IYS6WL3uwxvAtY2wEH3w/I1ORwRRbFVR92YsUcc=";
-          };
-          mcVersion = "1.21.8";
-        };
-      };
-
       runInRepoRoot = {
         update-asset-sha256 =
           pkgs.writers.writePython3Bin "update-asset-sha256" {
@@ -102,20 +92,8 @@ in {
           (sources."update-modloader-locks.py");
       };
 
-      runInRepoRootUpdateAssetSha256For =
-        lib.mapAttrs' (
-          version: versionInfo:
-            lib.nameValuePair (lib.replaceString "." "-" "${version}")
-            (pkgs.writeShellScriptBin "update-asset-sha256-for-${version}" ''
-              ${lib.getExe runInRepoRoot.update-asset-sha256} "${builders.mkAssetsDir {
-                versionData = lib.nixcraft.readJSON (builders.fetchSha1 versionInfo);
-              }}/objects"
-            '')
-        )
-        sources.normalized-manifest.versions;
-
       legacyPackages = {
-        inherit runInRepoRoot runInRepoRootUpdateAssetSha256For debugging;
+        inherit runInRepoRoot;
       };
 
       packages = lib.nixcraft.importPackages "${self}/packages" pkgs {
