@@ -1,4 +1,9 @@
 {
+  "25w45a": {
+    "dependencies": [
+      "net.fabricmc:intermediary:25w45a"
+    ]
+  },
   "25w44a": {
     "dependencies": [
       "net.fabricmc:intermediary:25w44a"
