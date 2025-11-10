@@ -549,11 +549,6 @@
       "net.fabricmc:intermediary:24w14potato"
     ]
   },
-  "24w14potato_original": {
-    "dependencies": [
-      "net.fabricmc:intermediary:24w14potato_original"
-    ]
-  },
   "24w13a": {
     "dependencies": [
       "net.fabricmc:intermediary:24w13a"
@@ -837,11 +832,6 @@
   "23w13a_or_b": {
     "dependencies": [
       "net.fabricmc:intermediary:23w13a_or_b"
-    ]
-  },
-  "23w13a_or_b_original": {
-    "dependencies": [
-      "net.fabricmc:intermediary:23w13a_or_b_original"
     ]
   },
   "23w13a": {
@@ -1169,11 +1159,6 @@
       "net.fabricmc:intermediary:1.18.2-pre1"
     ]
   },
-  "1.19_deep_dark_experimental_snapshot-1": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.19_deep_dark_experimental_snapshot-1"
-    ]
-  },
   "22w07a": {
     "dependencies": [
       "net.fabricmc:intermediary:22w07a"
@@ -1322,41 +1307,6 @@
   "21w37a": {
     "dependencies": [
       "net.fabricmc:intermediary:21w37a"
-    ]
-  },
-  "1.18_experimental-snapshot-7": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.18_experimental-snapshot-7"
-    ]
-  },
-  "1.18_experimental-snapshot-6": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.18_experimental-snapshot-6"
-    ]
-  },
-  "1.18_experimental-snapshot-5": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.18_experimental-snapshot-5"
-    ]
-  },
-  "1.18_experimental-snapshot-4": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.18_experimental-snapshot-4"
-    ]
-  },
-  "1.18_experimental-snapshot-3": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.18_experimental-snapshot-3"
-    ]
-  },
-  "1.18_experimental-snapshot-2": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.18_experimental-snapshot-2"
-    ]
-  },
-  "1.18_experimental-snapshot-1": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.18_experimental-snapshot-1"
     ]
   },
   "1.17.1": {
@@ -1577,11 +1527,6 @@
   "1.16.3-rc1": {
     "dependencies": [
       "net.fabricmc:intermediary:1.16.3-rc1"
-    ]
-  },
-  "1.16_combat-3": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.16_combat-3"
     ]
   },
   "1.16.2": {
@@ -1839,11 +1784,6 @@
       "net.fabricmc:intermediary:1.15-pre4"
     ]
   },
-  "1.15_combat-1": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.15_combat-1"
-    ]
-  },
   "1.15-pre3": {
     "dependencies": [
       "net.fabricmc:intermediary:1.15-pre3"
@@ -1877,11 +1817,6 @@
   "19w45a": {
     "dependencies": [
       "net.fabricmc:intermediary:19w45a"
-    ]
-  },
-  "1.14_combat-3": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.14_combat-3"
     ]
   },
   "19w44a": {
@@ -1939,11 +1874,6 @@
       "net.fabricmc:intermediary:19w34a"
     ]
   },
-  "1.14_combat-0": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.14_combat-0"
-    ]
-  },
   "1.14.4": {
     "dependencies": [
       "net.fabricmc:intermediary:1.14.4"
@@ -1987,11 +1917,6 @@
   "1.14.3": {
     "dependencies": [
       "net.fabricmc:intermediary:1.14.3"
-    ]
-  },
-  "1.14_combat-212796": {
-    "dependencies": [
-      "net.fabricmc:intermediary:1.14_combat-212796"
     ]
   },
   "1.14.3-pre4": {
@@ -2242,6 +2167,81 @@
   "18w43b": {
     "dependencies": [
       "net.fabricmc:intermediary:18w43b"
+    ]
+  },
+  "24w14potato_original": {
+    "dependencies": [
+      "net.fabricmc:intermediary:24w14potato_original"
+    ]
+  },
+  "23w13a_or_b_original": {
+    "dependencies": [
+      "net.fabricmc:intermediary:23w13a_or_b_original"
+    ]
+  },
+  "1.19_deep_dark_experimental_snapshot-1": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.19_deep_dark_experimental_snapshot-1"
+    ]
+  },
+  "1.18_experimental-snapshot-7": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.18_experimental-snapshot-7"
+    ]
+  },
+  "1.18_experimental-snapshot-6": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.18_experimental-snapshot-6"
+    ]
+  },
+  "1.18_experimental-snapshot-5": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.18_experimental-snapshot-5"
+    ]
+  },
+  "1.18_experimental-snapshot-4": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.18_experimental-snapshot-4"
+    ]
+  },
+  "1.18_experimental-snapshot-3": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.18_experimental-snapshot-3"
+    ]
+  },
+  "1.18_experimental-snapshot-2": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.18_experimental-snapshot-2"
+    ]
+  },
+  "1.18_experimental-snapshot-1": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.18_experimental-snapshot-1"
+    ]
+  },
+  "1.16_combat-3": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.16_combat-3"
+    ]
+  },
+  "1.15_combat-1": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.15_combat-1"
+    ]
+  },
+  "1.14_combat-3": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.14_combat-3"
+    ]
+  },
+  "1.14_combat-0": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.14_combat-0"
+    ]
+  },
+  "1.14_combat-212796": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.14_combat-212796"
     ]
   }
 }
