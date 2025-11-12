@@ -1,4 +1,9 @@
 {
+  "25w46a": {
+    "dependencies": [
+      "net.fabricmc:intermediary:25w46a"
+    ]
+  },
   "25w45a": {
     "dependencies": [
       "net.fabricmc:intermediary:25w45a"
@@ -2167,6 +2172,16 @@
   "18w43b": {
     "dependencies": [
       "net.fabricmc:intermediary:18w43b"
+    ]
+  },
+  "25w46a_unobfuscated": {
+    "dependencies": [
+      "net.fabricmc:intermediary:25w46a_unobfuscated"
+    ]
+  },
+  "25w45a_unobfuscated": {
+    "dependencies": [
+      "net.fabricmc:intermediary:25w45a_unobfuscated"
     ]
   },
   "24w14potato_original": {

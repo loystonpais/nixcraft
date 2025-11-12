@@ -4334,5 +4334,21 @@
   "net.fabricmc:fabric-loader:0.18.0": {
     "url": "https://maven.fabricmc.net",
     "sha256": "ecdd5b084a192b70e6a42e52894f1245b925faacbc187542fbb361b19c48aeba"
+  },
+  "net.fabricmc:intermediary:25w46a": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "3ce48164495f222880b9b7dab74fa6c47825e3baf404f39d8b914a86cbb71981"
+  },
+  "org.quiltmc:hashed:25w46a": {
+    "url": "https://maven.quiltmc.org/repository/release",
+    "sha256": "9bf33cf02ed85140cba2e95d5535abf833b9b00820514efe186a155f8d3314e1"
+  },
+  "net.fabricmc:intermediary:25w46a_unobfuscated": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
+  },
+  "net.fabricmc:intermediary:25w45a_unobfuscated": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
   }
 }
