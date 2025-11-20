@@ -1,4 +1,9 @@
 {
+  "1.21.11-pre1": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11-pre1"
+    ]
+  },
   "25w46a": {
     "dependencies": [
       "net.fabricmc:intermediary:25w46a"
@@ -2172,6 +2177,11 @@
   "18w43b": {
     "dependencies": [
       "net.fabricmc:intermediary:18w43b"
+    ]
+  },
+  "1.21.11-pre1_unobfuscated": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11-pre1_unobfuscated"
     ]
   },
   "25w46a_unobfuscated": {
