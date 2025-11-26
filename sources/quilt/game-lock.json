@@ -2644,6 +2644,16 @@
       "net.fabricmc:intermediary:1.14 Pre-Release 1"
     ]
   },
+  "1.21.11-pre3": {
+    "dependencies": [
+      "org.quiltmc:hashed:1.21.11-pre3"
+    ]
+  },
+  "1.21.11-pre2": {
+    "dependencies": [
+      "org.quiltmc:hashed:1.21.11-pre2"
+    ]
+  },
   "1.21.11-pre1": {
     "dependencies": [
       "org.quiltmc:hashed:1.21.11-pre1"
