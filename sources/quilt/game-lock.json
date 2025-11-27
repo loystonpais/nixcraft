@@ -1,4 +1,22 @@
 {
+  "1.21.11-pre3": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11-pre3",
+      "org.quiltmc:hashed:1.21.11-pre3"
+    ]
+  },
+  "1.21.11-pre2": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11-pre2",
+      "org.quiltmc:hashed:1.21.11-pre2"
+    ]
+  },
+  "1.21.11-pre1": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11-pre1",
+      "org.quiltmc:hashed:1.21.11-pre1"
+    ]
+  },
   "25w46a": {
     "dependencies": [
       "net.fabricmc:intermediary:25w46a",
@@ -2642,21 +2660,6 @@
   "1.14 Pre-Release 1": {
     "dependencies": [
       "net.fabricmc:intermediary:1.14 Pre-Release 1"
-    ]
-  },
-  "1.21.11-pre3": {
-    "dependencies": [
-      "org.quiltmc:hashed:1.21.11-pre3"
-    ]
-  },
-  "1.21.11-pre2": {
-    "dependencies": [
-      "org.quiltmc:hashed:1.21.11-pre2"
-    ]
-  },
-  "1.21.11-pre1": {
-    "dependencies": [
-      "org.quiltmc:hashed:1.21.11-pre1"
     ]
   },
   "1.16_combat-6": {
