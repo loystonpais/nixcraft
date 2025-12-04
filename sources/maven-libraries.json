@@ -4398,5 +4398,13 @@
   "net.fabricmc:intermediary:1.21.11-pre4": {
     "url": "https://maven.fabricmc.net",
     "sha256": "fbfaa7ff0629d0299e69c0a38a984b0ff3038973228cee32bebad5776d747b55"
+  },
+  "net.fabricmc:intermediary:1.21.11-pre5": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "73b8aba289542324c4b96a76a861c8efff20fce81c1b813d26212f8edafe85ff"
+  },
+  "net.fabricmc:intermediary:1.21.11-pre5_unobfuscated": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
   }
 }
