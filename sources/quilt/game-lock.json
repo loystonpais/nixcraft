@@ -1,4 +1,22 @@
 {
+  "1.21.11-rc1": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11-rc1",
+      "org.quiltmc:hashed:1.21.11-rc1"
+    ]
+  },
+  "1.21.11-pre5": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11-pre5",
+      "org.quiltmc:hashed:1.21.11-pre5"
+    ]
+  },
+  "1.21.11-pre4": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11-pre4",
+      "org.quiltmc:hashed:1.21.11-pre4"
+    ]
+  },
   "1.21.11-pre3": {
     "dependencies": [
       "net.fabricmc:intermediary:1.21.11-pre3",

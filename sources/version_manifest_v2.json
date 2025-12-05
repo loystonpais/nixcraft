@@ -1,52 +1,61 @@
 {
   "latest": {
     "release": "1.21.10",
-    "snapshot": "1.21.11-pre5"
+    "snapshot": "1.21.11-rc1"
   },
   "versions": [
     {
+      "id": "1.21.11-rc1",
+      "type": "snapshot",
+      "url": "https://piston-meta.mojang.com/v1/packages/36c257accc08a04f11492d8f4c7064871e3dcc04/1.21.11-rc1.json",
+      "time": "2025-12-04T15:33:04+00:00",
+      "releaseTime": "2025-12-04T15:20:43+00:00",
+      "sha1": "36c257accc08a04f11492d8f4c7064871e3dcc04",
+      "complianceLevel": 1
+    },
+    {
       "id": "1.21.11-pre5",
       "type": "snapshot",
-      "url": "https://piston-meta.mojang.com/v1/packages/0c44a8417875d1b1d5d3056c3a35ff9717342de0/1.21.11-pre5.json",
-      "time": "2025-12-03T13:26:59+00:00",
+      "url": "https://piston-meta.mojang.com/v1/packages/b9ca20ef058a1c9cd3078fd3973819709be6a675/1.21.11-pre5.json",
+      "time": "2025-12-04T13:57:07+00:00",
       "releaseTime": "2025-12-03T13:14:25+00:00",
-      "sha1": "0c44a8417875d1b1d5d3056c3a35ff9717342de0",
+      "sha1": "b9ca20ef058a1c9cd3078fd3973819709be6a675",
       "complianceLevel": 1
     },
     {
       "id": "1.21.11-pre4",
       "type": "snapshot",
-      "url": "https://piston-meta.mojang.com/v1/packages/b26950d15b92959c0c5db89047dfa58e82496b60/1.21.11-pre4.json",
-      "time": "2025-12-03T13:03:48+00:00",
+      "url": "https://piston-meta.mojang.com/v1/packages/af639e6394cf11680f9517cf445517486da74ffa/1.21.11-pre4.json",
+      "time": "2025-12-04T13:57:07+00:00",
       "releaseTime": "2025-12-01T13:17:32+00:00",
-      "sha1": "b26950d15b92959c0c5db89047dfa58e82496b60",
+      "sha1": "af639e6394cf11680f9517cf445517486da74ffa",
       "complianceLevel": 1
     },
     {
       "id": "1.21.11-pre3",
       "type": "snapshot",
-      "url": "https://piston-meta.mojang.com/v1/packages/86890b887c81421ea92693a1e46d8631815dd699/1.21.11-pre3.json",
-      "time": "2025-12-03T13:03:48+00:00",
+      "url": "https://piston-meta.mojang.com/v1/packages/46f7168cb7c8b8ee6d0972f32a26d465efd2ab63/1.21.11-pre3.json",
+      "time": "2025-12-04T13:57:07+00:00",
       "releaseTime": "2025-11-25T13:56:50+00:00",
-      "sha1": "86890b887c81421ea92693a1e46d8631815dd699",
+      "sha1": "46f7168cb7c8b8ee6d0972f32a26d465efd2ab63",
       "complianceLevel": 1
     },
     {
       "id": "1.21.11-pre2",
       "type": "snapshot",
-      "url": "https://piston-meta.mojang.com/v1/packages/602dec62325501c378fec069874161e03f88c896/1.21.11-pre2.json",
-      "time": "2025-12-03T13:03:48+00:00",
+      "url": "https://piston-meta.mojang.com/v1/packages/0bd795511c0d997d5ceda10310a86136a4d0e0ca/1.21.11-pre2.json",
+      "time": "2025-12-04T13:57:07+00:00",
       "releaseTime": "2025-11-21T11:44:15+00:00",
-      "sha1": "602dec62325501c378fec069874161e03f88c896",
+      "sha1": "0bd795511c0d997d5ceda10310a86136a4d0e0ca",
       "complianceLevel": 1
     },
     {
       "id": "1.21.11-pre1",
       "type": "snapshot",
-      "url": "https://piston-meta.mojang.com/v1/packages/1ad4bb67a9d795d4c8835575c5c85404cd4299b1/1.21.11-pre1.json",
-      "time": "2025-12-03T13:03:48+00:00",
+      "url": "https://piston-meta.mojang.com/v1/packages/e2adb1a551280196069ebfaad5ce6ef5b03bbfed/1.21.11-pre1.json",
+      "time": "2025-12-04T13:57:07+00:00",
       "releaseTime": "2025-11-19T08:06:45+00:00",
-      "sha1": "1ad4bb67a9d795d4c8835575c5c85404cd4299b1",
+      "sha1": "e2adb1a551280196069ebfaad5ce6ef5b03bbfed",
       "complianceLevel": 1
     },
     {
@@ -6719,21 +6728,21 @@
       "complianceLevel": 0
     },
     {
-      "id": "1.6.3",
-      "type": "snapshot",
-      "url": "https://piston-meta.mojang.com/v1/packages/903d6ba1bc87c301d88fa418f8b33446201c7d4e/1.6.3.json",
-      "time": "2019-06-28T07:07:47+00:00",
-      "releaseTime": "2013-09-13T10:54:41+00:00",
-      "sha1": "903d6ba1bc87c301d88fa418f8b33446201c7d4e",
-      "complianceLevel": 0
-    },
-    {
       "id": "13w37b",
       "type": "snapshot",
       "url": "https://piston-meta.mojang.com/v1/packages/b8d28154ee056af6af3c8c37815418fe0e9f34f8/13w37b.json",
       "time": "2019-06-28T07:08:08+00:00",
       "releaseTime": "2013-09-13T10:54:41+00:00",
       "sha1": "b8d28154ee056af6af3c8c37815418fe0e9f34f8",
+      "complianceLevel": 0
+    },
+    {
+      "id": "1.6.3",
+      "type": "snapshot",
+      "url": "https://piston-meta.mojang.com/v1/packages/903d6ba1bc87c301d88fa418f8b33446201c7d4e/1.6.3.json",
+      "time": "2019-06-28T07:07:47+00:00",
+      "releaseTime": "2013-09-13T10:54:41+00:00",
+      "sha1": "903d6ba1bc87c301d88fa418f8b33446201c7d4e",
       "complianceLevel": 0
     },
     {

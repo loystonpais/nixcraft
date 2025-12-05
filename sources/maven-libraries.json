@@ -4406,5 +4406,25 @@
   "net.fabricmc:intermediary:1.21.11-pre5_unobfuscated": {
     "url": "https://maven.fabricmc.net",
     "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
+  },
+  "org.quiltmc:hashed:1.21.11-pre5": {
+    "url": "https://maven.quiltmc.org/repository/release",
+    "sha256": "9912c11a9db93c335be5aaf5f8ba5df08e4570c035719d0324877ab1711a05a6"
+  },
+  "net.fabricmc:intermediary:1.21.11-rc1": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "66b56776b8293ff35278b93269e57a4db9761e1cfb4eab8ed78f6188099ea74a"
+  },
+  "org.quiltmc:hashed:1.21.11-rc1": {
+    "url": "https://maven.quiltmc.org/repository/release",
+    "sha256": "580b41bcf5e27dcd94afdc3a3348094241ee5d43b1f2879f786431ee6c93728e"
+  },
+  "org.quiltmc:hashed:1.21.11-pre4": {
+    "url": "https://maven.quiltmc.org/repository/release",
+    "sha256": "26d4e475854a12cc924350ccef0092092bb0883137fc68d8e3a1a67d8fc7a784"
+  },
+  "net.fabricmc:intermediary:1.21.11-rc1_unobfuscated": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
   }
 }
