@@ -370,6 +370,10 @@ in
           vulkan-loader # VulkanMod's lwjgl
 
           flite # TTS
+
+          libxtst
+          libxkbcommon
+          libxt
         ];
 
         runtimePrograms = with pkgs;
