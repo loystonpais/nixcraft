@@ -1,4 +1,9 @@
 {
+  "1.21.11": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11"
+    ]
+  },
   "1.21.11-rc3": {
     "dependencies": [
       "net.fabricmc:intermediary:1.21.11-rc3"
@@ -2212,6 +2217,11 @@
   "18w43b": {
     "dependencies": [
       "net.fabricmc:intermediary:18w43b"
+    ]
+  },
+  "1.21.11_unobfuscated": {
+    "dependencies": [
+      "net.fabricmc:intermediary:1.21.11_unobfuscated"
     ]
   },
   "1.21.11-rc3_unobfuscated": {
