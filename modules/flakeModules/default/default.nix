@@ -22,9 +22,6 @@
       // flakeModuleArgs);
   };
 in {
-  imports = [
-    inputs.devenv.flakeModule
-  ];
   config = {
     debug = true;
 
@@ -176,7 +173,6 @@ in {
     in {
       inherit packages;
       inherit legacyPackages;
-      inherit devenv;
     };
   };
 }
