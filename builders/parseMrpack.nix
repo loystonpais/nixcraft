@@ -4,7 +4,7 @@
   ...
 }: let
   inherit (lib.nixcraft) readJSON;
-  inherit (pkgs) runCommand unzip;
+  inherit (pkgs) runCommandLocal unzip;
   inherit (lib.filesystem) listFilesRecursive;
   inherit (lib) removePrefix;
   inherit (builtins) listToAttrs unsafeDiscardStringContext;
@@ -13,7 +13,7 @@ in
     # Some zips have weird permissions,
     # so we need to fix them
     unpacked =
-      runCommand "mrpack-unpacked" {
+      runCommandLocal "mrpack-unpacked" {
         nativeBuildInputs = [unzip];
       } ''
         unzip "${src}" -d $out

@@ -17,7 +17,7 @@ in
     client ? true,
     server ? false,
     jre ? pkgs.jre,
-    runCommand ? pkgs.runCommand,
+    runCommandLocal ? pkgs.runCommandLocal,
   }: let
     mode =
       if server == client
@@ -26,7 +26,7 @@ in
       then "client"
       else "server";
   in
-    runCommand "fabric-loader-mc${mcVersion}-v${loaderVersion}" {
+    runCommandLocal "fabric-loader-mc${mcVersion}-v${loaderVersion}" {
       buildInputs = [jre];
       outputHashMode = "recursive";
       outputHash = hash;

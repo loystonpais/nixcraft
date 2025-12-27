@@ -9,7 +9,7 @@
   assetType ? versionData.assets,
   assetIndex ? lib.nixcraft.readJSON (fetchSha1 versionData.assetIndex),
   objects ? assetIndex.objects,
-  runCommand ? pkgs.runCommand,
+  runCommandLocal ? pkgs.runCommandLocal,
   unzip ? pkgs.unzip,
 }: let
   inherit (lib) concatMapStringsSep;
@@ -34,7 +34,7 @@
     ${placeNativeLibs}
   '';
 in
-  runCommand "minecraft-native-lib-dir" {
+  runCommandLocal "minecraft-native-lib-dir" {
     nativeBuildInputs = [unzip];
   }
   script

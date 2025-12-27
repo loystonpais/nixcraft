@@ -13,7 +13,7 @@
   assetType ? versionData.assets,
   assetIndex ? lib.nixcraft.readJSON (fetchSha1 versionData.assetIndex),
   objects ? assetIndex.objects,
-  runCommand ? pkgs.runCommand,
+  runCommandLocal ? pkgs.runCommandLocal,
 }: let
   inherit (builtins) attrValues mapAttrs toFile toJSON;
   inherit (lib) concatMapStringsSep;
@@ -42,7 +42,7 @@
       ln -s ${fetchSha1 versionData.assetIndex} $out/indexes/${assetType}.json
     '';
   in
-    runCommand "minecraft-asset-dir" {} ''
+    runCommandLocal "minecraft-asset-dir" {} ''
       ${placeAssets}
       ${placeAssetIndex}
     '';
