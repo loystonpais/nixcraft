@@ -92,6 +92,8 @@ in
         '';
       };
 
+      enableNixGL = lib.mkEnableOption "nixGL";
+
       extraArguments = lib.mkOption {
         type = with lib.types; listOf nonEmptyStr;
         default = [];
@@ -384,6 +386,33 @@ in
         # inform generic settings module the instance type
         _instanceType = "client";
       }
+
+      (let
+        inherit (pkgs) mesa libglvnd libvdpau-va-gl;
+
+        mesa-drivers = [
+          mesa
+        ];
+
+        libvdpau = [libvdpau-va-gl];
+
+        glxindirect = pkgs.runCommandLocal "mesa_glxindirect" {} ''
+          mkdir -p $out/lib
+          ln -s ${mesa}/lib/libGLX_mesa.so.0 $out/lib/libGLX_indirect.so.0
+        '';
+      in
+        lib.mkIf config.enableNixGL {
+          envVars = {
+            GBM_BACKENDS_PATH = lib.makeSearchPathOutput "lib" "lib/gbm" mesa-drivers;
+            LIBGL_DRIVERS_PATH = lib.makeSearchPathOutput "lib" "lib/dri" mesa-drivers;
+            LIBVA_DRIVERS_PATH = lib.makeSearchPathOutput "out" "lib/dri" mesa-drivers;
+          };
+
+          runtimeLibs = mesa-drivers ++ [glxindirect libglvnd];
+          envVars.LD_LIBRARY_PATH = [
+            (lib.makeSearchPathOutput "lib" "lib/vdpau" libvdpau)
+          ];
+        })
 
       # TODO: implement fast asset download
       (lib.mkIf config.enableFastAssetDownload {
