@@ -7,21 +7,25 @@
 }: {
   sha1,
   assetSha256 ? sources.asset-sha256,
+  useBuiltinFetch ? false,
 }: let
   assetHashPath = lib.nixcraft.manifest.mkAssetHashPath sha1;
   url =
     "https://resources.download.minecraft.net/" + assetHashPath;
   src =
-    if assetSha256 ? "${assetHashPath}"
+    if useBuiltinFetch && (assetSha256 ? "${assetHashPath}")
     then
       builtins.fetchurl {
         inherit url;
         sha256 = assetSha256."${assetHashPath}";
       }
     else
-      fetchSha1 {
+      (pkgs.fetchurl {
         inherit url;
         inherit sha1;
+        preferLocalBuild = true;
+      }).overrideAttrs {
+        allowSubstitutes = false;
       };
 in
   src
