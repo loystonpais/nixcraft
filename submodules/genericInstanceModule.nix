@@ -333,6 +333,7 @@ in
           {
             # Prevents file from being GC-ed
             ".nixcraft/mrpack".source = config.mrpack.file;
+            ".nixcraft/mrpack-unpacked".source = config.mrpack._parsedMrpack.src;
           }
 
           # Set overrides
