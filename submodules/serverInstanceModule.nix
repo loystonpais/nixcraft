@@ -129,7 +129,7 @@
 
         ${config.finalPreLaunchShellScript}
 
-        cd "${config.absoluteDir}"
+        cd ${lib.escapeShellArg config.absoluteDir}
 
         ${
           if config.lazymc.enable

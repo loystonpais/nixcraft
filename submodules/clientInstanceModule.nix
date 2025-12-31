@@ -240,7 +240,7 @@ in
 
             ${config.finalPreLaunchShellScript}
 
-            cd "${config.absoluteDir}"
+            cd ${escapeShellArg config.absoluteDir}
 
             exec ${config.finalLaunchShellCommandString} "$@"
           '';
