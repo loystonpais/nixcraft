@@ -38,6 +38,7 @@ in {
 
     target = lib.mkOption {
       type = lib.types.pathWith {absolute = false;};
+      readOnly = true;
       default = name;
     };
 
@@ -175,6 +176,15 @@ in {
             && ((builtins.elem config.type readableTypes) == false))
           -> (config.source == null && config.text == null))
           "file ${config.target}: .source / .text cannot be transformed to value when type is ${config.type}"
+        )
+
+        (lib.assertMsg (lib.path.subpath.isValid config.target) "file path '${config.target}' is not valid")
+
+        (
+          lib.assertMsg (
+            (lib.path.subpath.isValid config.target)
+            && ((lib.removePrefix "./" (lib.path.subpath.normalise config.target)) == config.target)
+          ) "file path '${config.target}' is not normal"
         )
       ];
     }
