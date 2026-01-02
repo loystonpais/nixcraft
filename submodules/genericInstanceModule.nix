@@ -399,7 +399,15 @@ in
         '';
       })
 
+      # file placement logic
       {
+        # guard some paths
+        files = {
+          ".nixcraft".enable = lib.mkForce false;
+          ".nixcraft/files".enable = lib.mkForce false;
+          ".nixcraft/init".enable = lib.mkForce false;
+        };
+
         finalFilePlacementShellScript = let
           esc = lib.escapeShellArg;
           entryFilePath = "${config.absoluteDir}/.nixcraft/files";
@@ -498,6 +506,40 @@ in
               # count of enabled mod loaders must be below or equal to 1
               lib.assertMsg (enabledLoaders <= 1)
               "${prefixMsg}: can't have multiple (${toString enabledLoaders}) mod loaders enabled at the same time."
+          )
+
+          # make sure that paths that are enabled don't have any children
+          # TODO: move this logic over to a newer module called filesModule
+          (
+            let
+              allPaths = lib.attrNames config.files;
+
+              conflicts =
+                lib.filter (
+                  path:
+                    (config.files.${path}.enable or false)
+                    == true
+                    && (lib.any (p: p != path && lib.hasPrefix "${path}/" p) allPaths)
+                )
+                allPaths;
+
+              conflictMessages =
+                map (
+                  path: let
+                    children = lib.filter (p: p != path && lib.hasPrefix "${path}/" p) allPaths;
+                  in ''
+                    files."${path}" is enabled but it also has children:
+                      ${lib.concatStringsSep "\n  " children}
+                  ''
+                )
+                conflicts;
+            in
+              lib.assertMsg (conflicts == [])
+              ''
+                ${prefixMsg}: file path conflicts detected:
+
+                ${lib.concatStringsSep "\n\n" conflictMessages}
+              ''
           )
         ];
       })
