@@ -393,7 +393,7 @@ in
         '';
       })
 
-      (lib.mkIf (config.placeFilesAtActivation == false) {
+      (lib.mkIf (!config.placeFilesAtActivation) {
         preLaunchShellScript = ''
           ${config.finalFilePlacementShellScript}
         '';
