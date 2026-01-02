@@ -345,9 +345,15 @@ in
                 then parsedMrpack.overrides-plus-client-overrides
                 else parsedMrpack.overrides-plus-server-overrides;
             in (
-              builtins.mapAttrs (placePath: path: {
-                method = lib.mkDefault "copy-init";
-                source = path;
+              builtins.mapAttrs (targetPath: sourcePath: {
+                method = lib.mkDefault (
+                  # Some mrpacks contain mods in overrides
+                  # Use "copy" on them
+                  if lib.hasPrefix "mods/" targetPath
+                  then "copy"
+                  else "copy-init"
+                );
+                source = sourcePath;
               })
               files
             )
