@@ -482,7 +482,6 @@ in
               fileAbsDirPath = builtins.dirOf fileAbsPath;
             in ''
               mkdir -p ${esc fileAbsDirPath}
-              # echo "copy-init (once) ${esc file.finalSource} -> ${esc fileAbsPath}"
               rm -rf ${esc fileAbsPath}
               cp ${esc file.finalSource} ${esc fileAbsPath}
               chmod u+w ${esc fileAbsPath}
@@ -495,7 +494,6 @@ in
               fileAbsDirPath = builtins.dirOf fileAbsPath;
             in ''
               mkdir -p ${esc fileAbsDirPath}
-              # echo "copy (always) ${esc file.finalSource} -> ${esc fileAbsPath}"
               rm -rf ${esc fileAbsPath}
               cp ${esc file.finalSource} ${esc fileAbsPath}
               chmod u+w ${esc fileAbsPath}
@@ -508,7 +506,6 @@ in
               fileAbsDirPath = builtins.dirOf fileAbsPath;
             in ''
               mkdir -p ${esc fileAbsDirPath}
-              # echo "symlink ${esc file.finalSource} -> ${esc fileAbsPath}"
               rm -rf ${esc fileAbsPath}
               ln -s ${esc file.finalSource} ${esc fileAbsPath}
             '')
@@ -518,7 +515,6 @@ in
           mkdir -p ${esc config.absoluteDir}/.nixcraft
 
           if [ -f ${esc entryFilePath} ]; then
-            # echo "Removing old files..."
             while IFS= read -r f; do
                 # echo "Removing $f"
                 rm -rf "$f"
@@ -527,15 +523,20 @@ in
             rm -f ${esc entryFilePath}
           fi
 
-          # echo "Placing files for" ${esc config.name}
-
+          ### copy ###
           ${script'copy}
-          ${script'symlink}
+          ### copy end ###
 
+          ### symlink ###
+          ${script'symlink}
+          ### symlink end ###
+
+          ### copy-init ###
           if [ ! -e ${esc initFilePath} ]; then
             ${script'copy-init}
             touch ${esc initFilePath}
           fi
+          ### copy-init end ###
 
           rm -rf ${esc entryFilePath}
           cp ${builtins.toFile "entries" (
