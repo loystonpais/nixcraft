@@ -431,7 +431,7 @@ in
                   name = fileInfo.path;
                   value = {
                     source = pkgs.fetchurl {
-                      url = builtins.elemAt fileInfo.downloads 0;
+                      urls = fileInfo.downloads;
                       sha1 = fileInfo.hashes.sha1;
                     };
                   };
