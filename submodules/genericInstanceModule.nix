@@ -233,8 +233,9 @@ in
       };
 
       _instanceType = lib.mkOption {
-        internal = true;
         type = lib.types.enum ["client" "server"];
+        internal = true;
+        readOnly = true;
       };
 
       meta = {
