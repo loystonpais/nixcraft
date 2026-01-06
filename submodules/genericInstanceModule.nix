@@ -105,7 +105,56 @@ in
         };
 
       files = lib.mkOption {
-        type = with lib.types; attrsOf (submodule fileModule);
+        type = with lib.types;
+          attrsOf (submoduleWith {
+            modules = [
+              fileModule
+              ({
+                config,
+                instanceType,
+                ...
+              }: {
+                options = {
+                  method = lib.mkOption {
+                    type = lib.types.enum ["copy" "copy-init" "symlink"];
+                    default = "symlink";
+
+                    description = ''
+                      Method to place the file in target location
+                        copy-init     - copy once during init (suitable for config files from modpacks)
+                        copy          - copy every rebuild
+                        symlink - symlink every rebuild
+                    '';
+                  };
+                };
+
+                config = {
+                  _module.check = lib.any (a: a) [
+                    (
+                      instanceType
+                      == "client"
+                      -> (lib.assertMsg (
+                          !(lib.hasPrefix "saves/" config.target) && config.target != "saves"
+                        )
+                        "file '${config.target}' is not allowed")
+                    )
+
+                    (
+                      instanceType
+                      == "server"
+                      -> (lib.assertMsg (
+                          !(lib.hasPrefix "world/" config.target) && config.target != "world"
+                        )
+                        "file '${config.target}' is not allowed")
+                    )
+                  ];
+                };
+              })
+            ];
+            specialArgs = {
+              instanceType = config._instanceType;
+            };
+          });
         default = {};
       };
 

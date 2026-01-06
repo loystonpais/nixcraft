@@ -52,17 +52,6 @@ in {
       default = builtins.baseNameOf config.target;
     };
 
-    method = lib.mkOption {
-      type = lib.types.enum ["copy" "copy-init" "symlink"];
-      default = "symlink";
-      description = ''
-        Method to place the file in target location
-          copy-init     - copy once during init (suitable for config files from modpacks)
-          copy          - copy every rebuild
-          symlink - symlink every rebuild
-      '';
-    };
-
     force = lib.mkOption {
       type = lib.types.bool;
       default = false;
