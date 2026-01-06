@@ -396,9 +396,15 @@ in
             in (
               builtins.mapAttrs (targetPath: sourcePath: {
                 method = lib.mkDefault (
-                  # Some mrpacks contain mods in overrides
+                  # Some mrpacks contain mods,
+                  # resourcepacks and datapacks in overrides
                   # Use "copy" on them
-                  if lib.hasPrefix "mods/" targetPath
+                  if
+                    lib.any (p: lib.hasPrefix p targetPath) [
+                      "mods/"
+                      "resourcepacks/"
+                      "datapacks/"
+                    ]
                   then "copy"
                   else "copy-init"
                 );
