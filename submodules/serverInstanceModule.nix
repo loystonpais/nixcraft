@@ -187,6 +187,10 @@
       java.mainClass = config.quiltLoader.meta.lock.mainClass.server;
     })
 
+    (lib.mkIf config.mrpack.enable {
+      world = lib.mkDefault config.mrpack._parsedMrpack.world.overrides-plus-server-overrides;
+    })
+
     (lib.mkIf config.agreeToEula {
       files."eula.txt".text = ''
         # Agreed using nixcraft config

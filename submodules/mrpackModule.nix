@@ -1,6 +1,7 @@
 {
   lib,
   parseMrpack,
+  unpackMrpack,
   ...
 }: {
   name,
@@ -28,8 +29,6 @@
 
     placeOverrides = (lib.mkEnableOption "placing overrides") // {default = true;};
 
-    mutableOverrides = (lib.mkEnableOption "mutable overrides") // {default = true;};
-
     _parsedMrpack = lib.mkOption {
       type = lib.types.attrs;
     };
@@ -37,7 +36,7 @@
 
   config = lib.mkMerge [
     {
-      _parsedMrpack = parseMrpack config.file;
+      _parsedMrpack = parseMrpack {unpacked = unpackMrpack {src = config.file;};};
       minecraftVersion = lib.mkOptionDefault config._parsedMrpack.minecraftVersion;
     }
 

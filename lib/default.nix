@@ -16,6 +16,7 @@
     getAttrs
     mkMerge
     foldAttrs
+    mapAttrsToList
     ;
 
   sources = lib.nixcraft.importSources ../sources;
@@ -141,6 +142,10 @@ in rec {
 
   filesystem = {
     listJarFilesRecursive = drv: filter (path: isJarFile (toString path)) (lib.filesystem.listFilesRecursive drv);
+
+    listDirs = path: mapAttrsToList (name: _: joinPathAndString path name) (readDir'dirs path);
+    listFiles = path: mapAttrsToList (name: _: joinPathAndString path name) (readDir'files path);
+    listAll = path: mapAttrsToList (name: _: joinPathAndString path name) (readDir path);
   };
 
   lists = {

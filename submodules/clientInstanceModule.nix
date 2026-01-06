@@ -462,6 +462,10 @@ in
         java.mainClass = config.quiltLoader.meta.lock.mainClass.client;
       })
 
+      (lib.mkIf config.mrpack.enable {
+        saves = config.mrpack._parsedMrpack.saves.overrides-plus-client-overrides;
+      })
+
       (lib.mkIf config.waywall.enable {
         # waywall uses custom libglfw.so
         java.extraArguments = [
