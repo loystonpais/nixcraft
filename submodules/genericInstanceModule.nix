@@ -116,38 +116,17 @@ in
               }: {
                 options = {
                   method = lib.mkOption {
-                    type = lib.types.enum ["copy" "copy-init" "symlink"];
+                    type = lib.types.enum ["copy" "copy-init" "symlink" "world"];
                     default = "symlink";
 
                     description = ''
                       Method to place the file in target location
                         copy-init     - copy once during init (suitable for config files from modpacks)
                         copy          - copy every rebuild
-                        symlink - symlink every rebuild
+                        symlink       - symlink every rebuild
+                        world         - recursive copy directory only if it doesn't exist already (used internally for world/saves)
                     '';
                   };
-                };
-
-                config = {
-                  _module.check = lib.any (a: a) [
-                    (
-                      instanceType
-                      == "client"
-                      -> (lib.assertMsg (
-                          !(lib.hasPrefix "saves/" config.target) && config.target != "saves"
-                        )
-                        "file '${config.target}' is not allowed")
-                    )
-
-                    (
-                      instanceType
-                      == "server"
-                      -> (lib.assertMsg (
-                          !(lib.hasPrefix "world/" config.target) && config.target != "world"
-                        )
-                        "file '${config.target}' is not allowed")
-                    )
-                  ];
                 };
               })
             ];
@@ -474,6 +453,7 @@ in
           files'copy = filterAttrs (name: file: file.method == "copy") enabledFiles;
           files'symlink = filterAttrs (name: file: file.method == "symlink") enabledFiles;
           files'copy-init = filterAttrs (name: file: file.method == "copy-init") enabledFiles;
+          files'world = filterAttrs (name: file: file.method == "world") enabledFiles;
 
           files'entries = filterAttrs (name: file: file.method == "copy" || file.method == "symlink") enabledFiles;
 
@@ -511,6 +491,20 @@ in
               ln -s ${esc file.finalSource} ${esc fileAbsPath}
             '')
             files'symlink;
+
+          script'world =
+            lib.concatMapAttrsStringSep "\n" (name: file: let
+              fileAbsPath = "${config.absoluteDir}/${file.target}";
+              fileAbsDirPath = builtins.dirOf fileAbsPath;
+            in ''
+              if [ ! -d ${esc fileAbsPath} ]; then
+                mkdir -p ${esc fileAbsDirPath}
+                rm -rf ${esc fileAbsPath}
+                cp -rT ${esc file.finalSource} ${esc fileAbsPath}
+                chmod -R u+w ${esc fileAbsPath}
+              fi
+            '')
+            files'world;
         in ''
           mkdir -p ${esc config.absoluteDir}
           mkdir -p ${esc config.absoluteDir}/.nixcraft
@@ -523,6 +517,10 @@ in
             done < ${esc entryFilePath}
             rm -f ${esc entryFilePath}
           fi
+
+          ### world ###
+          ${script'world}
+          ### world end ###
 
           ### copy ###
           ${script'copy}
