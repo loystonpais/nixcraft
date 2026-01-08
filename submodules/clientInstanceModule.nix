@@ -293,29 +293,15 @@ in
 
       # Place saves
       {
-        preLaunchShellScript = let
-          absSavesPath = "${config.absoluteDir}/saves";
-
-          placeSaves =
-            lib.concatMapAttrsStringSep "\n" (name: path: let
-              absPlacePath = "${config.absoluteDir}/saves/${name}";
-            in ''
-              if [ ! -d ${escapeShellArg absPlacePath} ]; then
-                rm -rf ${escapeShellArg absPlacePath}
-                cp -R ${escapeShellArg path} ${escapeShellArg absPlacePath}
-                chmod -R u+w ${escapeShellArg absPlacePath}
-              fi
-            '')
-            config.saves;
-        in ''
-          if [ ! -d ${escapeShellArg absSavesPath} ]; then
-            rm -f ${escapeShellArg absSavesPath}
-            mkdir -p ${escapeShellArg absSavesPath}
-            chmod -R u+w ${escapeShellArg absSavesPath} || true
-          fi
-
-          ${placeSaves}
-        '';
+        files =
+          lib.mapAttrs' (
+            name: path:
+              lib.nameValuePair "saves/${name}" {
+                source = path;
+                method = "world";
+              }
+          )
+          config.saves;
       }
 
       {

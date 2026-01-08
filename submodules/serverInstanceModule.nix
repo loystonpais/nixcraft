@@ -221,18 +221,12 @@
     })
 
     # Place world dir
-    (lib.mkIf (config.world != null) (let
-      esc = lib.escapeShellArg;
-      absPlacePath = "${config.absoluteDir}/world";
-    in {
-      preLaunchShellScript = ''
-        if [ ! -d ${esc absPlacePath} ]; then
-          rm -rf ${esc absPlacePath}
-          cp -R ${esc config.world} ${esc absPlacePath}
-          chmod -R u+w ${esc absPlacePath}
-        fi
-      '';
-    }))
+    (lib.mkIf (config.world != null) {
+      files."world" = {
+        source = config.world;
+        method = "world";
+      };
+    })
 
     # TODO: find correct way to do validations
     (let
