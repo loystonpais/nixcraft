@@ -45,6 +45,10 @@
     ];
 
     meta.mainProgram = evaluated.config.binEntry.name;
+
+    passthru = {
+      evaluatedModule = evaluated;
+    };
   };
 in
   finalEntry
