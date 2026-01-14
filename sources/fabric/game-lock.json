@@ -1,4 +1,9 @@
 {
+  "26.1-snapshot-3": {
+    "dependencies": [
+      "net.fabricmc:intermediary:26.1-snapshot-3"
+    ]
+  },
   "26.1-snapshot-2": {
     "dependencies": [
       "net.fabricmc:intermediary:26.1-snapshot-2"
