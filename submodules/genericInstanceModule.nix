@@ -179,6 +179,8 @@ in
         default = [];
       };
 
+      enableJemalloc = lib.mkEnableOption "jemalloc";
+
       fixBugs =
         (lib.mkEnableOption "fixing trivial bugs if any")
         // {
@@ -420,6 +422,10 @@ in
               )
           )
         ];
+      })
+
+      (lib.mkIf (config.enableJemalloc) {
+        envVars.LD_PRELOAD = lib.mkBefore ["${pkgs.jemalloc}/lib/libjemalloc.so"];
       })
 
       (lib.mkIf (config.placeFilesAtActivation) {
