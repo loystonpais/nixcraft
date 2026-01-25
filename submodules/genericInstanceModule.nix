@@ -424,12 +424,16 @@ in
 
       (lib.mkIf (config.placeFilesAtActivation) {
         activationShellScript = ''
+          mkdir -p ${escapeShellArg config.absoluteDir}
+
           ${config.finalFilePlacementShellScript}
         '';
       })
 
       (lib.mkIf (!config.placeFilesAtActivation) {
         preLaunchShellScript = ''
+          mkdir -p ${escapeShellArg config.absoluteDir}
+
           ${config.finalFilePlacementShellScript}
         '';
       })
