@@ -76,7 +76,7 @@ See `docs` for all available options.
 # in flake.nix inputs add
 nixcraft = {
     url = "github:loystonpais/nixcraft";
-    inputs.follows.nixpkgs = "nixpkgs"; # Set correct nixpkgs name
+    inputs.nixpkgs.follows = "nixpkgs"; # Set correct nixpkgs name
 };
 
 ```
