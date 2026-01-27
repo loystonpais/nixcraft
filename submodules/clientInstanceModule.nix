@@ -223,11 +223,16 @@ in
           config.finalArgumentShellString
 
           # unmodded client doesn't launch if access token is not provided
-          "--accessToken $(cat ${
-            if (config.account != null && config.account.accessTokenPath != null)
-            then escapeShellArg config.account.accessTokenPath
-            else pkgs.writeText "dummy" "dummy"
-          })"
+          "--accessToken $(
+            ${
+              if config.account != null && config.account.accessTokenPath != null then
+                "cat ${escapeShellArg config.account.accessTokenPath}"
+              else if config.account != null && config.account.accessTokenCommand != null then
+                config.account.accessTokenCommand
+              else
+                "echo dummy"
+            }
+          )"
         ];
 
         finalLaunchShellScript = let
