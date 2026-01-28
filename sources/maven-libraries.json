@@ -4494,5 +4494,9 @@
   "net.fabricmc:intermediary:26.1-snapshot-4": {
     "url": "https://maven.fabricmc.net",
     "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
+  },
+  "net.fabricmc:intermediary:26.1-snapshot-5": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
   }
 }
