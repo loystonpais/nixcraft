@@ -307,6 +307,18 @@ in rec {
 
   versionManifestV2 = {
     getAllVersions = manifest: map (attr: attr.id) manifest.versions;
+
+    # Filter versions by type (e.g., "release" or "snapshot")
+    getVersionsByType = type: manifest:
+      filter (attr: attr.type == type) manifest.versions;
+
+    # Get only release versions (ordered as in manifest)
+    getReleaseVersions = manifest:
+      map (attr: attr.id) (filter (attr: attr.type == "release") manifest.versions);
+
+    # Get only snapshot versions (ordered as in manifest)
+    getSnapshotVersions = manifest:
+      map (attr: attr.id) (filter (attr: attr.type == "snapshot") manifest.versions);
   };
 
   aria2c = rec {
