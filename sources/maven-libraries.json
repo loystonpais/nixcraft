@@ -4666,5 +4666,9 @@
   "org.ow2.asm:asm:9.10.1": {
     "url": "https://maven.fabricmc.net/",
     "sha256": "ed825d10ab1399c8c0cb669e688cf0c8c82629b4c8399b58352b68e92ca10fcb"
+  },
+  "net.fabricmc:intermediary:26.2-pre-3": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
   }
 }
