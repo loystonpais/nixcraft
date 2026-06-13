@@ -14,9 +14,13 @@
     toLibraryArtifactLinkTree
     ;
 
-  # TODO: add support for osx
+  os =
+    if pkgs.stdenv.hostPlatform.isLinux then "linux"
+    else if pkgs.stdenv.hostPlatform.isDarwin then "osx"
+    else throw "Unsupported Minecraft OS: ${pkgs.stdenv.hostPlatform.system}";
+
   librariesLinkTree = pipe libraries [
-    (filterLibrariesByOS "linux")
+    (filterLibrariesByOS os)
     filterClassifiers
     filterEmptyArtifactUrl
     (toLibraryArtifactLinkTree fetchSha1)

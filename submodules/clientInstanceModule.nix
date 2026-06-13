@@ -18,7 +18,6 @@
   ...
 }: let
   inherit (lib) escapeShellArgs escapeShellArg concatStringsSep;
-  inherit (lib.nixcraft.filesystem) listJarFilesRecursive;
 in
   {
     name,
@@ -326,19 +325,23 @@ in
         mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
 
         # TODO: in javaSettingsModule try to implement this as an actual option
-        java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.meta.versionData;}}"];
+        java.extraArguments = [
+          "-Djava.library.path=${mkNativeLibDir { versionData = config.meta.versionData; }}"
+        ] ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+          "-XstartOnFirstThread"
+        ];
 
         java.mainClass = lib.mkDefault config.meta.versionData.mainClass;
 
         # Default libs copied over from
         # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/pr/prismlauncher/package.nix#L78
-        runtimeLibs = with pkgs;
-        with xorg; [
+        runtimeLibs = with pkgs; [
           (lib.getLib stdenv.cc.cc)
-          ## native versions
-          glfw3-minecraft
           openal
-
+          vulkan-loader # VulkanMod's lwjgl
+          flite # TTS
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux (with xorg; [
           ## openal
           alsa-lib
           libjack2
@@ -346,28 +349,24 @@ in
           pipewire
 
           ## glfw
+          glfw3-minecraft
           libGL
+
           libX11
           libXcursor
           libXext
           libXrandr
           libXxf86vm
-
           udev # oshi
-
-          vulkan-loader # VulkanMod's lwjgl
-
-          flite # TTS
-
           libxtst
           libxkbcommon
           libxt
-        ];
+        ]);
 
         runtimePrograms = with pkgs;
-        with xorg; [
-          xrandr # This is needed for 1.12.x versions to not crash
-        ];
+          lib.optionals stdenv.hostPlatform.isLinux (with xorg; [
+            xrandr # This is needed for 1.12.x versions to not crash
+          ]);
 
         # inform generic settings module the instance type
         _instanceType = "client";
@@ -387,7 +386,7 @@ in
           ln -s ${mesa}/lib/libGLX_mesa.so.0 $out/lib/libGLX_indirect.so.0
         '';
       in
-        lib.mkIf config.enableNixGL {
+        lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && config.enableNixGL) {
           envVars = {
             GBM_BACKENDS_PATH = lib.makeSearchPathOutput "lib" "lib/gbm" mesa-drivers;
             LIBGL_DRIVERS_PATH = lib.makeSearchPathOutput "lib" "lib/dri" mesa-drivers;
@@ -405,7 +404,7 @@ in
         assetHash = lib.mkOptionDefault lib.fakeHash;
       })
 
-      (lib.mkIf config.enableNvidiaOffload {
+      (lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && config.enableNvidiaOffload) {
         envVars = {
           __NV_PRIME_RENDER_OFFLOAD = "1";
           __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
@@ -414,13 +413,13 @@ in
         };
       })
 
-      (lib.mkIf config.enableDriPrime {
+      (lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && config.enableDriPrime) {
         envVars = {
           DRI_PRIME = "1";
         };
       })
 
-      (lib.mkIf config.useDiscreteGPU {
+      (lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && config.useDiscreteGPU) {
         enableDriPrime = true;
         enableNvidiaOffload = true;
       })
