@@ -18,7 +18,6 @@
   ...
 }: let
   inherit (lib) escapeShellArgs escapeShellArg concatStringsSep;
-  inherit (lib.nixcraft.filesystem) listJarFilesRecursive;
 in
   {
     name,
@@ -326,6 +325,9 @@ in
         mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
 
         java.D."java.library.path" = mkNativeLibDir {versionData = config.meta.versionData;};
+        java.extraArguments = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+          "-XstartOnFirstThread"
+        ];
 
         java.mainClass = lib.mkDefault config.meta.versionData.mainClass;
 
@@ -333,10 +335,11 @@ in
         # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/pr/prismlauncher/package.nix#L78
         runtimeLibs = with pkgs; [
           (lib.getLib stdenv.cc.cc)
-          ## native versions
-          glfw3-minecraft
           openal
-
+          vulkan-loader # VulkanMod's lwjgl
+          flite # TTS
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
           ## openal
           alsa-lib
           libjack2
@@ -344,27 +347,24 @@ in
           pipewire
 
           ## glfw
+          glfw3-minecraft
           libGL
+
           libx11
           libxcursor
           libxext
           libxrandr
           libxxf86vm
-
           udev # oshi
-
-          vulkan-loader # VulkanMod's lwjgl
-
-          flite # TTS
-
           libxtst
           libxkbcommon
           libxt
         ];
 
-        runtimePrograms = with pkgs; [
-          xrandr # This is needed for 1.12.x versions to not crash
-        ];
+        runtimePrograms = with pkgs;
+          lib.optionals stdenv.hostPlatform.isLinux [
+            xrandr # This is needed for 1.12.x versions to not crash
+          ];
 
         # inform generic settings module the instance type
         _instanceType = "client";
