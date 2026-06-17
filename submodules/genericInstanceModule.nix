@@ -273,14 +273,30 @@ in
 
       # Settings stuff that the user usually doesn't need to alter
       {
-        # Set LD_LIBRARY_PATH env var from libs
-        envVars.LD_LIBRARY_PATH = [(lib.makeLibraryPath config.runtimeLibs)];
-
-        # Add busybox to runtime programs (needed for init script)
-        runtimePrograms = with pkgs; [busybox];
-
         # Set PATH from runtime programs
-        envVars.PATH = lib.makeBinPath config.runtimePrograms;
+        # Set (DY)LD_LIBRARY_PATH env var from libs
+        envVars = {
+          PATH = lib.makeBinPath config.runtimePrograms;
+        } // (
+          if pkgs.stdenv.isDarwin then
+            {
+              DYLD_LIBRARY_PATH = [ (lib.makeLibraryPath config.runtimeLibs) ];
+            }
+          else
+            {
+              LD_LIBRARY_PATH = [ (lib.makeLibraryPath config.runtimeLibs) ];
+            }
+        );
+
+        # Add utils to runtime programs (needed for init script)
+        runtimePrograms = with pkgs; [
+          bash
+          coreutils
+          findutils
+          gnugrep
+          gnused
+          gawk
+        ];
 
         # Make lib dir out of all libraries and then
         # pass them to java class paths
