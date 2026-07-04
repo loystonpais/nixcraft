@@ -1,14 +1,15 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p python3Packages.requests
 
-# adopted from: https://github.com/Infinidoge/nix-minecraft/blob/master/pkgs/paper-servers/update.py
+# adapted from: https://github.com/Infinidoge/nix-minecraft/blob/master/pkgs/paper-servers/update.py
 
 import json
-import requests
 from pathlib import Path
+
+import requests
 from requests.adapters import HTTPAdapter, Retry
 
-ENDPOINT = "https://api.papermc.io/v2/projects/paper"
+ENDPOINT = "https://fill.papermc.io/v3/projects/paper"
 
 TIMEOUT = 5
 RETRIES = 5
@@ -40,14 +41,15 @@ def make_client():
 
 def get_game_versions(client):
     print("Fetching game versions")
-    data = client.get(ENDPOINT).json()
-    return data["versions"]
+    data = client.get(f"{ENDPOINT}/versions").json()
+    # NOTE: Improperly sorts versions, but is at least consistent
+    return sorted(v["version"]["id"] for v in data["versions"])
 
 
 def get_builds(version, client):
     print(f"Fetching builds for {version}")
     data = client.get(f"{ENDPOINT}/versions/{version}/builds").json()
-    return data
+    return sorted(data, key=lambda build: build["id"])
 
 
 def main(lock, client):
@@ -55,23 +57,17 @@ def main(lock, client):
     print("Starting fetch")
 
     for version in get_game_versions(client):
-        output[version] = {}
-        builds = get_builds(version, client)
-
-        if "builds" not in builds:
-            print(f"Error parsing paper server builds for {version}")
-            print(f"{builds = }")
-            continue
-
-        for build in builds["builds"]:
-            build_number = build["build"]
-            build_sha256 = build["downloads"]["application"]["sha256"]
-            build_filename = build["downloads"]["application"]["name"]
-            build_url = f"{ENDPOINT}/versions/{version}/builds/{build_number}/downloads/{build_filename}"
-            output[version][build_number] = {
+        version_builds = {}
+        for build in get_builds(version, client):
+            build_number = build["id"]
+            build_sha256 = build["downloads"]["server:default"]["checksums"]["sha256"]
+            build_url = build["downloads"]["server:default"]["url"]
+            version_builds[build_number] = {
                 "url": build_url,
                 "sha256": build_sha256,
             }
+        if version_builds:
+            output[version] = version_builds
 
     json.dump(output, lock, indent=2)
     lock.write("\n")
