@@ -217,18 +217,32 @@ in
       shared
 
       {
-        finalLaunchShellCommandString = concatStringsSep " " [
-          ''"${config.java.package}/bin/java"''
-          config.java.finalArgumentShellString
-          config.finalArgumentShellString
+        finalLaunchShellCommandString =
+          let
+            authDir = "${config.absoluteDir}/.nixcraft/auth";
+            accessTokenPath =
+              if (config.account != null && config.account.refreshTokenPath != null)
+              then "${authDir}/minecraft-access-token"
+              else pkgs.writeText "dummy" "dummy";
+            profilePath = "${authDir}/minecraft-profile.json";
 
-          # unmodded client doesn't launch if access token is not provided
-          "--accessToken $(cat ${
-            if (config.account != null && config.account.accessTokenPath != null)
-            then escapeShellArg config.account.accessTokenPath
-            else pkgs.writeText "dummy" "dummy"
-          })"
-        ];
+            dynamicProfileArgs =
+              lib.optionalString
+              (config.account != null && config.account.refreshTokenPath != null)
+              ''
+                --username "$(${pkgs.jq}/bin/jq -er '.name' < ${escapeShellArg profilePath})"
+                --uuid "$(${pkgs.jq}/bin/jq -er '.id' < ${escapeShellArg profilePath})"
+              '';
+          in
+            concatStringsSep " " [
+              ''"${config.java.package}/bin/java"''
+              config.java.finalArgumentShellString
+              config.finalArgumentShellString
+              dynamicProfileArgs
+
+              # unmodded client doesn't launch if access token is not provided
+              ''--accessToken "$(${pkgs.coreutils}/bin/cat ${escapeShellArg accessTokenPath})"''
+            ];
 
         finalLaunchShellScript = let
           defaultScript = ''
@@ -290,6 +304,160 @@ in
           package = pkgs.waywall;
         };
       }
+
+      (lib.mkIf (config.account != null && config.account.refreshTokenPath != null) (
+        let
+          authDir = "${config.absoluteDir}/.nixcraft/auth";
+          accessTokenPath = "${authDir}/minecraft-access-token";
+          profilePath = "${authDir}/minecraft-profile.json";
+          refreshScript = pkgs.writeShellScript "nixcraft-refresh-token-${name}" ''
+            #!${pkgs.bash}/bin/bash
+
+            set -euo pipefail
+
+            refresh_token_path=${escapeShellArg config.account.refreshTokenPath}
+            access_token_path=${escapeShellArg accessTokenPath}
+            profile_path=${escapeShellArg profilePath}
+            client_id=${escapeShellArg config.account.oauth.clientId}
+            token_endpoint=${escapeShellArg config.account.oauth.tokenEndpoint}
+            redirect_uri=${escapeShellArg config.account.oauth.redirectUri}
+            scope=${escapeShellArg config.account.oauth.scope}
+
+            mkdir -p \
+              "$(${pkgs.coreutils}/bin/dirname "$refresh_token_path")" \
+              "$(${pkgs.coreutils}/bin/dirname "$access_token_path")" \
+              "$(${pkgs.coreutils}/bin/dirname "$profile_path")"
+
+            refresh_tmp="$(${pkgs.coreutils}/bin/mktemp "$(${pkgs.coreutils}/bin/dirname "$refresh_token_path")/.refresh-token.XXXXXX")"
+            access_tmp="$(${pkgs.coreutils}/bin/mktemp "$(${pkgs.coreutils}/bin/dirname "$access_token_path")/.access-token.XXXXXX")"
+            profile_tmp="$(${pkgs.coreutils}/bin/mktemp "$(${pkgs.coreutils}/bin/dirname "$profile_path")/.profile.XXXXXX")"
+            cleanup() {
+              rm -f "$refresh_tmp" "$access_tmp" "$profile_tmp"
+            }
+            trap cleanup EXIT
+
+            refresh_token="$(${pkgs.coreutils}/bin/tr -d '\r\n' < "$refresh_token_path")"
+
+            microsoft_response="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request POST \
+                --url "$token_endpoint" \
+                --header "Content-Type: application/x-www-form-urlencoded" \
+                --data-urlencode "client_id=$client_id" \
+                --data-urlencode "refresh_token=$refresh_token" \
+                --data-urlencode "grant_type=refresh_token" \
+                --data-urlencode "redirect_uri=$redirect_uri" \
+                --data-urlencode "scope=$scope"
+            )"
+
+            microsoft_access_token="$(printf '%s' "$microsoft_response" | ${pkgs.jq}/bin/jq -er '.access_token')"
+            next_refresh_token="$(printf '%s' "$microsoft_response" | ${pkgs.jq}/bin/jq -er '.refresh_token')"
+
+            xbl_payload="$(
+              ${pkgs.jq}/bin/jq -cn --arg token "$microsoft_access_token" '{
+                Properties: {
+                  AuthMethod: "RPS",
+                  SiteName: "user.auth.xboxlive.com",
+                  RpsTicket: ("d=" + $token)
+                },
+                RelyingParty: "http://auth.xboxlive.com",
+                TokenType: "JWT"
+              }'
+            )"
+
+            xbl_response="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request POST \
+                --url "https://user.auth.xboxlive.com/user/authenticate" \
+                --header "Accept: application/json" \
+                --header "Content-Type: application/json" \
+                --data "$xbl_payload"
+            )"
+
+            xbl_token="$(printf '%s' "$xbl_response" | ${pkgs.jq}/bin/jq -er '.Token')"
+            user_hash="$(printf '%s' "$xbl_response" | ${pkgs.jq}/bin/jq -er '.DisplayClaims.xui[0].uhs')"
+
+            xsts_payload="$(
+              ${pkgs.jq}/bin/jq -cn --arg token "$xbl_token" '{
+                Properties: {
+                  SandboxId: "RETAIL",
+                  UserTokens: [$token]
+                },
+                RelyingParty: "rp://api.minecraftservices.com/",
+                TokenType: "JWT"
+              }'
+            )"
+
+            xsts_response="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request POST \
+                --url "https://xsts.auth.xboxlive.com/xsts/authorize" \
+                --header "Accept: application/json" \
+                --header "Content-Type: application/json" \
+                --data "$xsts_payload"
+            )"
+
+            xsts_token="$(printf '%s' "$xsts_response" | ${pkgs.jq}/bin/jq -er '.Token')"
+
+            minecraft_payload="$(
+              ${pkgs.jq}/bin/jq -cn --arg userHash "$user_hash" --arg token "$xsts_token" '{
+                identityToken: ("XBL3.0 x=" + $userHash + ";" + $token)
+              }'
+            )"
+
+            minecraft_response="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request POST \
+                --url "https://api.minecraftservices.com/authentication/login_with_xbox" \
+                --header "Accept: application/json" \
+                --header "Content-Type: application/json" \
+                --data "$minecraft_payload"
+            )"
+
+            minecraft_access_token="$(printf '%s' "$minecraft_response" | ${pkgs.jq}/bin/jq -er '.access_token')"
+
+            minecraft_profile="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request GET \
+                --url "https://api.minecraftservices.com/minecraft/profile" \
+                --header "Authorization: Bearer $minecraft_access_token"
+            )"
+
+            printf '%s' "$minecraft_profile" | ${pkgs.jq}/bin/jq -er '.id' > /dev/null
+            printf '%s' "$minecraft_profile" | ${pkgs.jq}/bin/jq -er '.name' > /dev/null
+
+            printf '%s' "$next_refresh_token" > "$refresh_tmp"
+            chmod 600 "$refresh_tmp"
+            printf '%s' "$minecraft_access_token" > "$access_tmp"
+            chmod 600 "$access_tmp"
+            printf '%s\n' "$minecraft_profile" > "$profile_tmp"
+            chmod 600 "$profile_tmp"
+
+            ${pkgs.coreutils}/bin/mv "$refresh_tmp" "$refresh_token_path"
+            ${pkgs.coreutils}/bin/mv "$access_tmp" "$access_token_path"
+            ${pkgs.coreutils}/bin/mv "$profile_tmp" "$profile_path"
+          '';
+        in {
+          preLaunchShellScript = lib.mkBefore ''
+            ${refreshScript}
+          '';
+        }
+      ))
 
       # Place saves
       {
@@ -467,8 +635,7 @@ in
           _classSettings.userProperties = lib.mkDefault {};
         })
 
-      (lib.mkIf (config.account
-        != null) {
+      (lib.mkIf (config.account != null && config.account.refreshTokenPath == null) {
         _classSettings.uuid = lib.mkIf (config.account.uuid != null) config.account.uuid;
         _classSettings.username = lib.mkIf (config.account.username != null) config.account.username;
       })

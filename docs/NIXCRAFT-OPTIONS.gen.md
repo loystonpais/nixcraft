@@ -63,7 +63,79 @@ attribute set of (submodule)
 
 
 
-## client\.accounts\.\<name>\.accessTokenPath
+## client\.accounts\.\<name>\.oauth
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or (submodule)
+
+
+
+*Default:*
+` null `
+
+
+
+## client\.accounts\.\<name>\.oauth\.clientId
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
+
+
+
+## client\.accounts\.\<name>\.oauth\.redirectUri
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
+
+
+
+## client\.accounts\.\<name>\.oauth\.scope
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
+
+
+
+## client\.accounts\.\<name>\.oauth\.tokenEndpoint
 
 
 
@@ -96,6 +168,24 @@ boolean
 
 *Default:*
 ` false `
+
+
+
+## client\.accounts\.\<name>\.refreshTokenPath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
 
 
 
@@ -449,7 +539,79 @@ null or (submodule)
 
 
 
-## client\.instances\.\<name>\.account\.accessTokenPath
+## client\.instances\.\<name>\.account\.oauth
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or (submodule)
+
+
+
+*Default:*
+` null `
+
+
+
+## client\.instances\.\<name>\.account\.oauth\.clientId
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
+
+
+
+## client\.instances\.\<name>\.account\.oauth\.redirectUri
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
+
+
+
+## client\.instances\.\<name>\.account\.oauth\.scope
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
+
+
+
+## client\.instances\.\<name>\.account\.oauth\.tokenEndpoint
 
 
 
@@ -482,6 +644,24 @@ boolean
 
 *Default:*
 ` false `
+
+
+
+## client\.instances\.\<name>\.account\.refreshTokenPath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+` null `
 
 
 
@@ -3937,5 +4117,3 @@ attribute set
 
 *Default:*
 ` { } `
-
-

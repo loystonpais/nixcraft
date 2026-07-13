@@ -16,6 +16,38 @@ Warning - This project is in a usable state but stil a work in progress. Do expe
   1. Support Forge
   2. Support more modpacks such as packwiz
 
+## Authentication
+
+Nixcraft supports both offline accounts and official Minecraft accounts.
+
+For offline use, set an in-game username and mark the account as offline.
+
+For official accounts, you need:
+
+  1. A Microsoft account that owns Minecraft Java Edition
+  2. A refresh token for that account
+  3. The OAuth values that belong to the same login flow that produced that refresh token
+
+To use an official account in nixcraft:
+
+  1. Sign in with your Microsoft account using the tool or flow you normally use to obtain a refresh token
+  2. Save that refresh token to a writable file outside the Nix store
+  3. Copy the matching OAuth values into `account.oauth`
+  4. Point `account.refreshTokenPath` at the saved refresh token file
+
+How to fill the OAuth fields:
+
+  - `oauth.clientId`: the client/application id used when you signed in
+  - `oauth.redirectUri`: the redirect uri used by that same sign-in flow
+  - `oauth.scope`: the scope string requested by that same sign-in flow
+  - `oauth.tokenEndpoint`: the token refresh endpoint used by that same sign-in flow
+
+Important:
+
+  - The refresh token and the OAuth values must come from the same login flow
+  - The refresh token file must be writable, because it may be rotated during refresh
+  - Nixcraft stores the refreshed Minecraft access token and profile inside the instance directory automatically
+
 ## Usage
 
 You can run a minecraft instance right off the bat.
@@ -32,6 +64,12 @@ nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outpu
 
 ```sh
 nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { cfg = { version = "1.16.1"; account = {  }; absoluteDir = builtins.getEnv "PWD"; }; }'
+```
+
+### client (official account)
+
+```sh
+nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { cfg = { version = "1.21.1"; absoluteDir = builtins.getEnv "PWD"; account = { refreshTokenPath = "${builtins.getEnv "HOME"}/.local/share/nixcraft/microsoft-refresh-token"; oauth = { tokenEndpoint = "https://login.live.com/oauth20_token.srf"; clientId = "<your-microsoft-oauth-client-id>"; redirectUri = "https://login.live.com/oauth20_desktop.srf"; scope = "service::user.auth.xboxlive.com::MBI_SSL"; }; }; }; }'
 ```
 
 ## Usage (nix profile)
@@ -248,6 +286,23 @@ in {
           nomods = {
             enable = true;
             version = "1.21.1";
+          };
+
+          # Example client using an official Minecraft account
+          official-account = {
+            enable = true;
+            version = "1.21.1";
+
+            account = {
+              offline = lib.mkForce false;
+              refreshTokenPath = "${config.home.homeDirectory}/.local/share/nixcraft/microsoft-refresh-token";
+              oauth = {
+                tokenEndpoint = "https://login.live.com/oauth20_token.srf";
+                clientId = "<your-microsoft-oauth-client-id>";
+                redirectUri = "https://login.live.com/oauth20_desktop.srf";
+                scope = "service::user.auth.xboxlive.com::MBI_SSL";
+              };
+            };
           };
 
           # Example client whose version is "latest-release"
