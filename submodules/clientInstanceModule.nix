@@ -318,10 +318,8 @@ in
             refresh_token_path=${escapeShellArg config.account.refreshTokenPath}
             access_token_path=${escapeShellArg accessTokenPath}
             profile_path=${escapeShellArg profilePath}
-            client_id='94d3031d-2d71-404e-8ff6-90f1f249fc1a'
-            token_endpoint='https://login.live.com/oauth20_token.srf'
-            redirect_uri='http://localhost:8080/callback'
-            scope='service::user.auth.xboxlive.com::MBI_SSL offline_access'
+            client_id='c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb'
+            token_endpoint='https://login.microsoftonline.com/consumers/oauth2/v2.0/token'
 
             mkdir -p \
               "$(${pkgs.coreutils}/bin/dirname "$refresh_token_path")" \
@@ -348,9 +346,7 @@ in
                 --header "Content-Type: application/x-www-form-urlencoded" \
                 --data-urlencode "client_id=$client_id" \
                 --data-urlencode "refresh_token=$refresh_token" \
-                --data-urlencode "grant_type=refresh_token" \
-                --data-urlencode "redirect_uri=$redirect_uri" \
-                --data-urlencode "scope=$scope"
+                --data-urlencode "grant_type=refresh_token"
             )"
 
             microsoft_access_token="$(printf '%s' "$microsoft_response" | ${pkgs.jq}/bin/jq -er '.access_token')"
