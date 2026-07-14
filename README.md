@@ -47,6 +47,7 @@ account = {
 ```
 
 Note: Microsoft may ask whether you want to let Prism Launcher access your information. This is expected right now. Nixcraft does not currently have its own Microsoft OAuth app, so `nixcraft-auth` temporarily reuses Prism Launcher's client id.
+`refreshTokenPath` must point to a writable file, because Nixcraft will update the refresh token itself. Do not manage that file with read-only secret systems such as `sops-nix`.
 
 ## Usage
 
