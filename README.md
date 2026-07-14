@@ -27,22 +27,26 @@ To use an official Minecraft account with Nixcraft:
 nix run github:loystonpais/nixcraft#auth
 ```
 
-2. Sign in in your browser.
+2. Open the printed Microsoft login URL in your browser.
 
-3. Copy the printed `refreshToken: ...` value into a writable file outside the Nix store. For example:
+3. If the page asks for a code, enter the code printed by `nixcraft-auth`, then sign in and approve the login.
+
+4. Wait for `nixcraft-auth` to print `refreshToken: ...`, then copy that value into a writable file outside the Nix store. For example:
 
 ```sh
 mkdir -p ~/.local/share/nixcraft
 printf '%s\n' '<paste-refresh-token-here>' > ~/.local/share/nixcraft/microsoft-refresh-token
 ```
 
-4. Point your Nixcraft account configuration at that file:
+5. Point your Nixcraft account configuration at that file:
 
 ```nix
 account = {
   refreshTokenPath = "${builtins.getEnv "HOME"}/.local/share/nixcraft/microsoft-refresh-token";
 };
 ```
+
+Note: Microsoft may ask whether you want to let Prism Launcher access your information. This is expected right now. Nixcraft does not currently have its own Microsoft OAuth app, so `nixcraft-auth` temporarily reuses Prism Launcher's client id.
 
 ## Usage
 
