@@ -459,9 +459,9 @@ in
             printf '%s\n' "$minecraft_profile" > "$profile_tmp"
             chmod 600 "$profile_tmp"
 
-            ${pkgs.coreutils}/bin/mv "$refresh_tmp" "$refresh_token_path"
-            ${pkgs.coreutils}/bin/mv "$access_tmp" "$access_token_path"
-            ${pkgs.coreutils}/bin/mv "$profile_tmp" "$profile_path"
+            ${pkgs.coreutils}/bin/mv -f "$refresh_tmp" "$refresh_token_path"
+            ${pkgs.coreutils}/bin/mv -f "$access_tmp" "$access_token_path"
+            ${pkgs.coreutils}/bin/mv -f "$profile_tmp" "$profile_path"
 
             echo "[nixcraft] refreshed token and wrote Minecraft profile cache" >&2
           '';
