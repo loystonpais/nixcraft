@@ -320,7 +320,7 @@ in
             profile_path=${escapeShellArg profilePath}
             client_id='94d3031d-2d71-404e-8ff6-90f1f249fc1a'
             token_endpoint='https://login.live.com/oauth20_token.srf'
-            redirect_uri='https://login.live.com/oauth20_desktop.srf'
+            redirect_uri='http://localhost:8080/callback'
             scope='service::user.auth.xboxlive.com::MBI_SSL offline_access'
 
             mkdir -p \
