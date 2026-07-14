@@ -10,32 +10,39 @@ Warning - This project is in a usable state but stil a work in progress. Do expe
   2. Supports Mod Loaders (Fabric loader, Quilt loader & paper servers)
   3. Supports Modpacks (modrinth .mrpack)
   4. MCSR - Supports speedrunning related content
+  5. Online account support
 
 ## TODO
 
   1. Support Forge
   2. Support more modpacks such as packwiz
 
-## Authentication
+## Online accounts
 
-Nixcraft supports both offline accounts and official Minecraft accounts.
+To use an official Minecraft account with Nixcraft:
 
-For offline use, set an in-game username and mark the account as offline.
-
-For official accounts, run `nixcraft-auth`:
+1. Run the login helper:
 
 ```sh
 nix run github:loystonpais/nixcraft#auth
 ```
 
-After login succeeds, `nixcraft-auth` prints a single `refreshToken: ...` line. Save that refresh token to a writable file outside the Nix store.
+2. Sign in in your browser.
 
-Important:
+3. Copy the printed `refreshToken: ...` value into a writable file outside the Nix store. For example:
 
-  - Official-account refresh tokens must be obtained through `nixcraft-auth`
-  - `nixcraft-auth` uses a fixed built-in OAuth configuration; do not use refresh tokens minted by other apps or redirect URIs
-  - The refresh token file must be writable, because it may be rotated during refresh
-  - Nixcraft stores the refreshed Minecraft access token and profile inside the instance directory automatically
+```sh
+mkdir -p ~/.local/share/nixcraft
+printf '%s\n' '<paste-refresh-token-here>' > ~/.local/share/nixcraft/microsoft-refresh-token
+```
+
+4. Point your Nixcraft account configuration at that file:
+
+```nix
+account = {
+  refreshTokenPath = "${builtins.getEnv "HOME"}/.local/share/nixcraft/microsoft-refresh-token";
+};
+```
 
 ## Usage
 
@@ -53,12 +60,6 @@ nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outpu
 
 ```sh
 nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { cfg = { version = "1.16.1"; account = {  }; absoluteDir = builtins.getEnv "PWD"; }; }'
-```
-
-### client (official account)
-
-```sh
-nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { cfg = { version = "1.21.1"; absoluteDir = builtins.getEnv "PWD"; account = { refreshTokenPath = "${builtins.getEnv "HOME"}/.local/share/nixcraft/microsoft-refresh-token"; }; }; }'
 ```
 
 ## Usage (nix profile)
