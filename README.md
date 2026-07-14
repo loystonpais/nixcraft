@@ -278,13 +278,16 @@ in {
             version = "1.21.1";
           };
 
-          # Example client using an official Minecraft account
+          # Example client using an official Minecraft account.
+          # First run: nix run github:loystonpais/nixcraft#auth
+          # Then save the printed refreshToken to the file below.
           official-account = {
             enable = true;
             version = "1.21.1";
 
             account = {
               offline = lib.mkForce false;
+              # This file should contain only the refresh token text.
               refreshTokenPath = "${config.home.homeDirectory}/.local/share/nixcraft/microsoft-refresh-token";
             };
           };
