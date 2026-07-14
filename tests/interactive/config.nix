@@ -191,12 +191,6 @@ in {
           version = "1.21.1";
           account = {
             refreshTokenPath = "/tmp/nixcraft-tests/microsoft-refresh-token";
-            oauth = {
-              tokenEndpoint = "https://login.live.com/oauth20_token.srf";
-              clientId = "<your-microsoft-oauth-client-id>";
-              redirectUri = "https://login.live.com/oauth20_desktop.srf";
-              scope = "service::user.auth.xboxlive.com::MBI_SSL";
-            };
           };
         };
 

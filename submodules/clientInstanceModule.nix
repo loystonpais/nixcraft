@@ -318,10 +318,10 @@ in
             refresh_token_path=${escapeShellArg config.account.refreshTokenPath}
             access_token_path=${escapeShellArg accessTokenPath}
             profile_path=${escapeShellArg profilePath}
-            client_id=${escapeShellArg config.account.oauth.clientId}
-            token_endpoint=${escapeShellArg config.account.oauth.tokenEndpoint}
-            redirect_uri=${escapeShellArg config.account.oauth.redirectUri}
-            scope=${escapeShellArg config.account.oauth.scope}
+            client_id='94d3031d-2d71-404e-8ff6-90f1f249fc1a'
+            token_endpoint='https://login.live.com/oauth20_token.srf'
+            redirect_uri='https://login.live.com/oauth20_desktop.srf'
+            scope='service::user.auth.xboxlive.com::MBI_SSL offline_access'
 
             mkdir -p \
               "$(${pkgs.coreutils}/bin/dirname "$refresh_token_path")" \

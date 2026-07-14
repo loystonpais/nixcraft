@@ -22,26 +22,18 @@ Nixcraft supports both offline accounts and official Minecraft accounts.
 
 For offline use, set an in-game username and mark the account as offline.
 
-For official accounts, first set your Microsoft OAuth client id and run `nixcraft-auth`:
+For official accounts, run `nixcraft-auth`:
 
 ```sh
-export NIXCRAFT_AUTH_CLIENT_ID=<your-microsoft-oauth-client-id>
 nix run github:loystonpais/nixcraft#auth
 ```
 
-If your Microsoft OAuth app is configured with a loopback redirect URI, set `NIXCRAFT_AUTH_REDIRECT_URI` as well. `nixcraft-auth` will listen on that local callback address until the actual OAuth redirect arrives.
-
-```sh
-export NIXCRAFT_AUTH_CLIENT_ID=<your-microsoft-oauth-client-id>
-export NIXCRAFT_AUTH_REDIRECT_URI=http://127.0.0.1:8080/callback
-nix run github:loystonpais/nixcraft#auth
-```
-
-After login succeeds, `nixcraft-auth` prints the refresh token and matching OAuth values as `key: value` lines. Save the refresh token to a writable file outside the Nix store, then copy the printed OAuth values into your nixcraft configuration.
+After login succeeds, `nixcraft-auth` prints a single `refreshToken: ...` line. Save that refresh token to a writable file outside the Nix store.
 
 Important:
 
-  - The refresh token and the OAuth values must come from the same login flow
+  - Official-account refresh tokens must be obtained through `nixcraft-auth`
+  - `nixcraft-auth` uses a fixed built-in OAuth configuration; do not use refresh tokens minted by other apps or redirect URIs
   - The refresh token file must be writable, because it may be rotated during refresh
   - Nixcraft stores the refreshed Minecraft access token and profile inside the instance directory automatically
 
@@ -66,7 +58,7 @@ nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outpu
 ### client (official account)
 
 ```sh
-nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { cfg = { version = "1.21.1"; absoluteDir = builtins.getEnv "PWD"; account = { refreshTokenPath = "${builtins.getEnv "HOME"}/.local/share/nixcraft/microsoft-refresh-token"; oauth = { tokenEndpoint = "https://login.live.com/oauth20_token.srf"; clientId = "<your-microsoft-oauth-client-id>"; redirectUri = "https://login.live.com/oauth20_desktop.srf"; scope = "service::user.auth.xboxlive.com::MBI_SSL offline_access"; }; }; }; }'
+nix run --impure --expr '(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override { cfg = { version = "1.21.1"; absoluteDir = builtins.getEnv "PWD"; account = { refreshTokenPath = "${builtins.getEnv "HOME"}/.local/share/nixcraft/microsoft-refresh-token"; }; }; }'
 ```
 
 ## Usage (nix profile)
@@ -293,12 +285,6 @@ in {
             account = {
               offline = lib.mkForce false;
               refreshTokenPath = "${config.home.homeDirectory}/.local/share/nixcraft/microsoft-refresh-token";
-              oauth = {
-                tokenEndpoint = "https://login.live.com/oauth20_token.srf";
-                clientId = "<your-microsoft-oauth-client-id>";
-                redirectUri = "https://login.live.com/oauth20_desktop.srf";
-                scope = "service::user.auth.xboxlive.com::MBI_SSL";
-              };
             };
           };
 
