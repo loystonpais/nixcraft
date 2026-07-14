@@ -12,6 +12,7 @@ import webbrowser
 DEFAULT_DEVICE_CODE_ENDPOINT = "https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode"
 DEFAULT_TOKEN_ENDPOINT = "https://login.microsoftonline.com/consumers/oauth2/v2.0/token"
 DEFAULT_SCOPE = "XboxLive.signin offline_access"
+# Temporary hack: reuse Prism Launcher's public client id for Microsoft auth.
 DEFAULT_CLIENT_ID = "c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb"
 
 

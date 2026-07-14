@@ -318,6 +318,7 @@ in
             refresh_token_path=${escapeShellArg config.account.refreshTokenPath}
             access_token_path=${escapeShellArg accessTokenPath}
             profile_path=${escapeShellArg profilePath}
+            # Temporary hack: reuse Prism Launcher's public client id for Microsoft auth.
             client_id='c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb'
             token_endpoint='https://login.microsoftonline.com/consumers/oauth2/v2.0/token'
 
