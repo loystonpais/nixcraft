@@ -248,6 +248,10 @@ in
             );
 
         finalLaunchShellScript = let
+          accountMode =
+            if config.account != null && config.account.refreshTokenPath != null
+            then "online"
+            else "offline";
           defaultScript = ''
             #!${pkgs.bash}/bin/bash
 
@@ -255,10 +259,14 @@ in
 
             ${lib.nixcraft.mkExportedEnvVars config.envVars}
 
+            echo "[nixcraft] starting client instance '${name}' (${accountMode})" >&2
+            echo "[nixcraft] instance directory: ${config.absoluteDir}" >&2
+
             ${config.finalPreLaunchShellScript}
 
             cd ${escapeShellArg config.absoluteDir}
 
+            echo "[nixcraft] launching Minecraft ${config._classSettings.version}" >&2
             exec ${config.finalLaunchShellCommandString} "$@"
           '';
         in
@@ -337,6 +345,9 @@ in
               rm -f "$refresh_tmp" "$access_tmp" "$profile_tmp"
             }
             trap cleanup EXIT
+
+            echo "[nixcraft] refreshing Microsoft token for instance '${name}'" >&2
+            echo "[nixcraft] refresh token path: $refresh_token_path" >&2
 
             refresh_token="$(${pkgs.coreutils}/bin/tr -d '\r\n' < "$refresh_token_path")"
 
@@ -451,6 +462,8 @@ in
             ${pkgs.coreutils}/bin/mv "$refresh_tmp" "$refresh_token_path"
             ${pkgs.coreutils}/bin/mv "$access_tmp" "$access_token_path"
             ${pkgs.coreutils}/bin/mv "$profile_tmp" "$profile_path"
+
+            echo "[nixcraft] refreshed token and wrote Minecraft profile cache" >&2
           '';
         in {
           preLaunchShellScript = lib.mkBefore ''
