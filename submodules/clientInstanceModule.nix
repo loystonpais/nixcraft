@@ -227,22 +227,25 @@ in
             profilePath = "${authDir}/minecraft-profile.json";
 
             dynamicProfileArgs =
-              lib.optionalString
+              lib.optionals
               (config.account != null && config.account.refreshTokenPath != null)
-              ''
-                --username "$(${pkgs.jq}/bin/jq -er '.name' < ${escapeShellArg profilePath})"
-                --uuid "$(${pkgs.jq}/bin/jq -er '.id' < ${escapeShellArg profilePath})"
-              '';
+              [
+                ''--username "$(${pkgs.jq}/bin/jq -er '.name' < ${escapeShellArg profilePath})"''
+                ''--uuid "$(${pkgs.jq}/bin/jq -er '.id' < ${escapeShellArg profilePath})"''
+              ];
           in
-            concatStringsSep " " [
-              ''"${config.java.package}/bin/java"''
-              config.java.finalArgumentShellString
-              config.finalArgumentShellString
-              dynamicProfileArgs
-
-              # unmodded client doesn't launch if access token is not provided
-              ''--accessToken "$(${pkgs.coreutils}/bin/cat ${escapeShellArg accessTokenPath})"''
-            ];
+            concatStringsSep " " (
+              [
+                ''"${config.java.package}/bin/java"''
+                config.java.finalArgumentShellString
+                config.finalArgumentShellString
+              ]
+              ++ dynamicProfileArgs
+              ++ [
+                # unmodded client doesn't launch if access token is not provided
+                ''--accessToken "$(${pkgs.coreutils}/bin/cat ${escapeShellArg accessTokenPath})"''
+              ]
+            );
 
         finalLaunchShellScript = let
           defaultScript = ''
