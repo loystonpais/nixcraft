@@ -347,6 +347,7 @@ in
             #!${pkgs.bash}/bin/bash
 
             set -euo pipefail
+            umask 077
 
             refresh_token_path=${escapeShellArg config.account.refreshTokenPath}
             access_token_path=${escapeShellArg accessTokenPath}
@@ -359,6 +360,13 @@ in
               "$(${pkgs.coreutils}/bin/dirname "$refresh_token_path")" \
               "$(${pkgs.coreutils}/bin/dirname "$access_token_path")" \
               "$(${pkgs.coreutils}/bin/dirname "$profile_path")"
+
+            refresh_lock_path="$refresh_token_path.lock"
+            exec 9>"$refresh_lock_path"
+            chmod 600 "$refresh_lock_path"
+
+            echo "[nixcraft] waiting for refresh token lock: $refresh_lock_path" >&2
+            ${pkgs.util-linux}/bin/flock 9
 
             refresh_tmp="$(${pkgs.coreutils}/bin/mktemp "$(${pkgs.coreutils}/bin/dirname "$refresh_token_path")/.refresh-token.XXXXXX")"
             access_tmp="$(${pkgs.coreutils}/bin/mktemp "$(${pkgs.coreutils}/bin/dirname "$access_token_path")/.access-token.XXXXXX")"
