@@ -92,6 +92,28 @@ in
         '';
       };
 
+      gameOptions = lib.mkOption {
+        type = with lib.types;
+          attrsOf (nullOr (oneOf [
+            str
+            bool
+            int
+            float
+          ]));
+        default = {};
+        example = {
+          fullscreen = true;
+          guiScale = 3;
+          fov = 0.5;
+          "key_key.forward" = "key.keyboard.w";
+        };
+        description = ''
+          Declarative values for the client's options.txt file. Attribute names
+          are Minecraft option keys. Null values are omitted. The generated
+          file is a read-only symlink, so in-game changes are not persistent.
+        '';
+      };
+
       enableNixGL = lib.mkEnableOption "nixGL";
 
       extraArguments = lib.mkOption {
@@ -484,6 +506,36 @@ in
           )
           config.saves;
       }
+
+      (lib.mkIf (config.gameOptions != {}) {
+        _generatedFiles."options.txt" = {
+          type = "options-txt";
+          value = config.gameOptions;
+          method = "symlink";
+        };
+      })
+
+      (let
+        invalidKeys = lib.filter (
+          key:
+            key == ""
+            || lib.hasInfix ":" key
+            || lib.hasInfix "\n" key
+            || lib.hasInfix "\r" key
+        ) (lib.attrNames config.gameOptions);
+        multilineStringKeys = lib.attrNames (lib.filterAttrs (
+          _: value:
+            lib.isString value
+            && (lib.hasInfix "\n" value || lib.hasInfix "\r" value)
+        ) config.gameOptions);
+      in {
+        _module.check = lib.all (value: value) [
+          (lib.assertMsg (invalidKeys == [])
+            "client instance '${config.name}': gameOptions keys must be non-empty, single-line strings without colons; invalid keys: ${lib.concatStringsSep ", " invalidKeys}")
+          (lib.assertMsg (multilineStringKeys == [])
+            "client instance '${config.name}': gameOptions string values must be single-line; invalid keys: ${lib.concatStringsSep ", " multilineStringKeys}")
+        ];
+      })
 
       {
         _classSettings = {

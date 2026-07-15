@@ -1335,6 +1335,39 @@ non-empty string
 
 
 
+## client\.instances\.\<name>\.gameOptions
+
+
+
+Declarative values for the client’s options\.txt file\. Attribute names
+are Minecraft option keys\. Null values are omitted\. The generated
+file is a read-only symlink, so in-game changes are not persistent\.
+
+
+
+*Type:*
+attribute set of (null or string or boolean or signed integer or floating point number)
+
+
+
+*Default:*
+` { } `
+
+
+
+*Example:*
+
+```
+{
+  fov = 0.5;
+  fullscreen = true;
+  guiScale = 3;
+  "key_key.forward" = "key.keyboard.w";
+}
+```
+
+
+
 ## client\.instances\.\<name>\.java
 
 
@@ -1795,8 +1828,6 @@ null or non-empty string
 
 ## client\.instances\.\<name>\.placeFilesAtActivation
 
-
-
 Whether to enable placing files during activation\.
 
 
@@ -1817,6 +1848,8 @@ boolean
 
 
 ## client\.instances\.\<name>\.preLaunchShellScript
+
+
 
 This option has no description\.
 
@@ -3622,8 +3655,6 @@ boolean
 
 ## server\.instances\.\<name>\.paper\._mainClass
 
-
-
 This option has no description\.
 
 
@@ -3639,6 +3670,8 @@ non-empty string *(read only)*
 
 
 ## server\.instances\.\<name>\.paper\._serverJar
+
+
 
 This option has no description\.
 

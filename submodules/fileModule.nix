@@ -137,7 +137,7 @@ in {
             else if config.type == "ini"
             then (pkgs.formats.ini {}).generate "value" config.value
             else if config.type == "options-txt"
-            then lib.nixcraft.toMinecraftOptionsTxt config.value
+            then pkgs.writeText "options.txt" ((lib.nixcraft.toMinecraftOptionsTxt config.value) + "\n")
             else throw "file ${config.target}: cannot transform value to type ${config.type}"
           )
         else if config.source != null

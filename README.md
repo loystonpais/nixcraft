@@ -71,6 +71,33 @@ Update the configured source and hash to upgrade a mod. A mod cannot share its
 generated target (for example, `mods/fsg-mod.jar`) with an mrpack or `files`
 entry.
 
+## Declarative game options
+
+You can configure minecraft's `options.txt` declaritively.
+
+```nix
+gameOptions = {
+  fullscreen = true;
+  guiScale = 3;
+  fov = 0.5;
+  "key_key.forward" = "key.keyboard.w";
+  narrator = null; # omitted from options.txt
+};
+```
+
+The generated file is a read-only symlink. In-game changes are not persistent;
+change `gameOptions` and rebuild the configuration instead. A non-empty
+`gameOptions` cannot be combined with an mrpack or `files` entry that also
+provides `options.txt`.
+
+> [!WARNING]
+> `gameOptions` is converted directly from `key = value` to `key:value` without
+> version-aware key translation or validation. Unknown, misspelled, or invalid
+> keys do not produce a warning. Minecraft versions may add, remove, or rename
+> keys and may expect different value formats, so use the names and values
+> supported by the configured Minecraft version. 
+> You can keep version-specific keys in each instance instead of `client.shared`.
+
 ## Usage
 
 You can run a minecraft instance right off the bat.
@@ -134,6 +161,45 @@ nixcraft = {
     inputs.nixpkgs.follows = "nixpkgs"; # Set correct nixpkgs name
 };
 
+```
+
+Game options can be shared by all client instances and overridden where needed:
+
+```nix
+nixcraft.client = {
+  shared.gameOptions = {
+    fullscreen = false;
+    guiScale = 2;
+    # Modern Minecraft uses graphicsMode: 0 = Fast, 1 = Fancy, 2 = Fabulous.
+    graphicsMode = 1;
+  };
+
+  instances = {
+    modern = {
+      enable = true;
+      version = "1.21.1";
+
+      # Override values inherited from client.shared.
+      gameOptions = {
+        guiScale = lib.mkForce 4;
+        graphicsMode = lib.mkForce 2;
+      };
+    };
+
+    legacy-1-8 = {
+      enable = true;
+      version = "1.8";
+
+      gameOptions = {
+        # Minecraft 1.8 uses the boolean `fancyGraphics` key instead of the
+        # modern integer `graphicsMode` key. Remove the inherited modern key,
+        # then provide the key and value format expected by this version.
+        graphicsMode = lib.mkForce null;
+        fancyGraphics = true;
+      };
+    };
+  };
+};
 ```
 
 ```nix

@@ -21,6 +21,32 @@ in
     dirPrefix,
     ...
   }: let
+    instanceFileType = with lib.types;
+      submoduleWith {
+        modules = [
+          fileModule
+          ({config, ...}: {
+            options = {
+              method = lib.mkOption {
+                type = lib.types.enum ["copy" "copy-init" "symlink" "world"];
+                default = "symlink";
+
+                description = ''
+                  Method to place the file in target location
+                    copy-init     - copy once during init (suitable for config files from modpacks)
+                    copy          - copy every rebuild
+                    symlink       - symlink every rebuild
+                    world         - recursive copy directory only if it doesn't exist already (used internally for world/saves)
+                '';
+              };
+            };
+          })
+        ];
+        specialArgs = {
+          instanceType = config._instanceType;
+        };
+      };
+
     modFiles = lib.mapAttrs' (modName: source:
       lib.nameValuePair "mods/${modName}.jar" {
         enable = true;
@@ -29,6 +55,8 @@ in
         finalSource = source;
       })
     config.mods;
+
+    generatedFiles = config._generatedFiles // modFiles;
   in {
     options = {
       name = lib.mkOption {
@@ -114,36 +142,15 @@ in
         };
 
       files = lib.mkOption {
-        type = with lib.types;
-          attrsOf (submoduleWith {
-            modules = [
-              fileModule
-              ({
-                config,
-                instanceType,
-                ...
-              }: {
-                options = {
-                  method = lib.mkOption {
-                    type = lib.types.enum ["copy" "copy-init" "symlink" "world"];
-                    default = "symlink";
-
-                    description = ''
-                      Method to place the file in target location
-                        copy-init     - copy once during init (suitable for config files from modpacks)
-                        copy          - copy every rebuild
-                        symlink       - symlink every rebuild
-                        world         - recursive copy directory only if it doesn't exist already (used internally for world/saves)
-                    '';
-                  };
-                };
-              })
-            ];
-            specialArgs = {
-              instanceType = config._instanceType;
-            };
-          });
+        type = with lib.types; attrsOf instanceFileType;
         default = {};
+      };
+
+      _generatedFiles = lib.mkOption {
+        type = with lib.types; attrsOf instanceFileType;
+        default = {};
+        internal = true;
+        visible = false;
       };
 
       mods = lib.mkOption {
@@ -489,7 +496,7 @@ in
           entryFilePath = "${config.absoluteDir}/.nixcraft/files";
           initFilePath = "${config.absoluteDir}/.nixcraft/init";
 
-          enabledFiles = filterAttrs (name: file: file.enable) (config.files // modFiles);
+          enabledFiles = filterAttrs (name: file: file.enable) (config.files // generatedFiles);
 
           files'copy = filterAttrs (name: file: file.method == "copy") enabledFiles;
           files'symlink = filterAttrs (name: file: file.method == "symlink") enabledFiles;
@@ -598,14 +605,14 @@ in
             || lib.hasInfix "\n" modName
             || lib.hasInfix "\r" modName
         ) (lib.attrNames config.mods);
-        conflictingModPaths = lib.intersectLists (lib.attrNames modFiles) (lib.attrNames config.files);
+        conflictingGeneratedPaths = lib.intersectLists (lib.attrNames generatedFiles) (lib.attrNames config.files);
       in {
         _module.check = lib.all (a: a) [
           (lib.assertMsg (invalidModNames == [])
             "${prefixMsg}: mod names must be non-empty, single-line base names without a .jar suffix; invalid names: ${lib.concatStringsSep ", " invalidModNames}")
 
-          (lib.assertMsg (conflictingModPaths == [])
-            "${prefixMsg}: declarative mods conflict with files or mrpack entries: ${lib.concatStringsSep ", " conflictingModPaths}")
+          (lib.assertMsg (conflictingGeneratedPaths == [])
+            "${prefixMsg}: generated files conflict with files or mrpack entries: ${lib.concatStringsSep ", " conflictingGeneratedPaths}")
 
           # If more than one type of mod loader is enabled then fail
           (
@@ -625,7 +632,7 @@ in
           # TODO: move this logic over to a newer module called filesModule
           (
             let
-              allFiles = config.files // modFiles;
+              allFiles = config.files // generatedFiles;
               allPaths = lib.attrNames allFiles;
 
               conflicts =
