@@ -61,6 +61,8 @@ attribute set of (submodule)
 *Default:*
 ` { } `
 
+
+
 ## client\.accounts\.\<name>\.offline
 
 
@@ -886,12 +888,18 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-This option has no description\.
+Fabric Loader version\. Defaults to the latest version available in the
+repository’s Fabric lock file\.
 
 
 
 *Type:*
 non-empty string
+
+
+
+*Default:*
+` latest Fabric Loader version in sources/fabric/lock.json `
 
 
 
@@ -2566,12 +2574,18 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-This option has no description\.
+Fabric Loader version\. Defaults to the latest version available in the
+repository’s Fabric lock file\.
 
 
 
 *Type:*
 non-empty string
+
+
+
+*Default:*
+` latest Fabric Loader version in sources/fabric/lock.json `
 
 
 

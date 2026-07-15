@@ -190,10 +190,8 @@ in {
           smp = {
             enable = true;
             version = "1.21.1";
-            fabricLoader = {
-              enable = true;
-              version = "0.17.2";
-            };
+            # Version defaults to the latest entry in the Fabric lock file.
+            fabricLoader.enable = true;
           };
 
           # Example server with simply-optimized mrpack loaded
