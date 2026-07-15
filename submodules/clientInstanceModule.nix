@@ -331,8 +331,7 @@ in
 
         # Default libs copied over from
         # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/pr/prismlauncher/package.nix#L78
-        runtimeLibs = with pkgs;
-        with xorg; [
+        runtimeLibs = with pkgs; [
           (lib.getLib stdenv.cc.cc)
           ## native versions
           glfw3-minecraft
@@ -346,11 +345,11 @@ in
 
           ## glfw
           libGL
-          libX11
-          libXcursor
-          libXext
-          libXrandr
-          libXxf86vm
+          libx11
+          libxcursor
+          libxext
+          libxrandr
+          libxxf86vm
 
           udev # oshi
 
@@ -363,8 +362,7 @@ in
           libxt
         ];
 
-        runtimePrograms = with pkgs;
-        with xorg; [
+        runtimePrograms = with pkgs; [
           xrandr # This is needed for 1.12.x versions to not crash
         ];
 
