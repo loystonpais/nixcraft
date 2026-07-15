@@ -61,8 +61,6 @@ attribute set of (submodule)
 *Default:*
 ` { } `
 
-
-
 ## client\.accounts\.\<name>\.offline
 
 
@@ -194,6 +192,29 @@ boolean
 
 
 Whether to enable dri prime (mesa)\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+
+
+*Example:*
+` true `
+
+
+
+## client\.instances\.\<name>\.enableNixGL
+
+
+
+Whether to enable nixGL\.
 
 
 
@@ -755,7 +776,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -1007,12 +1028,13 @@ boolean
 Method to place the file in target location
 copy-init     - copy once during init (suitable for config files from modpacks)
 copy          - copy every rebuild
-symlink - symlink every rebuild
+symlink       - symlink every rebuild
+world         - recursive copy directory only if it doesn’t exist already (used internally for world/saves)
 
 
 
 *Type:*
-one of “copy”, “copy-init”, “symlink”
+one of “copy”, “copy-init”, “symlink”, “world”
 
 
 
@@ -1048,7 +1070,7 @@ This option has no description\.
 
 
 *Type:*
-relative path
+relative path *(read only)*
 
 
 
@@ -1135,7 +1157,7 @@ non-empty string *(read only)*
 
 
 *Default:*
-` "--version 1.21.10 --assetsDir /nix/store/90016v5nsqq5mk93jj7naxiyng1x8gxn-minecraft-asset-dir --assetIndex 27 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'" `
+` "--version 26.2 --assetsDir /nix/store/2vlzkq6hgb0vyh7bnfgs8jgdv2sfwf1d-minecraft-asset-dir --assetIndex 32 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'" `
 
 
 
@@ -1212,7 +1234,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -1493,6 +1515,29 @@ null or (Java memory size (in MBs))
 
 
 
+## client\.instances\.\<name>\.jemalloc\.enable
+
+
+
+Whether to enable jemalloc\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+
+
+*Example:*
+` true `
+
+
+
 ## client\.instances\.\<name>\.libraries
 
 
@@ -1542,6 +1587,42 @@ attribute set *(read only)*
 
 
 
+## client\.instances\.\<name>\.mods
+
+
+
+Declarative Minecraft mods\. Each attribute name becomes the mod’s
+file name with a \.jar suffix inside the instance’s mods directory\.
+Sources must be local paths or fixed-output derivations\. Dependencies
+and compatibility are managed by the user\.
+
+
+
+*Type:*
+attribute set of absolute path
+
+
+
+*Default:*
+` { } `
+
+
+
+*Example:*
+
+```
+{
+  sodium = pkgs.fetchurl {
+    url = "https://example.invalid/sodium.jar";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  };
+  custom-mod = ./custom-mod.jar;
+}
+
+```
+
+
+
 ## client\.instances\.\<name>\.mrpack
 
 
@@ -1562,7 +1643,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -1668,29 +1749,6 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-## client\.instances\.\<name>\.mrpack\.mutableOverrides
-
-
-
-Whether to enable mutable overrides\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` true `
-
-
-
-*Example:*
-` true `
-
-
-
 ## client\.instances\.\<name>\.mrpack\.placeOverrides
 
 
@@ -1752,8 +1810,6 @@ boolean
 
 ## client\.instances\.\<name>\.preLaunchShellScript
 
-
-
 This option has no description\.
 
 
@@ -1789,7 +1845,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -1821,6 +1877,8 @@ boolean
 
 
 ## client\.instances\.\<name>\.quiltLoader\.classes
+
+
 
 This option has no description\.
 
@@ -2398,7 +2456,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -2650,12 +2708,13 @@ boolean
 Method to place the file in target location
 copy-init     - copy once during init (suitable for config files from modpacks)
 copy          - copy every rebuild
-symlink - symlink every rebuild
+symlink       - symlink every rebuild
+world         - recursive copy directory only if it doesn’t exist already (used internally for world/saves)
 
 
 
 *Type:*
-one of “copy”, “copy-init”, “symlink”
+one of “copy”, “copy-init”, “symlink”, “world”
 
 
 
@@ -2691,7 +2750,7 @@ This option has no description\.
 
 
 *Type:*
-relative path
+relative path *(read only)*
 
 
 
@@ -2855,7 +2914,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -3136,6 +3195,29 @@ null or (Java memory size (in MBs))
 
 
 
+## server\.instances\.\<name>\.jemalloc\.enable
+
+
+
+Whether to enable jemalloc\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+
+
+*Example:*
+` true `
+
+
+
 ## server\.instances\.\<name>\.lazymc
 
 
@@ -3257,6 +3339,42 @@ attribute set *(read only)*
 
 
 
+## server\.instances\.\<name>\.mods
+
+
+
+Declarative Minecraft mods\. Each attribute name becomes the mod’s
+file name with a \.jar suffix inside the instance’s mods directory\.
+Sources must be local paths or fixed-output derivations\. Dependencies
+and compatibility are managed by the user\.
+
+
+
+*Type:*
+attribute set of absolute path
+
+
+
+*Default:*
+` { } `
+
+
+
+*Example:*
+
+```
+{
+  sodium = pkgs.fetchurl {
+    url = "https://example.invalid/sodium.jar";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  };
+  custom-mod = ./custom-mod.jar;
+}
+
+```
+
+
+
 ## server\.instances\.\<name>\.mrpack
 
 
@@ -3277,7 +3395,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -3380,29 +3498,6 @@ Minecraft version, or one of: latest-release, latest-snapshot
 
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
-
-
-
-## server\.instances\.\<name>\.mrpack\.mutableOverrides
-
-
-
-Whether to enable mutable overrides\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` true `
-
-
-
-*Example:*
-` true `
 
 
 
@@ -3531,8 +3626,6 @@ non-empty string *(read only)*
 
 ## server\.instances\.\<name>\.paper\._serverJar
 
-
-
 This option has no description\.
 
 
@@ -3566,6 +3659,8 @@ non-empty string
 
 
 ## server\.instances\.\<name>\.paper\.meta
+
+
 
 This option has no description\.
 
@@ -3661,7 +3756,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }

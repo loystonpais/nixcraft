@@ -170,9 +170,14 @@ in {
           };
         };
       };
+
+      checks.declarative-mods = import "${self}/tests/declarative-mods.nix" {
+        inherit lib pkgs submodules;
+      };
     in {
       inherit packages;
       inherit legacyPackages;
+      inherit checks;
     };
   };
 }

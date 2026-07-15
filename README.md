@@ -50,6 +50,27 @@ Note: Microsoft may ask whether you want to let Prism Launcher access your infor
 
 `refreshTokenPath` must point to a writable file, because Nixcraft will update the refresh token itself. Do not manage that file with read-only secret systems such as `sops-nix`.
 
+## Declarative mods
+
+Client and server instances can install mods from local paths or fixed-output
+derivations. Attribute names must not include `.jar`; Nixcraft adds the suffix
+and places each source in the instance's `mods` directory.
+
+```nix
+mods = {
+  fsg-mod = pkgs.fetchurl {
+    url = "https://cdn.modrinth.com/data/XZOGBIpM/versions/4IW4nMP3/fsg-mod-5.2.0%2BMC1.16.1.jar";
+    hash = "sha256-bA3Y+7OWex8LwEXgMN+7DH6vi6hIoOZ7w3XzA3AE4qg=";
+  };
+  custom-mod = ./custom-mod.jar;
+};
+```
+
+Nixcraft does not resolve versions, dependencies, or loader compatibility.
+Update the configured source and hash to upgrade a mod. A mod cannot share its
+generated target (for example, `mods/fsg-mod.jar`) with an mrpack or `files`
+entry.
+
 ## Usage
 
 You can run a minecraft instance right off the bat.

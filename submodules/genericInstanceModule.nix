@@ -20,7 +20,16 @@ in
     config,
     dirPrefix,
     ...
-  }: {
+  }: let
+    modFiles = lib.mapAttrs' (modName: source:
+      lib.nameValuePair "mods/${modName}.jar" {
+        enable = true;
+        target = "mods/${modName}.jar";
+        method = "symlink";
+        finalSource = source;
+      })
+    config.mods;
+  in {
     options = {
       name = lib.mkOption {
         type = lib.types.nonEmptyStr;
@@ -135,6 +144,26 @@ in
             };
           });
         default = {};
+      };
+
+      mods = lib.mkOption {
+        type = with lib.types; attrsOf path;
+        default = {};
+        example = lib.literalExpression ''
+          {
+            sodium = pkgs.fetchurl {
+              url = "https://example.invalid/sodium.jar";
+              hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+            };
+            custom-mod = ./custom-mod.jar;
+          }
+        '';
+        description = ''
+          Declarative Minecraft mods. Each attribute name becomes the mod's
+          file name with a .jar suffix inside the instance's mods directory.
+          Sources must be local paths or fixed-output derivations. Dependencies
+          and compatibility are managed by the user.
+        '';
       };
 
       placeFilesAtActivation =
@@ -460,7 +489,7 @@ in
           entryFilePath = "${config.absoluteDir}/.nixcraft/files";
           initFilePath = "${config.absoluteDir}/.nixcraft/init";
 
-          enabledFiles = filterAttrs (name: file: file.enable) config.files;
+          enabledFiles = filterAttrs (name: file: file.enable) (config.files // modFiles);
 
           files'copy = filterAttrs (name: file: file.method == "copy") enabledFiles;
           files'symlink = filterAttrs (name: file: file.method == "symlink") enabledFiles;
@@ -551,7 +580,7 @@ in
 
           rm -rf ${esc entryFilePath}
           cp ${builtins.toFile "entries" (
-            lib.concatMapAttrsStringSep "\n" (name: file: "${config.absoluteDir}/${file.target}") files'entries
+            (lib.concatMapAttrsStringSep "\n" (name: file: "${config.absoluteDir}/${file.target}") files'entries) + "\n"
           )}  ${esc entryFilePath}
         '';
       }
@@ -559,8 +588,25 @@ in
       # TODO: find correct way to do validations
       (let
         prefixMsg = "${config._instanceType} instance '${config.name}'";
+        invalidModNames = lib.filter (
+          modName:
+            modName == ""
+            || modName == "."
+            || modName == ".."
+            || builtins.baseNameOf modName != modName
+            || lib.hasSuffix ".jar" modName
+            || lib.hasInfix "\n" modName
+            || lib.hasInfix "\r" modName
+        ) (lib.attrNames config.mods);
+        conflictingModPaths = lib.intersectLists (lib.attrNames modFiles) (lib.attrNames config.files);
       in {
         _module.check = lib.all (a: a) [
+          (lib.assertMsg (invalidModNames == [])
+            "${prefixMsg}: mod names must be non-empty, single-line base names without a .jar suffix; invalid names: ${lib.concatStringsSep ", " invalidModNames}")
+
+          (lib.assertMsg (conflictingModPaths == [])
+            "${prefixMsg}: declarative mods conflict with files or mrpack entries: ${lib.concatStringsSep ", " conflictingModPaths}")
+
           # If more than one type of mod loader is enabled then fail
           (
             let
@@ -579,12 +625,13 @@ in
           # TODO: move this logic over to a newer module called filesModule
           (
             let
-              allPaths = lib.attrNames config.files;
+              allFiles = config.files // modFiles;
+              allPaths = lib.attrNames allFiles;
 
               conflicts =
                 lib.filter (
                   path:
-                    (config.files.${path}.enable or false)
+                    (allFiles.${path}.enable or false)
                     == true
                     && (lib.any (p: p != path && lib.hasPrefix "${path}/" p) allPaths)
                 )
