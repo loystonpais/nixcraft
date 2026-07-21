@@ -10,11 +10,93 @@ Warning - This project is in a usable state but stil a work in progress. Do expe
   2. Supports Mod Loaders (Fabric loader, Quilt loader & paper servers)
   3. Supports Modpacks (modrinth .mrpack)
   4. MCSR - Supports speedrunning related content
+  5. Online account support
 
 ## TODO
 
   1. Support Forge
   2. Support more modpacks such as packwiz
+
+## Online accounts
+
+To use an official Minecraft account with Nixcraft:
+
+1. Run the login helper:
+
+```sh
+nix run github:loystonpais/nixcraft#auth
+```
+
+2. Open the printed Microsoft login URL in your browser.
+
+3. If the page asks for a code, enter the code printed by `nixcraft-auth`, then sign in and approve the login.
+
+4. Wait for `nixcraft-auth` to print `refreshToken: ...`, then copy that value into a writable file outside the Nix store. For example:
+
+```sh
+mkdir -p ~/.local/share/nixcraft
+printf '%s\n' '<paste-refresh-token-here>' > ~/.local/share/nixcraft/microsoft-refresh-token
+```
+
+5. Point your Nixcraft account configuration at that file:
+
+```nix
+account = {
+  refreshTokenPath = "${builtins.getEnv "HOME"}/.local/share/nixcraft/microsoft-refresh-token";
+};
+```
+
+Note: Microsoft may ask whether you want to let Prism Launcher access your information. This is expected right now. Nixcraft does not currently have its own Microsoft OAuth app, so `nixcraft-auth` temporarily reuses Prism Launcher's client id.
+
+`refreshTokenPath` must point to a writable file, because Nixcraft will update the refresh token itself. Do not manage that file with read-only secret systems such as `sops-nix`.
+
+## Declarative mods
+
+Client and server instances can install mods from local paths or fixed-output
+derivations. Attribute names must not include `.jar`; Nixcraft adds the suffix
+and places each source in the instance's `mods` directory.
+
+```nix
+mods = {
+  fsg-mod = pkgs.fetchurl {
+    url = "https://cdn.modrinth.com/data/XZOGBIpM/versions/4IW4nMP3/fsg-mod-5.2.0%2BMC1.16.1.jar";
+    hash = "sha256-bA3Y+7OWex8LwEXgMN+7DH6vi6hIoOZ7w3XzA3AE4qg=";
+  };
+  custom-mod = ./custom-mod.jar;
+};
+```
+
+Nixcraft does not resolve versions, dependencies, or loader compatibility.
+Update the configured source and hash to upgrade a mod. A mod cannot share its
+generated target (for example, `mods/fsg-mod.jar`) with an mrpack or `files`
+entry.
+
+## Declarative game options
+
+You can configure minecraft's `options.txt` declaritively.
+
+```nix
+gameOptions = {
+  fullscreen = true;
+  guiScale = 3;
+  fov = 0.5;
+  "key_key.forward" = "key.keyboard.w";
+  narrator = null; # omitted from options.txt
+};
+```
+
+The generated file is a read-only symlink. In-game changes are not persistent;
+change `gameOptions` and rebuild the configuration instead. A non-empty
+`gameOptions` cannot be combined with an mrpack or `files` entry that also
+provides `options.txt`.
+
+> [!WARNING]
+> `gameOptions` is converted directly from `key = value` to `key:value` without
+> version-aware key translation or validation. Unknown, misspelled, or invalid
+> keys do not produce a warning. Minecraft versions may add, remove, or rename
+> keys and may expect different value formats, so use the names and values
+> supported by the configured Minecraft version. 
+> You can keep version-specific keys in each instance instead of `client.shared`.
 
 ## Usage
 
@@ -81,6 +163,45 @@ nixcraft = {
 
 ```
 
+Game options can be shared by all client instances and overridden where needed:
+
+```nix
+nixcraft.client = {
+  shared.gameOptions = {
+    fullscreen = false;
+    guiScale = 2;
+    # Modern Minecraft uses graphicsMode: 0 = Fast, 1 = Fancy, 2 = Fabulous.
+    graphicsMode = 1;
+  };
+
+  instances = {
+    modern = {
+      enable = true;
+      version = "1.21.1";
+
+      # Override values inherited from client.shared.
+      gameOptions = {
+        guiScale = lib.mkForce 4;
+        graphicsMode = lib.mkForce 2;
+      };
+    };
+
+    legacy-1-8 = {
+      enable = true;
+      version = "1.8";
+
+      gameOptions = {
+        # Minecraft 1.8 uses the boolean `fancyGraphics` key instead of the
+        # modern integer `graphicsMode` key. Remove the inherited modern key,
+        # then provide the key and value format expected by this version.
+        graphicsMode = lib.mkForce null;
+        fancyGraphics = true;
+      };
+    };
+  };
+};
+```
+
 ```nix
 # Config showcasing nixcraft's features
 {
@@ -135,10 +256,8 @@ in {
           smp = {
             enable = true;
             version = "1.21.1";
-            fabricLoader = {
-              enable = true;
-              version = "0.17.2";
-            };
+            # Version defaults to the latest entry in the Fabric lock file.
+            fabricLoader.enable = true;
           };
 
           # Example server with simply-optimized mrpack loaded
@@ -248,6 +367,20 @@ in {
           nomods = {
             enable = true;
             version = "1.21.1";
+          };
+
+          # Example client using an official Minecraft account.
+          # First run: nix run github:loystonpais/nixcraft#auth
+          # Then save the printed refreshToken to the file below.
+          official-account = {
+            enable = true;
+            version = "1.21.1";
+
+            account = {
+              offline = lib.mkForce false;
+              # This file should contain only the refresh token text.
+              refreshTokenPath = "${config.home.homeDirectory}/.local/share/nixcraft/microsoft-refresh-token";
+            };
           };
 
           # Example client whose version is "latest-release"

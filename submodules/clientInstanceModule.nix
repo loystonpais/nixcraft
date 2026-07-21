@@ -92,6 +92,28 @@ in
         '';
       };
 
+      gameOptions = lib.mkOption {
+        type = with lib.types;
+          attrsOf (nullOr (oneOf [
+            str
+            bool
+            int
+            float
+          ]));
+        default = {};
+        example = {
+          fullscreen = true;
+          guiScale = 3;
+          fov = 0.5;
+          "key_key.forward" = "key.keyboard.w";
+        };
+        description = ''
+          Declarative values for the client's options.txt file. Attribute names
+          are Minecraft option keys. Null values are omitted. The generated
+          file is a read-only symlink, so in-game changes are not persistent.
+        '';
+      };
+
       enableNixGL = lib.mkEnableOption "nixGL";
 
       extraArguments = lib.mkOption {
@@ -217,20 +239,41 @@ in
       shared
 
       {
-        finalLaunchShellCommandString = concatStringsSep " " [
-          ''"${config.java.package}/bin/java"''
-          config.java.finalArgumentShellString
-          config.finalArgumentShellString
+        finalLaunchShellCommandString =
+          let
+            authDir = "${config.absoluteDir}/.nixcraft/auth";
+            accessTokenPath =
+              if (config.account != null && config.account.refreshTokenPath != null)
+              then "${authDir}/minecraft-access-token"
+              else pkgs.writeText "dummy" "dummy";
+            profilePath = "${authDir}/minecraft-profile.json";
 
-          # unmodded client doesn't launch if access token is not provided
-          "--accessToken $(cat ${
-            if (config.account != null && config.account.accessTokenPath != null)
-            then escapeShellArg config.account.accessTokenPath
-            else pkgs.writeText "dummy" "dummy"
-          })"
-        ];
+            dynamicProfileArgs =
+              lib.optionals
+              (config.account != null && config.account.refreshTokenPath != null)
+              [
+                ''--username "$(${pkgs.jq}/bin/jq -er '.name' < ${escapeShellArg profilePath})"''
+                ''--uuid "$(${pkgs.jq}/bin/jq -er '.id' < ${escapeShellArg profilePath})"''
+              ];
+          in
+            concatStringsSep " " (
+              [
+                ''"${config.java.package}/bin/java"''
+                config.java.finalArgumentShellString
+                config.finalArgumentShellString
+              ]
+              ++ dynamicProfileArgs
+              ++ [
+                # unmodded client doesn't launch if access token is not provided
+                ''--accessToken "$(${pkgs.coreutils}/bin/cat ${escapeShellArg accessTokenPath})"''
+              ]
+            );
 
         finalLaunchShellScript = let
+          accountMode =
+            if config.account != null && config.account.refreshTokenPath != null
+            then "online"
+            else "offline";
           defaultScript = ''
             #!${pkgs.bash}/bin/bash
 
@@ -238,10 +281,14 @@ in
 
             ${lib.nixcraft.mkExportedEnvVars config.envVars}
 
+            echo "[nixcraft] starting client instance '${name}' (${accountMode})" >&2
+            echo "[nixcraft] instance directory: ${config.absoluteDir}" >&2
+
             ${config.finalPreLaunchShellScript}
 
             cd ${escapeShellArg config.absoluteDir}
 
+            echo "[nixcraft] launching Minecraft ${config._classSettings.version}" >&2
             exec ${config.finalLaunchShellCommandString} "$@"
           '';
         in
@@ -291,6 +338,162 @@ in
         };
       }
 
+      (lib.mkIf (config.account != null && config.account.refreshTokenPath != null) (
+        let
+          authDir = "${config.absoluteDir}/.nixcraft/auth";
+          accessTokenPath = "${authDir}/minecraft-access-token";
+          profilePath = "${authDir}/minecraft-profile.json";
+          refreshScript = pkgs.writeShellScript "nixcraft-refresh-token-${name}" ''
+            #!${pkgs.bash}/bin/bash
+
+            set -euo pipefail
+
+            refresh_token_path=${escapeShellArg config.account.refreshTokenPath}
+            access_token_path=${escapeShellArg accessTokenPath}
+            profile_path=${escapeShellArg profilePath}
+            # Temporary hack: reuse Prism Launcher's public client id for Microsoft auth.
+            client_id='c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb'
+            token_endpoint='https://login.microsoftonline.com/consumers/oauth2/v2.0/token'
+
+            mkdir -p \
+              "$(${pkgs.coreutils}/bin/dirname "$refresh_token_path")" \
+              "$(${pkgs.coreutils}/bin/dirname "$access_token_path")" \
+              "$(${pkgs.coreutils}/bin/dirname "$profile_path")"
+
+            refresh_tmp="$(${pkgs.coreutils}/bin/mktemp "$(${pkgs.coreutils}/bin/dirname "$refresh_token_path")/.refresh-token.XXXXXX")"
+            access_tmp="$(${pkgs.coreutils}/bin/mktemp "$(${pkgs.coreutils}/bin/dirname "$access_token_path")/.access-token.XXXXXX")"
+            profile_tmp="$(${pkgs.coreutils}/bin/mktemp "$(${pkgs.coreutils}/bin/dirname "$profile_path")/.profile.XXXXXX")"
+            cleanup() {
+              rm -f "$refresh_tmp" "$access_tmp" "$profile_tmp"
+            }
+            trap cleanup EXIT
+
+            echo "[nixcraft] refreshing Microsoft token for instance '${name}'" >&2
+            echo "[nixcraft] refresh token path: $refresh_token_path" >&2
+
+            refresh_token="$(${pkgs.coreutils}/bin/tr -d '\r\n' < "$refresh_token_path")"
+
+            microsoft_response="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request POST \
+                --url "$token_endpoint" \
+                --header "Content-Type: application/x-www-form-urlencoded" \
+                --data-urlencode "client_id=$client_id" \
+                --data-urlencode "refresh_token=$refresh_token" \
+                --data-urlencode "grant_type=refresh_token"
+            )"
+
+            microsoft_access_token="$(printf '%s' "$microsoft_response" | ${pkgs.jq}/bin/jq -er '.access_token')"
+            next_refresh_token="$(printf '%s' "$microsoft_response" | ${pkgs.jq}/bin/jq -er '.refresh_token')"
+
+            xbl_payload="$(
+              ${pkgs.jq}/bin/jq -cn --arg token "$microsoft_access_token" '{
+                Properties: {
+                  AuthMethod: "RPS",
+                  SiteName: "user.auth.xboxlive.com",
+                  RpsTicket: ("d=" + $token)
+                },
+                RelyingParty: "http://auth.xboxlive.com",
+                TokenType: "JWT"
+              }'
+            )"
+
+            xbl_response="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request POST \
+                --url "https://user.auth.xboxlive.com/user/authenticate" \
+                --header "Accept: application/json" \
+                --header "Content-Type: application/json" \
+                --data "$xbl_payload"
+            )"
+
+            xbl_token="$(printf '%s' "$xbl_response" | ${pkgs.jq}/bin/jq -er '.Token')"
+            user_hash="$(printf '%s' "$xbl_response" | ${pkgs.jq}/bin/jq -er '.DisplayClaims.xui[0].uhs')"
+
+            xsts_payload="$(
+              ${pkgs.jq}/bin/jq -cn --arg token "$xbl_token" '{
+                Properties: {
+                  SandboxId: "RETAIL",
+                  UserTokens: [$token]
+                },
+                RelyingParty: "rp://api.minecraftservices.com/",
+                TokenType: "JWT"
+              }'
+            )"
+
+            xsts_response="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request POST \
+                --url "https://xsts.auth.xboxlive.com/xsts/authorize" \
+                --header "Accept: application/json" \
+                --header "Content-Type: application/json" \
+                --data "$xsts_payload"
+            )"
+
+            xsts_token="$(printf '%s' "$xsts_response" | ${pkgs.jq}/bin/jq -er '.Token')"
+
+            minecraft_payload="$(
+              ${pkgs.jq}/bin/jq -cn --arg userHash "$user_hash" --arg token "$xsts_token" '{
+                identityToken: ("XBL3.0 x=" + $userHash + ";" + $token)
+              }'
+            )"
+
+            minecraft_response="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request POST \
+                --url "https://api.minecraftservices.com/authentication/login_with_xbox" \
+                --header "Accept: application/json" \
+                --header "Content-Type: application/json" \
+                --data "$minecraft_payload"
+            )"
+
+            minecraft_access_token="$(printf '%s' "$minecraft_response" | ${pkgs.jq}/bin/jq -er '.access_token')"
+
+            minecraft_profile="$(
+              ${pkgs.curl}/bin/curl \
+                --silent \
+                --show-error \
+                --fail-with-body \
+                --request GET \
+                --url "https://api.minecraftservices.com/minecraft/profile" \
+                --header "Authorization: Bearer $minecraft_access_token"
+            )"
+
+            printf '%s' "$minecraft_profile" | ${pkgs.jq}/bin/jq -er '.id' > /dev/null
+            printf '%s' "$minecraft_profile" | ${pkgs.jq}/bin/jq -er '.name' > /dev/null
+
+            printf '%s' "$next_refresh_token" > "$refresh_tmp"
+            chmod 600 "$refresh_tmp"
+            printf '%s' "$minecraft_access_token" > "$access_tmp"
+            chmod 600 "$access_tmp"
+            printf '%s\n' "$minecraft_profile" > "$profile_tmp"
+            chmod 600 "$profile_tmp"
+
+            ${pkgs.coreutils}/bin/mv -f "$refresh_tmp" "$refresh_token_path"
+            ${pkgs.coreutils}/bin/mv -f "$access_tmp" "$access_token_path"
+            ${pkgs.coreutils}/bin/mv -f "$profile_tmp" "$profile_path"
+
+            echo "[nixcraft] refreshed token and wrote Minecraft profile cache" >&2
+          '';
+        in {
+          preLaunchShellScript = lib.mkBefore ''
+            ${refreshScript}
+          '';
+        }
+      ))
+
       # Place saves
       {
         files =
@@ -303,6 +506,36 @@ in
           )
           config.saves;
       }
+
+      (lib.mkIf (config.gameOptions != {}) {
+        _generatedFiles."options.txt" = {
+          type = "options-txt";
+          value = config.gameOptions;
+          method = "symlink";
+        };
+      })
+
+      (let
+        invalidKeys = lib.filter (
+          key:
+            key == ""
+            || lib.hasInfix ":" key
+            || lib.hasInfix "\n" key
+            || lib.hasInfix "\r" key
+        ) (lib.attrNames config.gameOptions);
+        multilineStringKeys = lib.attrNames (lib.filterAttrs (
+          _: value:
+            lib.isString value
+            && (lib.hasInfix "\n" value || lib.hasInfix "\r" value)
+        ) config.gameOptions);
+      in {
+        _module.check = lib.all (value: value) [
+          (lib.assertMsg (invalidKeys == [])
+            "client instance '${config.name}': gameOptions keys must be non-empty, single-line strings without colons; invalid keys: ${lib.concatStringsSep ", " invalidKeys}")
+          (lib.assertMsg (multilineStringKeys == [])
+            "client instance '${config.name}': gameOptions string values must be single-line; invalid keys: ${lib.concatStringsSep ", " multilineStringKeys}")
+        ];
+      })
 
       {
         _classSettings = {
@@ -332,8 +565,7 @@ in
 
         # Default libs copied over from
         # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/pr/prismlauncher/package.nix#L78
-        runtimeLibs = with pkgs;
-        with xorg; [
+        runtimeLibs = with pkgs; [
           (lib.getLib stdenv.cc.cc)
           ## native versions
           glfw3-minecraft
@@ -347,11 +579,11 @@ in
 
           ## glfw
           libGL
-          libX11
-          libXcursor
-          libXext
-          libXrandr
-          libXxf86vm
+          libx11
+          libxcursor
+          libxext
+          libxrandr
+          libxxf86vm
 
           udev # oshi
 
@@ -364,8 +596,7 @@ in
           libxt
         ];
 
-        runtimePrograms = with pkgs;
-        with xorg; [
+        runtimePrograms = with pkgs; [
           xrandr # This is needed for 1.12.x versions to not crash
         ];
 
@@ -467,8 +698,7 @@ in
           _classSettings.userProperties = lib.mkDefault {};
         })
 
-      (lib.mkIf (config.account
-        != null) {
+      (lib.mkIf (config.account != null && config.account.refreshTokenPath == null) {
         _classSettings.uuid = lib.mkIf (config.account.uuid != null) config.account.uuid;
         _classSettings.username = lib.mkIf (config.account.username != null) config.account.username;
       })
