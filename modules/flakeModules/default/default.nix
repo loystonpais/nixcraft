@@ -170,9 +170,22 @@ in {
           };
         };
       };
+
+      checks.declarative-mods = import "${self}/tests/declarative-mods.nix" {
+        inherit lib pkgs submodules;
+      };
+
+      checks.fabric-loader = import "${self}/tests/fabric-loader.nix" {
+        inherit lib pkgs sources submodules;
+      };
+
+      checks.game-options = import "${self}/tests/game-options.nix" {
+        inherit lib pkgs submodules;
+      };
     in {
       inherit packages;
       inherit legacyPackages;
+      inherit checks;
     };
   };
 }
