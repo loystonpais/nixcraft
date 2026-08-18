@@ -19,7 +19,7 @@
       default = null;
     };
 
-    accessTokenPath = lib.mkOption {
+    refreshTokenPath = lib.mkOption {
       type = lib.types.nullOr lib.types.nonEmptyStr;
       default = null;
     };
@@ -28,8 +28,8 @@
   config = lib.mkMerge [
     {
       _module.check =
-        lib.asserts.assertMsg (!(config.accessTokenPath != null && config.offline))
-        "Offline accounts cannot have access token paths provided";
+        lib.asserts.assertMsg (!(config.refreshTokenPath != null && config.offline))
+        "Offline accounts cannot have refresh token paths provided";
     }
   ];
 }

@@ -3,12 +3,26 @@
   fetchFabricLoaderImpure,
   sources,
   ...
-}: {config, ...}: {
+}: {config, ...}: let
+  loaderVersions = lib.attrNames sources.fabric.lock;
+  latestLoaderVersion = lib.foldl' (
+    latest: version:
+      if builtins.compareVersions version latest > 0
+      then version
+      else latest
+  ) (builtins.head loaderVersions) (builtins.tail loaderVersions);
+in {
   options = {
     enable = lib.mkEnableOption "fabric loader";
 
     version = lib.mkOption {
       type = lib.types.nonEmptyStr;
+      default = latestLoaderVersion;
+      defaultText = lib.literalExpression ''latest Fabric Loader version in sources/fabric/lock.json'';
+      description = ''
+        Fabric Loader version. Defaults to the latest version available in the
+        repository's Fabric lock file.
+      '';
     };
 
     minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
