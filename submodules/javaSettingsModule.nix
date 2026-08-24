@@ -38,6 +38,12 @@
       default = null;
     };
 
+    D = lib.mkOption {
+      type = with lib.types; attrsOf (oneOf [str path package int bool float]);
+      default = {};
+      description = "Java system properties (-D flags) to pass to the JVM.";
+    };
+
     extraArguments = lib.mkOption {
       type = with lib.types; listOf nonEmptyStr;
       default = [];
@@ -50,6 +56,8 @@
         concatLists [
           (optional (config.minMemory != null) "-Xms${toString config.minMemory}m")
           (optional (config.maxMemory != null) "-Xmx${toString config.maxMemory}m")
+
+          (mapAttrsToList (k: v: "-D${k}=${toString v}") config.D)
 
           (optional (config.cp != []) "-cp")
           (optional (config.cp != []) (concatStringsSep ":" config.cp))

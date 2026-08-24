@@ -325,8 +325,7 @@ in
 
         mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
 
-        # TODO: in javaSettingsModule try to implement this as an actual option
-        java.extraArguments = ["-Djava.library.path=${mkNativeLibDir {versionData = config.meta.versionData;}}"];
+        java.D."java.library.path" = mkNativeLibDir {versionData = config.meta.versionData;};
 
         java.mainClass = lib.mkDefault config.meta.versionData.mainClass;
 
@@ -454,9 +453,7 @@ in
 
       (lib.mkIf config.waywall.enable {
         # waywall uses custom libglfw.so
-        java.extraArguments = [
-          "-Dorg.lwjgl.glfw.libname=${inputs.self.packages.${system}.glfw3-waywall}/lib/libglfw.so"
-        ];
+        java.D."org.lwjgl.glfw.libname" = "${inputs.self.packages.${system}.glfw3-waywall}/lib/libglfw.so";
       })
 
       # If version >= 1.6 && version <= 1.12
