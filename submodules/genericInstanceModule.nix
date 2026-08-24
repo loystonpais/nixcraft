@@ -183,6 +183,15 @@ in
         enable = lib.mkEnableOption "jemalloc";
       };
 
+      renice = {
+        enable = lib.mkEnableOption "renicing the instance process before launch";
+        priority = lib.mkOption {
+          type = lib.types.int;
+          default = -20;
+          description = "Niceness priority value (between -20 and 19). Lower values mean higher priority.";
+        };
+      };
+
       fixBugs =
         (lib.mkEnableOption "fixing trivial bugs if any")
         // {
@@ -428,6 +437,12 @@ in
 
       (lib.mkIf (config.jemalloc.enable) {
         envVars.LD_PRELOAD = lib.mkBefore ["${pkgs.jemalloc}/lib/libjemalloc.so"];
+      })
+
+      (lib.mkIf (config.renice.enable) {
+        preLaunchShellScript = lib.mkBefore ''
+          /run/wrappers/bin/nixcraft-renice --priority ${toString config.renice.priority} -p $$
+        '';
       })
 
       (lib.mkIf (config.placeFilesAtActivation) {

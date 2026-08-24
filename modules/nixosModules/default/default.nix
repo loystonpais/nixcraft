@@ -46,6 +46,15 @@ in {
                 description = "Path to nixcraft cache directory";
               };
             };
+
+            options.renice = {
+              enable =
+                (lib.mkEnableOption "renice wrapper with CAP_SYS_NICE capability")
+                // {
+                  default = false;
+                  description = "Wrap renice binary with cap_sys_nice capability under /run/wrappers/bin/nixcraft-renice so it can be run without sudo.";
+                };
+            };
           })
         ];
         specialArgs = {
@@ -93,6 +102,16 @@ in {
             "d ${config.nixcraft.cache.path} 0777 root root -"
             "d ${config.nixcraft.cache.path}/asset-objects 0777 root root -"
           ];
+        })
+
+        # Renice security wrapper
+        (lib.mkIf config.nixcraft.renice.enable {
+          security.wrappers.nixcraft-renice = {
+            source = "${pkgs.util-linux}/bin/renice";
+            capabilities = "cap_sys_nice+ep";
+            owner = "root";
+            group = "root";
+          };
         })
 
         # Managing server
