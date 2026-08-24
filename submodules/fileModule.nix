@@ -127,9 +127,9 @@ in {
         then
           (
             if config.type == "json"
-            then builtins.toFile "value" (builtins.toJSON config.value)
+            then pkgs.writeText "value" (builtins.toJSON config.value)
             else if config.type == "txt-list"
-            then (lib.concatStringsSep "\n" config.value)
+            then pkgs.writeText "value" (lib.concatStringsSep "\n" config.value)
             else if config.type == "toml"
             then (pkgs.formats.toml {}).generate "value" config.value
             else if config.type == "properties"
@@ -137,7 +137,7 @@ in {
             else if config.type == "ini"
             then (pkgs.formats.ini {}).generate "value" config.value
             else if config.type == "options-txt"
-            then lib.nixcraft.toMinecraftOptionsTxt config.value
+            then pkgs.writeText "value" (lib.nixcraft.toMinecraftOptionsTxt config.value)
             else throw "file ${config.target}: cannot transform value to type ${config.type}"
           )
         else if config.source != null
