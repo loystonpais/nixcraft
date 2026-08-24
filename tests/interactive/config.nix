@@ -186,6 +186,14 @@ in {
           version = "latest-release";
         };
 
+        online-auth = {
+          enable = false;
+          version = "1.21.1";
+          account = {
+            refreshTokenPath = "/tmp/nixcraft-tests/microsoft-refresh-token";
+          };
+        };
+
         # Audio doesn't seem to work in old versions
         onepoint6 = {
           enable = true;
