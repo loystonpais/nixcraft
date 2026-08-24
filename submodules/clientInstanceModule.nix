@@ -47,7 +47,7 @@ in
 
       # Hide these two option for now
       enableFastAssetDownload =
-        (lib.mkEnableOption "fast asset downloading using aria2c (hash needs to be provided)")
+        (lib.mkEnableOption "fast asset downloading using fetchAssetsPy (hash needs to be provided)")
         // {
           internal = true;
         };
@@ -314,7 +314,7 @@ in
               (mkAssetsDir {
                 versionData = config.meta.versionData;
                 hash = config.assetHash;
-                useAria2c = config.enableFastAssetDownload;
+                useFetchAssetsPy = config.enableFastAssetDownload;
               })
             else mkAssetsDir {versionData = config.meta.versionData;};
 

@@ -30,7 +30,24 @@ in {
   options = {
     nixcraft = lib.mkOption {
       type = lib.types.submoduleWith {
-        modules = [nixcraftModule];
+        modules = [
+          nixcraftModule
+          ({lib, ...}: {
+            options.cache = {
+              enable =
+                (lib.mkEnableOption "nixcraft cache")
+                // {
+                  default = true;
+                };
+
+              path = lib.mkOption {
+                type = lib.types.str;
+                default = "/var/cache/nixcraft";
+                description = "Path to nixcraft cache directory";
+              };
+            };
+          })
+        ];
         specialArgs = {
           clientDirPrefix = "/var/lib/nixcraft/client/instances";
           serverDirPrefix = "/var/lib/nixcraft/server/instances";
@@ -65,6 +82,18 @@ in {
             groups.nixcraft = {};
           };
         }
+
+        # Cache setup
+        (lib.mkIf config.nixcraft.cache.enable {
+          nix.settings.extra-sandbox-paths = [
+            config.nixcraft.cache.path
+          ];
+
+          systemd.tmpfiles.rules = [
+            "d ${config.nixcraft.cache.path} 0777 root root -"
+            "d ${config.nixcraft.cache.path}/asset-objects 0777 root root -"
+          ];
+        })
 
         # Managing server
         {
