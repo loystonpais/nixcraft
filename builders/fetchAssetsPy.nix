@@ -21,6 +21,9 @@ pkgs.runCommand name {
   PYTHONUNBUFFERED = "1";
   __impureHostDeps = readCacheDirs ++ (lib.optional (writeCacheDir != null) writeCacheDir);
 } ''
+  mkdir -p "$out/indexes"
+  ln -s ${indexFile} "$out/indexes/${assetType}.json"
+
   python3 ${../scripts/fetchAssets.py} \
     --index ${indexFile} \
     --asset-type "${assetType}" \
