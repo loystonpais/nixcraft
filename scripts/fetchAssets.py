@@ -106,7 +106,7 @@ def find_in_read_caches(
 
 
 def link_or_copy(src: Path, dest: Path) -> None:
-    """Tries to create a hard link; falls back to copying if on different filesystems."""
+    """Tries to create a hard link; falls back to copying if hard link fails."""
     dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.exists():
         dest.unlink()
@@ -124,7 +124,7 @@ def save_to_write_cache(
     sha1: str,
     write_cache_dir: Optional[Path],
 ) -> None:
-    """Atomically copies a newly fetched asset to the write cache directory if available."""
+    """Atomically links or copies a newly fetched asset to the write cache directory if available."""
     global _write_warning_shown
     if not write_cache_dir:
         return
@@ -140,7 +140,11 @@ def save_to_write_cache(
         temp_target = cache_target.with_name(
             f"{sha1}.tmp.{os.getpid()}.{threading.get_ident()}"
         )
-        shutil.copyfile(src_file, temp_target)
+        try:
+            os.link(src_file, temp_target)
+        except OSError:
+            shutil.copyfile(src_file, temp_target)
+
         try:
             os.chmod(temp_target, 0o666)
         except Exception:
