@@ -106,14 +106,24 @@ def find_in_read_caches(
 
 
 def link_or_copy(src: Path, dest: Path) -> None:
-    """Tries to create a hard link; falls back to copying if hard link fails."""
+    """Atomically links or copies src to dest, safe across concurrent threads and processes."""
+    if dest.is_file():
+        return
+
     dest.parent.mkdir(parents=True, exist_ok=True)
-    if dest.exists():
-        dest.unlink()
+    temp_target = dest.parent / f".tmp.{dest.name}.{os.getpid()}.{threading.get_ident()}.{time.time_ns()}"
+
     try:
-        os.link(src, dest)
-    except OSError:
-        shutil.copyfile(src, dest)
+        try:
+            os.link(src, temp_target)
+        except OSError:
+            shutil.copyfile(src, temp_target)
+
+        os.replace(temp_target, dest)
+    except Exception:
+        temp_target.unlink(missing_ok=True)
+        if not dest.is_file():
+            raise
 
 
 _write_warning_shown = False
@@ -130,6 +140,10 @@ def save_to_write_cache(
         return
 
     cache_target = write_cache_dir / sha1[:2] / sha1
+    if cache_target.is_file():
+        return
+
+    temp_target = None
     try:
         cache_target.parent.mkdir(parents=True, exist_ok=True)
         try:
@@ -137,9 +151,7 @@ def save_to_write_cache(
         except Exception:
             pass
 
-        temp_target = cache_target.with_name(
-            f"{sha1}.tmp.{os.getpid()}.{threading.get_ident()}"
-        )
+        temp_target = cache_target.parent / f".tmp.{sha1}.{os.getpid()}.{threading.get_ident()}.{time.time_ns()}"
         try:
             os.link(src_file, temp_target)
         except OSError:
@@ -150,8 +162,10 @@ def save_to_write_cache(
         except Exception:
             pass
 
-        temp_target.replace(cache_target)
+        os.replace(temp_target, cache_target)
     except Exception as e:
+        if temp_target:
+            temp_target.unlink(missing_ok=True)
         if not _write_warning_shown:
             _write_warning_shown = True
             print(
@@ -171,11 +185,12 @@ def download_asset(
 ) -> None:
     """Downloads a single asset using persistent HTTP connection with exponential backoff and SHA-1 verification."""
     if dest_path.is_file():
-        return
+        if expected_size is None or dest_path.stat().st_size == expected_size:
+            return
 
     dest_path.parent.mkdir(parents=True, exist_ok=True)
-    temp_path = dest_path.with_name(
-        f"{dest_path.name}.tmp.{os.getpid()}.{threading.get_ident()}"
+    temp_path = dest_path.parent / (
+        f".tmp.{dest_path.name}.{os.getpid()}.{threading.get_ident()}.{time.time_ns()}"
     )
 
     scheme = parsed_base.scheme or "https"
@@ -188,7 +203,8 @@ def download_asset(
     for attempt in range(1, retries + 1):
         try:
             if dest_path.is_file():
-                return
+                if expected_size is None or dest_path.stat().st_size == expected_size:
+                    return
 
             conn = get_http_connection(scheme, host, port, timeout)
             conn.request(
@@ -233,7 +249,7 @@ def download_asset(
                 )
 
             try:
-                temp_path.replace(dest_path)
+                os.replace(temp_path, dest_path)
             except OSError:
                 if not dest_path.is_file():
                     raise
@@ -273,6 +289,11 @@ def process_asset(
         dest_path = out_dir / "virtual" / "legacy" / name
     else:
         dest_path = out_dir / "objects" / prefix / sha1
+
+    # 0. Check if destination file already exists and matches expected size
+    if dest_path.is_file():
+        if size is None or dest_path.stat().st_size == size:
+            return "cached"
 
     # 1. Check in read cache directories
     cached_file = find_in_read_caches(sha1, size, read_cache_dirs)
@@ -407,12 +428,6 @@ def main() -> None:
     total_assets = len(objects)
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
-
-    # Place index in $out/indexes/<asset_type>.json
-    indexes_dir = args.out_dir / "indexes"
-    indexes_dir.mkdir(parents=True, exist_ok=True)
-    target_index_file = indexes_dir / f"{args.asset_type}.json"
-    shutil.copyfile(args.index, target_index_file)
 
     # Filter valid read cache directories that actually exist
     valid_read_cache_dirs = [p for p in args.read_cache_dirs if p.is_dir()]
