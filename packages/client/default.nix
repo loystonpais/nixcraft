@@ -29,6 +29,7 @@
         shared = {};
         dirPrefix = null;
         clientExternalAssetDirPrefix = "/tmp/nixcraft-client-assets";
+        clientExternalAssetLookupPaths = ["/var/cache/nixcraft/asset-objects"];
         inherit name;
         inherit pkgs;
         inherit lib;
@@ -83,6 +84,6 @@
         lib.listToAttrs (map (ver: lib.nameValuePair (sanitizeVersion ver) (withVersion ver)) allVersions);
     };
   in
-    finalEntry // combinators // combinators.versionShortcuts;
+    finalEntry // {inherit (finalEntry.passthru) evaluatedModule;} // combinators // combinators.versionShortcuts;
 in
   makeClient cfg

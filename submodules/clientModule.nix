@@ -6,6 +6,8 @@
 }: {
   config,
   dir,
+  externalAssetDirPrefix,
+  externalAssetLookupPaths,
   ...
 }: {
   options = {
@@ -16,6 +18,8 @@
           specialArgs = {
             shared = config.shared;
             dirPrefix = "${config.dir}";
+            externalAssetDirPrefix = externalAssetDirPrefix;
+            externalAssetLookupPaths = externalAssetLookupPaths;
           };
         });
     };

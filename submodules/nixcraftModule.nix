@@ -8,6 +8,8 @@
   config,
   clientDirPrefix,
   serverDirPrefix,
+  clientExternalAssetDirPrefix,
+  clientExternalAssetLookupPaths,
   ...
 }: {
   options = {
@@ -18,6 +20,8 @@
         modules = [clientModule];
         specialArgs = {
           dir = clientDirPrefix;
+          externalAssetDirPrefix = clientExternalAssetDirPrefix;
+          externalAssetLookupPaths = clientExternalAssetLookupPaths;
         };
       };
     };

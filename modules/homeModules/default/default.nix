@@ -51,6 +51,12 @@ in {
         specialArgs = {
           clientDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/instances";
           serverDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/server/instances";
+          clientExternalAssetDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/assets";
+          clientExternalAssetLookupPaths = [
+            "${config.home.homeDirectory}/.local/share/PrismLauncher/assets"
+            "${config.home.homeDirectory}/.minecraft/assets"
+            "/var/cache/nixcraft/asset-objects"
+          ];
         };
       };
     };

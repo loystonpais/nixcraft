@@ -23,6 +23,8 @@ in
     name,
     config,
     shared ? {},
+    externalAssetDirPrefix,
+    externalAssetLookupPaths ? [],
     ...
   }: {
     imports = [genericInstanceModule];
@@ -54,6 +56,20 @@ in
       assetHash = lib.mkOption {
         type = lib.types.nonEmptyStr;
         internal = true;
+      };
+
+      enableExternalAssets = lib.mkEnableOption "external asset management via fetchAssets script";
+
+      externalAssetDir = lib.mkOption {
+        type = lib.types.nullOr (lib.types.pathWith {absolute = true;});
+        default = externalAssetDirPrefix;
+        description = "Path to external assets directory";
+      };
+
+      externalAssetExtraLookupPaths = lib.mkOption {
+        type = with lib.types; listOf (oneOf [str path]);
+        default = [];
+        description = "Extra paths to read/lookup cached assets from when fetching external assets.";
       };
 
       desktopEntry = lib.mkOption {
@@ -307,15 +323,23 @@ in
         _classSettings = {
           version = lib.mkOptionDefault config.meta.versionData.id;
           assetIndex = config.meta.versionData.assets;
-          assetsDir =
-            if config.enableFastAssetDownload
+          assetsDir = lib.mkDefault (
+            if config.enableExternalAssets
+            then
+              (pkgs.runCommandLocal "external-assets-dir" {} ''
+                mkdir -p $out/indexes
+                ln -s ${fetchSha1 config.meta.versionData.assetIndex} $out/indexes/${config.meta.versionData.assets}.json
+                ln -s ${lib.escapeShellArg config.externalAssetDir}/objects $out/objects
+              '')
+            else if config.enableFastAssetDownload
             then
               (mkAssetsDir {
                 versionData = config.meta.versionData;
                 hash = config.assetHash;
                 useFetchAssetsPy = config.enableFastAssetDownload;
               })
-            else mkAssetsDir {versionData = config.meta.versionData;};
+            else mkAssetsDir {versionData = config.meta.versionData;}
+          );
 
           gameDir = lib.mkDefault config.absoluteDir;
         };
@@ -333,33 +357,34 @@ in
 
         # Default libs copied over from
         # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/pr/prismlauncher/package.nix#L78
-        runtimeLibs = with pkgs; [
-          (lib.getLib stdenv.cc.cc)
-          openal
-          vulkan-loader # VulkanMod's lwjgl
-          flite # TTS
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          ## openal
-          alsa-lib
-          libjack2
-          libpulseaudio
-          pipewire
+        runtimeLibs = with pkgs;
+          [
+            (lib.getLib stdenv.cc.cc)
+            openal
+            vulkan-loader # VulkanMod's lwjgl
+            flite # TTS
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            ## openal
+            alsa-lib
+            libjack2
+            libpulseaudio
+            pipewire
 
-          ## glfw
-          glfw3-minecraft
-          libGL
+            ## glfw
+            glfw3-minecraft
+            libGL
 
-          libx11
-          libxcursor
-          libxext
-          libxrandr
-          libxxf86vm
-          udev # oshi
-          libxtst
-          libxkbcommon
-          libxt
-        ];
+            libx11
+            libxcursor
+            libxext
+            libxrandr
+            libxxf86vm
+            udev # oshi
+            libxtst
+            libxkbcommon
+            libxt
+          ];
 
         runtimePrograms = with pkgs;
           lib.optionals stdenv.hostPlatform.isLinux [
@@ -396,6 +421,22 @@ in
             (lib.makeSearchPathOutput "lib" "lib/vdpau" libvdpau)
           ];
         })
+
+      (lib.mkIf config.enableExternalAssets {
+        preLaunchShellScript = let
+          indexFile = fetchSha1 config.meta.versionData.assetIndex;
+          allLookupDirs =
+            config.externalAssetExtraLookupPaths ++ externalAssetLookupPaths;
+          dirsArg = lib.concatMapStringsSep " " lib.escapeShellArg allLookupDirs;
+        in ''
+          mkdir -p ${lib.escapeShellArg config.externalAssetDir}
+          ${pkgs.python3}/bin/python3 ${../scripts/fetchAssets.py} \
+            --index ${indexFile} \
+            --asset-type "${config.meta.versionData.assets}" \
+            --out-dir ${lib.escapeShellArg config.externalAssetDir} \
+            --read-cache-dirs ${dirsArg}
+        '';
+      })
 
       # TODO: implement fast asset download
       (lib.mkIf config.enableFastAssetDownload {
@@ -466,6 +507,16 @@ in
         != null) {
         _classSettings.uuid = lib.mkIf (config.account.uuid != null) config.account.uuid;
         _classSettings.username = lib.mkIf (config.account.username != null) config.account.username;
+      })
+
+      (let
+        prefixMsg = "client instance '${config.name}'";
+      in {
+        _module.check = lib.all (a: a) [
+          (lib.assertMsg
+            (!(config.enableFastAssetDownload && config.enableExternalAssets))
+            "${prefixMsg}: cannot have both .enableFastAssetDownload and .enableExternalAssets enabled at the same time.")
+        ];
       })
     ];
   }

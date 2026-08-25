@@ -60,6 +60,10 @@ in {
         specialArgs = {
           clientDirPrefix = "/var/lib/nixcraft/client/instances";
           serverDirPrefix = "/var/lib/nixcraft/server/instances";
+          clientExternalAssetDirPrefix = "/var/lib/nixcraft/client/assets";
+          clientExternalAssetLookupPaths = [
+            "/var/cache/nixcraft/asset-objects"
+          ];
         };
       };
     };

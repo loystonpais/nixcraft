@@ -109,6 +109,12 @@ in {
             specialArgs = {
               clientDirPrefix = "/(root)/.local/share/nixcraft/client/instances";
               serverDirPrefix = "/(root)/.local/share/nixcraft/server/instances";
+              clientExternalAssetDirPrefix = "/(root)/.local/share/nixcraft/client/assets";
+              clientExternalAssetLookupPaths = [
+                "/(root)/.local/share/PrismLauncher/assets"
+                "/(root)/.minecraft/assets"
+                "/var/cache/nixcraft/asset-objects"
+              ];
               name = "nixcraft";
             };
           };
