@@ -4742,5 +4742,13 @@
   "net.fabricmc:intermediary:26.3-snapshot-10": {
     "url": "https://maven.fabricmc.net",
     "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
+  },
+  "net.fabricmc:fabric-loader:0.19.4": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "e8918f8384f550da82023abc8e805ddf57bdda32472a44fced4b1b050bfdb84b"
+  },
+  "net.fabricmc:sponge-mixin:0.17.4+mixin.0.8.7": {
+    "url": "https://maven.fabricmc.net/",
+    "sha256": "1f0ae44db7295f8626f33b1dc0ad7f043d8954a8d6847247875fcc5dfcecc934"
   }
 }
