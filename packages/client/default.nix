@@ -9,6 +9,27 @@
 }: let
   clientInstanceModule = submodules.clientInstanceModule;
 
+  isImpure = builtins ? currentSystem;
+  homeDir =
+    if isImpure
+    then builtins.getEnv "HOME"
+    else "";
+  hasHome = isImpure && homeDir != "";
+
+  externalAssetDirPrefix =
+    if hasHome
+    then "${homeDir}/.local/share/nixcraft/client/assets"
+    else "/tmp/nixcraft-client-assets";
+
+  externalAssetLookupPaths =
+    if hasHome
+    then [
+      "${homeDir}/.local/share/PrismLauncher/assets"
+      "${homeDir}/.minecraft/assets"
+      "/var/cache/nixcraft/asset-objects"
+    ]
+    else ["/var/cache/nixcraft/asset-objects"];
+
   makeClient = currentCfg: let
     cfgModules = lib.toList currentCfg;
 
@@ -18,7 +39,11 @@
           clientInstanceModule
           {
             version = lib.mkDefault "latest-release";
-            absoluteDir = lib.mkDefault "/tmp/nixcraft-client/${name}";
+            absoluteDir = lib.mkDefault (
+              if hasHome
+              then "${homeDir}/.local/share/nixcraft/client/instances/${name}"
+              else "/tmp/nixcraft-client/${name}"
+            );
             account = lib.mkDefault {};
             binEntry.enable = lib.mkDefault true;
             desktopEntry.enable = lib.mkDefault true;
@@ -28,11 +53,13 @@
       specialArgs = {
         shared = {};
         dirPrefix = null;
-        externalAssetDirPrefix = "/tmp/nixcraft-client-assets";
-        externalAssetLookupPaths = ["/var/cache/nixcraft/asset-objects"];
-        inherit name;
-        inherit pkgs;
-        inherit lib;
+        inherit
+          externalAssetDirPrefix
+          externalAssetLookupPaths
+          name
+          pkgs
+          lib
+          ;
       };
     };
 
