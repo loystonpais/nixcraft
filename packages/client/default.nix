@@ -28,8 +28,8 @@
       specialArgs = {
         shared = {};
         dirPrefix = null;
-        clientExternalAssetDirPrefix = "/tmp/nixcraft-client-assets";
-        clientExternalAssetLookupPaths = ["/var/cache/nixcraft/asset-objects"];
+        externalAssetDirPrefix = "/tmp/nixcraft-client-assets";
+        externalAssetLookupPaths = ["/var/cache/nixcraft/asset-objects"];
         inherit name;
         inherit pkgs;
         inherit lib;
