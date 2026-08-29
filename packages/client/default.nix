@@ -96,10 +96,88 @@
 
       withCachedAssets = withExternalAssets;
 
+      withNixGL = withConfig {
+        enableNixGL = true;
+      };
+
       withVersion = ver:
         withConfig {
           version = ver;
         };
+
+      fsg = withConfig {
+        mrpack = {
+          enable = true;
+          file = pkgs.fetchurl {
+            inherit (sources.modrinth."speedrunpack-1-16-1") url sha512;
+          };
+        };
+
+        files = {
+          "mods/fsg-mod.jar".source = pkgs.fetchurl {
+            inherit (sources.modrinth."fsg-mod-1-16-1") url sha512;
+          };
+        };
+
+        java = {
+          extraArguments = [
+            "-XX:+UseZGC"
+            "-XX:+AlwaysPreTouch"
+            "-Dgraal.TuneInlinerExploration=1"
+            "-XX:NmethodSweepActivity=1"
+          ];
+          package = pkgs.jdk17;
+          maxMemory = 3500;
+          minMemory = 3500;
+        };
+
+        waywall.enable = true;
+
+        binEntry = {
+          name = "fsg";
+        };
+
+        desktopEntry = {
+          name = "Nixcraft FSG";
+          extraConfig = {
+            terminal = true;
+          };
+        };
+      };
+
+      rsg = withConfig {
+        mrpack = {
+          enable = true;
+          file = pkgs.fetchurl {
+            inherit (sources.modrinth."speedrunpack-1-16-1") url sha512;
+          };
+        };
+
+        java = {
+          extraArguments = [
+            "-XX:+UseZGC"
+            "-XX:+AlwaysPreTouch"
+            "-Dgraal.TuneInlinerExploration=1"
+            "-XX:NmethodSweepActivity=1"
+          ];
+          package = pkgs.jdk17;
+          maxMemory = 4000;
+          minMemory = 4000;
+        };
+
+        waywall.enable = true;
+
+        binEntry = {
+          name = "rsg";
+        };
+
+        desktopEntry = {
+          name = "Nixcraft RSG";
+          extraConfig = {
+            terminal = true;
+          };
+        };
+      };
 
       latestRelease = withVersion "latest-release";
       latestSnapshot = withVersion "latest-snapshot";
