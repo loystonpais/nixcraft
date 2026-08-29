@@ -1,0 +1,17 @@
+{
+  "speedrunpack-1-16-1": {
+    "project": "1uJaMUOm",
+    "game_versions": ["1.16.1"],
+    "loaders": ["fabric"]
+  },
+  "fsg-mod-1-16-1": {
+    "project": "XZOGBIpM",
+    "game_versions": ["1.16.1"],
+    "loaders": ["fabric"]
+  },
+  "simply-optimized-1-21-1": {
+    "project": "BYfVnHa7",
+    "game_versions": ["1.21.1"],
+    "loaders": ["fabric"]
+  }
+}

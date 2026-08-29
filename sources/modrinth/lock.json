@@ -1,0 +1,32 @@
+{
+  "speedrunpack-1-16-1": {
+    "project_id": "1uJaMUOm",
+    "version_id": "uklzzlCK",
+    "version_number": "mc1.16.1-v7.4.0",
+    "filename": "SpeedrunPack-mc1.16.1-v7.4.0.mrpack",
+    "url": "https://cdn.modrinth.com/data/1uJaMUOm/versions/uklzzlCK/SpeedrunPack-mc1.16.1-v7.4.0.mrpack",
+    "size": 4101,
+    "sha512": "879a718b826eb0d61ed96ee8d3f949c2201d73eedc9f1074a4267f2961e44a99b987c759f25d0b139575cf2a1396aa9fe1c18d2f670c0ac00e29d961796e1b00",
+    "sha1": "2d386a165f2e9bdaeb9b620a6f17176986109c69"
+  },
+  "fsg-mod-1-16-1": {
+    "project_id": "XZOGBIpM",
+    "version_id": "qc4OUmcd",
+    "version_number": "5.3.0+MC1.16.1",
+    "filename": "FSG-Mod-5.3.0+MC1.16.1.jar",
+    "url": "https://cdn.modrinth.com/data/XZOGBIpM/versions/qc4OUmcd/FSG-Mod-5.3.0%2BMC1.16.1.jar",
+    "size": 99724,
+    "sha512": "93f8d9b30f828938b57737ed6ad0c7ac85d2af709e3f389bf829d986f81e2c50d252f1ea3142e9f3bf5226a597f432e878c75ab9794411d120e986842ceab11b",
+    "sha1": "a38d67e309f58548f63c109110a2c286a701dbca"
+  },
+  "simply-optimized-1-21-1": {
+    "project_id": "BYfVnHa7",
+    "version_id": "12lXTVh0",
+    "version_number": "1.21.1-6.0",
+    "filename": "Simply Optimized-1.21.1-6.0.mrpack",
+    "url": "https://cdn.modrinth.com/data/BYfVnHa7/versions/12lXTVh0/Simply%20Optimized-1.21.1-6.0.mrpack",
+    "size": 6834,
+    "sha512": "9e65787eba3f99e2761513610ba022bab3ffb712fc25cdb7e2ba2f80733f611001f63586de4e6b959b76f551e2dc59e530f7c4e90dac103879a4f6902d952d0d",
+    "sha1": "6324231d83dc36ae040d229ea69ca65e184687c2"
+  }
+}

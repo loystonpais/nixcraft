@@ -32,6 +32,7 @@ jobs:
 
           nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-paper-servers
           nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-modloader-locks
+          nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-modrinth-sources
 
       - name: Commit and push if changed
         run: |

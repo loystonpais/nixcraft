@@ -87,6 +87,13 @@ in {
             libraries = with pkgs.python3Packages; [requests];
           }
           (sources."update-modloader-locks.py");
+
+        update-modrinth-sources =
+          pkgs.writers.writePython3Bin "update-modrinth-sources" {
+            doCheck = false;
+            libraries = with pkgs.python3Packages; [requests];
+          }
+          (builtins.readFile "${self}/sources/modrinth/update.py");
       };
 
       legacyPackages = {
