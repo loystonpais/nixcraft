@@ -232,18 +232,23 @@ in
       shared
 
       {
-        finalLaunchShellCommandString = concatStringsSep " " [
-          ''"${config.java.package}/bin/java"''
-          config.java.finalArgumentShellString
-          config.finalArgumentShellString
+        finalLaunchShellCommandString = let
+          acc = config.account;
+          accessTokenArg =
+            if acc != null && acc.accessTokenBinPath != null
+            then ''"$(${acc.accessTokenBinPath})"''
+            else if acc != null && acc.accessTokenPath != null
+            then ''"$(cat ${escapeShellArg acc.accessTokenPath})"''
+            else "dummy";
+        in
+          concatStringsSep " " [
+            ''"${config.java.package}/bin/java"''
+            config.java.finalArgumentShellString
+            config.finalArgumentShellString
 
-          # unmodded client doesn't launch if access token is not provided
-          "--accessToken $(cat ${
-            if (config.account != null && config.account.accessTokenPath != null)
-            then escapeShellArg config.account.accessTokenPath
-            else pkgs.writeText "dummy" "dummy"
-          })"
-        ];
+            # unmodded client doesn't launch if access token is not provided
+            "--accessToken ${accessTokenArg}"
+          ];
 
         finalLaunchShellScript = let
           defaultScript = ''
