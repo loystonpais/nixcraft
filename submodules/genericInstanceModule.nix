@@ -550,6 +550,9 @@ in
             '')
             files'world;
         in ''
+          (
+          ${pkgs.util-linux}/bin/flock -x 200
+
           mkdir -p ${esc config.absoluteDir}
           mkdir -p ${esc config.absoluteDir}/.nixcraft
 
@@ -585,6 +588,7 @@ in
           cp ${builtins.toFile "entries" (
             lib.concatMapAttrsStringSep "\n" (name: file: "${config.absoluteDir}/${file.target}") files'entries
           )}  ${esc entryFilePath}
+          ) 200< ${escapeShellArg config.absoluteDir}
         '';
       }
 
