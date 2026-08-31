@@ -23,6 +23,7 @@ in
     name,
     config,
     shared ? {},
+    authDirPrefix,
     externalAssetDirPrefix,
     externalAssetLookupPaths ? [],
     ...
@@ -92,7 +93,17 @@ in
       };
 
       account = lib.mkOption {
-        type = with lib.types; nullOr (submodule minecraftAccountModule);
+        type = with lib.types;
+          nullOr (submodule [
+            minecraftAccountModule
+            ({lib, ...}: {
+              options.authDir = lib.mkOption {
+                type = lib.types.str;
+                default = authDirPrefix;
+                description = "Path to nixcraft auth cache directory.";
+              };
+            })
+          ]);
         default = null;
       };
 
@@ -232,25 +243,24 @@ in
       shared
 
       {
-        finalLaunchShellCommandString = let
-          acc = config.account;
-          accessTokenArg =
-            if acc != null && acc.accessTokenBinPath != null
-            then ''"$(${acc.accessTokenBinPath})"''
-            else if acc != null && acc.accessTokenPath != null
-            then ''"$(cat ${escapeShellArg acc.accessTokenPath})"''
-            else "dummy";
-        in
-          concatStringsSep " " [
-            ''"${config.java.package}/bin/java"''
-            config.java.finalArgumentShellString
-            config.finalArgumentShellString
-
-            # unmodded client doesn't launch if access token is not provided
-            "--accessToken ${accessTokenArg}"
-          ];
+        finalLaunchShellCommandString = concatStringsSep " " [
+          ''"${config.java.package}/bin/java"''
+          config.java.finalArgumentShellString
+          config.finalArgumentShellString
+        ];
 
         finalLaunchShellScript = let
+          authPkg = pkgs.callPackage ../packages/client-auth {};
+          acc = config.account;
+
+          authArgsScript = let
+            uuidArg = lib.optionalString (acc.uuid != null) "--uuid ${escapeShellArg acc.uuid}";
+            verifyUsernameArg = lib.optionalString (acc.username != null) "--verify-username ${escapeShellArg acc.username}";
+          in
+            if acc != null && !acc.offline
+            then ''AUTH=$(${lib.getExe authPkg} --auth-dir ${escapeShellArg acc.authDir} auth ${uuidArg} ${verifyUsernameArg} --as-client-args)''
+            else ''AUTH="--accessToken dummy"'';
+
           defaultScript = ''
             #!${pkgs.bash}/bin/bash
 
@@ -262,7 +272,9 @@ in
 
             cd ${escapeShellArg config.absoluteDir}
 
-            exec ${config.finalLaunchShellCommandString} "$@"
+            ${authArgsScript}
+
+            exec ${config.finalLaunchShellCommandString} $AUTH "$@"
           '';
         in
           if config.waywall.enable
@@ -508,8 +520,7 @@ in
           _classSettings.userProperties = lib.mkDefault {};
         })
 
-      (lib.mkIf (config.account
-        != null) {
+      (lib.mkIf (config.account != null && config.account.offline) {
         _classSettings.uuid = lib.mkIf (config.account.uuid != null) config.account.uuid;
         _classSettings.username = lib.mkIf (config.account.username != null) config.account.username;
       })

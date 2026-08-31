@@ -7,6 +7,7 @@
   name,
   config,
   clientDirPrefix,
+  clientAuthDirPrefix,
   serverDirPrefix,
   clientExternalAssetDirPrefix,
   clientExternalAssetLookupPaths,
@@ -20,6 +21,7 @@
         modules = [clientModule];
         specialArgs = {
           dir = clientDirPrefix;
+          authDirPrefix = clientAuthDirPrefix;
           externalAssetDirPrefix = clientExternalAssetDirPrefix;
           externalAssetLookupPaths = clientExternalAssetLookupPaths;
         };

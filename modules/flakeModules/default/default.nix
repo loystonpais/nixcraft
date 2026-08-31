@@ -115,6 +115,7 @@ in {
 
             specialArgs = {
               clientDirPrefix = "/(root)/.local/share/nixcraft/client/instances";
+              clientAuthDirPrefix = "/(root)/.local/share/nixcraft/client/auth";
               serverDirPrefix = "/(root)/.local/share/nixcraft/server/instances";
               clientExternalAssetDirPrefix = "/(root)/.local/share/nixcraft/client/assets";
               clientExternalAssetLookupPaths = [

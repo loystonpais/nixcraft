@@ -50,6 +50,7 @@ in {
         modules = [nixcraftModule];
         specialArgs = {
           clientDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/instances";
+          clientAuthDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/auth";
           serverDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/server/instances";
           clientExternalAssetDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/assets";
           clientExternalAssetLookupPaths = [
@@ -82,6 +83,12 @@ in {
         # Managing client
         {
           home = lib.mkMerge [
+            (lib.mkIf (config.nixcraft.client.auth.uuid != null) {
+              sessionVariables = {
+                NIXCRAFT_CLIENT_AUTH_UUID = config.nixcraft.client.auth.uuid;
+              };
+            })
+
             (perClientInstance (
               instance:
                 lib.mkIf instance.enable (lib.mkMerge [

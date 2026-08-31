@@ -30,6 +30,11 @@
     ]
     else ["/var/cache/nixcraft/asset-objects"];
 
+  authDirPrefix =
+    if hasHome
+    then "${homeDir}/.local/share/nixcraft/client/auth"
+    else "/tmp/nixcraft-client-auth";
+
   makeClient = currentCfg: let
     cfgModules = lib.toList currentCfg;
 
@@ -44,7 +49,7 @@
               then "${homeDir}/.local/share/nixcraft/client/instances/${name}"
               else "/tmp/nixcraft-client/${name}"
             );
-            account = lib.mkDefault {};
+            account = lib.mkDefault {offline = true;};
             binEntry.enable = lib.mkDefault true;
             desktopEntry.enable = lib.mkDefault true;
           }
@@ -54,6 +59,7 @@
         shared = {};
         dirPrefix = null;
         inherit
+          authDirPrefix
           externalAssetDirPrefix
           externalAssetLookupPaths
           name

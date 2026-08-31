@@ -13,6 +13,7 @@
 
     specialArgs = {
       clientDirPrefix = "/tmp/nixcraft-tests/nixcraft/client/instances";
+      clientAuthDirPrefix = "/tmp/nixcraft-tests/nixcraft/client/auth";
       serverDirPrefix = "/tmp/nixcraft-tests/nixcraft/server/instances";
       inherit pkgs;
       inherit lib;
