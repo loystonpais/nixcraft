@@ -1,7 +1,6 @@
 {
   lib,
   clientInstanceModule,
-  minecraftAccountModule,
   ...
 }: {
   config,
@@ -34,11 +33,6 @@
               ;
           };
         });
-    };
-
-    accounts = lib.mkOption {
-      type = with lib.types; attrsOf (submodule minecraftAccountModule);
-      default = {};
     };
 
     shared = lib.mkOption {
