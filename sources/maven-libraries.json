@@ -4758,5 +4758,9 @@
   "net.fabricmc:fabric-loader:0.19.5": {
     "url": "https://maven.fabricmc.net",
     "sha256": "93044e4dd46de5d8136701292f05e868da096d2c9fddb4793e4fdbcc63efc695"
+  },
+  "net.fabricmc:intermediary:26.3-pre-1": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "2e00c527f1cb7ac996a59a92ccb46978d29fb3da04aa3d4b521c9c737ee3cb74"
   }
 }
