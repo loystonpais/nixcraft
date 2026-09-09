@@ -15,7 +15,11 @@
   imports = [genericInstanceModule];
 
   options = {
-    enable = lib.mkEnableOption "server instance";
+    enable =
+      (lib.mkEnableOption "server instance")
+      // {
+        default = true;
+      };
 
     paper = lib.mkOption {
       type = lib.types.submodule paperServerModule;

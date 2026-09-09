@@ -31,7 +31,11 @@ in
     imports = [genericInstanceModule];
 
     options = {
-      enable = lib.mkEnableOption "client instance";
+      enable =
+        (lib.mkEnableOption "client instance")
+        // {
+          default = true;
+        };
 
       waywall = lib.mkOption {
         type = lib.types.submodule waywallModule;
