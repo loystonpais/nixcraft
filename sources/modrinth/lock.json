@@ -1,13 +1,13 @@
 {
   "speedrunpack-1-16-1": {
     "project_id": "1uJaMUOm",
-    "version_id": "uklzzlCK",
-    "version_number": "mc1.16.1-v7.4.0",
-    "filename": "SpeedrunPack-mc1.16.1-v7.4.0.mrpack",
-    "url": "https://cdn.modrinth.com/data/1uJaMUOm/versions/uklzzlCK/SpeedrunPack-mc1.16.1-v7.4.0.mrpack",
-    "size": 4101,
-    "sha512": "879a718b826eb0d61ed96ee8d3f949c2201d73eedc9f1074a4267f2961e44a99b987c759f25d0b139575cf2a1396aa9fe1c18d2f670c0ac00e29d961796e1b00",
-    "sha1": "2d386a165f2e9bdaeb9b620a6f17176986109c69"
+    "version_id": "eNHPC8jW",
+    "version_number": "mc1.16.1-v8.0.0",
+    "filename": "SpeedrunPack-mc1.16.1-v8.0.0.mrpack",
+    "url": "https://cdn.modrinth.com/data/1uJaMUOm/versions/eNHPC8jW/SpeedrunPack-mc1.16.1-v8.0.0.mrpack",
+    "size": 4239,
+    "sha512": "a442fe0b1f0b0c512198cefa0d2bcf30110e9b9254afc69e6e31e3c7c315c5a46d9aa52b9be0e5ae1be972aca3b853911c421519aa4a36056ae2ed49a57bc125",
+    "sha1": "5294370a3969e14b94d31efb3228237fdeb9f34c"
   },
   "fsg-mod-1-16-1": {
     "project_id": "XZOGBIpM",
