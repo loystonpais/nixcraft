@@ -24,8 +24,8 @@ in
     config,
     shared ? {},
     authDirPrefix,
-    externalAssetDirPrefix,
-    externalAssetLookupPaths ? [],
+    externalAssetsDirPrefix,
+    externalAssetsLookupPaths ? [],
     ...
   }: {
     imports = [genericInstanceModule];
@@ -65,13 +65,13 @@ in
 
       enableExternalAssets = lib.mkEnableOption "external asset management via fetchAssets script";
 
-      externalAssetDir = lib.mkOption {
+      externalAssetsDir = lib.mkOption {
         type = lib.types.nullOr (lib.types.pathWith {absolute = true;});
-        default = externalAssetDirPrefix;
+        default = externalAssetsDirPrefix;
         description = "Path to external assets directory";
       };
 
-      externalAssetExtraLookupPaths = lib.mkOption {
+      externalAssetsExtraLookupPaths = lib.mkOption {
         type = with lib.types; listOf (oneOf [str path]);
         default = [];
         description = "Extra paths to read/lookup cached assets from when fetching external assets.";
@@ -137,7 +137,10 @@ in
             concatLists [
               ["--version" config._classSettings.version]
               ["--assetsDir" "${config._classSettings.assetsDir}"]
-              ["--assetIndex" config._classSettings.assetIndex]
+              (optionals (config.meta.versionData.assets != "legacy") [
+                "--assetIndex"
+                config._classSettings.assetIndex
+              ])
 
               (
                 let
@@ -344,23 +347,13 @@ in
         _classSettings = {
           version = lib.mkOptionDefault config.meta.versionData.id;
           assetIndex = config.meta.versionData.assets;
-          assetsDir = lib.mkDefault (
-            if config.enableExternalAssets
-            then
-              (pkgs.runCommandLocal "external-assets-dir" {} ''
-                mkdir -p $out/indexes
-                ln -s ${fetchSha1 config.meta.versionData.assetIndex} $out/indexes/${config.meta.versionData.assets}.json
-                ln -s ${lib.escapeShellArg config.externalAssetDir}/objects $out/objects
-              '')
-            else if config.enableFastAssetDownload
-            then
-              (mkAssetsDir {
-                versionData = config.meta.versionData;
-                hash = config.assetHash;
-                useFetchAssetsPy = config.enableFastAssetDownload;
-              })
-            else mkAssetsDir {versionData = config.meta.versionData;}
-          );
+          assetsDir = lib.mkDefault (mkAssetsDir {
+            versionData = config.meta.versionData;
+            hash = config.assetHash;
+            useFetchAssetsPy = config.enableFastAssetDownload;
+            useExternalAssetsDir = config.enableExternalAssets;
+            externalAssetsDir = config.externalAssetsDir;
+          });
 
           gameDir = lib.mkDefault config.absoluteDir;
         };
@@ -447,14 +440,13 @@ in
         preLaunchShellScript = let
           indexFile = fetchSha1 config.meta.versionData.assetIndex;
           allLookupDirs =
-            config.externalAssetExtraLookupPaths ++ externalAssetLookupPaths;
+            config.externalAssetsExtraLookupPaths ++ externalAssetsLookupPaths;
           dirsArg = lib.concatMapStringsSep " " lib.escapeShellArg allLookupDirs;
         in ''
-          mkdir -p ${lib.escapeShellArg config.externalAssetDir}
+          mkdir -p ${lib.escapeShellArg config.externalAssetsDir}
           ${pkgs.python3}/bin/python3 ${../scripts/client-fetch-assets.py} \
             --index ${indexFile} \
-            --asset-type "${config.meta.versionData.assets}" \
-            --out-dir ${lib.escapeShellArg config.externalAssetDir} \
+            --out-dir ${lib.escapeShellArg config.externalAssetsDir} \
             --read-cache-dirs ${dirsArg}
         '';
       })

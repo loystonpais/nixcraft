@@ -7,6 +7,8 @@
   lib,
   ...
 }: {
+  useExternalAssetsDir ? false,
+  externalAssetsDir ? null,
   useFetchAssetsPy ? false,
   hash ? lib.fakeHash,
   versionData,
@@ -16,44 +18,67 @@
   runCommandLocal ? pkgs.runCommandLocal,
   fetchAssetsPyArgs ? {},
 }: let
-  inherit (builtins) attrValues mapAttrs toFile toJSON;
-  inherit (lib) concatMapStringsSep;
+  inherit (builtins) attrValues mapAttrs;
+  inherit (lib) concatMapStringsSep escapeShellArg;
   inherit (lib.nixcraft.manifest) mkAssetHashPath;
 
-  defaultDownload = let
-    # [ { src = ...; path = ...; } ...  ]
-    assetsWithPath = attrValues (mapAttrs (name: asset: {
-        src = fetchAssetFromHash {sha1 = asset.hash;};
-        path =
-          if assetType == "legacy"
-          then "virtual/legacy/${name}"
-          else "objects/${mkAssetHashPath asset.hash}";
-      })
-      objects);
+  isLegacy = assetType == "legacy";
 
-    placeAssets =
-      concatMapStringsSep "\n" (asset: ''
-        mkdir -p $out/${dirOf asset.path}
-        ln -sf ${asset.src} $out/${asset.path}
-      '')
-      assetsWithPath;
+  objectsDownloadMethods = {
+    default = let
+      assetsWithPath = attrValues (mapAttrs (name: asset: {
+          src = fetchAssetFromHash {sha1 = asset.hash;};
+          path = "objects/${mkAssetHashPath asset.hash}";
+        })
+        objects);
 
-    placeAssetIndex = ''
-      mkdir -p $out/indexes
-      ln -s ${fetchSha1 versionData.assetIndex} $out/indexes/${assetType}.json
-    '';
-  in
-    runCommandLocal "minecraft-asset-dir" {} ''
-      ${placeAssets}
-      ${placeAssetIndex}
-    '';
+      placeAssets =
+        concatMapStringsSep "\n" (asset: ''
+          mkdir -p "$out/${dirOf asset.path}"
+          ln -sf ${asset.src} "$out/${asset.path}"
+        '')
+        assetsWithPath;
+    in
+      runCommandLocal "minecraft-asset-objects" {} ''
+        ${placeAssets}
+      '';
 
-  fetchAssetsPyDownload = fetchAssetsPy ({
-    name = "minecraft-asset-dir-py";
-    indexFile = fetchSha1 versionData.assetIndex;
-    inherit hash assetType;
-  } // fetchAssetsPyArgs);
+    viaFetchAssetsPy = fetchAssetsPy ({
+        name = "minecraft-asset-objects-py";
+        indexFile = fetchSha1 versionData.assetIndex;
+        inherit hash;
+      }
+      // fetchAssetsPyArgs);
+  };
+
+  objectsDrv =
+    if useFetchAssetsPy
+    then objectsDownloadMethods.viaFetchAssetsPy
+    else objectsDownloadMethods.default;
+
+  finalObjectsPath =
+    if useExternalAssetsDir
+    then "${externalAssetsDir}/objects"
+    else "${objectsDrv}/objects";
+
+  assetsDir = runCommandLocal "minecraft-assets-dir" {} ''
+    mkdir -p $out/indexes
+    ln -s ${fetchSha1 versionData.assetIndex} $out/indexes/${assetType}.json
+    ln -s ${escapeShellArg finalObjectsPath} $out/objects
+  '';
+
+  legacyAssetsDir = runCommandLocal "minecraft-legacy-assets-dir" {} ''
+    mkdir -p $out
+
+    ${concatMapStringsSep "\n" (name: let
+      asset = objects.${name};
+      path = mkAssetHashPath asset.hash;
+    in ''
+      mkdir -p "$out/${dirOf name}"
+      ln -s ${escapeShellArg "${finalObjectsPath}/${path}"} "$out/${name}"
+    '') (builtins.attrNames objects)}
+  '';
 in
-  if useFetchAssetsPy
-  then fetchAssetsPyDownload
-  else defaultDownload
+  if isLegacy
+  then legacyAssetsDir
+  else assetsDir

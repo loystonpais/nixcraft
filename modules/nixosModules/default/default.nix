@@ -62,8 +62,8 @@ in {
           clientDirPrefix = "/var/lib/nixcraft/client/instances";
           clientAuthDirPrefix = "/var/lib/nixcraft/client/auth";
           serverDirPrefix = "/var/lib/nixcraft/server/instances";
-          clientExternalAssetDirPrefix = "/var/lib/nixcraft/client/assets";
-          clientExternalAssetLookupPaths = [
+          clientExternalAssetsDirPrefix = "/var/lib/nixcraft/client/assets";
+          clientExternalAssetsLookupPaths = [
             "/var/cache/nixcraft/asset-objects"
           ];
         };

@@ -53,8 +53,8 @@ in {
           clientDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/instances";
           clientAuthDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/auth";
           serverDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/server/instances";
-          clientExternalAssetDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/assets";
-          clientExternalAssetLookupPaths = [
+          clientExternalAssetsDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/assets";
+          clientExternalAssetsLookupPaths = [
             "${config.home.homeDirectory}/.local/share/PrismLauncher/assets"
             "${config.home.homeDirectory}/.minecraft/assets"
             "/var/cache/nixcraft/asset-objects"

@@ -6,8 +6,8 @@
   config,
   dir,
   authDirPrefix,
-  externalAssetDirPrefix,
-  externalAssetLookupPaths,
+  externalAssetsDirPrefix,
+  externalAssetsLookupPaths,
   ...
 }: {
   options = {
@@ -28,8 +28,8 @@
             dirPrefix = "${config.dir}";
             inherit
               authDirPrefix
-              externalAssetDirPrefix
-              externalAssetLookupPaths
+              externalAssetsDirPrefix
+              externalAssetsLookupPaths
               ;
           };
         });

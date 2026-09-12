@@ -271,7 +271,6 @@ def download_asset(
 def process_asset(
     name: str,
     meta: Dict,
-    asset_type: str,
     out_dir: Path,
     read_cache_dirs: List[Path],
     write_cache_dir: Optional[Path],
@@ -284,11 +283,7 @@ def process_asset(
     size = meta.get("size")
     prefix = sha1[:2]
     prefix_sha1_path = f"{prefix}/{sha1}"
-
-    if asset_type == "legacy":
-        dest_path = out_dir / "virtual" / "legacy" / name
-    else:
-        dest_path = out_dir / "objects" / prefix / sha1
+    dest_path = out_dir / "objects" / prefix / sha1
 
     # 0. Check if destination file already exists and matches expected size
     if dest_path.is_file():
@@ -364,12 +359,6 @@ def main() -> None:
         type=Path,
         required=True,
         help="Path to the assetIndex.json file",
-    )
-    parser.add_argument(
-        "--asset-type",
-        type=str,
-        default="objects",
-        help="Asset type (e.g. 'legacy', '1.21', or name for index placement)",
     )
     parser.add_argument(
         "--out-dir",
@@ -454,7 +443,7 @@ def main() -> None:
             )
 
     print(
-        f"Processing {total_assets} assets for '{args.asset_type}' using up to {args.threads} threads..."
+        f"Processing {total_assets} assets using up to {args.threads} threads..."
     )
 
     parsed_base = urllib.parse.urlparse(args.base_url)
@@ -485,7 +474,6 @@ def main() -> None:
                 process_asset,
                 name=name,
                 meta=meta,
-                asset_type=args.asset_type,
                 out_dir=args.out_dir,
                 read_cache_dirs=valid_read_cache_dirs,
                 write_cache_dir=valid_write_cache_dir,

@@ -16,12 +16,12 @@
     else "";
   hasHome = isImpure && homeDir != "";
 
-  externalAssetDirPrefix =
+  externalAssetsDirPrefix =
     if hasHome
     then "${homeDir}/.local/share/nixcraft/client/assets"
     else "/tmp/nixcraft-client-assets";
 
-  externalAssetLookupPaths =
+  externalAssetsLookupPaths =
     if hasHome
     then [
       "${homeDir}/.local/share/PrismLauncher/assets"
@@ -60,8 +60,8 @@
         dirPrefix = null;
         inherit
           authDirPrefix
-          externalAssetDirPrefix
-          externalAssetLookupPaths
+          externalAssetsDirPrefix
+          externalAssetsLookupPaths
           name
           pkgs
           lib

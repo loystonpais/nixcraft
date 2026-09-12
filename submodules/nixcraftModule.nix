@@ -9,8 +9,8 @@
   clientDirPrefix,
   clientAuthDirPrefix,
   serverDirPrefix,
-  clientExternalAssetDirPrefix,
-  clientExternalAssetLookupPaths,
+  clientExternalAssetsDirPrefix,
+  clientExternalAssetsLookupPaths,
   ...
 }: {
   options = {
@@ -22,8 +22,8 @@
         specialArgs = {
           dir = clientDirPrefix;
           authDirPrefix = clientAuthDirPrefix;
-          externalAssetDirPrefix = clientExternalAssetDirPrefix;
-          externalAssetLookupPaths = clientExternalAssetLookupPaths;
+          externalAssetsDirPrefix = clientExternalAssetsDirPrefix;
+          externalAssetsLookupPaths = clientExternalAssetsLookupPaths;
         };
       };
     };
