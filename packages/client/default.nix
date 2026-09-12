@@ -106,6 +106,16 @@
         enableNixGL = true;
       };
 
+      withRenice = withConfig {
+        renice.enable = true;
+      };
+
+      online = withConfig {
+        account = {
+          offline = false;
+        };
+      };
+
       withVersion = ver:
         withConfig {
           version = ver;
