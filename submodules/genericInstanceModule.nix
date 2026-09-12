@@ -190,6 +190,18 @@ in
           default = -20;
           description = "Niceness priority value (between -20 and 19). Lower values mean higher priority.";
         };
+        wrappedBinPath = lib.mkOption {
+          type = lib.types.path;
+          default = "/run/wrappers/bin/nixcraft-renice";
+        };
+        sudoLookupPaths = lib.mkOption {
+          type = with lib.types; listOf path;
+          default = [
+            "/run/wrappers/bin/sudo"
+            "/usr/bin/sudo"
+            "/bin/sudo"
+          ];
+        };
       };
 
       fixBugs =
@@ -458,7 +470,16 @@ in
 
       (lib.mkIf (config.renice.enable) {
         preLaunchShellScript = lib.mkBefore ''
-          /run/wrappers/bin/nixcraft-renice --priority ${toString config.renice.priority} -p $$
+          if [ -x ${escapeShellArg config.renice.wrappedBinPath} ]; then
+            ${escapeShellArg config.renice.wrappedBinPath} --priority ${toString config.renice.priority} -p $$
+          else
+            for sudoPath in ${lib.concatMapStringsSep " " escapeShellArg config.renice.sudoLookupPaths}; do
+              if [ -x "$sudoPath" ]; then
+                "$sudoPath" ${pkgs.util-linux}/bin/renice --priority ${toString config.renice.priority} -p $$
+                break
+              fi
+            done
+          fi
         '';
       })
 
