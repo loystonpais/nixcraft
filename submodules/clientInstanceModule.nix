@@ -451,7 +451,7 @@ in
           dirsArg = lib.concatMapStringsSep " " lib.escapeShellArg allLookupDirs;
         in ''
           mkdir -p ${lib.escapeShellArg config.externalAssetDir}
-          ${pkgs.python3}/bin/python3 ${../scripts/fetchAssets.py} \
+          ${pkgs.python3}/bin/python3 ${../scripts/client-fetch-assets.py} \
             --index ${indexFile} \
             --asset-type "${config.meta.versionData.assets}" \
             --out-dir ${lib.escapeShellArg config.externalAssetDir} \

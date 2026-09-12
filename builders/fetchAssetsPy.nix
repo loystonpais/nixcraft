@@ -24,7 +24,7 @@ pkgs.runCommand name {
   mkdir -p "$out/indexes"
   ln -s ${indexFile} "$out/indexes/${assetType}.json"
 
-  python3 ${../scripts/fetchAssets.py} \
+  python3 ${../scripts/client-fetch-assets.py} \
     --index ${indexFile} \
     --asset-type "${assetType}" \
     --out-dir "$out" \
