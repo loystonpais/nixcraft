@@ -12,12 +12,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -45,29 +51,11 @@ submodule
 
 
 
-## client\.accounts
+## client\.auth\.uuid
 
 
 
-This option has no description\.
-
-
-
-*Type:*
-attribute set of (submodule)
-
-
-
-*Default:*
-` { } `
-
-
-
-## client\.accounts\.\<name>\.accessTokenPath
-
-
-
-This option has no description\.
+Default player UUID for client authentication\.
 
 
 
@@ -77,61 +65,10 @@ null or non-empty string
 
 
 *Default:*
-` null `
 
-
-
-## client\.accounts\.\<name>\.offline
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-
-
-## client\.accounts\.\<name>\.username
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-non-empty string
-
-
-
-*Default:*
-` "‹name›" `
-
-
-
-## client\.accounts\.\<name>\.uuid
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-null or non-empty string
-
-
-
-*Default:*
-` null `
+```nix
+null
+```
 
 
 
@@ -149,7 +86,10 @@ absolute path
 
 
 *Default:*
-` "/(root)/.local/share/nixcraft/client/instances" `
+
+```nix
+"/(root)/.local/share/nixcraft/client/instances"
+```
 
 
 
@@ -180,12 +120,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -203,12 +149,76 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.enableExternalAssets
+
+
+
+Whether to enable external asset management via fetchAssets script\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.enableNixGL
+
+
+
+Whether to enable nixGL\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
 
 
 
@@ -226,12 +236,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -288,7 +304,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
@@ -306,7 +325,10 @@ null or non-empty string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -324,7 +346,10 @@ null or (positive integer, meaning >0)
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -342,7 +367,10 @@ null or (attribute set)
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -360,7 +388,10 @@ null or non-empty string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -378,7 +409,10 @@ null or non-empty string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -409,7 +443,10 @@ null or (positive integer, meaning >0)
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -427,7 +464,10 @@ absolute path
 
 
 *Default:*
-` "/(root)/.local/share/nixcraft/client/instances/‹name›" `
+
+```nix
+"/(root)/.local/share/nixcraft/client/instances/‹name›"
+```
 
 
 
@@ -445,25 +485,31 @@ null or (submodule)
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
-## client\.instances\.\<name>\.account\.accessTokenPath
+## client\.instances\.\<name>\.account\.authDir
 
 
 
-This option has no description\.
+Path to nixcraft auth cache directory\.
 
 
 
 *Type:*
-null or non-empty string
+string
 
 
 
 *Default:*
-` null `
+
+```nix
+"/(root)/.local/share/nixcraft/client/auth"
+```
 
 
 
@@ -471,7 +517,7 @@ null or non-empty string
 
 
 
-This option has no description\.
+Whether this account is offline (unauthenticated)\.
 
 
 
@@ -481,7 +527,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
@@ -489,25 +538,7 @@ boolean
 
 
 
-This option has no description\.
-
-
-
-*Type:*
-non-empty string
-
-
-
-*Default:*
-` "‹name›" `
-
-
-
-## client\.instances\.\<name>\.account\.uuid
-
-
-
-This option has no description\.
+Player username\. For online accounts, used to verify against authenticated profile\.
 
 
 
@@ -517,7 +548,31 @@ null or non-empty string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.account\.uuid
+
+
+
+Player UUID\.
+
+
+
+*Type:*
+null or non-empty string
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -535,7 +590,10 @@ strings concatenated with “\\n”
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 
 
@@ -566,12 +624,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -589,7 +653,10 @@ package *(read only)*
 
 
 *Default:*
-` <derivation nixcraft-client--name-> `
+
+```nix
+<derivation nixcraft-client--name->
+```
 
 
 
@@ -621,7 +688,7 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   enable = false;
 }
@@ -643,12 +710,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -666,7 +739,10 @@ attribute set
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
@@ -684,7 +760,10 @@ non-empty string
 
 
 *Default:*
-` "Nixcraft Instance ‹name›" `
+
+```nix
+"Nixcraft Instance ‹name›"
+```
 
 
 
@@ -702,16 +781,61 @@ attribute set of (null or (list of (signed integer or string or absolute path)) 
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
 *Example:*
 
-```
+```nix
 {
   FOO = "BAR";
 }
+```
+
+
+
+## client\.instances\.\<name>\.externalAssetDir
+
+
+
+Path to external assets directory
+
+
+
+*Type:*
+null or absolute path
+
+
+
+*Default:*
+
+```nix
+"/(root)/.local/share/nixcraft/client/assets"
+```
+
+
+
+## client\.instances\.\<name>\.externalAssetExtraLookupPaths
+
+
+
+Extra paths to read/lookup cached assets from when fetching external assets\.
+
+
+
+*Type:*
+list of (string or absolute path)
+
+
+
+*Default:*
+
+```nix
+[ ]
 ```
 
 
@@ -730,7 +854,10 @@ list of non-empty string
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -749,13 +876,13 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   _instanceType = "client";
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -777,12 +904,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -800,7 +933,10 @@ package *(read only)*
 
 
 *Default:*
-` "package" `
+
+```nix
+"package"
+```
 
 
 
@@ -814,6 +950,14 @@ This option has no description\.
 
 *Type:*
 list of absolute path *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
 
 
 
@@ -844,7 +988,10 @@ attribute set *(read only)*
 
 
 *Default:*
-` "meta" `
+
+```nix
+"meta"
+```
 
 
 
@@ -888,7 +1035,10 @@ attribute set of (submodule)
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
@@ -906,12 +1056,18 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -929,7 +1085,10 @@ unspecified value *(read only)*
 
 
 *Default:*
-` "." `
+
+```nix
+"."
+```
 
 
 
@@ -947,7 +1106,10 @@ attribute set
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
@@ -965,7 +1127,10 @@ unspecified value *(read only)*
 
 
 *Default:*
-` "‹name›" `
+
+```nix
+"‹name›"
+```
 
 
 
@@ -996,7 +1161,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
@@ -1007,17 +1175,21 @@ boolean
 Method to place the file in target location
 copy-init     - copy once during init (suitable for config files from modpacks)
 copy          - copy every rebuild
-symlink - symlink every rebuild
+symlink       - symlink every rebuild
+world         - recursive copy directory only if it doesn’t exist already (used internally for world/saves)
 
 
 
 *Type:*
-one of “copy”, “copy-init”, “symlink”
+one of “copy”, “copy-init”, “symlink”, “world”
 
 
 
 *Default:*
-` "symlink" `
+
+```nix
+"symlink"
+```
 
 
 
@@ -1035,7 +1207,10 @@ null or absolute path
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -1048,12 +1223,15 @@ This option has no description\.
 
 
 *Type:*
-relative path
+relative path *(read only)*
 
 
 
 *Default:*
-` "‹name›" `
+
+```nix
+"‹name›"
+```
 
 
 
@@ -1071,7 +1249,10 @@ null or string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -1091,7 +1272,10 @@ null or one of “json”, “toml”, “yaml”, “ini”, “txt-list”, �
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -1135,7 +1319,10 @@ non-empty string *(read only)*
 
 
 *Default:*
-` "--version 1.21.10 --assetsDir /nix/store/90016v5nsqq5mk93jj7naxiyng1x8gxn-minecraft-asset-dir --assetIndex 27 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'" `
+
+```nix
+"--version 26.2 --assetsDir /nix/store/cc8whj1ggbwlr9wpgf4xzhlf1132p7pq-minecraft-asset-dir --assetIndex 32 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
+```
 
 
 
@@ -1206,13 +1393,13 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   _instanceType = "client";
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -1234,12 +1421,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -1257,7 +1450,10 @@ non-empty string
 
 
 *Default:*
-` "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" `
+
+```nix
+"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+```
 
 
 
@@ -1288,7 +1484,10 @@ attribute set *(read only)*
 
 
 *Default:*
-` "parsedForgeLoader" `
+
+```nix
+"parsedForgeLoader"
+```
 
 
 
@@ -1331,6 +1530,27 @@ package
 
 
 
+## client\.instances\.\<name>\.java\.D
+
+
+
+Java system properties (-D flags) to pass to the JVM\.
+
+
+
+*Type:*
+attribute set of (string or absolute path or package or signed integer or boolean or floating point number)
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
 ## client\.instances\.\<name>\.java\.cp
 
 
@@ -1345,7 +1565,10 @@ list of absolute path
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -1363,7 +1586,10 @@ list of non-empty string
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -1381,7 +1607,10 @@ non-empty string *(read only)*
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 
 
@@ -1399,7 +1628,10 @@ list of string *(read only)*
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -1417,7 +1649,10 @@ null or absolute path
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -1435,7 +1670,10 @@ null or non-empty string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -1453,7 +1691,10 @@ null or (Java memory size (in MBs))
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -1471,7 +1712,10 @@ null or (Java memory size (in MBs))
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -1489,7 +1733,39 @@ null or (Java memory size (in MBs))
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.jemalloc\.enable
+
+
+
+Whether to enable jemalloc\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
 
 
 
@@ -1507,7 +1783,10 @@ list of (attribute set)
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -1538,7 +1817,10 @@ attribute set *(read only)*
 
 
 *Default:*
-` "versionData" `
+
+```nix
+"versionData"
+```
 
 
 
@@ -1557,12 +1839,12 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -1584,12 +1866,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -1607,12 +1895,18 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -1629,6 +1923,14 @@ attribute set
 
 
 
+*Default:*
+
+```nix
+{ }
+```
+
+
+
 ## client\.instances\.\<name>\.mrpack\.fabricLoaderVersion
 
 
@@ -1639,6 +1941,14 @@ This option has no description\.
 
 *Type:*
 null or non-empty string
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -1668,29 +1978,6 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-## client\.instances\.\<name>\.mrpack\.mutableOverrides
-
-
-
-Whether to enable mutable overrides\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` true `
-
-
-
-*Example:*
-` true `
-
-
-
 ## client\.instances\.\<name>\.mrpack\.placeOverrides
 
 
@@ -1705,12 +1992,18 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -1724,6 +2017,14 @@ This option has no description\.
 
 *Type:*
 null or non-empty string
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -1741,12 +2042,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -1764,13 +2071,14 @@ strings concatenated with “\\n”
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 
 
 ## client\.instances\.\<name>\.quiltLoader
-
-
 
 This option has no description\.
 
@@ -1783,13 +2091,13 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   _instanceType = "client";
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -1811,16 +2119,24 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
 ## client\.instances\.\<name>\.quiltLoader\.classes
+
+
 
 This option has no description\.
 
@@ -1828,6 +2144,14 @@ This option has no description\.
 
 *Type:*
 list of absolute path *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
 
 
 
@@ -1858,7 +2182,10 @@ attribute set *(read only)*
 
 
 *Default:*
-` "meta" `
+
+```nix
+"meta"
+```
 
 
 
@@ -1888,6 +2215,56 @@ non-empty string
 
 
 
+## client\.instances\.\<name>\.renice\.enable
+
+
+
+Whether to enable renicing the instance process before launch\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.renice\.priority
+
+
+
+Niceness priority value (between -20 and 19)\. Lower values mean higher priority\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+-20
+```
+
+
+
 ## client\.instances\.\<name>\.runtimeLibs
 
 
@@ -1902,7 +2279,10 @@ list of absolute path
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -1920,7 +2300,10 @@ list of absolute path
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -1941,7 +2324,10 @@ attribute set of absolute path
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
@@ -1959,12 +2345,18 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -1982,7 +2374,10 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 *Default:*
-` "latest-release" `
+
+```nix
+"latest-release"
+```
 
 
 
@@ -2013,12 +2408,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -2050,13 +2451,16 @@ null or absolute path
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
 *Example:*
 
-```
+```nix
 ''
   pkgs.linkFarm {
     "init.lua" = builtins.toFile "init.lua" "<content>";
@@ -2080,7 +2484,10 @@ null or non-empty string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -2098,12 +2505,18 @@ null or non-empty string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
 *Example:*
-` "foo" `
+
+```nix
+"foo"
+```
 
 
 
@@ -2121,7 +2534,10 @@ attribute set
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
@@ -2165,7 +2581,10 @@ absolute path
 
 
 *Default:*
-` "/(root)/.local/share/nixcraft/server/instances" `
+
+```nix
+"/(root)/.local/share/nixcraft/server/instances"
+```
 
 
 
@@ -2196,12 +2615,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -2219,7 +2644,10 @@ absolute path
 
 
 *Default:*
-` "/(root)/.local/share/nixcraft/server/instances/‹name›" `
+
+```nix
+"/(root)/.local/share/nixcraft/server/instances/‹name›"
+```
 
 
 
@@ -2237,7 +2665,10 @@ strings concatenated with “\\n”
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 
 
@@ -2255,12 +2686,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -2291,12 +2728,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -2314,7 +2757,10 @@ package *(read only)*
 
 
 *Default:*
-` <derivation nixcraft-server--name-> `
+
+```nix
+<derivation nixcraft-server--name->
+```
 
 
 
@@ -2345,13 +2791,16 @@ attribute set of (null or (list of (signed integer or string or absolute path)) 
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
 *Example:*
 
-```
+```nix
 {
   FOO = "BAR";
 }
@@ -2373,7 +2822,10 @@ list of non-empty string
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -2392,13 +2844,13 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   _instanceType = "server";
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -2420,12 +2872,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -2443,7 +2901,10 @@ package *(read only)*
 
 
 *Default:*
-` "package" `
+
+```nix
+"package"
+```
 
 
 
@@ -2457,6 +2918,14 @@ This option has no description\.
 
 *Type:*
 list of absolute path *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
 
 
 
@@ -2487,7 +2956,10 @@ attribute set *(read only)*
 
 
 *Default:*
-` "meta" `
+
+```nix
+"meta"
+```
 
 
 
@@ -2531,7 +3003,10 @@ attribute set of (submodule)
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
@@ -2549,12 +3024,18 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -2572,7 +3053,10 @@ unspecified value *(read only)*
 
 
 *Default:*
-` "." `
+
+```nix
+"."
+```
 
 
 
@@ -2590,7 +3074,10 @@ attribute set
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
@@ -2608,7 +3095,10 @@ unspecified value *(read only)*
 
 
 *Default:*
-` "‹name›" `
+
+```nix
+"‹name›"
+```
 
 
 
@@ -2639,7 +3129,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
@@ -2650,17 +3143,21 @@ boolean
 Method to place the file in target location
 copy-init     - copy once during init (suitable for config files from modpacks)
 copy          - copy every rebuild
-symlink - symlink every rebuild
+symlink       - symlink every rebuild
+world         - recursive copy directory only if it doesn’t exist already (used internally for world/saves)
 
 
 
 *Type:*
-one of “copy”, “copy-init”, “symlink”
+one of “copy”, “copy-init”, “symlink”, “world”
 
 
 
 *Default:*
-` "symlink" `
+
+```nix
+"symlink"
+```
 
 
 
@@ -2678,7 +3175,10 @@ null or absolute path
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -2691,12 +3191,15 @@ This option has no description\.
 
 
 *Type:*
-relative path
+relative path *(read only)*
 
 
 
 *Default:*
-` "‹name›" `
+
+```nix
+"‹name›"
+```
 
 
 
@@ -2714,7 +3217,10 @@ null or string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -2734,7 +3240,10 @@ null or one of “json”, “toml”, “yaml”, “ini”, “txt-list”, �
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -2778,7 +3287,10 @@ string *(read only)*
 
 
 *Default:*
-` "nogui" `
+
+```nix
+"nogui"
+```
 
 
 
@@ -2849,13 +3361,13 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   _instanceType = "server";
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -2877,12 +3389,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -2900,7 +3418,10 @@ non-empty string
 
 
 *Default:*
-` "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" `
+
+```nix
+"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+```
 
 
 
@@ -2931,7 +3452,10 @@ attribute set *(read only)*
 
 
 *Default:*
-` "parsedForgeLoader" `
+
+```nix
+"parsedForgeLoader"
+```
 
 
 
@@ -2974,6 +3498,27 @@ package
 
 
 
+## server\.instances\.\<name>\.java\.D
+
+
+
+Java system properties (-D flags) to pass to the JVM\.
+
+
+
+*Type:*
+attribute set of (string or absolute path or package or signed integer or boolean or floating point number)
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
 ## server\.instances\.\<name>\.java\.cp
 
 
@@ -2988,7 +3533,10 @@ list of absolute path
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -3006,7 +3554,10 @@ list of non-empty string
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -3024,7 +3575,10 @@ non-empty string *(read only)*
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 
 
@@ -3042,7 +3596,10 @@ list of string *(read only)*
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -3060,7 +3617,10 @@ null or absolute path
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -3078,7 +3638,10 @@ null or non-empty string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -3096,7 +3659,10 @@ null or (Java memory size (in MBs))
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -3114,7 +3680,10 @@ null or (Java memory size (in MBs))
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -3132,7 +3701,39 @@ null or (Java memory size (in MBs))
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
+
+
+
+## server\.instances\.\<name>\.jemalloc\.enable
+
+
+
+Whether to enable jemalloc\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
 
 
 
@@ -3163,12 +3764,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -3186,7 +3793,10 @@ package
 
 
 *Default:*
-` <derivation lazymc-0.2.11> `
+
+```nix
+<derivation lazymc-0.2.11>
+```
 
 
 
@@ -3204,7 +3814,10 @@ attribute set
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 
 
@@ -3222,7 +3835,10 @@ list of (attribute set)
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -3253,7 +3869,10 @@ attribute set *(read only)*
 
 
 *Default:*
-` "versionData" `
+
+```nix
+"versionData"
+```
 
 
 
@@ -3272,12 +3891,12 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -3299,12 +3918,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -3322,12 +3947,18 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -3344,6 +3975,14 @@ attribute set
 
 
 
+*Default:*
+
+```nix
+{ }
+```
+
+
+
 ## server\.instances\.\<name>\.mrpack\.fabricLoaderVersion
 
 
@@ -3354,6 +3993,14 @@ This option has no description\.
 
 *Type:*
 null or non-empty string
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -3383,29 +4030,6 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-## server\.instances\.\<name>\.mrpack\.mutableOverrides
-
-
-
-Whether to enable mutable overrides\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` true `
-
-
-
-*Example:*
-` true `
-
-
-
 ## server\.instances\.\<name>\.mrpack\.placeOverrides
 
 
@@ -3420,12 +4044,18 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -3439,6 +4069,14 @@ This option has no description\.
 
 *Type:*
 null or non-empty string
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -3456,12 +4094,18 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -3480,7 +4124,7 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   enable = false;
 }
@@ -3502,18 +4146,22 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
 ## server\.instances\.\<name>\.paper\._mainClass
-
-
 
 This option has no description\.
 
@@ -3525,7 +4173,10 @@ non-empty string *(read only)*
 
 
 *Default:*
-` "<inferred>" `
+
+```nix
+"<inferred>"
+```
 
 
 
@@ -3543,7 +4194,10 @@ package *(read only)*
 
 
 *Default:*
-` "serverJar" `
+
+```nix
+"serverJar"
+```
 
 
 
@@ -3561,11 +4215,16 @@ non-empty string
 
 
 *Default:*
-` "<inferred>" `
+
+```nix
+"<inferred>"
+```
 
 
 
 ## server\.instances\.\<name>\.paper\.meta
+
+
 
 This option has no description\.
 
@@ -3577,7 +4236,10 @@ attribute set *(read only)*
 
 
 *Default:*
-` "meta" `
+
+```nix
+"meta"
+```
 
 
 
@@ -3595,7 +4257,10 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 *Default:*
-` "<inferred>" `
+
+```nix
+"<inferred>"
+```
 
 
 
@@ -3613,12 +4278,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -3636,7 +4307,10 @@ strings concatenated with “\\n”
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 
 
@@ -3655,13 +4329,13 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   _instanceType = "server";
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "1.21.10";
+    content = "26.2";
     priority = 1500;
   };
 }
@@ -3683,12 +4357,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -3702,6 +4382,14 @@ This option has no description\.
 
 *Type:*
 list of absolute path *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
 
 
 
@@ -3732,7 +4420,10 @@ attribute set *(read only)*
 
 
 *Default:*
-` "meta" `
+
+```nix
+"meta"
+```
 
 
 
@@ -3762,6 +4453,56 @@ non-empty string
 
 
 
+## server\.instances\.\<name>\.renice\.enable
+
+
+
+Whether to enable renicing the instance process before launch\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.renice\.priority
+
+
+
+Niceness priority value (between -20 and 19)\. Lower values mean higher priority\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+-20
+```
+
+
+
 ## server\.instances\.\<name>\.runtimeLibs
 
 
@@ -3776,7 +4517,10 @@ list of absolute path
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -3794,7 +4538,10 @@ list of absolute path
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 
 
@@ -3812,7 +4559,10 @@ null or (attribute set of (null or boolean or signed integer or string))
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -3831,7 +4581,7 @@ submodule
 
 *Default:*
 
-```
+```nix
 {
   autoStart = true;
   enable = false;
@@ -3854,12 +4604,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -3877,12 +4633,18 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 
 
 *Example:*
-` true `
+
+```nix
+true
+```
 
 
 
@@ -3900,7 +4662,10 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 *Default:*
-` "latest-release" `
+
+```nix
+"latest-release"
+```
 
 
 
@@ -3918,7 +4683,10 @@ null or absolute path
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 
 
@@ -3936,6 +4704,9 @@ attribute set
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 

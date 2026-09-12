@@ -57,7 +57,41 @@ in {
 
       submodules = lib.nixcraft.importSubmodules "${self}/submodules" submoduleArgs;
 
+      optionDocs = {
+        nixcraft = let
+          evaluated = lib.evalModules {
+            modules = with submodules; [
+              nixcraftModule
+            ];
+
+            specialArgs = {
+              clientDirPrefix = "/(root)/.local/share/nixcraft/client/instances";
+              clientAuthDirPrefix = "/(root)/.local/share/nixcraft/client/auth";
+              serverDirPrefix = "/(root)/.local/share/nixcraft/server/instances";
+              clientExternalAssetDirPrefix = "/(root)/.local/share/nixcraft/client/assets";
+              clientExternalAssetLookupPaths = [
+                "/(root)/.local/share/PrismLauncher/assets"
+                "/(root)/.minecraft/assets"
+                "/var/cache/nixcraft/asset-objects"
+              ];
+              name = "nixcraft";
+            };
+          };
+        in
+          pkgs.nixosOptionsDoc {
+            options = builtins.removeAttrs evaluated.options ["_module"];
+            warningsAreErrors = false;
+          };
+      };
+
       runInRepoRoot = {
+        update-doc-options = pkgs.writeShellScriptBin "update-doc-options" ''
+          rm -f docs/NIXCRAFT-OPTIONS.gen.md
+          install -m 0644 \
+            ${optionDocs.nixcraft.optionsCommonMark} \
+            docs/NIXCRAFT-OPTIONS.gen.md
+        '';
+
         update-asset-sha256 =
           pkgs.writers.writePython3Bin "update-asset-sha256" {
             doCheck = false;
@@ -104,85 +138,6 @@ in {
         inherit sources;
         inherit builders;
         inherit submodules;
-      };
-
-      optionDocs = {
-        nixcraft = let
-          evaluated = lib.evalModules {
-            modules = with submodules; [
-              nixcraftModule
-            ];
-
-            specialArgs = {
-              clientDirPrefix = "/(root)/.local/share/nixcraft/client/instances";
-              clientAuthDirPrefix = "/(root)/.local/share/nixcraft/client/auth";
-              serverDirPrefix = "/(root)/.local/share/nixcraft/server/instances";
-              clientExternalAssetDirPrefix = "/(root)/.local/share/nixcraft/client/assets";
-              clientExternalAssetLookupPaths = [
-                "/(root)/.local/share/PrismLauncher/assets"
-                "/(root)/.minecraft/assets"
-                "/var/cache/nixcraft/asset-objects"
-              ];
-              name = "nixcraft";
-            };
-          };
-        in
-          pkgs.nixosOptionsDoc {
-            options = builtins.removeAttrs evaluated.options ["_module"];
-            warningsAreErrors = false;
-          };
-      };
-
-      devenv = {
-        shells.default = {
-          config = {
-            env.GREET = "devenv";
-
-            packages = with pkgs; [
-              # Generating docs
-              mdbook
-            ];
-
-            tasks = {
-              "docs:generate" = {
-                exec = ''
-                  rm -f NIXCRAFT-OPTIONS.gen.md
-                  install -m 0644 \
-                    ${optionDocs.nixcraft.optionsCommonMark} \
-                    NIXCRAFT-OPTIONS.gen.md
-                '';
-                cwd = "docs";
-                execIfModified = [
-                  "submodules/*.nix"
-                  "modules/flakeModules/**/*.nix"
-                  "docs"
-                ];
-                before = ["docs:build"];
-              };
-
-              "docs:build" = {
-                exec = "mdbook build";
-                cwd = "docs";
-                before = ["devenv:processes:open-docs"];
-              };
-            };
-
-            processes = {
-              open-docs = {
-                exec = "mdbook serve -p 4000 -o";
-                cwd = "docs";
-              };
-            };
-
-            enterTest = ''
-              echo "Running tests"
-              git --version | grep --color=auto "${pkgs.git.version}"
-            '';
-
-            # https://devenv.sh/git-hooks/
-            # git-hooks.hooks.shellcheck.enable = true;
-          };
-        };
       };
     in {
       inherit packages;
