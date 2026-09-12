@@ -150,7 +150,6 @@ Import `inputs.nixcraft.homeModules.default` in your Home Manager configuration:
       };
 
       instances.survival = {
-        enable = true;
         version = "1.21.1";
         desktopEntry.enable = true;
       };
@@ -174,7 +173,6 @@ Import `inputs.nixcraft.nixosModules.default` in your `configuration.nix` to dec
     enable = true;
 
     server.instances.smp = {
-      enable = true;
       version = "1.21.1";
       agreeToEula = true;
       paper.enable = true;
@@ -255,7 +253,6 @@ Nixcraft can extract `.mrpack` files directly. It downloads all the listed mods,
 ```nix
 { pkgs, ... }: {
   nixcraft.client.instances.optimized = {
-    enable = true;
     enableExternalAssets = true;
 
     mrpack = {
@@ -280,7 +277,6 @@ Run a dedicated Paper or Fabric server in the background using systemd:
 
 ```nix
 nixcraft.server.instances.survival-smp = {
-  enable = true;
   version = "1.21.1";
   agreeToEula = true;
 
@@ -316,7 +312,6 @@ For Minecraft Speedrunning on Linux, you can enable Waywall, automatically extra
 ```nix
 { pkgs, ... }: {
   nixcraft.client.instances.rsg = {
-    enable = true;
     enableExternalAssets = true;
 
     version = "1.16.1";
