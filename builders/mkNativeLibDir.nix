@@ -1,14 +1,10 @@
 {
   pkgs,
-  fetchAssetFromHash,
   fetchSha1,
   lib,
   ...
 }: {
-  versionData,
-  assetType ? versionData.assets,
-  assetIndex ? lib.nixcraft.readJSON (fetchSha1 versionData.assetIndex),
-  objects ? assetIndex.objects,
+  libraries,
   runCommandLocal ? pkgs.runCommandLocal,
   unzip ? pkgs.unzip,
 }: let
@@ -52,7 +48,7 @@
     map fetchSha1
     (
       lib.filter (x: x != null)
-      (map nativeDownload versionData.libraries)
+      (map nativeDownload libraries)
     );
 
   placeNativeLibs =

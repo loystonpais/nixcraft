@@ -397,7 +397,7 @@ in
 
         mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
 
-        java.D."java.library.path" = mkNativeLibDir {versionData = config.meta.versionData;};
+        java.D."java.library.path" = mkNativeLibDir {libraries = config.libraries;};
         java.extraArguments = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
           "-XstartOnFirstThread"
         ];
