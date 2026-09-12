@@ -50,6 +50,31 @@ in rec {
   in
     pacakges;
 
+  importScripts = dir: pkgs: let
+    files = filterAttrsByName (name: !(lib.strings.hasPrefix "." name)) (readDir'files dir);
+  in
+    mapAttrs' (
+      fileName: _: let
+        scriptName =
+          if isPythonFile fileName
+          then removePythonExt fileName
+          else if isShellFile fileName
+          then removeShellExt fileName
+          else fileName;
+        binName = "nixcraft-${scriptName}";
+        filePath = joinPathAndString dir fileName;
+        pkg =
+          if isPythonFile fileName
+          then
+            pkgs.writers.writePython3Bin binName {
+              doCheck = false;
+            } (readFile filePath)
+          else
+            pkgs.writeShellScriptBin binName (readFile filePath);
+      in
+        nameValuePair scriptName pkg
+    ) files;
+
   importSources = dir: let
     dirFiles = readDir'files dir;
     sources = mapAttrs' (name: value:
@@ -115,6 +140,17 @@ in rec {
   removeNixExt = lib.strings.removeSuffix ".nix";
 
   removeJsonExt = lib.strings.removeSuffix ".json";
+
+  isPythonFile = hasExtension "py";
+
+  isShellFile = file: hasExtension "sh" file || hasExtension "bash" file;
+
+  removePythonExt = lib.strings.removeSuffix ".py";
+
+  removeShellExt = file:
+    if hasExtension "sh" file
+    then lib.strings.removeSuffix ".sh" file
+    else lib.strings.removeSuffix ".bash" file;
 
   isDefaultNixFile = s: s == "default.nix";
 

@@ -18,6 +18,7 @@
 
   submodules = lib.nixcraft.importSubmodules "${localFlake}/submodules" passThroughArgs;
   builders = lib.nixcraft.importBuilders "${localFlake}/builders" passThroughArgs;
+  scripts = lib.nixcraft.importScripts "${localFlake}/scripts" pkgs;
 
   inherit (submodules) nixcraftModule;
 
@@ -84,6 +85,11 @@ in {
       lib.mkMerge [
         # Generic
         {
+          environment.systemPackages = [
+            scripts.client-auth
+            scripts.client-fetch-assets
+          ];
+
           users = {
             users.nixcraft = {
               description = "Nixcraft user";

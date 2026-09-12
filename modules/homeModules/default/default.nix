@@ -18,6 +18,7 @@
 
   submodules = lib.nixcraft.importSubmodules "${localFlake}/submodules" passThroughArgs;
   builders = lib.nixcraft.importBuilders "${localFlake}/builders" passThroughArgs;
+  scripts = lib.nixcraft.importScripts "${localFlake}/scripts" pkgs;
 
   inherit (submodules) nixcraftModule;
 
@@ -78,6 +79,10 @@ in {
         # Generic
         {
           home.activation.nixcraftActivation = hmModuleArgs.lib.hm.dag.entryAfter ["writeBoundary"] (config.nixcraft.finalActivationShellScript);
+          home.packages = [
+            scripts.client-auth
+            scripts.client-fetch-assets
+          ];
         }
 
         # Managing client
