@@ -2,13 +2,11 @@
 {
   pkgs,
   fetchAssetFromHash,
-  fetchAria2c,
   fetchAssetsPy,
   fetchSha1,
   lib,
   ...
 }: {
-  useAria2c ? false,
   useFetchAssetsPy ? false,
   hash ? lib.fakeHash,
   versionData,
@@ -50,33 +48,6 @@
       ${placeAssetIndex}
     '';
 
-  ariaDownload = let
-    assetEntries = attrValues (mapAttrs (name: asset: let
-        path =
-          if assetType == "legacy"
-          then "./virtual/legacy/${name}"
-          else "./objects/${mkAssetHashPath asset.hash}";
-      in {
-        urls = ["https://resources.download.minecraft.net/${(mkAssetHashPath asset.hash)}"];
-        out = baseNameOf path;
-        dir = dirOf path;
-      })
-      objects);
-
-    indexEntry = {
-      urls = [versionData.assetIndex.url];
-      out = "${assetType}.json";
-      dir = "./indexes";
-    };
-
-    entries = [indexEntry] ++ assetEntries;
-  in
-    fetchAria2c {
-      name = "minecraft-asset-dir-aria";
-      inherit entries;
-      inherit hash;
-    };
-
   fetchAssetsPyDownload = fetchAssetsPy ({
     name = "minecraft-asset-dir-py";
     indexFile = fetchSha1 versionData.assetIndex;
@@ -85,6 +56,4 @@
 in
   if useFetchAssetsPy
   then fetchAssetsPyDownload
-  else if useAria2c
-  then ariaDownload
   else defaultDownload
