@@ -22,7 +22,8 @@
   inherit (lib) concatMapStringsSep escapeShellArg;
   inherit (lib.nixcraft.manifest) mkAssetHashPath;
 
-  isLegacy = assetType == "legacy";
+  isLegacy = assetType == "legacy" || (assetIndex ? virtual && assetIndex.virtual);
+  isPre1-6 = assetType == "pre-1.6" || (assetIndex ? map_to_resources && assetIndex.map_to_resources);
 
   objectsDownloadMethods = {
     default = let
@@ -78,7 +79,21 @@
       ln -s ${escapeShellArg "${finalObjectsPath}/${path}"} "$out/${name}"
     '') (builtins.attrNames objects)}
   '';
+
+  pre1-6AssetsDir = runCommandLocal "minecraft-pre-1.6-assets-dir" {} ''
+    mkdir -p $out
+
+    ${concatMapStringsSep "\n" (name: let
+      asset = objects.${name};
+      path = mkAssetHashPath asset.hash;
+    in ''
+      mkdir -p "$out/${dirOf name}"
+      ln -s ${escapeShellArg "${finalObjectsPath}/${path}"} "$out/${name}"
+    '') (builtins.attrNames objects)}
+  '';
 in
   if isLegacy
   then legacyAssetsDir
+  else if isPre1-6
+  then pre1-6AssetsDir
   else assetsDir

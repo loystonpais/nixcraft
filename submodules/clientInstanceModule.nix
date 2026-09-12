@@ -136,11 +136,19 @@ in
           escapeShellArgs (
             concatLists [
               ["--version" config._classSettings.version]
-              ["--assetsDir" "${config._classSettings.assetsDir}"]
-              (optionals (config.meta.versionData.assets != "legacy") [
-                "--assetIndex"
-                config._classSettings.assetIndex
-              ])
+              (
+                let
+                  cond = config._classSettings.assetsDir != null;
+                in
+                  (optional cond "--assetsDir") ++ (optional cond "${config._classSettings.assetsDir}")
+              )
+
+              (
+                let
+                  cond = config._classSettings.assetIndex != null;
+                in
+                  (optional cond "--assetIndex") ++ (optional cond config._classSettings.assetIndex)
+              )
 
               (
                 let
@@ -200,11 +208,13 @@ in
               };
 
               assetsDir = lib.mkOption {
-                type = lib.types.path;
+                type = lib.types.nullOr lib.types.path;
+                default = null;
               };
 
               assetIndex = lib.mkOption {
-                type = lib.types.nonEmptyStr;
+                type = lib.types.nullOr lib.types.nonEmptyStr;
+                default = null;
               };
 
               userProperties = lib.mkOption {
@@ -346,18 +356,43 @@ in
       {
         _classSettings = {
           version = lib.mkOptionDefault config.meta.versionData.id;
-          assetIndex = config.meta.versionData.assets;
-          assetsDir = lib.mkDefault (mkAssetsDir {
-            versionData = config.meta.versionData;
-            hash = config.assetHash;
-            useFetchAssetsPy = config.enableFastAssetDownload;
-            useExternalAssetsDir = config.enableExternalAssets;
-            externalAssetsDir = config.externalAssetsDir;
-          });
-
           gameDir = lib.mkDefault config.absoluteDir;
         };
+      }
 
+      (let
+        assets = config.meta.versionData.assets;
+        isPre1-6 = assets == "pre-1.6";
+        isLegacy = assets == "legacy";
+        isModern = !isPre1-6 && !isLegacy;
+
+        assetsDir = mkAssetsDir {
+          versionData = config.meta.versionData;
+          hash = config.assetHash;
+          useFetchAssetsPy = config.enableFastAssetDownload;
+          useExternalAssetsDir = config.enableExternalAssets;
+          externalAssetsDir = config.externalAssetsDir;
+        };
+      in
+        lib.mkMerge [
+          (lib.mkIf isModern {
+            _classSettings.assetsDir = lib.mkDefault assetsDir;
+            _classSettings.assetIndex = lib.mkDefault assets;
+          })
+
+          (lib.mkIf isLegacy {
+            _classSettings.assetsDir = lib.mkDefault assetsDir;
+          })
+
+          (lib.mkIf isPre1-6 {
+            files."resources" = {
+              source = assetsDir;
+              method = "symlink";
+            };
+          })
+        ])
+
+      {
         libraries = config.meta.versionData.libraries;
 
         mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
