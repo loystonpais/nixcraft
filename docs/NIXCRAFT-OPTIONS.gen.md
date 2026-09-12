@@ -2265,6 +2265,52 @@ signed integer
 
 
 
+## client\.instances\.\<name>\.renice\.sudoLookupPaths
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+list of absolute path
+
+
+
+*Default:*
+
+```nix
+[
+  "/run/wrappers/bin/sudo"
+  "/usr/bin/sudo"
+  "/bin/sudo"
+]
+```
+
+
+
+## client\.instances\.\<name>\.renice\.wrappedBinPath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+*Default:*
+
+```nix
+"/run/wrappers/bin/nixcraft-renice"
+```
+
+
+
 ## client\.instances\.\<name>\.runtimeLibs
 
 
@@ -4082,8 +4128,6 @@ null
 
 ## server\.instances\.\<name>\.noGui
 
-
-
 Whether to enable no gui\.
 
 
@@ -4162,6 +4206,8 @@ true
 
 
 ## server\.instances\.\<name>\.paper\._mainClass
+
+
 
 This option has no description\.
 
@@ -4499,6 +4545,52 @@ signed integer
 
 ```nix
 -20
+```
+
+
+
+## server\.instances\.\<name>\.renice\.sudoLookupPaths
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+list of absolute path
+
+
+
+*Default:*
+
+```nix
+[
+  "/run/wrappers/bin/sudo"
+  "/usr/bin/sudo"
+  "/bin/sudo"
+]
+```
+
+
+
+## server\.instances\.\<name>\.renice\.wrappedBinPath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+*Default:*
+
+```nix
+"/run/wrappers/bin/nixcraft-renice"
 ```
 
 
