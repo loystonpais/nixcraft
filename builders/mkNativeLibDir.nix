@@ -53,13 +53,16 @@
 
   placeNativeLibs =
     concatMapStringsSep "\n" (nativeLibrary: ''
-      unzip -o ${nativeLibrary} -d $out && rm -rf $out/META-INF
+      unzip -o ${nativeLibrary} -d $out
     '')
     nativeLibrariesZippedList;
 
   script = ''
     mkdir -p $out
     ${placeNativeLibs}
+    rm -rf $out/META-INF
+    rm $out/*.git
+    rm $out/*.sha1
   '';
 in
   runCommandLocal "minecraft-native-lib-dir" {
