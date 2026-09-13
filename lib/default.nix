@@ -422,55 +422,98 @@ in rec {
           library.downloads.artifact.path (fetcher library.downloads.artifact)
       ) (librariesByName libraries);
 
-    isOsAllowed = hostPlatform: rules: let
-      osName =
-        if hostPlatform.isLinux
-        then "linux"
-        else if hostPlatform.isDarwin
-        then "osx"
-        else if hostPlatform.isWindows
-        then "windows"
-        else null;
+    getPlatformInfo = hostPlatform: let
+      system = hostPlatform.system;
+    in {
+      inherit system;
+      isArm64 = hostPlatform.isAarch64 or (lib.hasPrefix "aarch64" system);
+      isX86 = hostPlatform.isx86_64 or (lib.hasPrefix "x86_64" system);
+      isDarwin = hostPlatform.isDarwin or (lib.hasSuffix "darwin" system);
+      isLinux = hostPlatform.isLinux or (lib.hasSuffix "linux" system);
+      isWindows = hostPlatform.isWindows or (lib.hasSuffix "windows" system);
+    };
+
+    isOsRuleMatching = p: osRule: let
+      name = osRule.name or null;
+      arch = osRule.arch or null;
     in
+      (
+        if name == null
+        then true
+        else if name == "osx"
+        then p.isDarwin
+        else if name == "osx-arm64"
+        then p.isDarwin && p.isArm64
+        else if name == "linux"
+        then p.isLinux
+        else if name == "linux-arm64"
+        then p.isLinux && p.isArm64
+        else if name == "windows"
+        then p.isWindows
+        else if name == "windows-arm64"
+        then p.isWindows && p.isArm64
+        else if name == "windows-x86"
+        then p.isWindows && p.isX86
+        else false
+      )
+      && (
+        if arch == null
+        then true
+        else if arch == "arm64" || arch == "aarch64"
+        then p.isArm64
+        else if arch == "x86" || arch == "x86_64" || arch == "amd64"
+        then p.isX86
+        else false
+      );
+
+    isOsAllowed = p: rules:
       if rules == []
       then true
-      else let
-        lemma = acc: rule:
-          if rule.action == "allow"
-          then
-            if rule ? os
-            then rule.os.name == osName
-            else true
-          else if rule ? os
-          then rule.os.name != osName
-          else false;
-      in
-        foldl' lemma false rules;
+      else
+        builtins.foldl' (
+          current: rule: let
+            ruleApplies = !(rule ? os) || (isOsRuleMatching p rule.os);
+          in
+            if ruleApplies
+            then rule.action == "allow"
+            else current
+        )
+        false
+        rules;
 
-    isClassifierAllowed = hostPlatform: classifierName: let
-      system = hostPlatform.system;
+    isNativeArchAllowed = p: name: let
+      hasArm64 = lib.hasInfix "arm64" name;
+      hasArm32 = lib.hasInfix "arm32" name;
     in
-      if system == "aarch64-darwin"
-      then
-        lib.hasInfix "macos-arm64" classifierName
-        || lib.hasInfix "osx-arm64" classifierName
-        || classifierName == "natives-macos"
-        || classifierName == "natives-osx"
-      else if system == "x86_64-darwin"
-      then
-        classifierName
-        == "natives-macos"
-        || classifierName == "natives-osx"
-      else if system == "aarch64-linux"
-      then
-        classifierName
-        == "natives-linux-arm64"
-        || classifierName == "natives-linux"
-      else if system == "x86_64-linux"
-      then classifierName == "natives-linux"
-      else false;
+      if !lib.hasInfix "natives-" name
+      then true
+      else if p.isArm64
+      then hasArm64
+      else if p.isX86
+      then !hasArm64 && !hasArm32
+      else true;
 
-    mkNormalizedMinecraftLibraryAttrs = hostPlatform: fetchSha1: libraries:
+    isClassifierAllowed = p: cName: let
+      hasArm64 = lib.hasInfix "arm64" cName;
+      matchesOs =
+        if p.isDarwin
+        then lib.hasInfix "macos" cName || lib.hasInfix "osx" cName
+        else if p.isLinux
+        then lib.hasInfix "linux" cName
+        else if p.isWindows
+        then lib.hasInfix "windows" cName
+        else false;
+    in
+      matchesOs
+      && (
+        if p.isArm64
+        then (hasArm64 || cName == "natives-macos" || cName == "natives-osx")
+        else !hasArm64
+      );
+
+    mkNormalizedMinecraftLibraryAttrs = hostPlatform: fetchSha1: libraries: let
+      p = getPlatformInfo hostPlatform;
+    in
       builtins.foldl' (
         acc: raw:
           if raw ? relativePath && raw ? jar
@@ -485,7 +528,7 @@ in rec {
               };
             }
           else let
-            allowed = isOsAllowed hostPlatform (raw.rules or []);
+            allowed = (isOsAllowed p (raw.rules or [])) && (isNativeArchAllowed p raw.name);
 
             mainEntry =
               if raw ? downloads && raw.downloads ? artifact && raw.downloads.artifact ? url && raw.downloads.artifact.url != ""
@@ -509,7 +552,7 @@ in rec {
                     if cArt ? url && cArt.url != ""
                     then let
                       fullName = "${raw.name}:${cName}";
-                      cAllowed = allowed && (isClassifierAllowed hostPlatform cName);
+                      cAllowed = allowed && (isClassifierAllowed p cName);
                     in
                       cAcc
                       // {
