@@ -474,7 +474,7 @@ in rec {
                 ${raw.name} = {
                   enable = allowed;
                   native = false;
-                  relativePath = raw.downloads.artifact.path;
+                  relativePath = raw.downloads.artifact.path or null;
                   jar = fetchSha1 raw.downloads.artifact;
                 };
               }
@@ -497,7 +497,7 @@ in rec {
                         ${fullName} = {
                           enable = cAllowed;
                           native = true;
-                          relativePath = cArt.path or "${fullName}.jar";
+                          relativePath = cArt.path or null;
                           jar = fetchSha1 cArt;
                         };
                       }

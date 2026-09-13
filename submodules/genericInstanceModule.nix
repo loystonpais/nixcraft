@@ -174,7 +174,8 @@ in
               };
 
               relativePath = lib.mkOption {
-                type = lib.types.pathWith {absolute = false;};
+                type = with lib.types; nullOr (pathWith {absolute = false;});
+                default = null;
               };
 
               jar = lib.mkOption {
