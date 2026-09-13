@@ -575,6 +575,39 @@ in
         _classSettings.username = lib.mkIf (config.account.username != null) config.account.username;
       })
 
+      # Set custom lwjgl libraries if lwjgl.version is set, and disable stock lwjgl libraries
+      (lib.mkIf (config.lwjgl.version != null) (let
+        isLwjglLib = name:
+          lib.hasInfix "lwjgl" name
+          || lib.hasPrefix "net.java.jinput:" name
+          || lib.hasPrefix "net.java.jutils:" name;
+
+        stockLibraries =
+          lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
+          pkgs.stdenv.hostPlatform
+          fetchSha1
+          config.meta.versionData.libraries;
+
+        customLwjglLibraries =
+          lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
+          pkgs.stdenv.hostPlatform
+          fetchSha1
+          sources.lwjgl.${config.lwjgl.version}.libraries;
+
+        stockLwjglLibraries =
+          lib.filterAttrs
+          (name: _: isLwjglLib name && !(customLwjglLibraries ? ${name}))
+          stockLibraries;
+
+        disabledStockLwjglLibraries =
+          lib.mapAttrs (_: _: {
+            enable = lib.mkForce false;
+          })
+          stockLwjglLibraries;
+      in {
+        libraries = disabledStockLwjglLibraries // customLwjglLibraries;
+      }))
+
       (let
         prefixMsg = "client instance '${config.name}'";
       in {
