@@ -632,7 +632,8 @@ in
       # Set custom lwjgl libraries if lwjgl.version is set, and disable stock lwjgl libraries
       (lib.mkIf (config.lwjgl.version != null) (let
         isLwjglLib = name:
-          lib.hasInfix "lwjgl" name
+          lib.hasPrefix "org.lwjgl:" name
+          || lib.hasPrefix "org.lwjgl.lwjgl:" name
           || lib.hasPrefix "net.java.jinput:" name
           || lib.hasPrefix "net.java.jutils:" name;
 
