@@ -401,7 +401,11 @@ in
 
         mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
 
-        java.D."java.library.path" = mkNativeLibDir {normalizedLibraries = config.libraries;};
+        # Set java.library.path to the native lib dir only if there are any native libraries
+        java.D."java.library.path" =
+          lib.mkIf (lib.any (l: l.enable && l.native) (lib.attrValues config.libraries))
+          (mkNativeLibDir {normalizedLibraries = config.libraries;});
+
         java.extraArguments = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
           "-XstartOnFirstThread"
         ];
