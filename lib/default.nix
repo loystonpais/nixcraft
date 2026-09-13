@@ -331,6 +331,16 @@ in rec {
       merge = loc: defs: (lib.head defs).value;
     };
 
+    lwjglVersion = lib.mkOptionType {
+      name = "lwjglVersion";
+      description = "LWJGL version";
+      check = version:
+        lib.assertMsg
+        (builtins.isString version && builtins.hasAttr version sources.lwjgl)
+        "LWJGL version '${toString version}' does not exist.";
+      merge = loc: defs: (lib.head defs).value;
+    };
+
     javaMemorySize = lib.mkOptionType {
       name = "javaMemorySize";
       description = "Java memory size (in MBs)";

@@ -51,6 +51,13 @@ in
           default = true;
         };
 
+      lwjgl = {
+        version = lib.mkOption {
+          type = with lib.types; nullOr lib.nixcraft.types.lwjglVersion;
+          default = null;
+        };
+      };
+
       # Hide these two option for now
       enableFastAssetDownload =
         (lib.mkEnableOption "fast asset downloading using fetchAssetsPy (hash needs to be provided)")
