@@ -493,7 +493,7 @@ in rec {
       then !hasArm64 && !hasArm32
       else true;
 
-    isClassifierAllowed = p: cName: let
+    isClassifierAllowed = p: cName: hasArm64Classifier: let
       hasArm64 = lib.hasInfix "arm64" cName;
       matchesOs =
         if p.isDarwin
@@ -507,7 +507,12 @@ in rec {
       matchesOs
       && (
         if p.isArm64
-        then (hasArm64 || cName == "natives-macos" || cName == "natives-osx")
+        then
+          (
+            if hasArm64Classifier
+            then hasArm64
+            else true
+          )
         else !hasArm64
       );
 
@@ -544,7 +549,9 @@ in rec {
 
             classifierEntries =
               if raw ? downloads && raw.downloads ? classifiers
-              then
+              then let
+                hasArm64Classifier = lib.any (c: lib.hasInfix "arm64" c) (builtins.attrNames raw.downloads.classifiers);
+              in
                 lib.foldl' (
                   cAcc: cName: let
                     cArt = raw.downloads.classifiers.${cName};
@@ -552,7 +559,7 @@ in rec {
                     if cArt ? url && cArt.url != ""
                     then let
                       fullName = "${raw.name}:${cName}";
-                      cAllowed = allowed && (isClassifierAllowed p cName);
+                      cAllowed = allowed && (isClassifierAllowed p cName hasArm64Classifier);
                     in
                       cAcc
                       // {

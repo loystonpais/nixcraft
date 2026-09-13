@@ -570,6 +570,60 @@ in
           _classSettings.userProperties = lib.mkDefault {};
         })
 
+      # Darwin-specific version range patches
+      (with lib.nixcraft.minecraftVersion;
+        lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (lib.mkMerge [
+          # 1. Minecraft < 1.13: LWJGL 2 Apple Silicon ARM64 backport
+          (lib.mkIf (ls config.version "1.13") {
+            lwjgl.version = lib.mkDefault "2.9.4-nightly-20150209";
+          })
+
+          # 2. Minecraft 1.13 to 1.18.2 (< 1.19): LWJGL 3.2.2 (ARM64 natives + no-op window icon)
+          (lib.mkIf ((grEq config.version "1.13") && (ls config.version "1.19")) {
+            lwjgl.version = lib.mkDefault "3.2.2";
+          })
+
+          # 3. Minecraft 1.17 to 1.20.1: JNA buffer truncation crash fix (JNA < 5.13.0)
+          (lib.mkIf ((grEq config.version "1.17") && (lsEq config.version "1.20.1")) (let
+            jnaLibs = {
+              "net.java.dev.jna:jna:5.13.0" = {
+                enable = lib.mkDefault true;
+                native = false;
+                relativePath = "net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
+                jar = fetchSha1 {
+                  sha1 = "1200e7ebeedbe0d10062093f32925a912020e747";
+                  url = "https://libraries.minecraft.net/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
+                };
+              };
+              "net.java.dev.jna:jna-platform:5.13.0" = {
+                enable = lib.mkDefault true;
+                native = false;
+                relativePath = "net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar";
+                jar = fetchSha1 {
+                  sha1 = "88e9a306715e9379f3122415ef4ae759a352640d";
+                  url = "https://libraries.minecraft.net/net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar";
+                };
+              };
+            };
+
+            stockJnaLibraries =
+              lib.filterAttrs
+              (name: _: lib.hasPrefix "net.java.dev.jna:" name && !(jnaLibs ? ${name}))
+              (lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
+                pkgs.stdenv.hostPlatform
+                fetchSha1
+                config.meta.versionData.libraries);
+
+            disabledStockJnaLibraries =
+              lib.mapAttrs (_: _: {
+                enable = lib.mkForce false;
+              })
+              stockJnaLibraries;
+          in {
+            libraries = disabledStockJnaLibraries // jnaLibs;
+          }))
+        ]))
+
       (lib.mkIf (config.account != null && config.account.offline) {
         _classSettings.uuid = lib.mkIf (config.account.uuid != null) config.account.uuid;
         _classSettings.username = lib.mkIf (config.account.username != null) config.account.username;
@@ -594,6 +648,13 @@ in
           fetchSha1
           sources.lwjgl.${config.lwjgl.version}.libraries;
 
+        forcedCustomLwjglLibraries = lib.mapAttrs (_: l:
+          l
+          // {
+            enable = lib.mkForce l.enable;
+          })
+        customLwjglLibraries;
+
         stockLwjglLibraries =
           lib.filterAttrs
           (name: _: isLwjglLib name && !(customLwjglLibraries ? ${name}))
@@ -605,7 +666,7 @@ in
           })
           stockLwjglLibraries;
       in {
-        libraries = disabledStockLwjglLibraries // customLwjglLibraries;
+        libraries = disabledStockLwjglLibraries // forcedCustomLwjglLibraries;
       }))
 
       (let
