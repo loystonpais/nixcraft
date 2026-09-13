@@ -1882,14 +1882,6 @@ boolean
 
 
 
-*Default:*
-
-```nix
-false
-```
-
-
-
 ## client\.instances\.\<name>\.libraries\.\<name>\.relativePath
 
 
@@ -1899,7 +1891,36 @@ This option has no description\.
 
 
 *Type:*
-relative path
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.lwjgl\.version
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or (LWJGL version)
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -2067,8 +2088,6 @@ null
 
 ## client\.instances\.\<name>\.mrpack\.file
 
-
-
 This option has no description\.
 
 
@@ -2079,6 +2098,8 @@ package
 
 
 ## client\.instances\.\<name>\.mrpack\.minecraftVersion
+
+
 
 Minecraft version, or one of: latest-release, latest-snapshot
 
@@ -4077,14 +4098,6 @@ boolean
 
 
 
-*Default:*
-
-```nix
-false
-```
-
-
-
 ## server\.instances\.\<name>\.libraries\.\<name>\.relativePath
 
 
@@ -4094,13 +4107,19 @@ This option has no description\.
 
 
 *Type:*
-relative path
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
 ## server\.instances\.\<name>\.mainJar
-
-
 
 This option has no description\.
 
@@ -4112,6 +4131,8 @@ absolute path
 
 
 ## server\.instances\.\<name>\.meta\.versionData
+
+
 
 This option has no description\.
 
