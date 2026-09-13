@@ -382,9 +382,12 @@ in rec {
         then builtins.elemAt parts 3
         else null;
       groupPath = builtins.replaceStrings ["."] ["/"] group;
-      fileName = "${artifact}-${version}${if classifier != null then "-${classifier}" else ""}.jar";
-    in
-      "${groupPath}/${artifact}/${version}/${fileName}";
+      fileName = "${artifact}-${version}${
+        if classifier != null
+        then "-${classifier}"
+        else ""
+      }.jar";
+    in "${groupPath}/${artifact}/${version}/${fileName}";
 
     mkLibUrl = url: libString: "${url}/${mkLibPath libString}";
 
