@@ -128,6 +128,12 @@ in {
             libraries = with pkgs.python3Packages; [requests];
           }
           (builtins.readFile "${self}/sources/modrinth/update.py");
+
+        update-lwjgl-sources =
+          pkgs.writers.writePython3Bin "update-lwjgl-sources" {
+            doCheck = false;
+          }
+          (builtins.readFile "${self}/sources/lwjgl/update.py");
       };
 
       legacyPackages = {
