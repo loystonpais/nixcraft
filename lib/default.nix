@@ -372,15 +372,21 @@ in rec {
   };
 
   maven = rec {
-    mkLibUrl = url: libString: let
-      inherit (lib) splitString replaceString;
-      inherit (builtins) elemAt;
-      libStringParts = splitString ":" libString;
-      dotDir = elemAt libStringParts 0;
-      dir = replaceString "." "/" dotDir;
-      name = elemAt libStringParts 1;
-      version = elemAt libStringParts 2;
-    in "${url}/${dir}/${name}/${version}/${name}-${version}.jar";
+    mkLibPath = libString: let
+      parts = lib.splitString ":" libString;
+      group = builtins.elemAt parts 0;
+      artifact = builtins.elemAt parts 1;
+      version = builtins.elemAt parts 2;
+      classifier =
+        if builtins.length parts > 3
+        then builtins.elemAt parts 3
+        else null;
+      groupPath = builtins.replaceStrings ["."] ["/"] group;
+      fileName = "${artifact}-${version}${if classifier != null then "-${classifier}" else ""}.jar";
+    in
+      "${groupPath}/${artifact}/${version}/${fileName}";
+
+    mkLibUrl = url: libString: "${url}/${mkLibPath libString}";
 
     isLibraryAllowedForOS = OS: library: let
       lemma1 = acc: rule:
@@ -484,7 +490,7 @@ in rec {
                 ${raw.name} = {
                   enable = allowed;
                   native = false;
-                  relativePath = raw.downloads.artifact.path or null;
+                  relativePath = raw.downloads.artifact.path or (mkLibPath raw.name);
                   jar = fetchSha1 raw.downloads.artifact;
                 };
               }
@@ -507,7 +513,7 @@ in rec {
                         ${fullName} = {
                           enable = cAllowed;
                           native = true;
-                          relativePath = cArt.path or null;
+                          relativePath = cArt.path or (mkLibPath fullName);
                           jar = fetchSha1 cArt;
                         };
                       }
