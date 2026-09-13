@@ -121,6 +121,14 @@
           version = ver;
         };
 
+      withLwjglVersion = ver:
+        withConfig {
+          lwjgl.version = ver;
+        };
+
+      lwjgl3-3-3 = withLwjglVersion "3.3.3";
+      lwjgl3-2-2 = withLwjglVersion "3.2.2";
+
       fsg = withConfig {
         mrpack = {
           enable = true;
