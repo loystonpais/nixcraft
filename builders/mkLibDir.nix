@@ -1,29 +1,29 @@
 {
   pkgs,
-  fetchAssetFromHash,
   fetchSha1,
   lib,
   ...
-}: {libraries}: let
-  inherit (lib) pipe;
-  inherit
-    (lib.nixcraft.maven)
-    filterLibrariesByOS
-    filterClassifiers
-    filterEmptyArtifactUrl
-    toLibraryArtifactLinkTree
-    ;
+}: {
+  normalizedLibraries ? null,
+  versionDataLibraries ? null,
+}: let
+  libs =
+    if normalizedLibraries != null
+    then normalizedLibraries
+    else if versionDataLibraries != null
+    then lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs pkgs.stdenv.hostPlatform fetchSha1 versionDataLibraries
+    else throw "mkLibDir: either 'normalizedLibraries' or 'versionDataLibraries' must be provided";
 
-  os =
-    if pkgs.stdenv.hostPlatform.isLinux then "linux"
-    else if pkgs.stdenv.hostPlatform.isDarwin then "osx"
-    else throw "Unsupported Minecraft OS: ${pkgs.stdenv.hostPlatform.system}";
+  enabledNonNativeLibs = builtins.filter (
+    l:
+      l.enable && !l.native
+  ) (builtins.attrValues libs);
 
-  librariesLinkTree = pipe libraries [
-    (filterLibrariesByOS os)
-    filterClassifiers
-    filterEmptyArtifactUrl
-    (toLibraryArtifactLinkTree fetchSha1)
-  ];
+  toLinkEntry = l: {
+    name = l.relativePath;
+    value = l.jar;
+  };
+
+  librariesLinkTree = builtins.listToAttrs (map toLinkEntry enabledNonNativeLibs);
 in
   pkgs.linkFarm "minecraft-lib-dir" librariesLinkTree

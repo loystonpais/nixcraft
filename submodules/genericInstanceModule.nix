@@ -158,8 +158,35 @@ in
       };
 
       libraries = lib.mkOption {
-        type = lib.types.listOf lib.types.attrs;
-        default = [];
+        type = with lib.types;
+          attrsOf (submodule ({name, ...}: {
+            options = {
+              enable =
+                (lib.mkEnableOption "library ${name}")
+                // {
+                  default = true;
+                };
+
+              name = lib.mkOption {
+                type = lib.types.str;
+                default = name;
+                readOnly = true;
+              };
+
+              relativePath = lib.mkOption {
+                type = lib.types.pathWith {absolute = false;};
+              };
+
+              jar = lib.mkOption {
+                type = lib.types.pathWith {absolute = true;};
+              };
+
+              native = lib.mkOption {
+                type = lib.types.bool;
+              };
+            };
+          }));
+        default = {};
       };
 
       mainJar = lib.mkOption {
@@ -324,7 +351,7 @@ in
         # pass them to java class paths
         java.cp = let
           normalLibDir = mkLibDir {
-            libraries = config.libraries;
+            normalizedLibraries = config.libraries;
           };
 
           # Fix bug with jopt-simple which gets an invalid module name

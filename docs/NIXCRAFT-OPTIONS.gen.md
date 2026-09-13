@@ -273,7 +273,15 @@ This option has no description\.
 
 
 *Type:*
-non-empty string
+null or non-empty string
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -286,7 +294,15 @@ This option has no description\.
 
 
 *Type:*
-absolute path
+null or absolute path
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -798,7 +814,7 @@ attribute set of (null or (list of (signed integer or string or absolute path)) 
 
 
 
-## client\.instances\.\<name>\.externalAssetDir
+## client\.instances\.\<name>\.externalAssetsDir
 
 
 
@@ -819,7 +835,7 @@ null or absolute path
 
 
 
-## client\.instances\.\<name>\.externalAssetExtraLookupPaths
+## client\.instances\.\<name>\.externalAssetsExtraLookupPaths
 
 
 
@@ -1321,7 +1337,7 @@ non-empty string *(read only)*
 *Default:*
 
 ```nix
-"--version 26.2 --assetsDir /nix/store/cc8whj1ggbwlr9wpgf4xzhlf1132p7pq-minecraft-asset-dir --assetIndex 32 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
+"--version 26.2 --assetsDir /nix/store/d29723k911lzhf6s7yz9l55yrk3apdl6-minecraft-assets-dir --assetIndex 32 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
 ```
 
 
@@ -1778,15 +1794,112 @@ This option has no description\.
 
 
 *Type:*
-list of (attribute set)
+attribute set of (submodule)
 
 
 
 *Default:*
 
 ```nix
-[ ]
+{ }
 ```
+
+
+
+## client\.instances\.\<name>\.libraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.libraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## client\.instances\.\<name>\.libraries\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## client\.instances\.\<name>\.libraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## client\.instances\.\<name>\.libraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+relative path
 
 
 
@@ -1967,8 +2080,6 @@ package
 
 ## client\.instances\.\<name>\.mrpack\.minecraftVersion
 
-
-
 Minecraft version, or one of: latest-release, latest-snapshot
 
 
@@ -2079,6 +2190,8 @@ strings concatenated with “\\n”
 
 
 ## client\.instances\.\<name>\.quiltLoader
+
+
 
 This option has no description\.
 
@@ -3876,15 +3989,112 @@ This option has no description\.
 
 
 *Type:*
-list of (attribute set)
+attribute set of (submodule)
 
 
 
 *Default:*
 
 ```nix
-[ ]
+{ }
 ```
+
+
+
+## server\.instances\.\<name>\.libraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.libraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## server\.instances\.\<name>\.libraries\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## server\.instances\.\<name>\.libraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## server\.instances\.\<name>\.libraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+relative path
 
 
 
@@ -3902,8 +4112,6 @@ absolute path
 
 
 ## server\.instances\.\<name>\.meta\.versionData
-
-
 
 This option has no description\.
 
@@ -4127,6 +4335,8 @@ null
 
 
 ## server\.instances\.\<name>\.noGui
+
+
 
 Whether to enable no gui\.
 

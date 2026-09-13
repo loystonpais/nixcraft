@@ -393,11 +393,15 @@ in
         ])
 
       {
-        libraries = config.meta.versionData.libraries;
+        libraries =
+          lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
+          pkgs.stdenv.hostPlatform
+          fetchSha1
+          config.meta.versionData.libraries;
 
         mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
 
-        java.D."java.library.path" = mkNativeLibDir {libraries = config.libraries;};
+        java.D."java.library.path" = mkNativeLibDir {normalizedLibraries = config.libraries;};
         java.extraArguments = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
           "-XstartOnFirstThread"
         ];
@@ -523,7 +527,11 @@ in
         _classSettings.version = config.forgeLoader.parsedForgeLoader.versionId;
         extraArguments = ["--launchTarget" "forge_client"];
         mainJar = let installDir = config.forgeLoader.parsedForgeLoader.clientInstallDirWithClientJar (fetchSha1 config.meta.versionData.downloads.client); in "${installDir}/libraries/net/minecraftforge/forge/${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}/forge-${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}-client.jar";
-        libraries = config.forgeLoader.parsedForgeLoader.versionLibraries;
+        libraries =
+          lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
+          pkgs.stdenv.hostPlatform
+          fetchSha1
+          config.forgeLoader.parsedForgeLoader.versionLibraries;
       })
 
       (lib.mkIf config.fabricLoader.enable {

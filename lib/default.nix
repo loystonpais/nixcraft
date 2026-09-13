@@ -69,11 +69,11 @@ in rec {
             pkgs.writers.writePython3Bin binName {
               doCheck = false;
             } (readFile filePath)
-          else
-            pkgs.writeShellScriptBin binName (readFile filePath);
+          else pkgs.writeShellScriptBin binName (readFile filePath);
       in
         nameValuePair scriptName pkg
-    ) files;
+    )
+    files;
 
   importSources = dir: let
     dirFiles = readDir'files dir;
@@ -396,6 +396,117 @@ in rec {
     librariesByName = libraries:
       lib.listToAttrs (map (library: nameValuePair library.name library) libraries);
 
-    toLibraryArtifactLinkTree = fetcher: libraries: lib.mapAttrs' (name: library: nameValuePair library.downloads.artifact.path (fetcher library.downloads.artifact)) (librariesByName libraries);
+    toLibraryArtifactLinkTree = fetcher: libraries:
+      lib.mapAttrs' (
+        name: library:
+          nameValuePair
+          library.downloads.artifact.path (fetcher library.downloads.artifact)
+      ) (librariesByName libraries);
+
+    isOsAllowed = hostPlatform: rules: let
+      osName =
+        if hostPlatform.isLinux
+        then "linux"
+        else if hostPlatform.isDarwin
+        then "osx"
+        else if hostPlatform.isWindows
+        then "windows"
+        else null;
+    in
+      if rules == []
+      then true
+      else let
+        lemma = acc: rule:
+          if rule.action == "allow"
+          then
+            if rule ? os
+            then rule.os.name == osName
+            else true
+          else if rule ? os
+          then rule.os.name != osName
+          else false;
+      in
+        foldl' lemma false rules;
+
+    isClassifierAllowed = hostPlatform: classifierName: let
+      system = hostPlatform.system;
+    in
+      if system == "aarch64-darwin"
+      then
+        lib.hasInfix "macos-arm64" classifierName
+        || lib.hasInfix "osx-arm64" classifierName
+        || classifierName == "natives-macos"
+        || classifierName == "natives-osx"
+      else if system == "x86_64-darwin"
+      then
+        classifierName
+        == "natives-macos"
+        || classifierName == "natives-osx"
+      else if system == "aarch64-linux"
+      then
+        classifierName
+        == "natives-linux-arm64"
+        || classifierName == "natives-linux"
+      else if system == "x86_64-linux"
+      then classifierName == "natives-linux"
+      else false;
+
+    mkNormalizedMinecraftLibraryAttrs = hostPlatform: fetchSha1: libraries:
+      builtins.foldl' (
+        acc: raw:
+          if raw ? relativePath && raw ? jar
+          then
+            acc
+            // {
+              ${raw.name} = {
+                enable = raw.enable or true;
+                native = raw.native or false;
+                relativePath = raw.relativePath;
+                jar = raw.jar;
+              };
+            }
+          else let
+            allowed = isOsAllowed hostPlatform (raw.rules or []);
+
+            mainEntry =
+              if raw ? downloads && raw.downloads ? artifact && raw.downloads.artifact ? url && raw.downloads.artifact.url != ""
+              then {
+                ${raw.name} = {
+                  enable = allowed;
+                  native = false;
+                  relativePath = raw.downloads.artifact.path;
+                  jar = fetchSha1 raw.downloads.artifact;
+                };
+              }
+              else {};
+
+            classifierEntries =
+              if raw ? downloads && raw.downloads ? classifiers
+              then
+                lib.foldl' (
+                  cAcc: cName: let
+                    cArt = raw.downloads.classifiers.${cName};
+                  in
+                    if cArt ? url && cArt.url != ""
+                    then let
+                      fullName = "${raw.name}:${cName}";
+                      cAllowed = allowed && (isClassifierAllowed hostPlatform cName);
+                    in
+                      cAcc
+                      // {
+                        ${fullName} = {
+                          enable = cAllowed;
+                          native = true;
+                          relativePath = cArt.path or "${fullName}.jar";
+                          jar = fetchSha1 cArt;
+                        };
+                      }
+                    else cAcc
+                ) {} (builtins.attrNames raw.downloads.classifiers)
+              else {};
+          in
+            acc // mainEntry // classifierEntries
+      ) {}
+      libraries;
   };
 }

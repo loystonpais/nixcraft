@@ -4,65 +4,35 @@
   lib,
   ...
 }: {
-  libraries,
+  normalizedLibraries ? null,
+  versionDataLibraries ? null,
   runCommandLocal ? pkgs.runCommandLocal,
   unzip ? pkgs.unzip,
 }: let
   inherit (lib) concatMapStringsSep;
 
-  platform = pkgs.stdenv.hostPlatform;
+  libs =
+    if normalizedLibraries != null
+    then normalizedLibraries
+    else if versionDataLibraries != null
+    then lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs pkgs.stdenv.hostPlatform fetchSha1 versionDataLibraries
+    else throw "mkNativeLibDir: either 'normalizedLibraries' or 'versionDataLibraries' must be provided";
 
-  nativeClassifierCandidates =
-    if platform.system == "aarch64-darwin"
-    then [
-      "natives-macos-arm64"
-      "natives-osx-arm64"
-      "natives-macos"
-      "natives-osx"
-    ]
-    else if platform.system == "x86_64-darwin"
-    then [
-      "natives-macos"
-      "natives-osx"
-    ]
-    else if platform.system == "aarch64-linux"
-    then [
-      "natives-linux-arm64"
-      "natives-linux"
-    ]
-    else if platform.system == "x86_64-linux"
-    then [
-      "natives-linux"
-    ]
-    else throw "Unsupported Minecraft native platform: ${platform.system}";
-
-  nativeDownload = artif: let
-    classifiers = artif.downloads.classifiers or {};
-    matches = lib.filter (classifier: classifiers ? ${classifier}) nativeClassifierCandidates;
-  in
-    if matches == []
-    then null
-    else classifiers.${builtins.head matches};
-
-  nativeLibrariesZippedList =
-    map fetchSha1
-    (
-      lib.filter (x: x != null)
-      (map nativeDownload libraries)
-    );
+  enabledNativeLibs =
+    map (l: l.jar) (builtins.filter (l: l.enable && l.native) (builtins.attrValues libs));
 
   placeNativeLibs =
     concatMapStringsSep "\n" (nativeLibrary: ''
       unzip -o ${nativeLibrary} -d $out
     '')
-    nativeLibrariesZippedList;
+    enabledNativeLibs;
 
   script = ''
     mkdir -p $out
     ${placeNativeLibs}
     rm -rf $out/META-INF
-    rm $out/*.git
-    rm $out/*.sha1
+    rm -f $out/*.git
+    rm -f $out/*.sha1
   '';
 in
   runCommandLocal "minecraft-native-lib-dir" {
