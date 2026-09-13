@@ -413,10 +413,6 @@ in
           lib.mkIf (lib.any (l: l.enable && l.native) (lib.attrValues config.libraries))
           (mkNativeLibDir {normalizedLibraries = config.libraries;});
 
-        java.extraArguments = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
-          "-XstartOnFirstThread"
-        ];
-
         java.mainClass = lib.mkDefault config.meta.versionData.mainClass;
 
         # Default libs copied over from
@@ -573,6 +569,12 @@ in
       # Darwin-specific version range patches
       (with lib.nixcraft.minecraftVersion;
         lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (lib.mkMerge [
+          # -XstartOnFirstThread is strictly required for GLFW (LWJGL 3 >= 1.13) on macOS,
+          # but breaks AWT/Cocoa event dispatch in LWJGL 2 (< 1.13), preventing the window from appearing.
+          (lib.mkIf (grEq config.version "1.13") {
+            java.extraArguments = ["-XstartOnFirstThread"];
+          })
+
           # 1. Minecraft < 1.13: LWJGL 2 Apple Silicon ARM64 backport
           (lib.mkIf (ls config.version "1.13") {
             lwjgl.version = lib.mkDefault "2.9.4-nightly-20150209";
@@ -583,8 +585,39 @@ in
             lwjgl.version = lib.mkDefault "3.2.2";
           })
 
-          # 3. Minecraft 1.17 to 1.20.1: JNA buffer truncation crash fix (JNA < 5.13.0)
-          (lib.mkIf ((grEq config.version "1.17") && (lsEq config.version "1.20.1")) (let
+          # 3. Minecraft 1.12 to 1.18.2 (< 1.19): Objective-C bridge ARM64 natives
+          (lib.mkIf ((grEq config.version "1.12") && (ls config.version "1.19")) (let
+            bridgeLibs = {
+              "ca.weblite:java-objc-bridge:1.1.0-mmachina.1" = {
+                enable = lib.mkDefault true;
+                native = false;
+                relativePath = "ca/weblite/java-objc-bridge/1.1.0-mmachina.1/java-objc-bridge-1.1.jar";
+                jar = fetchSha1 {
+                  sha1 = "369a83621e3c65496348491e533cb97fe5f2f37d";
+                  url = "https://github.com/MinecraftMachina/Java-Objective-C-Bridge/releases/download/1.1.0-mmachina.1/java-objc-bridge-1.1.jar";
+                };
+              };
+            };
+
+            stockBridgeLibraries =
+              lib.filterAttrs
+              (name: _: lib.hasPrefix "ca.weblite:java-objc-bridge:" name && !(bridgeLibs ? ${name}))
+              (lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
+                pkgs.stdenv.hostPlatform
+                fetchSha1
+                config.meta.versionData.libraries);
+
+            disabledStockBridgeLibraries =
+              lib.mapAttrs (_: _: {
+                enable = lib.mkForce false;
+              })
+              stockBridgeLibraries;
+          in {
+            libraries = disabledStockBridgeLibraries // bridgeLibs;
+          }))
+
+          # 4. Minecraft 1.12 to 1.20.1: JNA ARM64 natives (< 1.17) and buffer truncation crash fix (< 1.20.2)
+          (lib.mkIf ((grEq config.version "1.12") && (ls config.version "1.20.2")) (let
             jnaLibs = {
               "net.java.dev.jna:jna:5.13.0" = {
                 enable = lib.mkDefault true;
