@@ -39,18 +39,46 @@
       };
     };
 
-    finalBin = evaluated.config.binEntry.finalBin;
-  in
-    finalBin
-    // {
-      passthru =
-        (finalBin.passthru or {})
-        // {
-          evaluatedModule = evaluated;
-        };
+    service = rec {
+      serviceName = evaluated.config.binEntry.name;
+
+      serviceText = ''
+        [Unit]
+        Description=Minecraft Server ${name}
+        After=network.target
+        Wants=network.target
+
+        [Service]
+        Type=simple
+        ExecStart=${lib.getExe evaluated.config.binEntry.finalBin}
+        Restart=on-failure
+
+        [Install]
+        WantedBy=default.target
+      '';
+
+      shareItem = pkgs.writeTextDir "share/systemd/user/${serviceName}.service" serviceText;
+      libItem = pkgs.writeTextDir "lib/systemd/user/${serviceName}.service" serviceText;
     };
 
-  extraCombinators = {withConfig, ...}: rec {
+    finalEntry = pkgs.symlinkJoin {
+      name = service.serviceName;
+      paths = [
+        service.shareItem
+        service.libItem
+        evaluated.config.binEntry.finalBin
+      ];
+
+      meta.mainProgram = service.serviceName;
+
+      passthru = {
+        evaluatedModule = evaluated;
+      };
+    };
+  in
+    finalEntry;
+
+  extraCombinators = withConfig: rec {
     agreeToEula = withConfig {
       agreeToEula = true;
     };
