@@ -91,7 +91,7 @@
   in
     finalEntry;
 
-  extraCombinators = {withConfig, ...}: rec {
+  extraCombinators = withConfig: rec {
     withExternalAssets = withConfig {
       enableExternalAssets = true;
     };

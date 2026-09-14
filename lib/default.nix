@@ -93,6 +93,31 @@ in rec {
             };
           };
 
+        pwd = let
+          pwdEnv =
+            if builtins ? currentSystem
+            then builtins.getEnv "PWD"
+            else "";
+          pwdPath = /. + "${pwdEnv}";
+          configFile =
+            if pwdEnv != "" && builtins.pathExists (pwdPath + "/nixcraft.nix")
+            then pwdPath + "/nixcraft.nix"
+            else if pwdEnv != "" && builtins.pathExists (pwdPath + "/default.nix")
+            then pwdPath + "/default.nix"
+            else null;
+        in
+          if pwdEnv == ""
+          then throw "nixcraft: .pwd requires evaluation with '--impure' to read PWD"
+          else
+            withConfig (
+              [
+                {
+                  absoluteDir = pwdEnv;
+                }
+              ]
+              ++ (lib.optional (configFile != null) configFile)
+            );
+
         versionShortcuts = let
           sanitizeVersion = v: "v" + (builtins.replaceStrings ["." "-" " "] ["-" "-" "-"] v);
           allVersions = sources.normalized-manifest.versionListOrdered;
@@ -100,11 +125,7 @@ in rec {
           lib.listToAttrs (map (ver: lib.nameValuePair (sanitizeVersion ver) (withVersion ver)) allVersions);
       };
 
-      customCombinators = extraCombinators {
-        inherit withConfig makeInstance cfgModules;
-      };
-
-      allCombinators = baseCombinators // customCombinators;
+      allCombinators = baseCombinators // (extraCombinators withConfig);
 
       evalResult = evalPackage {
         inherit cfgModules makeInstance allCombinators withConfig;
@@ -114,7 +135,11 @@ in rec {
       evaluatedModule = evalResult.evaluatedModule or (evalResult.passthru.evaluatedModule or null);
     in
       package
-      // (if evaluatedModule != null then {inherit evaluatedModule;} else {})
+      // (
+        if evaluatedModule != null
+        then {inherit evaluatedModule;}
+        else {}
+      )
       // allCombinators
       // baseCombinators.versionShortcuts;
   in
