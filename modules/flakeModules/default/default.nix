@@ -141,6 +141,7 @@ in {
       };
 
       packages = lib.nixcraft.importPackages "${self}/packages" pkgs {
+        inherit lib;
         inherit sources;
         inherit builders;
         inherit submodules;

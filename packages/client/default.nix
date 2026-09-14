@@ -35,9 +35,7 @@
     then "${homeDir}/.local/share/nixcraft/client/auth"
     else "/tmp/nixcraft-client-auth";
 
-  makeClient = currentCfg: let
-    cfgModules = lib.toList currentCfg;
-
+  evalPackage = {cfgModules, ...}: let
     evaluated = lib.evalModules {
       modules =
         [
@@ -90,129 +88,114 @@
         evaluatedModule = evaluated;
       };
     };
-
-    # Fluent modifiers
-    combinators = rec {
-      withConfig = newCfg: makeClient (cfgModules ++ (lib.toList newCfg));
-      overrideConfig = withConfig;
-
-      withExternalAssets = withConfig {
-        enableExternalAssets = true;
-      };
-
-      withCachedAssets = withExternalAssets;
-
-      withNixGL = withConfig {
-        enableNixGL = true;
-      };
-
-      withRenice = withConfig {
-        renice.enable = true;
-      };
-
-      online = withConfig {
-        account = {
-          offline = false;
-        };
-      };
-
-      withVersion = ver:
-        withConfig {
-          version = ver;
-        };
-
-      withLwjglVersion = ver:
-        withConfig {
-          lwjgl.version = ver;
-        };
-
-      lwjgl3-3-3 = withLwjglVersion "3.3.3";
-      lwjgl3-2-2 = withLwjglVersion "3.2.2";
-
-      fsg = withConfig {
-        mrpack = {
-          enable = true;
-          file = pkgs.fetchurl {
-            inherit (sources.modrinth."speedrunpack-1-16-1") url sha512;
-          };
-        };
-
-        files = {
-          "mods/fsg-mod.jar".source = pkgs.fetchurl {
-            inherit (sources.modrinth."fsg-mod-1-16-1") url sha512;
-          };
-        };
-
-        java = {
-          extraArguments = [
-            "-XX:+UseZGC"
-            "-XX:+AlwaysPreTouch"
-            "-Dgraal.TuneInlinerExploration=1"
-            "-XX:NmethodSweepActivity=1"
-          ];
-          package = pkgs.jdk17;
-          maxMemory = 3500;
-          minMemory = 3500;
-        };
-
-        waywall.enable = true;
-
-        binEntry = {
-          name = "fsg";
-        };
-
-        desktopEntry = {
-          name = "Nixcraft FSG";
-          extraConfig = {
-            terminal = true;
-          };
-        };
-      };
-
-      rsg = withConfig {
-        mrpack = {
-          enable = true;
-          file = pkgs.fetchurl {
-            inherit (sources.modrinth."speedrunpack-1-16-1") url sha512;
-          };
-        };
-
-        java = {
-          extraArguments = [
-            "-XX:+UseZGC"
-            "-XX:+AlwaysPreTouch"
-            "-Dgraal.TuneInlinerExploration=1"
-            "-XX:NmethodSweepActivity=1"
-          ];
-          package = pkgs.jdk17;
-          maxMemory = 4000;
-          minMemory = 4000;
-        };
-
-        waywall.enable = true;
-
-        binEntry = {
-          name = "rsg";
-        };
-
-        desktopEntry = {
-          name = "Nixcraft RSG";
-          extraConfig = {
-            terminal = true;
-          };
-        };
-      };
-
-      latestRelease = withVersion "latest-release";
-      latestSnapshot = withVersion "latest-snapshot";
-
-      versionShortcuts = let
-        sanitizeVersion = v: "v" + (builtins.replaceStrings ["." "-" " "] ["-" "-" "-"] v);
-        allVersions = sources.normalized-manifest.versionListOrdered;
-      in
-        lib.listToAttrs (map (ver: lib.nameValuePair (sanitizeVersion ver) (withVersion ver)) allVersions);
-    };
   in
-    finalEntry // {inherit (finalEntry.passthru) evaluatedModule;} // combinators // combinators.versionShortcuts;
+    finalEntry;
+
+  extraCombinators = {withConfig, ...}: rec {
+    withExternalAssets = withConfig {
+      enableExternalAssets = true;
+    };
+
+    withCachedAssets = withExternalAssets;
+
+    withNixGL = withConfig {
+      enableNixGL = true;
+    };
+
+    withRenice = withConfig {
+      renice.enable = true;
+    };
+
+    online = withConfig {
+      account = {
+        offline = false;
+      };
+    };
+
+    withLwjglVersion = ver:
+      withConfig {
+        lwjgl.version = ver;
+      };
+
+    lwjgl3-3-3 = withLwjglVersion "3.3.3";
+    lwjgl3-2-2 = withLwjglVersion "3.2.2";
+
+    fsg = withConfig {
+      mrpack = {
+        enable = true;
+        file = pkgs.fetchurl {
+          inherit (sources.modrinth."speedrunpack-1-16-1") url sha512;
+        };
+      };
+
+      files = {
+        "mods/fsg-mod.jar".source = pkgs.fetchurl {
+          inherit (sources.modrinth."fsg-mod-1-16-1") url sha512;
+        };
+      };
+
+      java = {
+        extraArguments = [
+          "-XX:+UseZGC"
+          "-XX:+AlwaysPreTouch"
+          "-Dgraal.TuneInlinerExploration=1"
+          "-XX:NmethodSweepActivity=1"
+        ];
+        package = pkgs.jdk17;
+        maxMemory = 3500;
+        minMemory = 3500;
+      };
+
+      waywall.enable = true;
+
+      binEntry = {
+        name = "fsg";
+      };
+
+      desktopEntry = {
+        name = "Nixcraft FSG";
+        extraConfig = {
+          terminal = true;
+        };
+      };
+    };
+
+    rsg = withConfig {
+      mrpack = {
+        enable = true;
+        file = pkgs.fetchurl {
+          inherit (sources.modrinth."speedrunpack-1-16-1") url sha512;
+        };
+      };
+
+      java = {
+        extraArguments = [
+          "-XX:+UseZGC"
+          "-XX:+AlwaysPreTouch"
+          "-Dgraal.TuneInlinerExploration=1"
+          "-XX:NmethodSweepActivity=1"
+        ];
+        package = pkgs.jdk17;
+        maxMemory = 4000;
+        minMemory = 4000;
+      };
+
+      waywall.enable = true;
+
+      binEntry = {
+        name = "rsg";
+      };
+
+      desktopEntry = {
+        name = "Nixcraft RSG";
+        extraConfig = {
+          terminal = true;
+        };
+      };
+    };
+  };
 in
-  makeClient cfg
+  (lib.nixcraft.makeInstancePackage {
+    inherit sources evalPackage extraCombinators;
+  })
+  cfg

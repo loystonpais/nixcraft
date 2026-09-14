@@ -34,21 +34,91 @@ in rec {
     builders;
 
   importPackages = dir: pkgs: args: let
+    fullArgs = {inherit lib;} // args;
     nixFiles = readDir'nixFiles dir;
     packages'nixfiles =
       mapAttrs'
-      (name: value: nameValuePair (removeNixExt name) (pkgs.callPackage (joinPathAndString dir name) args))
+      (name: value: nameValuePair (removeNixExt name) (pkgs.callPackage (joinPathAndString dir name) fullArgs))
       nixFiles;
 
     subdirs = readDir'dirs dir;
     packages'subdir =
       mapAttrs'
-      (name: value: nameValuePair name (pkgs.callPackage (joinPathAndString dir name) args))
+      (name: value: nameValuePair name (pkgs.callPackage (joinPathAndString dir name) fullArgs))
       subdirs;
 
     pacakges = packages'nixfiles // packages'subdir;
   in
     pacakges;
+
+  makeInstancePackage = {
+    sources ? sources,
+    evalPackage,
+    extraCombinators ? (_: {}),
+  }: let
+    makeInstance = currentCfg: let
+      cfgModules = lib.toList currentCfg;
+
+      withConfig = newCfg: makeInstance (cfgModules ++ (lib.toList newCfg));
+
+      baseCombinators = rec {
+        inherit withConfig;
+        overrideConfig = withConfig;
+
+        withVersion = ver:
+          withConfig {
+            version = ver;
+          };
+
+        latestRelease = withVersion "latest-release";
+        latestSnapshot = withVersion "latest-snapshot";
+
+        withFabric = withConfig {
+          fabricLoader.enable = true;
+        };
+
+        withForge = withConfig {
+          forgeLoader.enable = true;
+        };
+
+        withQuilt = withConfig {
+          quiltLoader.enable = true;
+        };
+
+        withMrpack = file:
+          withConfig {
+            mrpack = {
+              enable = true;
+              inherit file;
+            };
+          };
+
+        versionShortcuts = let
+          sanitizeVersion = v: "v" + (builtins.replaceStrings ["." "-" " "] ["-" "-" "-"] v);
+          allVersions = sources.normalized-manifest.versionListOrdered;
+        in
+          lib.listToAttrs (map (ver: lib.nameValuePair (sanitizeVersion ver) (withVersion ver)) allVersions);
+      };
+
+      customCombinators = extraCombinators {
+        inherit withConfig makeInstance cfgModules;
+      };
+
+      allCombinators = baseCombinators // customCombinators;
+
+      evalResult = evalPackage {
+        inherit cfgModules makeInstance allCombinators withConfig;
+      };
+
+      package = evalResult.package or evalResult;
+      evaluatedModule = evalResult.evaluatedModule or (evalResult.passthru.evaluatedModule or null);
+    in
+      package
+      // (if evaluatedModule != null then {inherit evaluatedModule;} else {})
+      // allCombinators
+      // baseCombinators.versionShortcuts;
+  in
+    makeInstance;
 
   importScripts = dir: pkgs: let
     files = filterAttrsByName (name: !(lib.strings.hasPrefix "." name)) (readDir'files dir);
