@@ -497,7 +497,6 @@ in
         '';
       })
 
-      # TODO: implement fast asset download
       (lib.mkIf config.enableFastAssetDownload {
         assetHash = lib.mkOptionDefault lib.fakeHash;
       })
