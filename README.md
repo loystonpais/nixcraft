@@ -7,7 +7,7 @@
 [![Flake](https://img.shields.io/badge/Nix-Flakes-5277C3?style=flat-square&logo=nixos&logoColor=white)](https://nixos.org)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS-informational?style=flat-square)](https://github.com/loystonpais/nixcraft)
 
-[Features](#features) • [Quick Start](#quick-start) • [Installation](#installation) • [External Assets](#external-assets-recommended) • [Authentication](#authentication) • [Configuration Recipes](#configuration-recipes) • [Options Reference](#options-reference)
+[Features](#features) • [Quick Start](#quick-start) • [External Assets](#external-assets-recommended) • [Authentication](#authentication) • [Configuration Recipes](#configuration-recipes) • [Options Reference](#options-reference)
 
 </div>
 
@@ -33,80 +33,12 @@ Nixcraft lets you build and run Minecraft clients and dedicated servers using Ni
 
 ## Quick Start
 
-You can run an instance right away without installing anything permanently:
-
-### Run a Client Instance
-
-Using presets (combinators):
-
-```bash
-nix run --impure "github:loystonpais/nixcraft#client.withExternalAssets.v1-21-1"
-```
-
-Custom setup:
-
-```bash
-nix run --impure --expr '
-(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override {
-  cfg = {
-    version = "1.21.1";
-    account = { offline = true; };
-    enableExternalAssets = true; # Recommended for faster installation
-    absoluteDir = "${builtins.getEnv "PWD"}/game-dir";
-  };
-}
-'
-```
-
-### Run a Dedicated Server
-
-```bash
-nix run --impure --expr '
-(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.server.override {
-  cfg = {
-    version = "1.21.1";
-    agreeToEula = true;
-    absoluteDir = "${builtins.getEnv "PWD"}/game-dir";
-  };
-}
-'
-```
+Nixcraft can be used in several ways: it can be installed via **Home Manager**, as a **NixOS module** (for servers only), via **`nix profile`**, or simply run on the fly with **`nix run`**.
 
 > [!IMPORTANT]
-> Dedicated servers require accepting the Mojang EULA by setting `agreeToEula = true;`.
+> When using `nix run` or `nix profile`, **`--impure` must be set**. This is only needed so Nix can read environment variables like `$HOME` and `$PWD` at evaluation time. Without it, Nix cannot determine your home or current directory, and all instance data will fall back to `/tmp/nixcraft-...`.
 
-## Installation
-
-There are three ways to use Nixcraft depending on your setup.
-
-### 1. Standalone with `nix profile` (Fastest for Single Instances)
-
-If you want to install a client or server without changing your NixOS or Home Manager configuration, use `nix profile add`. This puts the launcher binary in your `$PATH` and creates a desktop shortcut:
-
-```bash
-nix profile add --impure --expr '
-(builtins.getFlake "github:loystonpais/nixcraft").outputs.packages.x86_64-linux.client.override {
-  name = "mc-vanilla";
-  cfg = {
-    version = "1.21.1";
-    account = { offline = true; };
-    enableExternalAssets = true;
-    desktopEntry.name = "Minecraft 1.21.1";
-    absoluteDir = "${builtins.getEnv "HOME"}/.local/share/mc-vanilla";
-  };
-}
-'
-```
-
-Once added, start it with `nixcraft-client-mc-vanilla` in your terminal or launch **Minecraft 1.21.1** from your desktop app menu.
-
-To uninstall it:
-
-```bash
-nix profile remove mc-vanilla
-```
-
-### 2. Home Manager (For Both Clients and Servers)
+### 1. Home Manager (For Both Clients and Servers)
 
 Add Nixcraft to your `flake.nix` inputs:
 
@@ -158,7 +90,7 @@ Import `inputs.nixcraft.homeModules.default` in your Home Manager configuration:
 }
 ```
 
-### 3. NixOS Module (Servers Only)
+### 2. NixOS Module (Servers Only)
 
 Import `inputs.nixcraft.nixosModules.default` in your `configuration.nix` to declare system-level servers running under systemd:
 
@@ -185,6 +117,115 @@ Import `inputs.nixcraft.nixosModules.default` in your `configuration.nix` to dec
     };
   };
 }
+```
+
+### 3. Standalone with `nix profile`
+
+Install an instance directly into your user environment using simple combinators without modifying system files:
+
+```bash
+# Install a client instance (adds binary to $PATH and creates a desktop menu shortcut)
+nix profile add --impure github:loystonpais/nixcraft#client.withExternalAssets.v1-21-1
+
+# Install a Paper server
+nix profile add --impure github:loystonpais/nixcraft#server.agreeToEula.paper.v1-21-1
+```
+
+When a server is added via `nix profile`, a systemd user service is automatically included. You can enable or disable it using standard `systemctl --user`:
+
+```bash
+# Start or enable the server user service
+systemctl --user start nixcraft-server-default
+systemctl --user enable nixcraft-server-default
+
+# Stop or disable it
+systemctl --user stop nixcraft-server-default
+systemctl --user disable nixcraft-server-default
+```
+
+To uninstall an instance:
+
+```bash
+nix profile remove nixcraft-client-default # or nixcraft-server-default
+```
+
+### 4. Run on the fly with `nix run`
+
+Run an instance immediately without installing anything permanently:
+
+```bash
+# Run client on 1.21.1 with external assets
+nix run --impure github:loystonpais/nixcraft#client.withExternalAssets.v1-21-1
+
+# Run a dedicated Paper server on 1.21.1
+nix run --impure github:loystonpais/nixcraft#server.agreeToEula.paper.v1-21-1
+```
+
+#### Chaining Multiple Combinators
+
+Multiple combinators can be chained together via dot-notation:
+
+```bash
+# Paper server + EULA + offline mode + version
+nix run --impure github:loystonpais/nixcraft#server.agreeToEula.paper.offlineMode.v1-21-1
+```
+
+### Portable Game Directories (`.pwd`)
+
+`pwd` is a combinator that sets the instance's game directory to your current working directory (`$PWD`). If a `nixcraft.nix` file exists in that directory, it is automatically picked up and applied as the instance configuration.
+
+This means you can keep your `nixcraft.nix` configuration, world data, mods, and all game files together in a single self-contained folder and move it between machines.
+
+Create a folder with a `nixcraft.nix` inside:
+
+```nix
+# ./nixcraft.nix
+{
+  name = "survival-smp";
+  version = "1.21.1";
+  agreeToEula = true;
+  paper.enable = true;
+  serverProperties = {
+    motd = "My Portable Nixcraft Server";
+    difficulty = "hard";
+  };
+}
+```
+
+Then `cd` into the directory and run:
+
+```bash
+# For a server
+nix run --impure github:loystonpais/nixcraft#server.pwd
+
+# For a client
+nix run --impure github:loystonpais/nixcraft#client.pwd
+```
+
+All game files and world data stay inside that directory. Since `pwd` is just another combinator, it composes with others the same way:
+
+```bash
+nix run --impure github:loystonpais/nixcraft#server.pwd.withLazymc
+```
+
+### Advanced Customization with `--expr`
+
+For more advanced customizations or quick one-off tweaks, use `--expr` to define arbitrary configurations:
+
+```bash
+nix run --impure --expr '
+(builtins.getFlake "github:loystonpais/nixcraft").packages.x86_64-linux.server
+  .agreeToEula
+  .paper
+  .named "creative-hub"
+  .withConfig {
+    version = "1.21.1";
+    serverProperties = {
+      "max-players" = 10;
+      gamemode = "creative";
+    };
+  }
+'
 ```
 
 ## External Assets (Recommended)
@@ -234,7 +275,7 @@ nixcraft.client.shared.account = {
 
 ### Online Accounts (Microsoft)
 
-For connecting to online servers and Realms, set `offline = false`. Nixcraft pulls valid session tokens dynamically at launch without storing your passwords or credentials inside your Nix code:
+For connecting to online servers and Realms, set `offline = false`. Nixcraft uses a device code authentication flow: on first launch, it displays a code in the terminal that you enter at [microsoft.com/link](https://microsoft.com/link) to sign in, similar to how Prism Launcher handles authentication. Valid session tokens are then pulled dynamically at launch without storing passwords or credentials inside your Nix code:
 
 ```nix
 nixcraft.client.shared.account = {
@@ -244,11 +285,25 @@ nixcraft.client.shared.account = {
 };
 ```
 
+When `uuid` is not provided in online mode, it will automatically be picked up from the `NIXCRAFT_CLIENT_AUTH_UUID` environment variable.
+
+In both Home Manager and NixOS, you can set this variable declaratively:
+
+```nix
+nixcraft.client.auth.uuid = "your-account-uuid";
+```
+
+Or export it directly in your shell:
+
+```bash
+export NIXCRAFT_CLIENT_AUTH_UUID="your-account-uuid"
+```
+
 ## Configuration Recipes
 
-### 1. Modrinth Modpack (`.mrpack`) with Auto-Inference
+### 1. Modrinth Modpack (`.mrpack`)
 
-Nixcraft can extract `.mrpack` files directly. It downloads all the listed mods, copies overrides, and automatically sets the right Minecraft and Fabric or Quilt versions:
+When values can be known from other places, they will be inferred. For example, Nixcraft can extract `.mrpack` files directly: it downloads all the listed mods, copies overrides, and infers the right Minecraft and mod loader versions automatically:
 
 ```nix
 { pkgs, ... }: {
