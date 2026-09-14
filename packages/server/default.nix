@@ -62,14 +62,14 @@
     };
 
     finalEntry = pkgs.symlinkJoin {
-      name = service.serviceName;
+      name = "nixcraft-server-${name}";
       paths = [
         service.shareItem
         service.libItem
         evaluated.config.binEntry.finalBin
       ];
 
-      meta.mainProgram = service.serviceName;
+      meta.mainProgram = evaluated.config.binEntry.name;
 
       passthru = {
         evaluatedModule = evaluated;
