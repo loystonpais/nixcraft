@@ -78,6 +78,10 @@
         serverProperties = props;
       };
 
+    offlineMode = withServerProperties {
+      online-mode = false;
+    };
+
     withWorld = world:
       withConfig {
         inherit world;
