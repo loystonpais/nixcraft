@@ -19,12 +19,13 @@ in
     name,
     config,
     dirPrefix,
+    readOnlyName ? true,
     ...
   }: {
     options = {
       name = lib.mkOption {
         type = lib.types.nonEmptyStr;
-        readOnly = true;
+        readOnly = readOnlyName;
         internal = true;
         default = name;
       };
@@ -35,7 +36,7 @@ in
         // (
           if dirPrefix != null
           then {
-            default = "${dirPrefix}/${name}";
+            default = "${dirPrefix}/${config.name}";
           }
           else {}
         ));
@@ -317,7 +318,7 @@ in
         in
           javaPkg);
 
-        binEntry.name = lib.mkOptionDefault "nixcraft-${config._instanceType}-${name}";
+        binEntry.name = lib.mkOptionDefault "nixcraft-${config._instanceType}-${config.name}";
       }
 
       # Settings stuff that the user usually doesn't need to alter

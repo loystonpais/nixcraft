@@ -21,20 +21,21 @@
       modules =
         [
           serverInstanceModule
-          {
+          ({config, ...}: {
             version = lib.mkDefault "latest-release";
             absoluteDir = lib.mkDefault (
               if hasHome
-              then "${homeDir}/.local/share/nixcraft/server/instances/${name}"
-              else "/tmp/nixcraft-server/${name}"
+              then "${homeDir}/.local/share/nixcraft/server/instances/${config.name}"
+              else "/tmp/nixcraft-server/${config.name}"
             );
             binEntry.enable = lib.mkDefault true;
-          }
+          })
         ]
         ++ cfgModules;
       specialArgs = {
         shared = {};
         dirPrefix = null;
+        readOnlyName = false;
         inherit name pkgs lib;
       };
     };
@@ -44,7 +45,7 @@
 
       serviceText = ''
         [Unit]
-        Description=Minecraft Server ${name}
+        Description=Minecraft Server ${evaluated.config.name}
         After=network.target
         Wants=network.target
 
@@ -62,7 +63,7 @@
     };
 
     finalEntry = pkgs.symlinkJoin {
-      name = "nixcraft-server-${name}";
+      name = evaluated.config.binEntry.name;
       paths = [
         service.shareItem
         service.libItem
@@ -79,6 +80,12 @@
     finalEntry;
 
   extraCombinators = withConfig: rec {
+    withName = newName:
+      withConfig {
+        name = newName;
+      };
+    named = withName;
+
     agreeToEula = withConfig {
       agreeToEula = true;
     };

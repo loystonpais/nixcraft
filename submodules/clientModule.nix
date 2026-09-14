@@ -26,6 +26,7 @@
           specialArgs = {
             shared = config.shared;
             dirPrefix = "${config.dir}";
+            readOnlyName = true;
             inherit
               authDirPrefix
               externalAssetsDirPrefix

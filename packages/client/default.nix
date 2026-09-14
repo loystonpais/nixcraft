@@ -40,22 +40,23 @@
       modules =
         [
           clientInstanceModule
-          {
+          ({config, ...}: {
             version = lib.mkDefault "latest-release";
             absoluteDir = lib.mkDefault (
               if hasHome
-              then "${homeDir}/.local/share/nixcraft/client/instances/${name}"
-              else "/tmp/nixcraft-client/${name}"
+              then "${homeDir}/.local/share/nixcraft/client/instances/${config.name}"
+              else "/tmp/nixcraft-client/${config.name}"
             );
             account = lib.mkDefault {offline = true;};
             binEntry.enable = lib.mkDefault true;
             desktopEntry.enable = lib.mkDefault true;
-          }
+          })
         ]
         ++ cfgModules;
       specialArgs = {
         shared = {};
         dirPrefix = null;
+        readOnlyName = false;
         inherit
           authDirPrefix
           externalAssetsDirPrefix
@@ -69,7 +70,7 @@
 
     # Combines both bin entry and desktop entry
     finalEntry = pkgs.symlinkJoin {
-      name = name;
+      name = evaluated.config.binEntry.name;
       paths = [
         (
           pkgs.makeDesktopItem (evaluated.config.desktopEntry.extraConfig
@@ -92,6 +93,12 @@
     finalEntry;
 
   extraCombinators = withConfig: rec {
+    withName = newName:
+      withConfig {
+        name = newName;
+      };
+    named = withName;
+
     withExternalAssets = withConfig {
       enableExternalAssets = true;
     };

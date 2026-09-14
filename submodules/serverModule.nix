@@ -15,6 +15,7 @@
           specialArgs = {
             shared = config.shared;
             dirPrefix = config.dir;
+            readOnlyName = true;
             # name = "<name>";
           };
         });
