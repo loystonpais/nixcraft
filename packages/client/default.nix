@@ -109,6 +109,10 @@
       enableNixGL = true;
     };
 
+    withMangoHud = withConfig {
+      enableMangoHud = true;
+    };
+
     withRenice = withConfig {
       renice.enable = true;
     };

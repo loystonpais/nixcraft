@@ -240,6 +240,37 @@ in
           internal = true;
         };
 
+      launchPrefix = lib.mkOption {
+        type = with lib.types;
+          attrsOf (submodule ({name, ...}: {
+            options = {
+              name = lib.mkOption {
+                type = lib.types.str;
+                default = name;
+                readOnly = true;
+              };
+              enable = (lib.mkEnableOption "launch prefix entry") // {default = true;};
+              priority = lib.mkOption {
+                type = lib.types.int;
+                default = 1000;
+              };
+              command = lib.mkOption {
+                type = with lib.types; listOf (oneOf [str path package]);
+              };
+              separator = lib.mkOption {
+                type = with lib.types; nullOr str;
+                default = "--";
+              };
+              envVars =
+                lib.nixcraft.options.envVars
+                // {
+                  default = {};
+                };
+            };
+          }));
+        default = {};
+      };
+
       finalLaunchShellCommandString = lib.mkOption {
         type = lib.types.lines;
         readOnly = true;
