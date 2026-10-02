@@ -117,14 +117,14 @@ in
               }: {
                 options = {
                   method = lib.mkOption {
-                    type = lib.types.enum ["copy" "copy-init" "symlink" "world"];
+                    type = lib.types.enum ["copy" "copy-init" "symlink" "world" "merge"];
                     default = "symlink";
-
                     description = ''
                       Method to place the file in target location
                         copy-init     - copy once during init (suitable for config files from modpacks)
                         copy          - copy every rebuild
                         symlink       - symlink every rebuild
+                        merge         - merge file at runtime
                         world         - recursive copy directory only if it doesn't exist already (used internally for world/saves)
                     '';
                   };
@@ -538,6 +538,7 @@ in
         };
 
         finalFilePlacementShellScript = let
+          fileMerge = pkgs.callPackage ../packages/file-merge {};
           esc = lib.escapeShellArg;
           entryFilePath = "${config.absoluteDir}/.nixcraft/files";
           initFilePath = "${config.absoluteDir}/.nixcraft/init";
@@ -548,6 +549,7 @@ in
           files'symlink = filterAttrs (name: file: file.method == "symlink") enabledFiles;
           files'copy-init = filterAttrs (name: file: file.method == "copy-init") enabledFiles;
           files'world = filterAttrs (name: file: file.method == "world") enabledFiles;
+          files'merge = filterAttrs (name: file: file.method == "merge") enabledFiles;
 
           files'entries = filterAttrs (name: file: file.method == "copy" || file.method == "symlink") enabledFiles;
 
@@ -585,6 +587,17 @@ in
               ln -s ${esc file.finalSource} ${esc fileAbsPath}
             '')
             files'symlink;
+
+          script'merge =
+            lib.concatMapAttrsStringSep "\n" (name: file: let
+              fileAbsPath = "${config.absoluteDir}/${file.target}";
+              fileAbsDirPath = builtins.dirOf fileAbsPath;
+              patchJson = pkgs.writeText "${file.fileName}.patch.json" (builtins.toJSON file.value);
+            in ''
+              mkdir -p ${esc fileAbsDirPath}
+              ${lib.getExe fileMerge} ${esc file.type} ${esc patchJson} ${esc fileAbsPath} ${esc fileAbsPath}
+            '')
+            files'merge;
 
           script'world =
             lib.concatMapAttrsStringSep "\n" (name: file: let
@@ -626,6 +639,10 @@ in
           ### symlink ###
           ${script'symlink}
           ### symlink end ###
+
+          ### merge ###
+          ${script'merge}
+          ### merge end ###
 
           ### copy-init ###
           if [ ! -e ${esc initFilePath} ]; then
