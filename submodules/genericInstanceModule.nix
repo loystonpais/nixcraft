@@ -138,6 +138,11 @@ in
         default = {};
       };
 
+      mods = lib.mkOption {
+        type = with lib.types; listOf (oneOf [path package]);
+        default = [];
+      };
+
       placeFilesAtActivation =
         (lib.mkEnableOption "placing files during activation")
         // {
@@ -523,6 +528,19 @@ in
           )
         ];
       })
+
+      # Place mods from .mods
+      {
+        files = builtins.listToAttrs (
+          map (modPath: {
+            name = builtins.unsafeDiscardStringContext "mods/${builtins.baseNameOf (toString modPath)}";
+            value = {
+              source = modPath;
+            };
+          })
+          config.mods
+        );
+      }
 
       (lib.mkIf (config.jemalloc.enable) {
         envVars.LD_PRELOAD = lib.mkBefore ["${pkgs.jemalloc}/lib/libjemalloc.so"];
