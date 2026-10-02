@@ -136,6 +136,8 @@ in
 
       enableNixGL = lib.mkEnableOption "nixGL";
 
+      enableMangoHud = lib.mkEnableOption "mangohud";
+
       extraArguments = lib.mkOption {
         type = with lib.types; listOf nonEmptyStr;
         default = [];
@@ -278,6 +280,44 @@ in
           config.finalArgumentShellString
         ];
 
+        launchPrefix = {
+          waywall = {
+            enable = lib.mkDefault config.waywall.enable;
+            priority = 500;
+            command =
+              [
+                "${config.waywall.package}/bin/waywall"
+                "wrap"
+              ]
+              ++ lib.optionals (config.waywall.profile != null) [
+                "--profile"
+                config.waywall.profile
+              ];
+            separator = "--";
+            envVars =
+              lib.optionalAttrs (config.waywall.configDir != null) {
+                XDG_CONFIG_HOME = pkgs.linkFarm "waywall-config-dir" {
+                  waywall = config.waywall.configDir;
+                };
+              }
+              // lib.optionalAttrs (config.waywall.configText != null) {
+                XDG_CONFIG_HOME = pkgs.linkFarm "waywall-config-dir" {
+                  "waywall/init.lua" = pkgs.writeTextFile {
+                    name = "init.lua";
+                    text = config.waywall.configText;
+                  };
+                };
+              };
+          };
+
+          mangohud = {
+            enable = lib.mkDefault config.enableMangoHud;
+            priority = 600;
+            command = ["${lib.getExe pkgs.mangohud}"];
+            separator = null;
+          };
+        };
+
         finalLaunchShellScript = let
           authPkg = pkgs.callPackage ../packages/client-auth {};
           acc = config.account;
@@ -290,53 +330,40 @@ in
             then ''AUTH=$(${lib.getExe authPkg} --auth-dir ${escapeShellArg acc.authDir} auth ${uuidArg} ${verifyUsernameArg} --as-client-args)''
             else ''AUTH="--accessToken dummy"'';
 
-          defaultScript = ''
-            #!${pkgs.bash}/bin/bash
+          enabledPrefixes =
+            lib.sort (a: b: a.priority < b.priority)
+            (lib.filter (w: w.enable) (builtins.attrValues config.launchPrefix));
 
-            set -e
+          launchPrefixTokens =
+            lib.concatMap (
+              w: let
+                envTokens =
+                  if w.envVars != {}
+                  then ["env"] ++ (lib.mapAttrsToList (k: v: "${k}=${v}") w.envVars)
+                  else [];
+              in
+                envTokens ++ (map toString w.command) ++ (lib.optional (w.separator != null) w.separator)
+            )
+            enabledPrefixes;
 
-            ${lib.nixcraft.mkExportedEnvVars config.envVars}
+          launchPrefixStr =
+            lib.optionalString (launchPrefixTokens != [])
+            "${lib.concatMapStringsSep " " escapeShellArg launchPrefixTokens} ";
+        in ''
+          #!${pkgs.bash}/bin/bash
 
-            ${config.finalPreLaunchShellScript}
+          set -e
 
-            cd ${escapeShellArg config.absoluteDir}
+          ${lib.nixcraft.mkExportedEnvVars config.envVars}
 
-            ${authArgsScript}
+          ${config.finalPreLaunchShellScript}
 
-            exec ${config.finalLaunchShellCommandString} $AUTH "$@"
-          '';
-        in
-          if config.waywall.enable
-          then
-            (let
-              configDirStr = lib.optionalString (config.waywall.configDir != null) "XDG_CONFIG_HOME=${(pkgs.linkFarm "waywall-config-dir" {
-                waywall = config.waywall.configDir;
-              })}";
+          cd ${escapeShellArg config.absoluteDir}
 
-              configTextStr = lib.optionalString (config.waywall.configText != null) "XDG_CONFIG_HOME=${(pkgs.linkFarm "waywall-config-dir" {
-                "waywall/init.lua" = pkgs.writeTextFile {
-                  name = "init.lua";
-                  text = config.waywall.configText;
-                };
-              })}";
+          ${authArgsScript}
 
-              profileStr = lib.optionalString (config.waywall.profile != null) "--profile ${lib.escapeShellArg config.waywall.profile}";
-
-              runScript =
-                pkgs.writeTextFile
-                {
-                  name = "run";
-                  text = defaultScript;
-                  executable = true;
-                };
-            in ''
-              #!${pkgs.bash}/bin/bash
-
-              set -e
-
-              ${configDirStr} ${configTextStr} exec "${config.waywall.package}/bin/waywall" wrap ${profileStr} -- "${runScript}" "$@"
-            '')
-          else defaultScript;
+          exec ${launchPrefixStr}${config.finalLaunchShellCommandString} $AUTH "$@"
+        '';
 
         finalActivationShellScript = ''
           ${config.activationShellScript}

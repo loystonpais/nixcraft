@@ -138,7 +138,27 @@
         ${
           if config.lazymc.enable
           then ''exec "${lib.getExe config.lazymc.package}" --config ${config.absoluteDir}/lazymc.toml''
-          else ''exec ${config.finalLaunchShellCommandString} "$@"''
+          else let
+            enabledPrefixes =
+              lib.sort (a: b: a.priority < b.priority)
+              (lib.filter (w: w.enable) (builtins.attrValues config.launchPrefix));
+
+            launchPrefixTokens =
+              lib.concatMap (
+                w: let
+                  envTokens =
+                    if w.envVars != {}
+                    then ["env"] ++ (lib.mapAttrsToList (k: v: "${k}=${v}") w.envVars)
+                    else [];
+                in
+                  envTokens ++ (map toString w.command) ++ (lib.optional (w.separator != null) w.separator)
+              )
+              enabledPrefixes;
+
+            launchPrefixStr =
+              lib.optionalString (launchPrefixTokens != [])
+              "${lib.concatMapStringsSep " " lib.escapeShellArg launchPrefixTokens} ";
+          in ''exec ${launchPrefixStr}${config.finalLaunchShellCommandString} "$@"''
         }
       '';
 
