@@ -193,6 +193,35 @@ true
 
 
 
+## client\.instances\.\<name>\.enableMangoHud
+
+
+
+Whether to enable mangohud\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
 ## client\.instances\.\<name>\.enableNixGL
 
 
@@ -898,7 +927,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "26.2";
+    content = "26.3";
     priority = 1500;
   };
 }
@@ -1192,12 +1221,13 @@ Method to place the file in target location
 copy-init     - copy once during init (suitable for config files from modpacks)
 copy          - copy every rebuild
 symlink       - symlink every rebuild
+merge         - merge file at runtime
 world         - recursive copy directory only if it doesn’t exist already (used internally for world/saves)
 
 
 
 *Type:*
-one of “copy”, “copy-init”, “symlink”, “world”
+one of “copy”, “copy-init”, “symlink”, “world”, “merge”
 
 
 
@@ -1337,7 +1367,7 @@ non-empty string *(read only)*
 *Default:*
 
 ```nix
-"--version 26.2 --assetsDir /nix/store/d29723k911lzhf6s7yz9l55yrk3apdl6-minecraft-assets-dir --assetIndex 32 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
+"--version 26.3 --assetsDir /nix/store/6wm9mhm397p1srg6vxvimc5kzs5dvdab-minecraft-assets-dir --assetIndex 34 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
 ```
 
 
@@ -1415,7 +1445,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "26.2";
+    content = "26.3";
     priority = 1500;
   };
 }
@@ -1785,6 +1815,171 @@ true
 
 
 
+## client\.instances\.\<name>\.launchPrefix
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule)
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
+## client\.instances\.\<name>\.launchPrefix\.\<name>\.enable
+
+
+
+Whether to enable launch prefix entry\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.launchPrefix\.\<name>\.command
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+list of (string or absolute path or package)
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## client\.instances\.\<name>\.launchPrefix\.\<name>\.envVars
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (null or (list of (signed integer or string or absolute path)) or signed integer or string or absolute path)
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
+*Example:*
+
+```nix
+{
+  FOO = "BAR";
+}
+```
+
+
+
+## client\.instances\.\<name>\.launchPrefix\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## client\.instances\.\<name>\.launchPrefix\.\<name>\.priority
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+1000
+```
+
+
+
+## client\.instances\.\<name>\.launchPrefix\.\<name>\.separator
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+
+```nix
+"--"
+```
+
+
+
 ## client\.instances\.\<name>\.libraries
 
 
@@ -1905,8 +2100,6 @@ null
 
 ## client\.instances\.\<name>\.lwjgl\.version
 
-
-
 This option has no description\.
 
 
@@ -1958,6 +2151,27 @@ attribute set *(read only)*
 
 
 
+## client\.instances\.\<name>\.mods
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+list of (absolute path or package)
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
 ## client\.instances\.\<name>\.mrpack
 
 
@@ -1978,7 +2192,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "26.2";
+    content = "26.3";
     priority = 1500;
   };
 }
@@ -2088,6 +2302,8 @@ null
 
 ## client\.instances\.\<name>\.mrpack\.file
 
+
+
 This option has no description\.
 
 
@@ -2149,6 +2365,27 @@ This option has no description\.
 
 *Type:*
 null or non-empty string
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.optionsTxt
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or (attribute set of anything)
 
 
 
@@ -2231,7 +2468,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "26.2";
+    content = "26.3";
     priority = 1500;
   };
 }
@@ -3030,7 +3267,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "26.2";
+    content = "26.3";
     priority = 1500;
   };
 }
@@ -3324,12 +3561,13 @@ Method to place the file in target location
 copy-init     - copy once during init (suitable for config files from modpacks)
 copy          - copy every rebuild
 symlink       - symlink every rebuild
+merge         - merge file at runtime
 world         - recursive copy directory only if it doesn’t exist already (used internally for world/saves)
 
 
 
 *Type:*
-one of “copy”, “copy-init”, “symlink”, “world”
+one of “copy”, “copy-init”, “symlink”, “world”, “merge”
 
 
 
@@ -3547,7 +3785,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "26.2";
+    content = "26.3";
     priority = 1500;
   };
 }
@@ -3917,6 +4155,169 @@ true
 
 
 
+## server\.instances\.\<name>\.launchPrefix
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule)
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
+## server\.instances\.\<name>\.launchPrefix\.\<name>\.enable
+
+
+
+Whether to enable launch prefix entry\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.launchPrefix\.\<name>\.command
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+list of (string or absolute path or package)
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## server\.instances\.\<name>\.launchPrefix\.\<name>\.envVars
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (null or (list of (signed integer or string or absolute path)) or signed integer or string or absolute path)
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
+*Example:*
+
+```nix
+{
+  FOO = "BAR";
+}
+```
+
+
+
+## server\.instances\.\<name>\.launchPrefix\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## server\.instances\.\<name>\.launchPrefix\.\<name>\.priority
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+1000
+```
+
+
+
+## server\.instances\.\<name>\.launchPrefix\.\<name>\.separator
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+
+```nix
+"--"
+```
+
+
+
 ## server\.instances\.\<name>\.lazymc
 
 
@@ -4121,6 +4522,8 @@ null
 
 ## server\.instances\.\<name>\.mainJar
 
+
+
 This option has no description\.
 
 
@@ -4151,6 +4554,27 @@ attribute set *(read only)*
 
 
 
+## server\.instances\.\<name>\.mods
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+list of (absolute path or package)
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
 ## server\.instances\.\<name>\.mrpack
 
 
@@ -4171,7 +4595,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "26.2";
+    content = "26.3";
     priority = 1500;
   };
 }
@@ -4612,7 +5036,7 @@ submodule
   enable = false;
   minecraftVersion = {
     _type = "override";
-    content = "26.2";
+    content = "26.3";
     priority = 1500;
   };
 }
