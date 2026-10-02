@@ -206,6 +206,7 @@
       files."server.properties" = {
         type = "properties";
         value = config.serverProperties;
+        method = "merge";
       };
     })
 
@@ -219,9 +220,8 @@
         max-tick-time = -1;
       };
 
-      # Lazymc overwrites a lotta things in server properties
-      # so set it to copy instead of symlinking
-      files."server.properties".method = lib.mkDefault "copy";
+      # Lazymc overwrites settings in server properties
+      files."server.properties".method = lib.mkDefault "merge";
     })
 
     # Place world dir
