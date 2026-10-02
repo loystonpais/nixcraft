@@ -93,6 +93,11 @@ in rec {
             };
           };
 
+        withMods = mods:
+          withConfig {
+            inherit mods;
+          };
+
         pwd = let
           pwdEnv =
             if builtins ? currentSystem
