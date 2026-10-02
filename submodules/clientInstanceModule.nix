@@ -129,6 +129,11 @@ in
         '';
       };
 
+      optionsTxt = lib.mkOption {
+        type = with lib.types; nullOr (attrsOf anything);
+        default = null;
+      };
+
       enableNixGL = lib.mkEnableOption "nixGL";
 
       extraArguments = lib.mkOption {
@@ -700,6 +705,21 @@ in
           stockLwjglLibraries;
       in {
         libraries = disabledStockLwjglLibraries // forcedCustomLwjglLibraries;
+      }))
+
+      (lib.mkIf (config.optionsTxt != null) (let
+        dataVersion = sources.minecraft-data-versions.${config.version} or null;
+      in {
+        files."options.txt" = {
+          type = "options-txt";
+          method = "merge";
+          value = lib.mkMerge [
+            (lib.mkIf (dataVersion != null) {
+              version = lib.mkDefault dataVersion;
+            })
+            config.optionsTxt
+          ];
+        };
       }))
 
       (let
