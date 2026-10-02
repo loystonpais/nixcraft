@@ -30,6 +30,7 @@ jobs:
             nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-asset-sha256-all
           fi
 
+          nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-data-versions
           nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-paper-servers
           nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-modloader-locks
           nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-modrinth-sources

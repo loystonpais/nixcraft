@@ -115,6 +115,12 @@ in {
           }
           (sources."update-version-manifest-v2.py");
 
+        update-data-versions =
+          pkgs.writers.writePython3Bin "update-data-versions" {
+            doCheck = false;
+          }
+          (sources."update-data-versions.py");
+
         update-paper-servers = pkgs.writers.writePython3Bin "update-paper-servers" {
           doCheck = false;
           libraries = with pkgs.python3Packages; [requests];
