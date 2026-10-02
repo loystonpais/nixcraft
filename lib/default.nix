@@ -118,6 +118,8 @@ in rec {
               ++ (lib.optional (configFile != null) configFile)
             );
 
+        portable = pwd;
+
         versionShortcuts = let
           sanitizeVersion = v: "v" + (builtins.replaceStrings ["." "-" " "] ["-" "-" "-"] v);
           allVersions = sources.normalized-manifest.versionListOrdered;
