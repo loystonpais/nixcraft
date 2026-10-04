@@ -274,11 +274,15 @@ in
       shared
 
       {
-        finalLaunchShellCommandString = concatStringsSep " " [
-          ''"${config.java.package}/bin/java"''
-          config.java.finalArgumentShellString
-          config.finalArgumentShellString
-        ];
+        finalLaunchShellCommandString = with lib;
+          concatStringsSep " " (concatLists [
+            (lib.nixcraft.mkLaunchPrefixList config.launchPrefix)
+            [
+              ''"${config.java.package}/bin/java"''
+              config.java.finalArgumentShellString
+              config.finalArgumentShellString
+            ]
+          ]);
 
         launchPrefix = {
           waywall = {
@@ -329,26 +333,6 @@ in
             if acc != null && !acc.offline
             then ''AUTH=$(${lib.getExe authPkg} --auth-dir ${escapeShellArg acc.authDir} auth ${uuidArg} ${verifyUsernameArg} --as-client-args)''
             else ''AUTH="--accessToken dummy"'';
-
-          enabledPrefixes =
-            lib.sort (a: b: a.priority < b.priority)
-            (lib.filter (w: w.enable) (builtins.attrValues config.launchPrefix));
-
-          launchPrefixTokens =
-            lib.concatMap (
-              w: let
-                envTokens =
-                  if w.envVars != {}
-                  then ["env"] ++ (lib.mapAttrsToList (k: v: "${k}=${v}") w.envVars)
-                  else [];
-              in
-                envTokens ++ (map toString w.command) ++ (lib.optional (w.separator != null) w.separator)
-            )
-            enabledPrefixes;
-
-          launchPrefixStr =
-            lib.optionalString (launchPrefixTokens != [])
-            "${lib.concatMapStringsSep " " escapeShellArg launchPrefixTokens} ";
         in ''
           #!${pkgs.bash}/bin/bash
 
@@ -362,7 +346,7 @@ in
 
           ${authArgsScript}
 
-          exec ${launchPrefixStr}${config.finalLaunchShellCommandString} $AUTH "$@"
+          exec ${config.finalLaunchShellCommandString} $AUTH "$@"
         '';
 
         finalActivationShellScript = ''

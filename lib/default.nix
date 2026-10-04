@@ -357,6 +357,25 @@ in rec {
   in
     lib.concatStringsSep "\n" exportVariables;
 
+  mkLaunchPrefixList = launchPrefix: let
+    enabledPrefixes =
+      lib.sort (a: b: a.priority < b.priority)
+      (lib.filter (w: w.enable) (builtins.attrValues launchPrefix));
+
+    launchPrefixTokens =
+      lib.concatMap (
+        w: let
+          envTokens =
+            if w.envVars != {}
+            then ["env"] ++ (lib.mapAttrsToList (k: v: "${k}=${v}") w.envVars)
+            else [];
+        in
+          envTokens ++ (map toString w.command) ++ (lib.optional (w.separator != null) w.separator)
+      )
+      enabledPrefixes;
+  in
+    map lib.escapeShellArg launchPrefixTokens;
+
   options = {
     # source https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/config/shells-environment.nix#L39
     envVars = lib.mkOption {
