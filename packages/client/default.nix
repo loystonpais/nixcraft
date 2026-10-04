@@ -109,6 +109,19 @@
       enableNixGL = true;
     };
 
+    withBwrap = withConfig {
+      bwrap.enable = true;
+    };
+
+    mountOpenglDriver = withConfig {
+      bwrap = {
+        enable = true;
+        mountOpenglDriver = true;
+      };
+    };
+
+    withOpenglDriver = mountOpenglDriver;
+
     withMangoHud = withConfig {
       enableMangoHud = true;
     };

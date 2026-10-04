@@ -471,6 +471,20 @@ in
         _instanceType = "client";
       }
 
+      (lib.mkIf (config.bwrap.enable && config.bwrap.mountOpenglDriver) {
+        runtimeLibs = with pkgs; [
+          libxau
+          libxdmcp
+          libxcb
+          libxrender
+          libxi
+          libxinerama
+          libdrm
+          libdecor
+          wayland
+        ];
+      })
+
       (let
         inherit (pkgs) mesa libglvnd libvdpau-va-gl;
 
