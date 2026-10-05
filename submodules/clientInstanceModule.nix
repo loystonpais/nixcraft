@@ -515,10 +515,14 @@ in
         };
       })
 
-      (lib.mkIf config.useDiscreteGPU {
-        enableDriPrime = true;
-        enableNvidiaOffload = true;
-      })
+      (lib.mkIf config.useDiscreteGPU (
+        lib.mkMerge [
+          (lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+            enableDriPrime = true;
+            enableNvidiaOffload = true;
+          })
+        ]
+      ))
 
       (lib.mkIf config.fixBugs (lib.mkMerge [
         (lib.mkIf config.enableNvidiaOffload {
