@@ -417,17 +417,19 @@ in
 
       {
         libraries =
-          lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
-          pkgs.stdenv.hostPlatform
-          fetchSha1
-          config.meta.versionData.libraries;
+          lib.mapAttrs
+          (_: libDef: lib.mkDefault libDef)
+          (lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
+            pkgs.stdenv.hostPlatform
+            fetchSha1
+            config.meta.versionData.libraries);
 
         mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
 
         # Set java.library.path to the native lib dir only if there are any native libraries
         java.D."java.library.path" =
-          lib.mkIf (lib.any (l: l.enable && l.native) (lib.attrValues config.libraries))
-          (mkNativeLibDir {normalizedLibraries = config.libraries;});
+          lib.mkIf (lib.any (l: l.enable && l.native) (lib.attrValues config.finalLibraries))
+          (mkNativeLibDir {normalizedLibraries = config.finalLibraries;});
 
         java.mainClass = lib.mkDefault config.meta.versionData.mainClass;
 

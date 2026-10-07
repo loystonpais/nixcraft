@@ -164,36 +164,20 @@ in
       };
 
       libraries = lib.mkOption {
-        type = with lib.types;
-          attrsOf (submodule ({name, ...}: {
-            options = {
-              enable =
-                (lib.mkEnableOption "library ${name}")
-                // {
-                  default = true;
-                };
-
-              name = lib.mkOption {
-                type = lib.types.str;
-                default = name;
-                readOnly = true;
-              };
-
-              relativePath = lib.mkOption {
-                type = with lib.types; nullOr (pathWith {absolute = false;});
-                default = null;
-              };
-
-              jar = lib.mkOption {
-                type = lib.types.pathWith {absolute = true;};
-              };
-
-              native = lib.mkOption {
-                type = lib.types.bool;
-              };
-            };
-          }));
+        type = lib.types.attrsOf lib.nixcraft.types.library;
         default = {};
+      };
+
+      dedupeLibraries =
+        (lib.mkEnableOption "deduplication of libraries")
+        // {
+          default = true;
+          internal = true;
+        };
+
+      finalLibraries = lib.mkOption {
+        type = lib.types.attrsOf lib.nixcraft.types.library;
+        readOnly = true;
       };
 
       mainJar = lib.mkOption {
@@ -410,7 +394,7 @@ in
         # pass them to java class paths
         java.cp = let
           normalLibDir = mkLibDir {
-            normalizedLibraries = config.libraries;
+            normalizedLibraries = config.finalLibraries;
           };
 
           # Fix bug with jopt-simple which gets an invalid module name
@@ -434,6 +418,25 @@ in
         in
           (listJarFilesRecursive libDir)
           ++ [config.mainJar];
+      }
+
+      # Compute finalLibraries from libraries with optional deduplication
+      {
+        finalLibraries = let
+          loaderLibs =
+            if config.fabricLoader.enable
+            then config.fabricLoader.finalLibraries
+            else if config.quiltLoader.enable
+            then config.quiltLoader.finalLibraries
+            else {};
+        in
+          if config.dedupeLibraries
+          then
+            lib.nixcraft.maven.dedupeNormalizedLibraryAttrs {
+              libraries = config.libraries;
+              priorityLibraries = loaderLibs;
+            }
+          else config.libraries;
       }
 
       # Forge loader stuff
@@ -461,12 +464,11 @@ in
       }
 
       (lib.mkIf config.fabricLoader.enable {
-        # java.cp = listJarFilesRecursive config.fabricLoader._impurePackage;
-        java.cp = config.fabricLoader.classes;
+        libraries = config.fabricLoader.finalLibraries;
       })
 
       (lib.mkIf config.quiltLoader.enable {
-        java.cp = config.quiltLoader.classes;
+        libraries = config.quiltLoader.finalLibraries;
       })
 
       (lib.mkIf config.mrpack.enable {

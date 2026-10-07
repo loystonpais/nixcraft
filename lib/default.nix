@@ -441,7 +441,7 @@ in rec {
     lsEq = v1: v2: ls v1 v2 || eq v1 v2;
   };
 
-  types = {
+  types = rec {
     minecraftVersion = lib.mkOptionType {
       name = "minecraftVersion";
       description = "Minecraft version";
@@ -470,6 +470,38 @@ in rec {
         "Invalid memory size: '${toString value}'. Must be an integer and above 512MBs.";
       merge = loc: defs: (lib.head defs).value;
     };
+
+    libraryModule = {name, ...}: {
+      options = {
+        enable =
+          (lib.mkEnableOption "library ${name}")
+          // {
+            default = true;
+          };
+
+        name = lib.mkOption {
+          type = lib.types.str;
+          default = name;
+          readOnly = true;
+        };
+
+        relativePath = lib.mkOption {
+          type = with lib.types; nullOr (pathWith {absolute = false;});
+          default = null;
+        };
+
+        jar = lib.mkOption {
+          type = lib.types.pathWith {absolute = true;};
+        };
+
+        native = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+        };
+      };
+    };
+
+    library = lib.types.submodule libraryModule;
   };
 
   versionManifestV2 = {
@@ -697,6 +729,98 @@ in rec {
           in
             acc // mainEntry // classifierEntries
       ) {}
+      libraries;
+
+    parseMavenCoord = coord: let
+      parts = lib.splitString ":" coord;
+      group = builtins.elemAt parts 0;
+      artifact = builtins.elemAt parts 1;
+      version =
+        if builtins.length parts >= 3
+        then builtins.elemAt parts 2
+        else null;
+      classifier =
+        if builtins.length parts >= 4
+        then builtins.elemAt parts 3
+        else null;
+    in {
+      inherit group artifact version classifier;
+      coordKey = "${group}:${artifact}${
+        if classifier != null
+        then ":${classifier}"
+        else ""
+      }";
+    };
+
+    dedupeNormalizedLibraryAttrs = {
+      libraries,
+      priorityLibraries ? {},
+    }: let
+      # 1. Coordinate keys from priority libraries (e.g. loader libraries)
+      prioKeys = lib.listToAttrs (map (
+        name: let
+          parsed = parseMavenCoord name;
+        in
+          lib.nameValuePair parsed.coordKey name
+      ) (builtins.attrNames priorityLibraries));
+
+      # 2. Group enabled libraries by coordKey to compare versions if needed
+      grouped = lib.foldl' (
+        acc: name: let
+          parsed = parseMavenCoord name;
+          libDef = libraries.${name};
+        in
+          if !(libDef.enable or true)
+          then acc
+          else let
+            key = parsed.coordKey;
+            current = acc.${key} or [];
+          in
+            acc
+            // {
+              ${key} =
+                current
+                ++ [
+                  {
+                    inherit name;
+                    version = parsed.version;
+                  }
+                ];
+            }
+      ) {} (builtins.attrNames libraries);
+
+      # Determine which library wins for each coordKey
+      winningNames =
+        lib.mapAttrs (
+          key: items:
+            if prioKeys ? ${key}
+            then prioKeys.${key}
+            else
+              (lib.foldl' (
+                  best: curr:
+                    if best == null
+                    then curr
+                    else if curr.version != null && best.version != null && (builtins.compareVersions curr.version best.version) > 0
+                    then curr
+                    else best
+                )
+                null
+                items).name
+        )
+        grouped;
+
+      winningSet = lib.listToAttrs (map (name: lib.nameValuePair name true) (builtins.attrValues winningNames));
+    in
+      lib.mapAttrs (
+        name: libDef: let
+          parsed = parseMavenCoord name;
+          key = parsed.coordKey;
+          hasCollision = (builtins.length (grouped.${key} or [])) > 1 || (prioKeys ? ${key} && prioKeys.${key} != name);
+        in
+          if hasCollision && !(winningSet ? ${name})
+          then libDef // {enable = false;}
+          else libDef
+      )
       libraries;
   };
 }

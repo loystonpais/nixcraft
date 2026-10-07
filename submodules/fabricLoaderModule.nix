@@ -35,8 +35,8 @@
       };
     };
 
-    classes = lib.mkOption {
-      type = lib.types.listOf lib.types.path;
+    finalLibraries = lib.mkOption {
+      type = lib.types.attrsOf lib.nixcraft.types.library;
       readOnly = true;
     };
 
@@ -59,19 +59,24 @@
   config = {
     hash = lib.mkOptionDefault lib.fakeHash;
 
-    classes = let
-      inherit (lib.nixcraft.maven) mkLibUrl;
+    finalLibraries = let
+      inherit (lib.nixcraft.maven) mkLibUrl mkLibPath;
       inherit (sources) maven-libraries;
       dependencies =
         config.meta.lock.dependencies.common
         ++ config.meta.lock.dependencies.${config._instanceType}
         ++ config.meta.gameLock.dependencies ++ [config.meta.lock.name];
     in
-      map (library:
-        builtins.fetchurl {
-          url = mkLibUrl maven-libraries.${library}.url library;
-          sha256 = maven-libraries.${library}.sha256;
+      lib.listToAttrs (map (library:
+        lib.nameValuePair library {
+          enable = true;
+          native = false;
+          relativePath = mkLibPath library;
+          jar = builtins.fetchurl {
+            url = mkLibUrl maven-libraries.${library}.url library;
+            sha256 = maven-libraries.${library}.sha256;
+          };
         })
-      dependencies;
+      dependencies);
   };
 }
