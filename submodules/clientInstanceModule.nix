@@ -544,6 +544,7 @@ in
               "${config.waywall.package}/bin/waywall"
               "wrap"
             ]
+            (lib.optional config.waywall.noEnvReexec "--no-env-reexec")
             (lib.optionals (config.waywall.profile != null) [
               "--profile"
               config.waywall.profile

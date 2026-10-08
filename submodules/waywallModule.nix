@@ -42,6 +42,11 @@
       '';
       default = null;
     };
+
+    noEnvReexec = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+    };
   };
 
   config = lib.mkMerge [
