@@ -111,7 +111,10 @@ def link_or_copy(src: Path, dest: Path) -> None:
         return
 
     dest.parent.mkdir(parents=True, exist_ok=True)
-    temp_target = dest.parent / f".tmp.{dest.name}.{os.getpid()}.{threading.get_ident()}.{time.time_ns()}"
+    temp_target = (
+        dest.parent
+        / f".tmp.{dest.name}.{os.getpid()}.{threading.get_ident()}.{time.time_ns()}"
+    )
 
     try:
         try:
@@ -151,7 +154,10 @@ def save_to_write_cache(
         except Exception:
             pass
 
-        temp_target = cache_target.parent / f".tmp.{sha1}.{os.getpid()}.{threading.get_ident()}.{time.time_ns()}"
+        temp_target = (
+            cache_target.parent
+            / f".tmp.{sha1}.{os.getpid()}.{threading.get_ident()}.{time.time_ns()}"
+        )
         try:
             os.link(src_file, temp_target)
         except OSError:
@@ -197,7 +203,9 @@ def download_asset(
     host = parsed_base.netloc
     port = parsed_base.port or (443 if scheme == "https" else 80)
     base_path = parsed_base.path.rstrip("/")
-    req_path = f"{base_path}/{prefix_sha1_path}" if base_path else f"/{prefix_sha1_path}"
+    req_path = (
+        f"{base_path}/{prefix_sha1_path}" if base_path else f"/{prefix_sha1_path}"
+    )
 
     last_error: Optional[Exception] = None
     for attempt in range(1, retries + 1):
@@ -318,9 +326,11 @@ def render_progress(
     cached: int,
     downloaded: int,
     errors: int,
+    threads: int,
     is_tty: bool,
     last_render_time: float,
     force: bool = False,
+    duration: Optional[float] = None,
 ) -> float:
     """Renders a progress bar with cached vs downloaded asset counts."""
     now = time.time()
@@ -330,19 +340,31 @@ def render_progress(
         return last_render_time
 
     pct = (completed / total * 100) if total > 0 else 100.0
-    bar_width = 25
+    bar_width = 24
     filled = int(bar_width * (completed / total)) if total > 0 else bar_width
-    bar = "=" * filled + "-" * (bar_width - filled)
+
+    # Use Unicode block elements if supported, fall back to ASCII
+    use_utf8 = bool(sys.stdout.encoding and "utf" in sys.stdout.encoding.lower())
+    fill_char = "█" if use_utf8 else "="
+    empty_char = "░" if use_utf8 else "-"
+    bar = fill_char * filled + empty_char * (bar_width - filled)
+
+    # Right-align completed count to eliminate jitter as digits increase
+    digits = len(str(total))
+    count_str = f"{completed:>{digits}}/{total}"
 
     status = (
-        f"[{bar}] {pct:5.1f}% ({completed}/{total}) "
-        f"| Cached: {cached} | Downloaded: {downloaded}"
+        f"Assets [{bar}] {pct:5.1f}% ({count_str}) "
+        f"| Cached: {cached} | Downloaded: {downloaded} | Threads: {threads}"
     )
+    if duration is not None:
+        status += f" | Duration: {duration:.2f}s"
     if errors > 0:
         status += f" | Failed: {errors}"
 
     if is_tty:
-        sys.stdout.write(f"\r{status}")
+        # \r to beginning of line, write status, and clear any trailing characters
+        sys.stdout.write(f"\r{status}\033[K")
     else:
         sys.stdout.write(f"{status}\n")
     sys.stdout.flush()
@@ -407,7 +429,9 @@ def main() -> None:
     args = parser.parse_args()
 
     if not args.index.is_file():
-        print(f"Error: Asset index file '{args.index}' does not exist.", file=sys.stderr)
+        print(
+            f"Error: Asset index file '{args.index}' does not exist.", file=sys.stderr
+        )
         sys.exit(1)
 
     with open(args.index, "r") as f:
@@ -442,10 +466,6 @@ def main() -> None:
                 file=sys.stderr,
             )
 
-    print(
-        f"Processing {total_assets} assets using up to {args.threads} threads..."
-    )
-
     parsed_base = urllib.parse.urlparse(args.base_url)
 
     cached_count = 0
@@ -463,6 +483,7 @@ def main() -> None:
         cached=0,
         downloaded=0,
         errors=0,
+        threads=args.threads,
         is_tty=is_tty,
         last_render_time=last_render_time,
         force=True,
@@ -496,28 +517,23 @@ def main() -> None:
                 errors.append((name, str(e)))
 
             completed = cached_count + downloaded_count + len(errors)
+            is_final = completed == total_assets
             last_render_time = render_progress(
                 completed=completed,
                 total=total_assets,
                 cached=cached_count,
                 downloaded=downloaded_count,
                 errors=len(errors),
+                threads=args.threads,
                 is_tty=is_tty,
                 last_render_time=last_render_time,
-                force=(completed == total_assets),
+                force=is_final,
+                duration=(time.time() - start_time) if is_final else None,
             )
 
     if is_tty:
         sys.stdout.write("\n")
         sys.stdout.flush()
-
-    duration = time.time() - start_time
-
-    print(f"\nAsset fetching summary:")
-    print(f"  Total:      {total_assets}")
-    print(f"  Cached:     {cached_count}")
-    print(f"  Downloaded: {downloaded_count}")
-    print(f"  Duration:   {duration:.2f}s")
 
     if errors:
         print(f"\nFailed to fetch {len(errors)} assets:", file=sys.stderr)
