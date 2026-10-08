@@ -411,6 +411,8 @@ in
             libxext
             libxrandr
             libxxf86vm
+            wayland
+            libdecor
             udev # oshi
             libxtst
             libxkbcommon
@@ -435,8 +437,6 @@ in
           libxi
           libxinerama
           libdrm
-          libdecor
-          wayland
         ];
       })
 
@@ -538,8 +538,17 @@ in
       })
 
       (lib.mkIf config.waywall.enable {
-        # waywall uses custom libglfw.so
-        java.D."org.lwjgl.glfw.libname" = "${inputs.self.packages.${system}.glfw3-waywall}/lib/libglfw.so";
+        # Minecraft >= 26.1 uses bundled GLFW with native Wayland support via debug flags.
+        # Older versions require the waywall-patched GLFW library.
+        java.D =
+          if (lib.nixcraft.minecraftVersion.grEq config.version "26.1")
+          then {
+            "MC_DEBUG_ENABLED" = "";
+            "MC_DEBUG_PREFER_WAYLAND" = "";
+          }
+          else {
+            "org.lwjgl.glfw.libname" = "${inputs.self.packages.${system}.glfw3-waywall}/lib/libglfw.so";
+          };
 
         launchPrefix.waywall = {
           priority = lib.mkDefault 500;
@@ -553,6 +562,7 @@ in
               "--profile"
               config.waywall.profile
             ])
+            config.waywall.extraArguments
           ];
           separator = "--";
           envVars =

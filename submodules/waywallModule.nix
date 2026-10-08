@@ -47,6 +47,11 @@
       type = lib.types.bool;
       default = true;
     };
+
+    extraArguments = lib.mkOption {
+      type = with lib.types; listOf nonEmptyStr;
+      default = [];
+    };
   };
 
   config = lib.mkMerge [
