@@ -70,7 +70,11 @@ in
         internal = true;
       };
 
-      enableExternalAssets = lib.mkEnableOption "external asset management via fetchAssets script";
+      enableExternalAssets =
+        (lib.mkEnableOption "external asset management via fetchAssets script")
+        // {
+          default = true;
+        };
 
       externalAssetsDir = lib.mkOption {
         type = lib.types.nullOr (lib.types.pathWith {absolute = true;});
