@@ -284,56 +284,7 @@ in
             ]
           ]);
 
-        launchPrefix = {
-          waywall = {
-            enable = lib.mkDefault config.waywall.enable;
-            priority = 500;
-            command =
-              [
-                "${config.waywall.package}/bin/waywall"
-                "wrap"
-              ]
-              ++ lib.optionals (config.waywall.profile != null) [
-                "--profile"
-                config.waywall.profile
-              ];
-            separator = "--";
-            envVars =
-              lib.optionalAttrs (config.waywall.configDir != null) {
-                XDG_CONFIG_HOME = pkgs.linkFarm "waywall-config-dir" {
-                  waywall = config.waywall.configDir;
-                };
-              }
-              // lib.optionalAttrs (config.waywall.configText != null) {
-                XDG_CONFIG_HOME = pkgs.linkFarm "waywall-config-dir" {
-                  "waywall/init.lua" = pkgs.writeTextFile {
-                    name = "init.lua";
-                    text = config.waywall.configText;
-                  };
-                };
-              };
-          };
-
-          mangohud = {
-            enable = lib.mkDefault config.enableMangoHud;
-            priority = 600;
-            command = ["${lib.getExe pkgs.mangohud}"];
-            separator = null;
-          };
-        };
-
-        finalLaunchShellScript = let
-          authPkg = pkgs.callPackage ../packages/client-auth {};
-          acc = config.account;
-
-          authArgsScript = let
-            uuidArg = lib.optionalString (acc.uuid != null) "--uuid ${escapeShellArg acc.uuid}";
-            verifyUsernameArg = lib.optionalString (acc.username != null) "--verify-username ${escapeShellArg acc.username}";
-          in
-            if acc != null && !acc.offline
-            then ''AUTH=$(${lib.getExe authPkg} --auth-dir ${escapeShellArg acc.authDir} auth ${uuidArg} ${verifyUsernameArg} --as-client-args)''
-            else ''AUTH="--accessToken dummy"'';
-        in ''
+        finalLaunchShellScript = ''
           #!${pkgs.bash}/bin/bash
 
           set -e
@@ -344,9 +295,7 @@ in
 
           cd ${escapeShellArg config.absoluteDir}
 
-          ${authArgsScript}
-
-          exec ${config.finalLaunchShellCommandString} $AUTH "$@"
+          exec ${config.finalLaunchShellCommandString} "$@"
         '';
 
         finalActivationShellScript = ''
@@ -587,6 +536,43 @@ in
       (lib.mkIf config.waywall.enable {
         # waywall uses custom libglfw.so
         java.D."org.lwjgl.glfw.libname" = "${inputs.self.packages.${system}.glfw3-waywall}/lib/libglfw.so";
+
+        launchPrefix.waywall = {
+          priority = lib.mkDefault 500;
+          command = lib.concatLists [
+            [
+              "${config.waywall.package}/bin/waywall"
+              "wrap"
+            ]
+            (lib.optionals (config.waywall.profile != null) [
+              "--profile"
+              config.waywall.profile
+            ])
+          ];
+          separator = "--";
+          envVars =
+            lib.optionalAttrs (config.waywall.configDir != null) {
+              XDG_CONFIG_HOME = pkgs.linkFarm "waywall-config-dir" {
+                waywall = config.waywall.configDir;
+              };
+            }
+            // lib.optionalAttrs (config.waywall.configText != null) {
+              XDG_CONFIG_HOME = pkgs.linkFarm "waywall-config-dir" {
+                "waywall/init.lua" = pkgs.writeTextFile {
+                  name = "init.lua";
+                  text = config.waywall.configText;
+                };
+              };
+            };
+        };
+      })
+
+      (lib.mkIf config.enableMangoHud {
+        launchPrefix.mangohud = {
+          priority = lib.mkDefault 600;
+          command = ["${lib.getExe pkgs.mangohud}"];
+          separator = null;
+        };
       })
 
       # If version >= 1.6 && version <= 1.12
@@ -688,10 +674,39 @@ in
           }))
         ]))
 
-      (lib.mkIf (config.account != null && config.account.offline) {
-        _classSettings.uuid = lib.mkIf (config.account.uuid != null) config.account.uuid;
-        _classSettings.username = lib.mkIf (config.account.username != null) config.account.username;
-      })
+      (lib.mkIf (config.account != null) (lib.mkMerge [
+        (lib.mkIf config.account.offline {
+          _classSettings.uuid = lib.mkIf (config.account.uuid != null) config.account.uuid;
+          _classSettings.username = lib.mkIf (config.account.username != null) config.account.username;
+          extraArguments = ["--accessToken" "dummy"];
+        })
+
+        (lib.mkIf (!config.account.offline) (let
+          authPkg = pkgs.callPackage ../packages/client-auth {};
+          acc = config.account;
+        in {
+          launchPrefix.auth = {
+            priority = lib.mkDefault 50;
+            command = lib.concatLists [
+              [
+                "${lib.getExe authPkg}"
+                "--auth-dir"
+                acc.authDir
+                "wrap"
+              ]
+              (lib.optionals (acc.uuid != null) [
+                "--uuid"
+                acc.uuid
+              ])
+              (lib.optionals (acc.username != null) [
+                "--verify-username"
+                acc.username
+              ])
+            ];
+            separator = "--";
+          };
+        }))
+      ]))
 
       # Set custom lwjgl libraries if lwjgl.version is set, and disable stock lwjgl libraries
       (lib.mkIf (config.lwjgl.version != null) (let

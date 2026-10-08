@@ -126,6 +126,11 @@
       enableMangoHud = true;
     };
 
+    withWaywall = withConfig {
+      waywall.enable = true;
+    };
+    waywall = withWaywall;
+
     withRenice = withConfig {
       renice.enable = true;
     };

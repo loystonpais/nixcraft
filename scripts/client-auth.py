@@ -47,7 +47,10 @@ def _http_request(
     timeout: float = 15.0,
 ) -> Tuple[int, Dict[str, Any], bytes, Dict[str, str]]:
     """Execute an HTTP request and parse JSON response if present."""
-    req_headers = {"User-Agent": "MinecraftLauncher/2.2.10675", "Accept": "application/json"}
+    req_headers = {
+        "User-Agent": "MinecraftLauncher/2.2.10675",
+        "Accept": "application/json",
+    }
     if headers:
         req_headers.update(headers)
 
@@ -59,10 +62,14 @@ def _http_request(
         req_headers["Content-Type"] = "application/x-www-form-urlencoded"
         body_bytes = urllib.parse.urlencode(data).encode("utf-8")
 
-    req = urllib.request.Request(url, data=body_bytes, headers=req_headers, method=method)
+    req = urllib.request.Request(
+        url, data=body_bytes, headers=req_headers, method=method
+    )
 
     try:
-        with urllib.request.urlopen(req, timeout=timeout, context=_SSL_CONTEXT) as response:
+        with urllib.request.urlopen(
+            req, timeout=timeout, context=_SSL_CONTEXT
+        ) as response:
             res_code = response.status
             res_headers = dict(response.headers)
             raw_data = response.read()
@@ -91,6 +98,7 @@ def lock_directory(dir_path: Path):
     try:
         try:
             import fcntl
+
             fcntl.flock(dir_fd, fcntl.LOCK_EX)
         except ImportError:
             pass
@@ -98,6 +106,7 @@ def lock_directory(dir_path: Path):
     finally:
         try:
             import fcntl
+
             fcntl.flock(dir_fd, fcntl.LOCK_UN)
         except (ImportError, OSError):
             pass
@@ -155,7 +164,9 @@ def _device_code_login() -> Tuple[str, str]:
         raise RuntimeError(f"Failed to initiate device login: {code_res}")
 
     user_code = code_res["user_code"]
-    verification_uri = code_res.get("verification_uri", "https://www.microsoft.com/link")
+    verification_uri = code_res.get(
+        "verification_uri", "https://www.microsoft.com/link"
+    )
     device_code = code_res["device_code"]
     interval = code_res.get("interval", 5)
     expires_in = code_res.get("expires_in", 900)
@@ -163,7 +174,9 @@ def _device_code_login() -> Tuple[str, str]:
     set_cookie = headers.get("Set-Cookie", "")
     poll_headers = {"Cookie": set_cookie} if set_cookie else {}
 
-    sys.stderr.write(f"To sign in, open {verification_uri} in a browser and enter code: {user_code}\n")
+    sys.stderr.write(
+        f"To sign in, open {verification_uri} in a browser and enter code: {user_code}\n"
+    )
     sys.stderr.write("Waiting for authorization...\n")
     sys.stderr.flush()
 
@@ -225,7 +238,11 @@ def _exchange_for_minecraft_chain(ms_access_token: str) -> Tuple[str, int, str, 
     Exchange Microsoft access token through Xbox Live (XAU), XSTS, and Minecraft services.
     Returns (mc_access_token, mc_expires_in, username, normalized_uuid).
     """
-    rps_ticket = ms_access_token if (ms_access_token.startswith("d=") or ms_access_token.startswith("t=")) else f"t={ms_access_token}"
+    rps_ticket = (
+        ms_access_token
+        if (ms_access_token.startswith("d=") or ms_access_token.startswith("t="))
+        else f"t={ms_access_token}"
+    )
 
     # 1. Xbox Live User Authentication (XAU)
     xbl_status, xbl_res, _, _ = _http_request(
@@ -248,7 +265,9 @@ def _exchange_for_minecraft_chain(ms_access_token: str) -> Tuple[str, int, str, 
     )
 
     if xbl_status != 200 or "Token" not in xbl_res:
-        raise RuntimeError(f"Xbox Live authentication failed (status {xbl_status}): {xbl_res}")
+        raise RuntimeError(
+            f"Xbox Live authentication failed (status {xbl_status}): {xbl_res}"
+        )
 
     xbl_token = xbl_res["Token"]
     try:
@@ -278,10 +297,16 @@ def _exchange_for_minecraft_chain(ms_access_token: str) -> Tuple[str, int, str, 
     if xsts_status != 200 or "Token" not in xsts_res:
         xerr = xsts_res.get("XErr")
         if xerr == 2148916233:
-            raise RuntimeError("Xbox Live error: Account does not have an Xbox profile. Please create one at https://signup.live.com/signup")
+            raise RuntimeError(
+                "Xbox Live error: Account does not have an Xbox profile. Please create one at https://signup.live.com/signup"
+            )
         elif xerr == 2148916238:
-            raise RuntimeError("Xbox Live error: Account date of birth is under 18 and requires Family setup.")
-        raise RuntimeError(f"XSTS authorization failed (status {xsts_status}, XErr={xerr}): {xsts_res}")
+            raise RuntimeError(
+                "Xbox Live error: Account date of birth is under 18 and requires Family setup."
+            )
+        raise RuntimeError(
+            f"XSTS authorization failed (status {xsts_status}, XErr={xerr}): {xsts_res}"
+        )
 
     xsts_token = xsts_res["Token"]
 
@@ -297,7 +322,9 @@ def _exchange_for_minecraft_chain(ms_access_token: str) -> Tuple[str, int, str, 
     )
 
     if mc_status != 200 or "access_token" not in mc_res:
-        raise RuntimeError(f"Minecraft authentication failed (status {mc_status}): {mc_res}")
+        raise RuntimeError(
+            f"Minecraft authentication failed (status {mc_status}): {mc_res}"
+        )
 
     mc_access_token = mc_res["access_token"]
     mc_expires_in = mc_res.get("expires_in", 86400)
@@ -342,10 +369,9 @@ def get_all_account_dirs(auth_dir: Path) -> List[Path]:
     """Find all valid account directories under auth_dir."""
     if not auth_dir.exists():
         return []
-    return sorted([
-        p for p in auth_dir.iterdir()
-        if p.is_dir() and (p / "refresh-token").exists()
-    ])
+    return sorted(
+        [p for p in auth_dir.iterdir() if p.is_dir() and (p / "refresh-token").exists()]
+    )
 
 
 def save_account_data(
@@ -399,9 +425,15 @@ def refresh_account(account_dir: Path) -> Tuple[str, str, str]:
             raise RuntimeError(f"No refresh token found in {account_dir}.")
 
         try:
-            new_ms_access_token, new_refresh_token = _refresh_microsoft_token(saved_refresh_token)
-            new_mc_token, mc_expires_in, username, live_uuid = _exchange_for_minecraft_chain(new_ms_access_token)
-            save_account_data(account_dir, username, new_refresh_token, new_mc_token, mc_expires_in)
+            new_ms_access_token, new_refresh_token = _refresh_microsoft_token(
+                saved_refresh_token
+            )
+            new_mc_token, mc_expires_in, username, live_uuid = (
+                _exchange_for_minecraft_chain(new_ms_access_token)
+            )
+            save_account_data(
+                account_dir, username, new_refresh_token, new_mc_token, mc_expires_in
+            )
             return new_mc_token, username, live_uuid
         except Exception as err:
             # Fallback to existing token if still unexpired
@@ -418,13 +450,27 @@ def refresh_account(account_dir: Path) -> Tuple[str, str, str]:
 # CLI Commands
 # ==============================================================================
 
-def cmd_auth(args: argparse.Namespace) -> int:
-    """Special launcher command: checks/verifies credentials, auto-logins if missing/expired, outputs token or client args."""
+
+def cmd_wrap(args: argparse.Namespace) -> int:
+    """Launcher wrapper: checks/verifies credentials, auto-logins if missing/expired, and executes wrapped command."""
     try:
+        exec_cmd = list(args.exec_cmd) if args.exec_cmd else []
+        if exec_cmd and exec_cmd[0] == "--":
+            exec_cmd = exec_cmd[1:]
+
+        if not exec_cmd:
+            raise RuntimeError(
+                "No command specified to wrap. Usage: wrap [options] -- <command...>"
+            )
+
         auth_dir: Path = args.auth_dir
-        raw_uuid = args.uuid or os.environ.get("NIXCRAFT_CLIENT_AUTH_UUID", "").strip() or None
+        raw_uuid = (
+            args.uuid or os.environ.get("NIXCRAFT_CLIENT_AUTH_UUID", "").strip() or None
+        )
         target_uuid: Optional[str] = normalize_uuid(raw_uuid) if raw_uuid else None
-        verify_username: Optional[str] = args.verify_username.strip() if args.verify_username else None
+        verify_username: Optional[str] = (
+            args.verify_username.strip() if args.verify_username else None
+        )
 
         account_dir: Optional[Path] = None
         if target_uuid:
@@ -441,7 +487,9 @@ def cmd_auth(args: argparse.Namespace) -> int:
             try:
                 mc_token, username, live_uuid = refresh_account(account_dir)
             except Exception as err:
-                sys.stderr.write(f"Cached credentials could not be refreshed ({err}). Re-authenticating...\n")
+                sys.stderr.write(
+                    f"Cached credentials could not be refreshed ({err}). Re-authenticating...\n"
+                )
                 account_dir = None
 
         # 2. If UUID was not given, or not on disk, or refresh failed: proceed to login
@@ -453,7 +501,9 @@ def cmd_auth(args: argparse.Namespace) -> int:
                 )
             ms_access_token, ms_refresh_token = _device_code_login()
             sys.stderr.write("Authenticating with Minecraft services...\n")
-            mc_token, mc_expires_in, username, live_uuid = _exchange_for_minecraft_chain(ms_access_token)
+            mc_token, mc_expires_in, username, live_uuid = (
+                _exchange_for_minecraft_chain(ms_access_token)
+            )
 
             # Check UUID match if UUID was specified
             if target_uuid and target_uuid != live_uuid:
@@ -463,7 +513,9 @@ def cmd_auth(args: argparse.Namespace) -> int:
 
             target_dir = auth_dir / live_uuid
             with lock_directory(target_dir):
-                save_account_data(target_dir, username, ms_refresh_token, mc_token, mc_expires_in)
+                save_account_data(
+                    target_dir, username, ms_refresh_token, mc_token, mc_expires_in
+                )
 
             sys.stderr.write(f"Logged in as {username} ({live_uuid})\n")
             sys.stderr.write(f"Account saved: {target_dir}\n")
@@ -474,13 +526,22 @@ def cmd_auth(args: argparse.Namespace) -> int:
                 f"Fetched account username '{username}' does not match provided username '{verify_username}'."
             )
 
-        # 4. Format output to stdout
-        if args.as_client_args:
-            sys.stdout.write(f"--username {username} --uuid {live_uuid} --accessToken {mc_token}\n")
-        else:
-            sys.stdout.write(f"{mc_token}\n")
-        sys.stdout.flush()
-        return 0
+        # 4. Inject credentials and execute wrapped command
+        def set_arg(flag: str, value: str) -> None:
+            if flag in exec_cmd:
+                idx = exec_cmd.index(flag)
+                if idx + 1 < len(exec_cmd):
+                    exec_cmd[idx + 1] = value
+                else:
+                    exec_cmd.append(value)
+            else:
+                exec_cmd.extend([flag, value])
+
+        set_arg("--username", username)
+        set_arg("--uuid", live_uuid)
+        set_arg("--accessToken", mc_token)
+
+        os.execvp(exec_cmd[0], exec_cmd)
     except Exception as e:
         sys.stderr.write(f"Error: {e}\n")
         return 1
@@ -491,11 +552,15 @@ def cmd_add_account(args: argparse.Namespace) -> int:
     try:
         ms_access_token, ms_refresh_token = _device_code_login()
         sys.stderr.write("Authenticating with Minecraft services...\n")
-        mc_access_token, mc_expires_in, username, live_uuid = _exchange_for_minecraft_chain(ms_access_token)
+        mc_access_token, mc_expires_in, username, live_uuid = (
+            _exchange_for_minecraft_chain(ms_access_token)
+        )
 
         account_dir = args.auth_dir / live_uuid
         with lock_directory(account_dir):
-            save_account_data(account_dir, username, ms_refresh_token, mc_access_token, mc_expires_in)
+            save_account_data(
+                account_dir, username, ms_refresh_token, mc_access_token, mc_expires_in
+            )
 
         sys.stderr.write(f"Logged in as {username} ({live_uuid})\n")
         sys.stderr.write(f"Account saved: {account_dir}\n")
@@ -511,7 +576,9 @@ def cmd_get_token(args: argparse.Namespace) -> int:
         norm_uuid = normalize_uuid(args.uuid)
         account_dir = args.auth_dir / norm_uuid
         if not (account_dir.is_dir() and (account_dir / "refresh-token").exists()):
-            raise RuntimeError(f"No account found with UUID '{args.uuid}' in auth directory: {args.auth_dir}")
+            raise RuntimeError(
+                f"No account found with UUID '{args.uuid}' in auth directory: {args.auth_dir}"
+            )
 
         mc_token, _, _ = refresh_account(account_dir)
         sys.stdout.write(f"{mc_token}\n")
@@ -528,7 +595,9 @@ def cmd_get_username(args: argparse.Namespace) -> int:
         norm_uuid = normalize_uuid(args.uuid)
         account_dir = args.auth_dir / norm_uuid
         if not (account_dir.is_dir() and (account_dir / "refresh-token").exists()):
-            raise RuntimeError(f"No account found with UUID '{args.uuid}' in auth directory: {args.auth_dir}")
+            raise RuntimeError(
+                f"No account found with UUID '{args.uuid}' in auth directory: {args.auth_dir}"
+            )
 
         username = get_account_username(account_dir)
         if not username:
@@ -564,7 +633,9 @@ def cmd_refresh(args: argparse.Namespace) -> int:
             norm_uuid = normalize_uuid(args.uuid)
             account_dir = auth_dir / norm_uuid
             if not (account_dir.is_dir() and (account_dir / "refresh-token").exists()):
-                raise RuntimeError(f"No account found with UUID '{args.uuid}' in auth directory: {auth_dir}")
+                raise RuntimeError(
+                    f"No account found with UUID '{args.uuid}' in auth directory: {auth_dir}"
+                )
 
             sys.stderr.write(f"Refreshing account {account_dir.name}...\n")
             token, username, live_uuid = refresh_account(account_dir)
@@ -635,29 +706,29 @@ def main() -> int:
 
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # Subcommand: auth (launcher helper)
-    sub_auth = subparsers.add_parser(
-        "auth",
-        help="Resolve credentials, auto-login if missing, verify against config, and output token or client launch args",
+    # Subcommand: wrap (launcher prefix wrapper)
+    sub_wrap = subparsers.add_parser(
+        "wrap",
+        help="Resolve credentials, verify against config, and execute wrapped command with player credentials",
     )
-    sub_auth.add_argument(
+    sub_wrap.add_argument(
         "--uuid",
         type=str,
         default=None,
         help="Account player UUID to check and retrieve session for",
     )
-    sub_auth.add_argument(
+    sub_wrap.add_argument(
         "--verify-username",
         type=str,
         default=None,
         help="Verify that the account username matches this value",
     )
-    sub_auth.add_argument(
-        "--as-client-args",
-        action="store_true",
-        help="Output '--username <name> --uuid <uuid> --accessToken <token>' for Minecraft client arguments",
+    sub_wrap.add_argument(
+        "exec_cmd",
+        nargs=argparse.REMAINDER,
+        help="Target command to execute with authenticated credentials appended (e.g. -- java ...)",
     )
-    sub_auth.set_defaults(func=cmd_auth)
+    sub_wrap.set_defaults(func=cmd_wrap)
 
     # Subcommand: add-account (explicit login)
     sub_add = subparsers.add_parser(
