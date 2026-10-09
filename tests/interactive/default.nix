@@ -15,6 +15,9 @@
       clientDirPrefix = "/tmp/nixcraft-tests/nixcraft/client/instances";
       clientAuthDirPrefix = "/tmp/nixcraft-tests/nixcraft/client/auth";
       serverDirPrefix = "/tmp/nixcraft-tests/nixcraft/server/instances";
+      clientExternalAssetsDirPrefix = "/tmp/nixcraft-tests/nixcraft/client/assets";
+      clientSkinsDirPrefix = "/tmp/nixcraft-tests/nixcraft/client/skins";
+      clientExternalAssetsLookupPaths = [];
       inherit pkgs;
       inherit lib;
     };

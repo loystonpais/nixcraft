@@ -25,6 +25,7 @@ in
     shared ? {},
     authDirPrefix,
     externalAssetsDirPrefix,
+    skinsDirPrefix,
     externalAssetsLookupPaths ? [],
     ...
   }: {
@@ -80,6 +81,12 @@ in
         type = lib.types.nullOr (lib.types.pathWith {absolute = true;});
         default = externalAssetsDirPrefix;
         description = "Path to external assets directory";
+      };
+
+      skinsDir = lib.mkOption {
+        type = lib.types.nullOr (lib.types.pathWith {absolute = true;});
+        default = skinsDirPrefix;
+        description = "Path to writable directory where client skins are cached/stored.";
       };
 
       externalAssetsExtraLookupPaths = lib.mkOption {
@@ -345,6 +352,7 @@ in
         assetsDir = mkAssetsDir {
           versionData = config.meta.versionData;
           hash = config.assetHash;
+          skinsDir = config.skinsDir;
           useFetchAssetsPy = config.enableFastAssetDownload;
           useExternalAssetsDir = config.enableExternalAssets;
           externalAssetsDir = config.externalAssetsDir;
@@ -479,6 +487,12 @@ in
             --index ${indexFile} \
             --out-dir ${lib.escapeShellArg config.externalAssetsDir} \
             --read-cache-dirs ${dirsArg}
+        '';
+      })
+
+      (lib.mkIf (config.skinsDir != null) {
+        preLaunchShellScript = ''
+          mkdir -p ${lib.escapeShellArg config.skinsDir}
         '';
       })
 

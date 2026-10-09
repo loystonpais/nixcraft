@@ -54,6 +54,7 @@ in {
           clientAuthDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/auth";
           serverDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/server/instances";
           clientExternalAssetsDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/assets";
+          clientSkinsDirPrefix = "${config.home.homeDirectory}/.local/share/nixcraft/client/skins";
           clientExternalAssetsLookupPaths = [
             "${config.home.homeDirectory}/.local/share/PrismLauncher/assets"
             "${config.home.homeDirectory}/.minecraft/assets"

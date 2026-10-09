@@ -11,6 +11,7 @@
   externalAssetsDir ? null,
   useFetchAssetsPy ? false,
   hash ? lib.fakeHash,
+  skinsDir ? null,
   versionData,
   assetType ? versionData.assets,
   assetIndex ? lib.nixcraft.readJSON (fetchSha1 versionData.assetIndex),
@@ -66,6 +67,9 @@
     mkdir -p $out/indexes
     ln -s ${fetchSha1 versionData.assetIndex} $out/indexes/${assetType}.json
     ln -s ${escapeShellArg finalObjectsPath} $out/objects
+    ${lib.optionalString (skinsDir != null) ''
+      ln -s ${escapeShellArg skinsDir} $out/skins
+    ''}
   '';
 
   legacyAssetsDir = runCommandLocal "minecraft-legacy-assets-dir" {} ''

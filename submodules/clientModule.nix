@@ -7,6 +7,7 @@
   dir,
   authDirPrefix,
   externalAssetsDirPrefix,
+  skinsDirPrefix,
   externalAssetsLookupPaths,
   ...
 }: {
@@ -30,6 +31,7 @@
             inherit
               authDirPrefix
               externalAssetsDirPrefix
+              skinsDirPrefix
               externalAssetsLookupPaths
               ;
           };

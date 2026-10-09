@@ -180,7 +180,7 @@ boolean
 *Default:*
 
 ```nix
-false
+true
 ```
 
 
@@ -718,6 +718,119 @@ non-empty string
 
 
 
+## client\.instances\.\<name>\.bwrap
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
+## client\.instances\.\<name>\.bwrap\.enable
+
+
+
+Whether to enable bwrap\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.bwrap\.package
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+<derivation nixcraft-bwrap>
+```
+
+
+
+## client\.instances\.\<name>\.bwrap\.extraArguments
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+list of non-empty string
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## client\.instances\.\<name>\.bwrap\.mountOpenglDriver
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
 ## client\.instances\.\<name>\.desktopEntry
 
 
@@ -985,7 +1098,7 @@ package *(read only)*
 
 
 
-## client\.instances\.\<name>\.fabricLoader\.classes
+## client\.instances\.\<name>\.fabricLoader\.finalLibraries
 
 
 
@@ -994,14 +1107,111 @@ This option has no description\.
 
 
 *Type:*
-list of absolute path *(read only)*
+attribute set of (submodule) *(read only)*
+
+
+
+## client\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
 
 
 
 *Default:*
 
 ```nix
-[ ]
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## client\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## client\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## client\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
 ```
 
 
@@ -1367,7 +1577,7 @@ non-empty string *(read only)*
 *Default:*
 
 ```nix
-"--version 26.3 --assetsDir /nix/store/6wm9mhm397p1srg6vxvimc5kzs5dvdab-minecraft-assets-dir --assetIndex 34 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
+"--version 26.3 --assetsDir /nix/store/n8qcng1cvji03sr9066pqd5n6fk63xlq-minecraft-assets-dir --assetIndex 34 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
 ```
 
 
@@ -1408,6 +1618,124 @@ This option has no description\.
 
 *Type:*
 strings concatenated with “\\n” *(read only)*
+
+
+
+## client\.instances\.\<name>\.finalLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule) *(read only)*
+
+
+
+## client\.instances\.\<name>\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## client\.instances\.\<name>\.finalLibraries\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## client\.instances\.\<name>\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## client\.instances\.\<name>\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -1767,8 +2095,6 @@ null
 
 ## client\.instances\.\<name>\.java\.minMemory
 
-
-
 This option has no description\.
 
 
@@ -2077,6 +2403,14 @@ boolean
 
 
 
+*Default:*
+
+```nix
+false
+```
+
+
+
 ## client\.instances\.\<name>\.libraries\.\<name>\.relativePath
 
 
@@ -2099,6 +2433,8 @@ null
 
 
 ## client\.instances\.\<name>\.lwjgl\.version
+
+
 
 This option has no description\.
 
@@ -2505,7 +2841,7 @@ true
 
 
 
-## client\.instances\.\<name>\.quiltLoader\.classes
+## client\.instances\.\<name>\.quiltLoader\.finalLibraries
 
 
 
@@ -2514,14 +2850,111 @@ This option has no description\.
 
 
 *Type:*
-list of absolute path *(read only)*
+attribute set of (submodule) *(read only)*
+
+
+
+## client\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
 
 
 
 *Default:*
 
 ```nix
-[ ]
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## client\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## client\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## client\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
 ```
 
 
@@ -2748,6 +3181,27 @@ attribute set of absolute path
 
 
 
+## client\.instances\.\<name>\.skinsDir
+
+
+
+Path to writable directory where client skins are cached/stored\.
+
+
+
+*Type:*
+null or absolute path
+
+
+
+*Default:*
+
+```nix
+"/(root)/.local/share/nixcraft/client/skins"
+```
+
+
+
 ## client\.instances\.\<name>\.useDiscreteGPU
 
 
@@ -2904,6 +3358,48 @@ null or non-empty string
 
 ```nix
 null
+```
+
+
+
+## client\.instances\.\<name>\.waywall\.extraArguments
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+list of non-empty string
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## client\.instances\.\<name>\.waywall\.noEnvReexec
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
 ```
 
 
@@ -3194,6 +3690,119 @@ non-empty string
 
 
 
+## server\.instances\.\<name>\.bwrap
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
+## server\.instances\.\<name>\.bwrap\.enable
+
+
+
+Whether to enable bwrap\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.bwrap\.package
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+<derivation nixcraft-bwrap>
+```
+
+
+
+## server\.instances\.\<name>\.bwrap\.extraArguments
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+list of non-empty string
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## server\.instances\.\<name>\.bwrap\.mountOpenglDriver
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
 ## server\.instances\.\<name>\.envVars
 
 
@@ -3325,7 +3934,7 @@ package *(read only)*
 
 
 
-## server\.instances\.\<name>\.fabricLoader\.classes
+## server\.instances\.\<name>\.fabricLoader\.finalLibraries
 
 
 
@@ -3334,14 +3943,111 @@ This option has no description\.
 
 
 *Type:*
-list of absolute path *(read only)*
+attribute set of (submodule) *(read only)*
+
+
+
+## server\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
 
 
 
 *Default:*
 
 ```nix
-[ ]
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## server\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## server\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## server\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
 ```
 
 
@@ -3499,8 +4205,6 @@ attribute set
 
 
 ## server\.instances\.\<name>\.files\.\<name>\.fileName
-
-
 
 This option has no description\.
 
@@ -3748,6 +4452,124 @@ This option has no description\.
 
 *Type:*
 strings concatenated with “\\n” *(read only)*
+
+
+
+## server\.instances\.\<name>\.finalLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule) *(read only)*
+
+
+
+## server\.instances\.\<name>\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## server\.instances\.\<name>\.finalLibraries\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## server\.instances\.\<name>\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## server\.instances\.\<name>\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
 
 
 
@@ -4157,6 +4979,8 @@ true
 
 ## server\.instances\.\<name>\.launchPrefix
 
+
+
 This option has no description\.
 
 
@@ -4496,6 +5320,14 @@ This option has no description\.
 
 *Type:*
 boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
 
 
 
@@ -5073,7 +5905,7 @@ true
 
 
 
-## server\.instances\.\<name>\.quiltLoader\.classes
+## server\.instances\.\<name>\.quiltLoader\.finalLibraries
 
 
 
@@ -5082,14 +5914,111 @@ This option has no description\.
 
 
 *Type:*
-list of absolute path *(read only)*
+attribute set of (submodule) *(read only)*
+
+
+
+## server\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
 
 
 
 *Default:*
 
 ```nix
-[ ]
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## server\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.name
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+"‹name›"
+```
+
+
+
+## server\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## server\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
 ```
 
 
@@ -5338,8 +6267,6 @@ submodule
 
 
 ## server\.instances\.\<name>\.service\.enable
-
-
 
 Whether to enable systemd user service\.
 
