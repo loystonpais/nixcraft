@@ -10,6 +10,7 @@
   clientAuthDirPrefix,
   serverDirPrefix,
   clientExternalAssetsDirPrefix,
+  clientSkinsDirPrefix ? null,
   clientExternalAssetsLookupPaths,
   ...
 }: {
@@ -23,6 +24,7 @@
           dir = clientDirPrefix;
           authDirPrefix = clientAuthDirPrefix;
           externalAssetsDirPrefix = clientExternalAssetsDirPrefix;
+          skinsDirPrefix = clientSkinsDirPrefix;
           externalAssetsLookupPaths = clientExternalAssetsLookupPaths;
         };
       };

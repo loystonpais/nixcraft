@@ -35,6 +35,11 @@
     then "${homeDir}/.local/share/nixcraft/client/auth"
     else "/tmp/nixcraft-client-auth";
 
+  skinsDirPrefix =
+    if hasHome
+    then "${homeDir}/.local/share/nixcraft/client/skins"
+    else "/tmp/nixcraft-client-skins";
+
   evalPackage = {cfgModules, ...}: let
     evaluated = lib.evalModules {
       modules =
@@ -60,6 +65,7 @@
         inherit
           authDirPrefix
           externalAssetsDirPrefix
+          skinsDirPrefix
           externalAssetsLookupPaths
           name
           pkgs
