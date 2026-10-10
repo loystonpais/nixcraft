@@ -327,6 +327,18 @@ in rec {
       (lib.filterAttrs (n: v: v != null) attrs)
     );
 
+  fromMinecraftOptionsTxt = text:
+    let
+      lines = lib.filter (l: l != "" && !lib.hasPrefix "#" l && lib.hasInfix ":" l) (lib.splitString "\n" text);
+      parseLine = line:
+        let
+          parts = lib.splitString ":" line;
+          key = lib.trim (builtins.head parts);
+          val = lib.trim (lib.concatStringsSep ":" (builtins.tail parts));
+        in { name = key; value = val; };
+    in
+      builtins.listToAttrs (map parseLine lines);
+
   modules = {
     # Crazy function
     # https://discourse.nixos.org/t/infinite-recursion-in-module-with-mkmerge/10989/13

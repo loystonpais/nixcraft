@@ -31,6 +31,7 @@
     "json"
     "toml"
     "txt-list"
+    "options-txt"
   ];
 in {
   options = {
@@ -118,6 +119,10 @@ in {
 
         (lib.mkIf (config.type == "txt-list") {
           value = lib.splitString "\n" text;
+        })
+
+        (lib.mkIf (config.type == "options-txt") {
+          value = lib.nixcraft.fromMinecraftOptionsTxt text;
         })
       ]))
 
