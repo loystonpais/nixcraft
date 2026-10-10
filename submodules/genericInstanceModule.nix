@@ -691,12 +691,14 @@ in
             lib.concatMapAttrsStringSep "\n" (name: file: let
               fileAbsPath = "${config.absoluteDir}/${file.target}";
               fileAbsDirPath = builtins.dirOf fileAbsPath;
+              tmpPath = "${config.absoluteDir}/.nixcraft/world-tmp-${file.fileName}-${builtins.hashString "sha1" file.target}";
             in ''
               if [ ! -d ${esc fileAbsPath} ]; then
                 mkdir -p ${esc fileAbsDirPath}
-                rm -rf ${esc fileAbsPath}
-                cp -rT ${esc file.finalSource} ${esc fileAbsPath}
-                chmod -R u+w ${esc fileAbsPath}
+                rm -rf ${esc tmpPath}
+                cp -rT ${esc file.finalSource} ${esc tmpPath}
+                chmod -R u+w ${esc tmpPath}
+                mv ${esc tmpPath} ${esc fileAbsPath}
               fi
             '')
             files'world;
