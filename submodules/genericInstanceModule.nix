@@ -703,10 +703,10 @@ in
             '')
             files'world;
         in ''
-          (
+          mkdir -p ${esc config.absoluteDir}
+          exec 200< ${esc config.absoluteDir}
           ${pkgs.util-linux}/bin/flock -x 200
 
-          mkdir -p ${esc config.absoluteDir}
           mkdir -p ${esc config.absoluteDir}/.nixcraft
 
           if [ -f ${esc entryFilePath} ]; then
@@ -731,7 +731,8 @@ in
             ${script'copy-init}
             touch ${esc initFilePath}
           fi
-          ) 200< ${escapeShellArg config.absoluteDir}
+
+          exec 200<&-
         '';
       }
 
