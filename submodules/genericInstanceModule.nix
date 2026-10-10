@@ -644,7 +644,7 @@ in
           script'copy-init =
             lib.concatMapAttrsStringSep "\n" (name: file: let
               fileAbsPath = "${config.absoluteDir}/${file.target}";
-              fileAbsDirPath = builtins.dirOf fileAbsPath;
+              fileAbsDirPath = dirOf fileAbsPath;
             in ''
               mkdir -p ${esc fileAbsDirPath}
               rm -rf ${esc fileAbsPath}
@@ -656,7 +656,7 @@ in
           script'copy =
             lib.concatMapAttrsStringSep "\n" (name: file: let
               fileAbsPath = "${config.absoluteDir}/${file.target}";
-              fileAbsDirPath = builtins.dirOf fileAbsPath;
+              fileAbsDirPath = dirOf fileAbsPath;
             in ''
               mkdir -p ${esc fileAbsDirPath}
               rm -rf ${esc fileAbsPath}
@@ -668,7 +668,7 @@ in
           script'symlink =
             lib.concatMapAttrsStringSep "\n" (name: file: let
               fileAbsPath = "${config.absoluteDir}/${file.target}";
-              fileAbsDirPath = builtins.dirOf fileAbsPath;
+              fileAbsDirPath = dirOf fileAbsPath;
             in ''
               mkdir -p ${esc fileAbsDirPath}
               rm -rf ${esc fileAbsPath}
@@ -679,7 +679,7 @@ in
           script'merge =
             lib.concatMapAttrsStringSep "\n" (name: file: let
               fileAbsPath = "${config.absoluteDir}/${file.target}";
-              fileAbsDirPath = builtins.dirOf fileAbsPath;
+              fileAbsDirPath = dirOf fileAbsPath;
               patchJson = pkgs.writeText "${file.fileName}.patch.json" (builtins.toJSON file.value);
             in ''
               mkdir -p ${esc fileAbsDirPath}
@@ -690,7 +690,7 @@ in
           script'world =
             lib.concatMapAttrsStringSep "\n" (name: file: let
               fileAbsPath = "${config.absoluteDir}/${file.target}";
-              fileAbsDirPath = builtins.dirOf fileAbsPath;
+              fileAbsDirPath = dirOf fileAbsPath;
               tmpPath = "${config.absoluteDir}/.nixcraft/world-tmp-${file.fileName}-${builtins.hashString "sha1" file.target}";
             in ''
               if [ ! -d ${esc fileAbsPath} ]; then
@@ -711,7 +711,6 @@ in
 
           if [ -f ${esc entryFilePath} ]; then
             while IFS= read -r f; do
-                # echo "Removing $f"
                 rm -rf "$f"
                 rmdir --ignore-fail-on-non-empty "$(dirname "$f")" 2>/dev/null || true
             done < ${esc entryFilePath}
@@ -720,28 +719,18 @@ in
           cp ${newEntriesFile} ${esc entryFilePath}.tmp
           mv -f ${esc entryFilePath}.tmp ${esc entryFilePath}
 
-          ### world ###
           ${script'world}
-          ### world end ###
 
-          ### copy ###
           ${script'copy}
-          ### copy end ###
 
-          ### symlink ###
           ${script'symlink}
-          ### symlink end ###
 
-          ### merge ###
           ${script'merge}
-          ### merge end ###
 
-          ### copy-init ###
           if [ ! -e ${esc initFilePath} ]; then
             ${script'copy-init}
             touch ${esc initFilePath}
           fi
-          ### copy-init end ###
           ) 200< ${escapeShellArg config.absoluteDir}
         '';
       }
