@@ -627,6 +627,10 @@ in
           entryFilePath = "${config.absoluteDir}/.nixcraft/files";
           initFilePath = "${config.absoluteDir}/.nixcraft/init";
 
+          newEntriesFile = pkgs.writeText "entries" (
+            lib.concatMapAttrsStringSep "\n" (name: file: "${config.absoluteDir}/${file.target}") files'entries
+          );
+
           enabledFiles = filterAttrs (name: file: file.enable) config.files;
 
           files'copy = filterAttrs (name: file: file.method == "copy") enabledFiles;
@@ -709,8 +713,10 @@ in
                 rm -rf "$f"
                 rmdir --ignore-fail-on-non-empty "$(dirname "$f")" 2>/dev/null || true
             done < ${esc entryFilePath}
-            rm -f ${esc entryFilePath}
           fi
+
+          cp ${newEntriesFile} ${esc entryFilePath}.tmp
+          mv -f ${esc entryFilePath}.tmp ${esc entryFilePath}
 
           ### world ###
           ${script'world}
@@ -734,11 +740,6 @@ in
             touch ${esc initFilePath}
           fi
           ### copy-init end ###
-
-          rm -rf ${esc entryFilePath}
-          cp ${builtins.toFile "entries" (
-            lib.concatMapAttrsStringSep "\n" (name: file: "${config.absoluteDir}/${file.target}") files'entries
-          )}  ${esc entryFilePath}
           ) 200< ${escapeShellArg config.absoluteDir}
         '';
       }
