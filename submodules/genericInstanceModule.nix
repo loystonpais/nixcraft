@@ -133,6 +133,7 @@ in
             ];
             specialArgs = {
               instanceType = config._instanceType;
+              fileMerge = lib.nixcraft.fileMerge;
             };
           });
         default = {};
