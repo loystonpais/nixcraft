@@ -50,6 +50,7 @@ if [ "$MOUNT_OPENGL" -eq 1 ]; then
     --dir "/run/opengl-driver/share/vulkan/implicit_layer.d"
     --dir "/run/opengl-driver/share/vulkan/explicit_layer.d"
     --dir "/run/opengl-driver/share/glvnd/egl_vendor.d"
+    --dir "/run/opengl-driver/share/egl/egl_external_platform.d"
     --dir "/run/opengl-driver/etc/OpenCL/vendors"
   )
 
@@ -79,6 +80,10 @@ if [ "$MOUNT_OPENGL" -eq 1 ]; then
         BWRAP_ARGS+=(--ro-bind "$f" "/run/opengl-driver/lib/$bName")
       fi
     done
+
+    if [ -d "$MESA_PATH/share/drirc.d" ]; then
+      BWRAP_ARGS+=(--ro-bind "$MESA_PATH/share/drirc.d" "/run/opengl-driver/share/drirc.d")
+    fi
 
     if [ -d "$MESA_PATH/share/vulkan/icd.d" ]; then
       for f in "$MESA_PATH"/share/vulkan/icd.d/*.json; do
@@ -132,7 +137,7 @@ if [ "$MOUNT_OPENGL" -eq 1 ]; then
         if [ -f "$libPath" ]; then
           FOUND_NVIDIA_LIBS+=("$libPath")
         fi
-      done < <(ldconfig -p 2>/dev/null | grep -E "x86-64|libc6,x86-64" | grep -E "libGLX_nvidia|libEGL_nvidia|libGLESv.*_nvidia|libnvidia-|libcuda|libnvoptix" | awk '{print $NF}' | sort -u)
+      done < <(ldconfig -p 2>/dev/null | grep -E "x86-64|libc6,x86-64" | grep -E "libGLX_nvidia|libEGL_nvidia|libGLESv.*_nvidia|libnvidia-|libcuda|libnvcuvid|libnvoptix" | awk '{print $NF}' | sort -u)
     fi
 
     # 2. Fallback candidate directories (NixOS or systems without ld.so.cache)
@@ -146,7 +151,7 @@ if [ "$MOUNT_OPENGL" -eq 1 ]; then
       )
       for libDir in "${LIB_SEARCH_DIRS[@]}"; do
         if [ -d "$libDir" ]; then
-          for f in "$libDir"/libGLX_nvidia*.so* "$libDir"/libEGL_nvidia*.so* "$libDir"/libnvidia-*.so* "$libDir"/libcuda*.so* "$libDir"/libnvoptix*.so*; do
+          for f in "$libDir"/libGLX_nvidia*.so* "$libDir"/libEGL_nvidia*.so* "$libDir"/libnvidia-*.so* "$libDir"/libcuda*.so* "$libDir"/libnvcuvid*.so* "$libDir"/libnvoptix*.so*; do
             if [ -e "$f" ]; then
               FOUND_NVIDIA_LIBS+=("$f")
             fi
@@ -170,56 +175,113 @@ if [ "$MOUNT_OPENGL" -eq 1 ]; then
       fi
     done
 
+    # Discover and mount host NVIDIA GBM driver
+    for gbmDir in /run/opengl-driver/lib/gbm /usr/lib/gbm /usr/lib64/gbm /usr/lib/x86_64-linux-gnu/gbm; do
+      FOUND=0
+      if [ -d "$gbmDir" ]; then
+        for f in "$gbmDir"/*nvidia*.so*; do
+          if [ -e "$f" ]; then
+            fName=$(basename "$f")
+            BWRAP_ARGS+=(--ro-bind "$f" "/run/opengl-driver/lib/gbm/$fName")
+            FOUND=1
+          fi
+        done
+        if [ "$FOUND" -eq 1 ]; then
+          break
+        fi
+      fi
+    done
+
     # 3. Discover and merge host Vulkan ICD manifests
-    VK_SEARCH_DIRS=(
-      /usr/share/vulkan/icd.d
-      /etc/vulkan/icd.d
-      /usr/local/share/vulkan/icd.d
-      /run/opengl-driver/share/vulkan/icd.d
-    )
-    for vkDir in "${VK_SEARCH_DIRS[@]}"; do
+    for vkDir in /run/opengl-driver/share/vulkan/icd.d /usr/share/vulkan/icd.d /etc/vulkan/icd.d /usr/local/share/vulkan/icd.d; do
+      FOUND=0
       if [ -d "$vkDir" ]; then
         for f in "$vkDir"/*nvidia*.json; do
           if [ -e "$f" ]; then
             fName=$(basename "$f")
             BWRAP_ARGS+=(--ro-bind "$f" "/run/opengl-driver/share/vulkan/icd.d/$fName")
+            FOUND=1
           fi
         done
+        if [ "$FOUND" -eq 1 ]; then
+          break
+        fi
+      fi
+    done
+
+    # Discover and merge host Vulkan implicit layers (e.g. nvidia_layers.json)
+    for vkImpDir in /run/opengl-driver/share/vulkan/implicit_layer.d /usr/share/vulkan/implicit_layer.d /etc/vulkan/implicit_layer.d /usr/local/share/vulkan/implicit_layer.d; do
+      FOUND=0
+      if [ -d "$vkImpDir" ]; then
+        for f in "$vkImpDir"/*nvidia*.json; do
+          if [ -e "$f" ]; then
+            fName=$(basename "$f")
+            BWRAP_ARGS+=(--ro-bind "$f" "/run/opengl-driver/share/vulkan/implicit_layer.d/$fName")
+            FOUND=1
+          fi
+        done
+        if [ "$FOUND" -eq 1 ]; then
+          break
+        fi
       fi
     done
 
     # 4. Discover and merge host EGL vendor manifests
-    EGL_SEARCH_DIRS=(
-      /usr/share/glvnd/egl_vendor.d
-      /etc/glvnd/egl_vendor.d
-      /usr/local/share/glvnd/egl_vendor.d
-      /run/opengl-driver/share/glvnd/egl_vendor.d
-    )
-    for eglDir in "${EGL_SEARCH_DIRS[@]}"; do
+    for eglDir in /run/opengl-driver/share/glvnd/egl_vendor.d /usr/share/glvnd/egl_vendor.d /etc/glvnd/egl_vendor.d /usr/local/share/glvnd/egl_vendor.d; do
+      FOUND=0
       if [ -d "$eglDir" ]; then
         for f in "$eglDir"/*nvidia*.json; do
           if [ -e "$f" ]; then
             fName=$(basename "$f")
             BWRAP_ARGS+=(--ro-bind "$f" "/run/opengl-driver/share/glvnd/egl_vendor.d/$fName")
+            FOUND=1
           fi
         done
+        if [ "$FOUND" -eq 1 ]; then
+          break
+        fi
+      fi
+    done
+
+    # Discover and merge host EGL external platform manifests (e.g. nvidia-egl-wayland)
+    for extDir in /run/opengl-driver/share/egl/egl_external_platform.d /usr/share/egl/egl_external_platform.d /etc/egl/egl_external_platform.d /usr/local/share/egl/egl_external_platform.d; do
+      FOUND=0
+      if [ -d "$extDir" ]; then
+        for f in "$extDir"/*.json; do
+          if [ -e "$f" ]; then
+            fName=$(basename "$f")
+            BWRAP_ARGS+=(--ro-bind "$f" "/run/opengl-driver/share/egl/egl_external_platform.d/$fName")
+            FOUND=1
+          fi
+        done
+        if [ "$FOUND" -eq 1 ]; then
+          break
+        fi
+      fi
+    done
+
+    # Bind host wayland-eglstream directory if present
+    for streamDir in /run/opengl-driver/share/wayland-eglstream /usr/share/wayland-eglstream /usr/local/share/wayland-eglstream; do
+      if [ -d "$streamDir" ]; then
+        BWRAP_ARGS+=(--ro-bind "$streamDir" "/run/opengl-driver/share/wayland-eglstream")
+        break
       fi
     done
 
     # 5. Discover and merge host OpenCL vendor manifests
-    OCL_SEARCH_DIRS=(
-      /etc/OpenCL/vendors
-      /usr/share/OpenCL/vendors
-      /run/opengl-driver/etc/OpenCL/vendors
-    )
-    for oclDir in "${OCL_SEARCH_DIRS[@]}"; do
+    for oclDir in /run/opengl-driver/etc/OpenCL/vendors /etc/OpenCL/vendors /usr/share/OpenCL/vendors; do
+      FOUND=0
       if [ -d "$oclDir" ]; then
         for f in "$oclDir"/*; do
           if [ -e "$f" ]; then
             fName=$(basename "$f")
             BWRAP_ARGS+=(--ro-bind "$f" "/run/opengl-driver/etc/OpenCL/vendors/$fName")
+            FOUND=1
           fi
         done
+        if [ "$FOUND" -eq 1 ]; then
+          break
+        fi
       fi
     done
   fi
@@ -228,6 +290,7 @@ if [ "$MOUNT_OPENGL" -eq 1 ]; then
   BWRAP_ARGS+=(
     --setenv LIBGL_DRIVERS_PATH "/run/opengl-driver/lib/dri"
     --setenv __EGL_VENDOR_LIBRARY_DIRS "/run/opengl-driver/share/glvnd/egl_vendor.d"
+    --setenv __EGL_EXTERNAL_PLATFORM_CONFIG_DIRS "/run/opengl-driver/share/egl/egl_external_platform.d"
     --setenv VK_DRIVER_FILES "/run/opengl-driver/share/vulkan/icd.d"
     --setenv VK_LAYER_PATH "/run/opengl-driver/share/vulkan/explicit_layer.d:/run/opengl-driver/share/vulkan/implicit_layer.d"
     --setenv OCL_ICD_VENDORS "/run/opengl-driver/etc/OpenCL/vendors"
