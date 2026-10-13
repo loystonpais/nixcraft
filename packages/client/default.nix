@@ -126,6 +126,10 @@
       };
     };
 
+    noUseDiscreteGPU = withConfig {
+      useDiscreteGPU = lib.mkForce false;
+    };
+
     withOpenglDriver = mountOpenglDriver;
 
     withMangoHud = withConfig {
