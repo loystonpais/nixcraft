@@ -477,13 +477,14 @@ in
 
       (lib.mkIf config.enableExternalAssets {
         preLaunchShellScript = let
+          clientFetchAssets = pkgs.callPackage ../packages/client-fetch-assets {};
           indexFile = fetchSha1 config.meta.versionData.assetIndex;
           allLookupDirs =
             config.externalAssetsExtraLookupPaths ++ externalAssetsLookupPaths;
           dirsArg = lib.concatMapStringsSep " " lib.escapeShellArg allLookupDirs;
         in ''
           mkdir -p ${lib.escapeShellArg config.externalAssetsDir}
-          ${pkgs.python3}/bin/python3 ${../scripts/client-fetch-assets.py} \
+          ${lib.getExe clientFetchAssets} \
             --index ${indexFile} \
             --out-dir ${lib.escapeShellArg config.externalAssetsDir} \
             --read-cache-dirs ${dirsArg}

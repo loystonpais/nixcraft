@@ -25,6 +25,50 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 _thread_local = threading.local()
+_shared_ssl_context: Optional[ssl.SSLContext] = None
+
+_KNOWN_CA_PATHS = (
+    Path("/etc/ssl/certs/ca-certificates.crt"),
+    Path("/usr/local/share/certs/ca-root-nss.crt"),
+    Path("/etc/ssl/cert.pem"),
+    Path("/etc/pki/tls/certs/ca-bundle.crt"),
+    Path("/etc/ssl/ca-bundle.pem"),
+    Path("/etc/openssl/certs/ca-certificates.crt"),
+)
+
+
+def _create_ssl_context(custom_ca_file: Optional[Path] = None) -> ssl.SSLContext:
+    """Creates an SSL context with fallback discovery for system CA bundles."""
+    ctx = ssl.create_default_context()
+
+    if custom_ca_file and custom_ca_file.is_file():
+        try:
+            ctx.load_verify_locations(cafile=str(custom_ca_file))
+            return ctx
+        except Exception as e:
+            print(f"Warning: Failed to load custom CA bundle '{custom_ca_file}': {e}", file=sys.stderr)
+
+    if os.environ.get("SSL_CERT_FILE") or os.environ.get("SSL_CERT_DIR") or len(ctx.get_ca_certs()) > 0:
+        return ctx
+
+    for ca_path in _KNOWN_CA_PATHS:
+        if ca_path.is_file():
+            try:
+                ctx.load_verify_locations(cafile=str(ca_path))
+                if len(ctx.get_ca_certs()) > 0:
+                    break
+            except Exception:
+                continue
+
+    return ctx
+
+
+def get_ssl_context(custom_ca_file: Optional[Path] = None) -> ssl.SSLContext:
+    """Retrieves or initializes the shared SSL context."""
+    global _shared_ssl_context
+    if _shared_ssl_context is None:
+        _shared_ssl_context = _create_ssl_context(custom_ca_file)
+    return _shared_ssl_context
 
 
 def get_http_connection(
@@ -32,17 +76,18 @@ def get_http_connection(
     host: str,
     port: int,
     timeout: float,
+    ssl_context: Optional[ssl.SSLContext] = None,
 ) -> http.client.HTTPConnection:
     """Retrieves or establishes a thread-local persistent HTTP/HTTPS connection."""
     conn = getattr(_thread_local, "conn", None)
     if conn is None:
         if scheme == "https":
-            ssl_ctx = ssl.create_default_context()
+            ctx = ssl_context or get_ssl_context()
             conn = http.client.HTTPSConnection(
                 host,
                 port=port,
                 timeout=timeout,
-                context=ssl_ctx,
+                context=ctx,
             )
         else:
             conn = http.client.HTTPConnection(
@@ -425,8 +470,17 @@ def main() -> None:
         default="https://resources.download.minecraft.net",
         help="Base URL for Minecraft assets",
     )
+    parser.add_argument(
+        "--ca-bundle",
+        type=Path,
+        default=None,
+        help="Optional path to a custom CA certificate bundle file",
+    )
 
     args = parser.parse_args()
+
+    # Pre-initialize SSL context with potential fallback
+    get_ssl_context(args.ca_bundle)
 
     if not args.index.is_file():
         print(
