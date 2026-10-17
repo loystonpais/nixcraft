@@ -25,9 +25,6 @@ Nixcraft lets you build and run Minecraft clients and dedicated servers using Ni
 - **Efficiency and caching**: Reuses existing game assets from Prism Launcher and Vanilla Minecraft to avoid redundant downloads.
 - **Systemd integration**: Run headless servers as user or system systemd services with auto-restart.
 
-> [!IMPORTANT]
-> Nixcraft is not yet officially allowed for Minecraft Speedrunning (MCSR) leaderboard submissions.
-
 > [!WARNING]
 > This project is a work in progress. While mostly functional, expect potential breaking changes on updates.
 
@@ -250,6 +247,7 @@ flowchart TD
 ```
 
 When `enableExternalAssets` is enabled:
+
 1. Nix only downloads the small version asset index JSON file.
 2. Before launching the game, Nixcraft downloads any missing assets directly to `~/.local/share/nixcraft/client/assets`.
 3. If you already have assets downloaded from Prism Launcher or the official Minecraft launcher, it reuses those files directly instead of downloading them again.
