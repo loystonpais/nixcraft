@@ -3,7 +3,6 @@
   sources,
   pkgs,
   parseForgeInstaller,
-  fetchSha1,
   ...
 }: {
   name,

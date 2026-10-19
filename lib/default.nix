@@ -1,4 +1,8 @@
-{lib, ...}: let
+{
+  lib,
+  sources,
+  ...
+}: let
   inherit
     (builtins)
     readDir
@@ -18,8 +22,6 @@
     foldAttrs
     mapAttrsToList
     ;
-
-  sources = lib.nixcraft.importSources ../sources;
 in rec {
   importSubmodules = dir: args: let
     dirContent = readDir'nixFiles dir;
@@ -127,7 +129,7 @@ in rec {
 
         versionShortcuts = let
           sanitizeVersion = v: "v" + (builtins.replaceStrings ["." "-" " "] ["-" "-" "-"] v);
-          allVersions = sources.normalized-manifest.versionListOrdered;
+          allVersions = sources.mojang.meta.versions;
         in
           lib.listToAttrs (map (ver: lib.nameValuePair (sanitizeVersion ver) (withVersion ver)) allVersions);
       };
@@ -327,17 +329,18 @@ in rec {
       (lib.filterAttrs (n: v: v != null) attrs)
     );
 
-  fromMinecraftOptionsTxt = text:
-    let
-      lines = lib.filter (l: l != "" && !lib.hasPrefix "#" l && lib.hasInfix ":" l) (lib.splitString "\n" text);
-      parseLine = line:
-        let
-          parts = lib.splitString ":" line;
-          key = lib.trim (builtins.head parts);
-          val = lib.trim (lib.concatStringsSep ":" (builtins.tail parts));
-        in { name = key; value = val; };
-    in
-      builtins.listToAttrs (map parseLine lines);
+  fromMinecraftOptionsTxt = text: let
+    lines = lib.filter (l: l != "" && !lib.hasPrefix "#" l && lib.hasInfix ":" l) (lib.splitString "\n" text);
+    parseLine = line: let
+      parts = lib.splitString ":" line;
+      key = lib.trim (builtins.head parts);
+      val = lib.trim (lib.concatStringsSep ":" (builtins.tail parts));
+    in {
+      name = key;
+      value = val;
+    };
+  in
+    builtins.listToAttrs (map parseLine lines);
 
   modules = {
     # Crazy function
@@ -428,16 +431,16 @@ in rec {
 
       apply = version:
         if version == "latest-release"
-        then sources.version_manifest_v2.latest.release
+        then sources.mojang.meta.latest.release
         else if version == "latest-snapshot"
-        then sources.version_manifest_v2.latest.snapshot
+        then sources.mojang.meta.latest.snapshot
         else version;
     };
   };
 
   minecraftVersion = rec {
     compare = v1: v2: let
-      versionList = sources.normalized-manifest.versionListOrdered;
+      versionList = sources.mojang.meta.versions;
       index1 = lib.lists.findFirstIndex (x: x == v1) (-1) versionList;
       index2 = lib.lists.findFirstIndex (x: x == v2) (-1) versionList;
     in
@@ -459,7 +462,7 @@ in rec {
       description = "Minecraft version";
       check = version:
         lib.assertMsg
-        (elem version (versionManifestV2.getAllVersions (sources.version_manifest_v2)))
+        (builtins.hasAttr version sources.mojang.versions)
         "Minecraft version '${version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -469,7 +472,7 @@ in rec {
       description = "LWJGL version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.hasAttr version sources.lwjgl)
+        (builtins.isString version && (builtins.elem version sources.lwjgl.versions || builtins.hasAttr version sources.lwjgl.components))
         "LWJGL version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -490,12 +493,6 @@ in rec {
           // {
             default = true;
           };
-
-        name = lib.mkOption {
-          type = lib.types.str;
-          default = name;
-          readOnly = true;
-        };
 
         relativePath = lib.mkOption {
           type = with lib.types; nullOr (pathWith {absolute = false;});
@@ -681,8 +678,17 @@ in rec {
         else !hasArm64
       );
 
-    mkNormalizedMinecraftLibraryAttrs = hostPlatform: fetchSha1: libraries: let
+    mkNormalizedMinecraftLibraryAttrs = hostPlatform: pkgs: libraries: let
       p = getPlatformInfo hostPlatform;
+      fetchLib = libInfo:
+        pkgs.fetchurl {
+          inherit (libInfo) url hash;
+        };
+
+      rawLibrariesList =
+        if builtins.isAttrs libraries
+        then lib.mapAttrsToList (name: libDef: libDef // {inherit name;}) libraries
+        else libraries;
     in
       builtins.foldl' (
         acc: raw:
@@ -700,48 +706,30 @@ in rec {
           else let
             allowed = (isOsAllowed p (raw.rules or [])) && (isNativeArchAllowed p raw.name);
 
-            mainEntry =
-              if raw ? downloads && raw.downloads ? artifact && raw.downloads.artifact ? url && raw.downloads.artifact.url != ""
+            libInfo = sources.libraries.${raw.name} or null;
+            isNative =
+              (raw.native or false)
+              || (raw ? extract)
+              || (lib.hasInfix "natives" raw.name)
+              || (lib.hasInfix "linux-" raw.name)
+              || (lib.hasInfix "osx-" raw.name)
+              || (lib.hasInfix "windows-" raw.name);
+
+            entry =
+              if libInfo != null
               then {
                 ${raw.name} = {
                   enable = allowed;
-                  native = false;
-                  relativePath = raw.downloads.artifact.path or (mkLibPath raw.name);
-                  jar = fetchSha1 raw.downloads.artifact;
+                  native = isNative;
+                  relativePath = mkLibPath raw.name;
+                  jar = fetchLib libInfo;
                 };
               }
               else {};
-
-            classifierEntries =
-              if raw ? downloads && raw.downloads ? classifiers
-              then let
-                hasArm64Classifier = lib.any (c: lib.hasInfix "arm64" c) (builtins.attrNames raw.downloads.classifiers);
-              in
-                lib.foldl' (
-                  cAcc: cName: let
-                    cArt = raw.downloads.classifiers.${cName};
-                  in
-                    if cArt ? url && cArt.url != ""
-                    then let
-                      fullName = "${raw.name}:${cName}";
-                      cAllowed = allowed && (isClassifierAllowed p cName hasArm64Classifier);
-                    in
-                      cAcc
-                      // {
-                        ${fullName} = {
-                          enable = cAllowed;
-                          native = true;
-                          relativePath = cArt.path or (mkLibPath fullName);
-                          jar = fetchSha1 cArt;
-                        };
-                      }
-                    else cAcc
-                ) {} (builtins.attrNames raw.downloads.classifiers)
-              else {};
           in
-            acc // mainEntry // classifierEntries
+            acc // entry
       ) {}
-      libraries;
+      rawLibrariesList;
 
     parseMavenCoord = coord: let
       parts = lib.splitString ":" coord;
@@ -847,11 +835,31 @@ in rec {
       }
       // (lib.optionalAttrs (value != null) {inherit value;});
 
-    force = value: mkDirective {action = "force"; inherit value;};
+    force = value:
+      mkDirective {
+        action = "force";
+        inherit value;
+      };
+
     remove = mkDirective {action = "remove";};
-    keep = value: mkDirective {action = "keep"; inherit value;};
-    append = value: mkDirective {action = "append"; inherit value;};
-    merge = value: mkDirective {action = "merge"; inherit value;};
+
+    keep = value:
+      mkDirective {
+        action = "keep";
+        inherit value;
+      };
+
+    append = value:
+      mkDirective {
+        action = "append";
+        inherit value;
+      };
+
+    merge = value:
+      mkDirective {
+        action = "merge";
+        inherit value;
+      };
 
     isDirective = val:
       builtins.isAttrs val && val ? __nixcraft_file_merge;

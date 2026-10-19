@@ -3,7 +3,6 @@
   pkgs,
   fetchAssetFromHash,
   fetchAssetsPy,
-  fetchSha1,
   lib,
   ...
 }: {
@@ -14,7 +13,7 @@
   skinsDir ? null,
   versionData,
   assetType ? versionData.assets,
-  assetIndex ? lib.nixcraft.readJSON (fetchSha1 versionData.assetIndex),
+  assetIndex ? lib.nixcraft.readJSON (pkgs.fetchurl { inherit (versionData.assetIndex) url sha1; }),
   objects ? assetIndex.objects,
   runCommandLocal ? pkgs.runCommandLocal,
   fetchAssetsPyArgs ? {},
@@ -22,6 +21,10 @@
   inherit (builtins) attrValues mapAttrs;
   inherit (lib) concatMapStringsSep escapeShellArg;
   inherit (lib.nixcraft.manifest) mkAssetHashPath;
+
+  assetIndexFile = pkgs.fetchurl {
+    inherit (versionData.assetIndex) url sha1;
+  };
 
   isLegacy = assetType == "legacy" || (assetIndex ? virtual && assetIndex.virtual);
   isPre1-6 = assetType == "pre-1.6" || (assetIndex ? map_to_resources && assetIndex.map_to_resources);
@@ -47,7 +50,7 @@
 
     viaFetchAssetsPy = fetchAssetsPy ({
         name = "minecraft-asset-objects-py";
-        indexFile = fetchSha1 versionData.assetIndex;
+        indexFile = assetIndexFile;
         inherit hash;
       }
       // fetchAssetsPyArgs);
@@ -65,7 +68,7 @@
 
   assetsDir = runCommandLocal "minecraft-assets-dir" {} ''
     mkdir -p $out/indexes
-    ln -s ${fetchSha1 versionData.assetIndex} $out/indexes/${assetType}.json
+    ln -s ${assetIndexFile} $out/indexes/${assetType}.json
     ln -s ${escapeShellArg finalObjectsPath} $out/objects
     ${lib.optionalString (skinsDir != null) ''
       ln -s ${escapeShellArg skinsDir} $out/skins

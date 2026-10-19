@@ -5,11 +5,23 @@
   inputs,
   ...
 } @ flakeModuleArgs: let
-  sources = lib.nixcraft.importSources "${self}/sources";
+  sourcesRoot = import inputs.sources {};
+  sources =
+    (sourcesRoot.version."1")
+    // {
+      modrinth = builtins.fromJSON (builtins.readFile "${self}/sources/modrinth/lock.json");
+    };
+
+  nixcraftLib = import "${self}/lib" {inherit lib sources;};
+  extendedLib = flakeModuleArgs.lib.extend (self: super: {
+    nixcraft = nixcraftLib;
+  });
+
   homeModules = {
     default = flake-parts-lib.importApply "${self}/modules/homeModules/default" ({
         localFlake = self;
         inherit sources;
+        lib = extendedLib;
       }
       // flakeModuleArgs);
   };
@@ -18,11 +30,13 @@
     default = flake-parts-lib.importApply "${self}/modules/nixosModules/default" ({
         localFlake = self;
         inherit sources;
+        lib = extendedLib;
       }
       // flakeModuleArgs);
   };
 in {
   config = {
+    _module.args.lib = extendedLib;
     debug = true;
 
     systems = [
@@ -33,7 +47,7 @@ in {
     ];
 
     flake = {
-      lib = lib.nixcraft;
+      lib = nixcraftLib;
       inherit homeModules;
       inherit nixosModules;
     };
@@ -44,9 +58,9 @@ in {
       pkgs,
       ...
     }: let
-      builders = lib.nixcraft.importBuilders "${self}/builders" {
+      builders = extendedLib.nixcraft.importBuilders "${self}/builders" {
         inherit pkgs;
-        inherit lib;
+        lib = extendedLib;
         inherit sources;
         inherit system;
       };
@@ -57,14 +71,15 @@ in {
           inherit pkgs;
           inherit system;
           inherit sources;
+          lib = extendedLib;
         }
         // builders;
 
-      submodules = lib.nixcraft.importSubmodules "${self}/submodules" submoduleArgs;
+      submodules = extendedLib.nixcraft.importSubmodules "${self}/submodules" submoduleArgs;
 
       optionDocs = {
         nixcraft = let
-          evaluated = lib.evalModules {
+          evaluated = extendedLib.evalModules {
             modules = with submodules; [
               nixcraftModule
             ];
@@ -98,62 +113,20 @@ in {
             docs/NIXCRAFT-OPTIONS.gen.md
         '';
 
-        update-asset-sha256 =
-          pkgs.writers.writePython3Bin "update-asset-sha256" {
-            doCheck = false;
-          }
-          (sources."update-asset-sha256.py");
-
-        update-asset-sha256-all =
-          pkgs.writers.writePython3Bin "update-asset-sha256-all" {
-            doCheck = false;
-          }
-          (sources."update-asset-sha256-all.py");
-
-        update-version-manifest-v2 =
-          pkgs.writers.writePython3Bin "update-version-manifest-v2" {
-            doCheck = false;
-          }
-          (sources."update-version-manifest-v2.py");
-
-        update-data-versions =
-          pkgs.writers.writePython3Bin "update-data-versions" {
-            doCheck = false;
-          }
-          (sources."update-data-versions.py");
-
-        update-paper-servers = pkgs.writers.writePython3Bin "update-paper-servers" {
-          doCheck = false;
-          libraries = with pkgs.python3Packages; [requests];
-        } (builtins.readFile "${self}/sources/paper-servers/update.py");
-
-        update-modloader-locks =
-          pkgs.writers.writePython3Bin "update-modloader-locks" {
-            doCheck = false;
-            libraries = with pkgs.python3Packages; [requests];
-          }
-          (sources."update-modloader-locks.py");
-
         update-modrinth-sources =
           pkgs.writers.writePython3Bin "update-modrinth-sources" {
             doCheck = false;
             libraries = with pkgs.python3Packages; [requests];
           }
           (builtins.readFile "${self}/sources/modrinth/update.py");
-
-        update-lwjgl-sources =
-          pkgs.writers.writePython3Bin "update-lwjgl-sources" {
-            doCheck = false;
-          }
-          (builtins.readFile "${self}/sources/lwjgl/update.py");
       };
 
       legacyPackages = {
         inherit runInRepoRoot;
       };
 
-      packages = lib.nixcraft.importPackages "${self}/packages" pkgs {
-        inherit lib;
+      packages = extendedLib.nixcraft.importPackages "${self}/packages" pkgs {
+        lib = extendedLib;
         inherit sources;
         inherit builders;
         inherit submodules;

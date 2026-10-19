@@ -1,7 +1,6 @@
 {
   pkgs,
   fetchAssetFromHash,
-  fetchSha1,
   mkLibDir,
   lib,
   ...

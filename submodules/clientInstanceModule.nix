@@ -9,7 +9,6 @@
   waywallModule,
   minecraftAccountModule,
   sources,
-  fetchSha1,
   mkAssetsDir,
   mkLibDir,
   mkNativeLibDir,
@@ -382,10 +381,12 @@ in
           (_: libDef: lib.mkDefault libDef)
           (lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
             pkgs.stdenv.hostPlatform
-            fetchSha1
+            pkgs
             config.meta.versionData.libraries);
 
-        mainJar = lib.mkDefault (fetchSha1 config.meta.versionData.downloads.client);
+        mainJar = lib.mkDefault (pkgs.fetchurl {
+          inherit (config.meta.versionData.downloads.client) url sha1;
+        });
 
         # Set java.library.path to the native lib dir only if there are any native libraries
         java.D."java.library.path" =
@@ -478,7 +479,9 @@ in
       (lib.mkIf config.enableExternalAssets {
         preLaunchShellScript = let
           clientFetchAssets = pkgs.callPackage ../packages/client-fetch-assets {};
-          indexFile = fetchSha1 config.meta.versionData.assetIndex;
+          indexFile = pkgs.fetchurl {
+            inherit (config.meta.versionData.assetIndex) url sha1;
+          };
           allLookupDirs =
             config.externalAssetsExtraLookupPaths ++ externalAssetsLookupPaths;
           dirsArg = lib.concatMapStringsSep " " lib.escapeShellArg allLookupDirs;
@@ -536,11 +539,16 @@ in
         java.mainClass = "net.minecraftforge.bootstrap.ForgeBootstrap";
         _classSettings.version = config.forgeLoader.parsedForgeLoader.versionId;
         extraArguments = ["--launchTarget" "forge_client"];
-        mainJar = let installDir = config.forgeLoader.parsedForgeLoader.clientInstallDirWithClientJar (fetchSha1 config.meta.versionData.downloads.client); in "${installDir}/libraries/net/minecraftforge/forge/${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}/forge-${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}-client.jar";
+        mainJar = let
+          clientJar = pkgs.fetchurl {
+            inherit (config.meta.versionData.downloads.client) url sha1;
+          };
+          installDir = config.forgeLoader.parsedForgeLoader.clientInstallDirWithClientJar clientJar;
+        in "${installDir}/libraries/net/minecraftforge/forge/${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}/forge-${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}-client.jar";
         libraries =
           lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
           pkgs.stdenv.hostPlatform
-          fetchSha1
+          pkgs
           config.forgeLoader.parsedForgeLoader.versionLibraries;
       })
 
@@ -643,7 +651,7 @@ in
                 enable = lib.mkDefault true;
                 native = false;
                 relativePath = "ca/weblite/java-objc-bridge/1.1.0-mmachina.1/java-objc-bridge-1.1.jar";
-                jar = fetchSha1 {
+                jar = pkgs.fetchurl {
                   sha1 = "369a83621e3c65496348491e533cb97fe5f2f37d";
                   url = "https://github.com/MinecraftMachina/Java-Objective-C-Bridge/releases/download/1.1.0-mmachina.1/java-objc-bridge-1.1.jar";
                 };
@@ -655,7 +663,7 @@ in
               (name: _: lib.hasPrefix "ca.weblite:java-objc-bridge:" name && !(bridgeLibs ? ${name}))
               (lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
                 pkgs.stdenv.hostPlatform
-                fetchSha1
+                pkgs
                 config.meta.versionData.libraries);
 
             disabledStockBridgeLibraries =
@@ -674,7 +682,7 @@ in
                 enable = lib.mkDefault true;
                 native = false;
                 relativePath = "net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
-                jar = fetchSha1 {
+                jar = pkgs.fetchurl {
                   sha1 = "1200e7ebeedbe0d10062093f32925a912020e747";
                   url = "https://libraries.minecraft.net/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
                 };
@@ -683,7 +691,7 @@ in
                 enable = lib.mkDefault true;
                 native = false;
                 relativePath = "net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar";
-                jar = fetchSha1 {
+                jar = pkgs.fetchurl {
                   sha1 = "88e9a306715e9379f3122415ef4ae759a352640d";
                   url = "https://libraries.minecraft.net/net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar";
                 };
@@ -695,7 +703,7 @@ in
               (name: _: lib.hasPrefix "net.java.dev.jna:" name && !(jnaLibs ? ${name}))
               (lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
                 pkgs.stdenv.hostPlatform
-                fetchSha1
+                pkgs
                 config.meta.versionData.libraries);
 
             disabledStockJnaLibraries =
@@ -753,14 +761,14 @@ in
         stockLibraries =
           lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
           pkgs.stdenv.hostPlatform
-          fetchSha1
+          pkgs
           config.meta.versionData.libraries;
 
         customLwjglLibraries =
           lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
           pkgs.stdenv.hostPlatform
-          fetchSha1
-          sources.lwjgl.${config.lwjgl.version}.libraries;
+          pkgs
+          sources.lwjgl.components.${config.lwjgl.version};
 
         forcedCustomLwjglLibraries = lib.mapAttrs (_: l:
           l
@@ -784,7 +792,7 @@ in
       }))
 
       (lib.mkIf (config.optionsTxt != null) (let
-        dataVersion = sources.minecraft-data-versions.${config.version} or null;
+        dataVersion = sources.mojang.meta.data_versions.${config.version} or null;
       in {
         files."options.txt" = {
           type = "options-txt";

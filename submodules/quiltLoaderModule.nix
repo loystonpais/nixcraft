@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   sources,
   ...
 }: {config, ...}: {
@@ -30,8 +31,8 @@
       type = lib.types.attrs;
       readOnly = true;
       default = {
-        lock = sources.quilt.lock.${config.version};
-        gameLock = sources.quilt.game-lock.${config.minecraftVersion};
+        lock = sources.quilt.loaders.${config.version};
+        mappings = sources.quilt.mappings.${config.minecraftVersion};
       };
       defaultText = ''meta'';
     };
@@ -41,21 +42,20 @@
     hash = lib.mkOptionDefault lib.fakeHash;
 
     finalLibraries = let
-      inherit (lib.nixcraft.maven) mkLibUrl mkLibPath;
-      inherit (sources) maven-libraries;
+      inherit (lib.nixcraft.maven) mkLibPath;
       dependencies =
         config.meta.lock.dependencies.common
         ++ config.meta.lock.dependencies.${config._instanceType}
-        ++ config.meta.gameLock.dependencies ++ [config.meta.lock.name];
+        ++ (config.meta.mappings or [])
+        ++ [config.meta.lock.name];
     in
       lib.listToAttrs (map (library:
         lib.nameValuePair library {
           enable = true;
           native = false;
           relativePath = mkLibPath library;
-          jar = builtins.fetchurl {
-            url = mkLibUrl maven-libraries.${library}.url library;
-            sha256 = maven-libraries.${library}.sha256;
+          jar = pkgs.fetchurl {
+            inherit (sources.libraries.${library}) url hash;
           };
         })
       dependencies);
