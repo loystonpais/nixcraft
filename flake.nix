@@ -13,18 +13,9 @@
     };
   };
 
-  outputs = inputs @ {
-    flake-parts,
-    nixpkgs,
-    ...
-  }: let
-    lib = nixpkgs.lib.extend (self: super: {
-      nixcraft = import ./lib {inherit lib;};
-    });
-  in
+  outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {
       inherit inputs;
-      specialArgs = {inherit lib;};
     } {
       imports = [
         ./modules/flakeModules/default

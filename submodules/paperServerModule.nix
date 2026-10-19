@@ -12,8 +12,8 @@
     enable = lib.mkEnableOption "paper";
 
     buildNumber = lib.mkOption {
-      type = lib.types.nonEmptyStr;
-      default = lib.last (builtins.attrNames (config.meta.builds));
+      type = lib.types.either lib.types.int lib.types.nonEmptyStr;
+      default = config.meta.build.build;
       defaultText = ''<inferred>'';
     };
 
@@ -27,8 +27,7 @@
       readOnly = true;
       type = lib.types.package;
       default = pkgs.fetchurl {
-        url = config.meta.builds.${config.buildNumber}.url;
-        sha256 = config.meta.builds.${config.buildNumber}.sha256;
+        inherit (config.meta.build) url hash;
       };
       defaultText = ''serverJar'';
     };
@@ -44,7 +43,7 @@
       type = lib.types.attrs;
       readOnly = true;
       default = {
-        builds = sources.paper-servers."${config.minecraftVersion}";
+        build = sources.paper.builds."${config.minecraftVersion}";
         mainClass = "io.papermc.paperclip.Paperclip";
       };
       defaultText = ''meta'';

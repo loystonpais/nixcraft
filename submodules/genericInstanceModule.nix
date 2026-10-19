@@ -7,7 +7,6 @@
   mrpackModule,
   javaSettingsModule,
   fileModule,
-  fetchSha1,
   mkLibDir,
   sources,
   ...
@@ -317,21 +316,19 @@ in
         versionData = lib.mkOption {
           type = lib.types.attrs;
           readOnly = true;
-          default =
-            lib.nixcraft.readJSON
-            (fetchSha1 sources.normalized-manifest.versions.${config.version});
-          defaultText = ''versionData'';
+          default = sources.mojang.versions.${config.version};
+          defaultText = ''sources.mojang.versions.''${config.version}'';
         };
       };
     };
 
     config = lib.mkMerge [
       {
-        # Prevents file from being GC-ed
-        files.".nixcraft/manifest-version-data.json" = {
-          source =
-            fetchSha1 sources.normalized-manifest.versions.${config.version};
-        };
+        # TODO: Remove this
+        # # Prevents file from being GC-ed
+        # files.".nixcraft/manifest-version-data.json" = {
+        #   value = config.meta.versionData;
+        # };
 
         # Set the default java package for client instances
         # is this Good enough ?

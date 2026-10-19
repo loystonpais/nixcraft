@@ -4,7 +4,6 @@
   genericInstanceModule,
   paperServerModule,
   sources,
-  fetchSha1,
   ...
 }: {
   name,
@@ -156,7 +155,9 @@
       _instanceType = "server";
 
       mainJar = lib.mkDefault (
-        fetchSha1 config.meta.versionData.downloads.server
+        pkgs.fetchurl {
+          inherit (config.meta.versionData.downloads.server) url sha1;
+        }
       );
 
       paper.minecraftVersion = config.version;
