@@ -6,6 +6,11 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+
+    sources = {
+      url = "github:loystonpais/minecraft-sources/nixcraft";
+      flake = false;
+    };
   };
 
   outputs = inputs @ {

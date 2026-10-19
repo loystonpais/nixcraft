@@ -39,7 +39,25 @@
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "sources": "sources"
+      }
+    },
+    "sources": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792396250,
+        "narHash": "sha256-3UQpzqdWmVtyAbffh+dVazho+8ywiG+EwiwdXFWUVCA=",
+        "owner": "loystonpais",
+        "repo": "minecraft-sources",
+        "rev": "225b8794a306dccb21759d18e5a0506a1ebbf02e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "loystonpais",
+        "ref": "nixcraft",
+        "repo": "minecraft-sources",
+        "type": "github"
       }
     }
   },
