@@ -141,6 +141,10 @@
     };
     waywall = withWaywall;
 
+    noWaywall = withConfig {
+      waywall.enable = lib.mkForce false;
+    };
+
     withRenice = withConfig {
       renice.enable = true;
     };
