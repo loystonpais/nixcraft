@@ -47,11 +47,6 @@
 
     agreeToEula = lib.mkEnableOption "agree to EULA";
 
-    extraArguments = lib.mkOption {
-      type = with lib.types; listOf nonEmptyStr;
-      default = [];
-    };
-
     finalArgumentShellString = lib.mkOption {
       type = lib.types.str;
       readOnly = true;
@@ -116,6 +111,14 @@
     shared
 
     {
+      libraries =
+        lib.mapAttrs
+        (_: libDef: lib.mkDefault libDef)
+        (lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
+          pkgs.stdenv.hostPlatform
+          pkgs
+          config.meta.versionData.libraries);
+
       finalLaunchShellCommandString = with lib;
         concatStringsSep " " (concatLists [
           (lib.nixcraft.mkLaunchPrefixList config.launchPrefix)
@@ -172,7 +175,7 @@
         public.version = config.version;
 
         server.directory = config.absoluteDir;
-        server.forge = config.forgeLoader.enable;
+        server.forge = config.forgeLoader.enable || config.neoForgeLoader.enable;
         server.command = config.finalLaunchShellCommandString;
 
         config.version = lib.mkDefault "0.2.11";
@@ -194,6 +197,42 @@
       java.jar = lib.mkForce null;
       java.mainClass = config.quiltLoader.meta.lock.mainClass.server;
     })
+
+    # Forge / NeoForge
+    (let
+      loader =
+        if config.forgeLoader.enable
+        then config.forgeLoader
+        else config.neoForgeLoader;
+    in
+      lib.mkIf (config.forgeLoader.enable || config.neoForgeLoader.enable) (lib.mkMerge [
+        {
+          java.jar = lib.mkForce null;
+        }
+
+        # Legacy Forge: LaunchWrapper with the vanilla server jar on the classpath
+        (lib.mkIf loader.meta.isLegacy {
+          java.mainClass = loader.legacy.serverMainClass;
+        })
+
+        # Installer based: install once with the official installer, then launch
+        # the generated args file / jar
+        (lib.mkIf (!loader.meta.isLegacy) {
+          java.mainClass = lib.mkForce null;
+          java.cp = lib.mkForce [];
+          java.extraArguments = lib.mkAfter loader.meta.server.javaArguments;
+
+          preLaunchShellScript = ''
+            mkdir -p ${lib.escapeShellArg config.absoluteDir}
+            if [ ! -e ${lib.escapeShellArg "${config.absoluteDir}/${loader.meta.server.installMarker}"} ]; then
+              echo "Installing ${loader.version} server..."
+              (cd ${lib.escapeShellArg config.absoluteDir} && \
+                ${lib.escapeShellArg "${config.java.package}/bin/java"} -jar ${lib.escapeShellArg loader.installerJar} \
+                  --installServer ${lib.escapeShellArg config.absoluteDir})
+            fi
+          '';
+        })
+      ]))
 
     (lib.mkIf config.mrpack.enable {
       world = lib.mkDefault config.mrpack._parsedMrpack.world.overrides-plus-server-overrides;
@@ -247,10 +286,16 @@
             -> (
               config.forgeLoader.enable
               == false
+              && config.neoForgeLoader.enable == false
               && config.fabricLoader.enable == false
               && config.quiltLoader.enable == false
             ))
           "${prefixMsg}: can't have paper server enabled while mod loaders are enabled."
+        )
+
+        (
+          lib.assertMsg (config.paper.enable -> (builtins.elem config.paper.minecraftVersion sources.paper.versions))
+          "${prefixMsg}: Paper server does not support Minecraft version '${config.paper.minecraftVersion}'."
         )
       ];
     })

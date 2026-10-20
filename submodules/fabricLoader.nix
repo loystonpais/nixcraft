@@ -1,15 +1,19 @@
 {
   lib,
   pkgs,
+  fetchFabricLoaderImpure,
   sources,
   ...
 }: {config, ...}: {
   options = {
-    enable = lib.mkEnableOption "quilt loader";
+    enable = lib.mkEnableOption "fabric loader";
 
-    version = lib.mkOption {
-      type = lib.types.nonEmptyStr;
-    };
+    version =
+      lib.nixcraft.options.fabricLoaderVersionDyn
+      // {
+        default = "latest";
+        defaultText = "latest";
+      };
 
     minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
 
@@ -30,11 +34,16 @@
     meta = lib.mkOption {
       type = lib.types.attrs;
       readOnly = true;
-      default = {
-        lock = sources.quilt.loaders.${config.version};
-        mappings = sources.quilt.mappings.${config.minecraftVersion};
-      };
       defaultText = ''meta'';
+      default =
+        {
+          clientMainClass = "net.fabricmc.loader.impl.launch.knot.KnotClient";
+          serverMainClass = "net.fabricmc.loader.impl.launch.knot.KnotServer";
+        }
+        // {
+          lock = sources.fabric.loaders.${config.version};
+          mappings = sources.fabric.mappings.${config.minecraftVersion};
+        };
     };
   };
 

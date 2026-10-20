@@ -2,6 +2,7 @@
   lib,
   pkgs,
   forgeLoaderModule,
+  neoForgeLoaderModule,
   fabricLoaderModule,
   quiltLoaderModule,
   mrpackModule,
@@ -12,7 +13,6 @@
   ...
 }: let
   inherit (lib) escapeShellArg filterAttrs;
-  inherit (lib.nixcraft.filesystem) listJarFilesRecursive;
 in
   {
     name,
@@ -70,7 +70,14 @@ in
         default = {
           enable = false;
           minecraftVersion = lib.mkOptionDefault config.version;
-          _instanceType = config._instanceType;
+        };
+      };
+
+      neoForgeLoader = lib.mkOption {
+        type = with lib.types; (submodule neoForgeLoaderModule);
+        default = {
+          enable = false;
+          minecraftVersion = lib.mkOptionDefault config.version;
         };
       };
 
@@ -159,6 +166,11 @@ in
         default = '''';
       };
 
+      extraArguments = lib.mkOption {
+        type = with lib.types; listOf nonEmptyStr;
+        default = [];
+      };
+
       java = lib.mkOption {
         type = lib.types.submodule javaSettingsModule;
       };
@@ -168,17 +180,10 @@ in
         default = {};
       };
 
-      dedupeLibraries =
-        (lib.mkEnableOption "deduplication of libraries")
-        // {
-          default = true;
-          internal = true;
-        };
-
-      finalLibraries = lib.mkOption {
-        type = lib.types.attrsOf lib.nixcraft.types.library;
-        readOnly = true;
-      };
+      mutableLibrariesDir = lib.mkEnableOption ''
+        placing libraries in the instance's mutable libraries directory
+        and using those paths on the classpath
+      '';
 
       mainJar = lib.mkOption {
         type = lib.types.path;
@@ -243,13 +248,6 @@ in
         };
       };
 
-      fixBugs =
-        (lib.mkEnableOption "fixing trivial bugs if any")
-        // {
-          default = true;
-          internal = true;
-        };
-
       launchPrefix = lib.mkOption {
         type = with lib.types;
           attrsOf (submodule ({name, ...}: {
@@ -281,6 +279,11 @@ in
         default = {};
       };
 
+      finalLibraries = lib.mkOption {
+        type = lib.types.attrsOf lib.nixcraft.types.library;
+        readOnly = true;
+      };
+
       finalLaunchShellCommandString = lib.mkOption {
         type = lib.types.lines;
         readOnly = true;
@@ -306,12 +309,6 @@ in
         readOnly = true;
       };
 
-      _instanceType = lib.mkOption {
-        type = lib.types.enum ["client" "server"];
-        internal = true;
-        readOnly = true;
-      };
-
       meta = {
         versionData = lib.mkOption {
           type = lib.types.attrs;
@@ -320,6 +317,28 @@ in
           defaultText = ''sources.mojang.versions.''${config.version}'';
         };
       };
+
+      # Internal options
+
+      _instanceType = lib.mkOption {
+        type = lib.types.enum ["client" "server"];
+        internal = true;
+        readOnly = true;
+      };
+
+      fixBugs =
+        (lib.mkEnableOption "fixing trivial bugs if any")
+        // {
+          default = true;
+          internal = true;
+        };
+
+      dedupeLibraries =
+        (lib.mkEnableOption "deduplication of libraries")
+        // {
+          default = true;
+          internal = true;
+        };
     };
 
     config = lib.mkMerge [
@@ -360,23 +379,17 @@ in
         binEntry.name = lib.mkOptionDefault "nixcraft-${config._instanceType}-${config.name}";
       }
 
-      # Settings stuff that the user usually doesn't need to alter
+      (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+        envVars.DYLD_LIBRARY_PATH = [(lib.makeLibraryPath config.runtimeLibs)];
+      })
+
+      # When linux or freebsd
+      (lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
+        envVars.LD_LIBRARY_PATH = [(lib.makeLibraryPath config.runtimeLibs)];
+      })
+
       {
-        # Set PATH from runtime programs
-        # Set (DY)LD_LIBRARY_PATH env var from libs
-        envVars =
-          {
-            PATH = lib.makeBinPath config.runtimePrograms;
-          }
-          // (
-            if pkgs.stdenv.hostPlatform.isDarwin
-            then {
-              DYLD_LIBRARY_PATH = [(lib.makeLibraryPath config.runtimeLibs)];
-            }
-            else {
-              LD_LIBRARY_PATH = [(lib.makeLibraryPath config.runtimeLibs)];
-            }
-          );
+        envVars.PATH = lib.makeBinPath config.runtimePrograms;
 
         # Add utils to runtime programs (needed for init script)
         runtimePrograms = with pkgs; [
@@ -387,52 +400,44 @@ in
           gnused
           gawk
         ];
-
-        # Make lib dir out of all libraries and then
-        # pass them to java class paths
-        java.cp = let
-          normalLibDir = mkLibDir {
-            normalizedLibraries = config.finalLibraries;
-          };
-
-          # Fix bug with jopt-simple which gets an invalid module name
-          # due to it being a symlink
-          patchedForgeLibDir = normalLibDir.overrideAttrs (final: prev: {
-            buildCommand = ''
-              ${prev.buildCommand}
-              if [ -d $out/net/sf/jopt-simple ]; then
-                chmod -R u+w $out/net/sf/jopt-simple
-                for f in $(find $out/net/sf/jopt-simple -type l); do
-                  cp --remove-destination $(readlink $f) $f
-                done
-              fi
-            '';
-          });
-
-          libDir =
-            if config.forgeLoader.enable
-            then patchedForgeLibDir
-            else normalLibDir;
-        in
-          (listJarFilesRecursive libDir)
-          ++ [config.mainJar];
       }
+
+      (let
+        libDir =
+          if config.mutableLibrariesDir
+          then "${config.absoluteDir}/libraries"
+          else mkLibDir {normalizedLibraries = config.finalLibraries;};
+
+        paths =
+          map (l: "${libDir}/${l.relativePath}")
+          (builtins.filter (l: l.enable && !l.native) (builtins.attrValues config.finalLibraries));
+      in {
+        # When forge or neoforge is enabled, let forge/neoforge handle the libraries and classpath
+        java.cp = lib.mkIf (!config.forgeLoader.enable && !config.neoForgeLoader.enable) (paths ++ [config.mainJar]);
+      })
+
+      (lib.mkIf config.mutableLibrariesDir {
+        files = let
+          enabledLibs =
+            builtins.filter (l: l.enable && !l.native)
+            (builtins.attrValues (config.finalLibraries));
+        in
+          builtins.listToAttrs (
+            map (l:
+              lib.nameValuePair "libraries/${l.relativePath}" {
+                source = l.jar;
+              })
+            enabledLibs
+          );
+      })
 
       # Compute finalLibraries from libraries with optional deduplication
       {
-        finalLibraries = let
-          loaderLibs =
-            if config.fabricLoader.enable
-            then config.fabricLoader.finalLibraries
-            else if config.quiltLoader.enable
-            then config.quiltLoader.finalLibraries
-            else {};
-        in
+        finalLibraries =
           if config.dedupeLibraries
           then
             lib.nixcraft.maven.dedupeNormalizedLibraryAttrs {
-              libraries = config.libraries;
-              priorityLibraries = loaderLibs;
+              inherit (config) libraries;
             }
           else config.libraries;
       }
@@ -441,7 +446,13 @@ in
       {
         forgeLoader = {
           minecraftVersion = lib.mkOptionDefault config.version;
-          _instanceType = config._instanceType;
+        };
+      }
+
+      # NeoForge loader stuff
+      {
+        neoForgeLoader = {
+          minecraftVersion = lib.mkOptionDefault config.version;
         };
       }
 
@@ -468,6 +479,87 @@ in
       (lib.mkIf config.quiltLoader.enable {
         libraries = config.quiltLoader.finalLibraries;
       })
+
+      (lib.mkIf config.forgeLoader.enable {
+        libraries = config.forgeLoader.finalLibraries;
+      })
+
+      (lib.mkIf config.neoForgeLoader.enable {
+        libraries = config.neoForgeLoader.finalLibraries;
+      })
+
+      # Forge / NeoForge
+      (let
+        loader =
+          if config.forgeLoader.enable
+          then config.forgeLoader
+          else config.neoForgeLoader;
+
+        installerLibraries =
+          lib.foldl'
+          (libraries: loader:
+            libraries
+            // lib.optionalAttrs
+            (loader.enable && !loader.meta.isLegacy)
+            loader.finalInstallerLibraries)
+          {}
+          [config.forgeLoader config.neoForgeLoader];
+      in
+        lib.mkIf (config.forgeLoader.enable || config.neoForgeLoader.enable) (lib.mkMerge [
+          {
+            mutableLibrariesDir = true;
+
+            # Only runtime libraries belong on the classpath.
+            java.cp =
+              map
+              (l: "${config.absoluteDir}/libraries/${l.relativePath}")
+              (builtins.filter
+                (l: l.enable && !l.native)
+                (builtins.attrValues config.finalLibraries));
+
+            # Place installer libraries in mutable libraries dir
+            files = let
+              enabledLibs =
+                builtins.filter (l: l.enable && !l.native)
+                (builtins.attrValues installerLibraries);
+            in
+              builtins.listToAttrs (
+                map (l:
+                  lib.nameValuePair "libraries/${l.relativePath}" {
+                    source = l.jar;
+                  })
+                enabledLibs
+              );
+          }
+
+          {
+            # These files bug when they are symlinks, so copy them instead
+            files = let
+              librariesToCopy =
+                builtins.filter
+                (l:
+                  l.enable
+                  && !l.native
+                  && (
+                    lib.hasInfix "jopt-simple" l.relativePath
+                    || lib.hasInfix "org/ow2/asm/asm/" l.relativePath
+                  ))
+                (builtins.attrValues (installerLibraries // config.finalLibraries));
+            in
+              builtins.listToAttrs (
+                map (l:
+                  lib.nameValuePair "libraries/${l.relativePath}" {
+                    method = "copy";
+                  })
+                librariesToCopy
+              );
+          }
+
+          # Legacy loaders patch vanilla Minecraft classes at runtime.
+          (lib.mkIf loader.meta.isLegacy {
+            java.cp = [config.mainJar];
+          })
+        ]))
 
       (lib.mkIf config.mrpack.enable {
         # Settings up fabricloader
@@ -744,6 +836,7 @@ in
             let
               enabledLoaders = lib.count (modLoader: modLoader.enable) [
                 config.forgeLoader
+                config.neoForgeLoader
                 config.fabricLoader
                 config.quiltLoader
               ];

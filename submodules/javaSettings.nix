@@ -72,7 +72,7 @@
     };
 
     finalArgumentShellString = lib.mkOption {
-      type = lib.types.nonEmptyStr;
+      type = lib.types.str;
       readOnly = true;
       default = with lib;
         escapeShellArgs (

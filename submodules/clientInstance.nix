@@ -2,6 +2,7 @@
   lib,
   pkgs,
   forgeLoaderModule,
+  neoForgeLoaderModule,
   fabricLoaderModule,
   mrpackModule,
   javaSettingsModule,
@@ -53,8 +54,12 @@ in
 
       lwjgl = {
         version = lib.mkOption {
-          type = with lib.types; nullOr lib.nixcraft.types.lwjglVersion;
+          type = with lib.types; nullOr (either (enum ["latest"]) lib.nixcraft.types.lwjglVersion);
           default = null;
+          apply = v:
+            if v == "latest"
+            then builtins.head sources.lwjgl.versions
+            else v;
         };
       };
 
@@ -147,11 +152,6 @@ in
       enableNixGL = lib.mkEnableOption "nixGL";
 
       enableMangoHud = lib.mkEnableOption "mangohud";
-
-      extraArguments = lib.mkOption {
-        type = with lib.types; listOf nonEmptyStr;
-        default = [];
-      };
 
       finalArgumentShellString = lib.mkOption {
         type = with lib.types; nonEmptyStr;
@@ -533,24 +533,21 @@ in
           # Prevents minecraft from segfaulting on exit
           envVars.__GL_THREADED_OPTIMIZATIONS = "0";
         })
-      ]))
 
-      (lib.mkIf config.forgeLoader.enable {
-        java.mainClass = "net.minecraftforge.bootstrap.ForgeBootstrap";
-        _classSettings.version = config.forgeLoader.parsedForgeLoader.versionId;
-        extraArguments = ["--launchTarget" "forge_client"];
-        mainJar = let
-          clientJar = pkgs.fetchurl {
-            inherit (config.meta.versionData.downloads.client) url sha1;
-          };
-          installDir = config.forgeLoader.parsedForgeLoader.clientInstallDirWithClientJar clientJar;
-        in "${installDir}/libraries/net/minecraftforge/forge/${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}/forge-${config.forgeLoader.minecraftVersion}-${config.forgeLoader.version}-client.jar";
-        libraries =
-          lib.nixcraft.maven.mkNormalizedMinecraftLibraryAttrs
-          pkgs.stdenv.hostPlatform
-          pkgs
-          config.forgeLoader.parsedForgeLoader.versionLibraries;
-      })
+        # Forge client on Minecraft 26.1 under Linux
+        (lib.mkIf (
+            pkgs.stdenv.hostPlatform.isLinux
+            && config.forgeLoader.enable
+            && (config.version == "26.1")
+            && !config.waywall.enable
+          ) {
+            # Forge 62.0.9's early window on MC 26.1 uses LWJGL 3.4.1 (GLFW 3.4) and initializes
+            # without specifying the X11 platform hint. This causes GLFW to pick native Wayland,
+            # fail on window positioning, and crash vanilla's GLX._initGlfw pre-flight check.
+            envVars.XDG_SESSION_TYPE = lib.mkDefault "x11";
+            envVars.GDK_BACKEND = lib.mkDefault "x11";
+          })
+      ]))
 
       (lib.mkIf config.fabricLoader.enable {
         java.mainClass = config.fabricLoader.meta.clientMainClass;
@@ -559,6 +556,35 @@ in
       (lib.mkIf config.quiltLoader.enable {
         java.mainClass = config.quiltLoader.meta.lock.mainClass.client;
       })
+
+      # Forge / NeoForge
+      (let
+        loader =
+          if config.forgeLoader.enable
+          then config.forgeLoader
+          else config.neoForgeLoader;
+      in
+        lib.mkIf (config.forgeLoader.enable || config.neoForgeLoader.enable) (lib.mkMerge [
+          {
+            java.mainClass = loader.meta.mainClass;
+            extraArguments = loader.clientArguments;
+          }
+
+          # ForgeWrapper runs the installer on first launch, which needs a mutable
+          # libraries directory holding both the runtime and installer libraries.
+          (lib.mkIf (!loader.meta.isLegacy) {
+            mutableLibrariesDir = true;
+
+            java.cp = lib.mkIf (!loader.replacesMinecraftJar) [config.mainJar];
+
+            java.D = {
+              "forgewrapper.librariesDir" = "${config.absoluteDir}/libraries";
+              "forgewrapper.minecraft" = config.mainJar;
+              "forgewrapper.installer" = loader.installerJar;
+              "libraryDirectory" = "${config.absoluteDir}/libraries";
+            };
+          })
+        ]))
 
       (lib.mkIf config.mrpack.enable {
         saves = config.mrpack._parsedMrpack.saves.overrides-plus-client-overrides;

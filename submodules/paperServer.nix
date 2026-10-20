@@ -43,7 +43,7 @@
       type = lib.types.attrs;
       readOnly = true;
       default = {
-        build = sources.paper.builds."${config.minecraftVersion}";
+        build = sources.paper.builds."${config.minecraftVersion}" or null;
         mainClass = "io.papermc.paperclip.Paperclip";
       };
       defaultText = ''meta'';

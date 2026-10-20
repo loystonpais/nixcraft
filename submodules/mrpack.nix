@@ -18,11 +18,11 @@
     minecraftVersion = lib.nixcraft.options.minecraftVersionDyn;
 
     fabricLoaderVersion = lib.mkOption {
-      type = lib.types.nullOr lib.types.nonEmptyStr;
+      type = lib.types.nullOr lib.nixcraft.types.fabricLoaderVersion;
     };
 
     quiltLoaderVersion = lib.mkOption {
-      type = lib.types.nullOr lib.types.nonEmptyStr;
+      type = lib.types.nullOr lib.nixcraft.types.quiltLoaderVersion;
     };
 
     enableOptionalMods = (lib.mkEnableOption "optional mods") // {default = true;};

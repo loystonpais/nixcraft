@@ -1077,27 +1077,6 @@ true
 
 
 
-## client\.instances\.\<name>\.fabricLoader\._impurePackage
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-package *(read only)*
-
-
-
-*Default:*
-
-```nix
-"package"
-```
-
-
-
 ## client\.instances\.\<name>\.fabricLoader\.finalLibraries
 
 
@@ -1150,27 +1129,6 @@ This option has no description\.
 
 *Type:*
 absolute path
-
-
-
-## client\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.name
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-string *(read only)*
-
-
-
-*Default:*
-
-```nix
-"‹name›"
-```
 
 
 
@@ -1267,12 +1225,20 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-This option has no description\.
+Fabric loader version, or ‘latest’
 
 
 
 *Type:*
-non-empty string
+value “latest” (singular enum) or (Fabric loader version)
+
+
+
+*Default:*
+
+```nix
+"latest"
+```
 
 
 
@@ -1577,7 +1543,7 @@ non-empty string *(read only)*
 *Default:*
 
 ```nix
-"--version 26.3 --assetsDir /nix/store/n8qcng1cvji03sr9066pqd5n6fk63xlq-minecraft-assets-dir --assetIndex 34 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
+"--version 26.3 --assetsDir /nix/store/bz28gjiyjnld8z3qyk7hy5k5ayms6l6h-minecraft-assets-dir --assetIndex 34 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
 ```
 
 
@@ -1676,27 +1642,6 @@ absolute path
 
 
 
-## client\.instances\.\<name>\.finalLibraries\.\<name>\.name
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-string *(read only)*
-
-
-
-*Default:*
-
-```nix
-"‹name›"
-```
-
-
-
 ## client\.instances\.\<name>\.finalLibraries\.\<name>\.native
 
 
@@ -1769,7 +1714,6 @@ submodule
 
 ```nix
 {
-  _instanceType = "client";
   enable = false;
   minecraftVersion = {
     _type = "override";
@@ -1810,7 +1754,28 @@ true
 
 
 
-## client\.instances\.\<name>\.forgeLoader\.hash
+## client\.instances\.\<name>\.forgeLoader\.clientArguments
+
+
+
+Loader specific game arguments for the client\.
+
+
+
+*Type:*
+list of string *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries
 
 
 
@@ -1819,14 +1784,324 @@ This option has no description\.
 
 
 *Type:*
-non-empty string
+attribute set of (submodule) *(read only)*
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
 
 
 
 *Default:*
 
 ```nix
-"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule) *(read only)*
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.installerJar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or absolute path *(read only)*
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.meta\.isLegacy
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean *(read only)*
+
+
+
+*Default:*
+
+```nix
+(config.meta.loaders.installer or null) == null
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.meta\.loaders
+
+
+
+Metadata for the selected loader version\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.sources.loaders.${config.version}
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.meta\.mainClass
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.mainClass or "io.github.zekerzhayard.forgewrapper.installer.Main"
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.meta\.server\.installMarker
+
+
+
+Path (relative to the instance dir) that exists once the server is installed\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.meta\.server\.javaArguments
+
+
+
+Java arguments (relative to the instance dir) that launch the installed server\.
+
+
+
+*Type:*
+list of string *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.meta\.sources
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+{ }
 ```
 
 
@@ -1844,37 +2119,16 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-## client\.instances\.\<name>\.forgeLoader\.parsedForgeLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-attribute set *(read only)*
-
-
-
-*Default:*
-
-```nix
-"parsedForgeLoader"
-```
-
-
-
 ## client\.instances\.\<name>\.forgeLoader\.version
 
 
 
-This option has no description\.
+Forge loader version, or ‘latest’
 
 
 
 *Type:*
-non-empty string
+value “latest” (singular enum) or (Forge loader version)
 
 
 
@@ -1976,7 +2230,7 @@ This option has no description\.
 
 
 *Type:*
-non-empty string *(read only)*
+string *(read only)*
 
 
 
@@ -2094,6 +2348,8 @@ null
 
 
 ## client\.instances\.\<name>\.java\.minMemory
+
+
 
 This option has no description\.
 
@@ -2369,27 +2625,6 @@ absolute path
 
 
 
-## client\.instances\.\<name>\.libraries\.\<name>\.name
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-string *(read only)*
-
-
-
-*Default:*
-
-```nix
-"‹name›"
-```
-
-
-
 ## client\.instances\.\<name>\.libraries\.\<name>\.native
 
 
@@ -2441,7 +2676,7 @@ This option has no description\.
 
 
 *Type:*
-null or (LWJGL version)
+null or value “latest” (singular enum) or (LWJGL version)
 
 
 
@@ -2482,7 +2717,7 @@ attribute set *(read only)*
 *Default:*
 
 ```nix
-"versionData"
+"sources.mojang.versions.\${config.version}"
 ```
 
 
@@ -2624,7 +2859,7 @@ This option has no description\.
 
 
 *Type:*
-null or non-empty string
+null or (Fabric loader version)
 
 
 
@@ -2700,7 +2935,7 @@ This option has no description\.
 
 
 *Type:*
-null or non-empty string
+null or (Quilt loader version)
 
 
 
@@ -2709,6 +2944,474 @@ null or non-empty string
 ```nix
 null
 ```
+
+
+
+## client\.instances\.\<name>\.mutableLibrariesDir
+
+
+
+Whether to enable placing libraries in the instance’s mutable libraries directory
+and using those paths on the classpath
+\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{
+  enable = false;
+  minecraftVersion = {
+    _type = "override";
+    content = "26.3";
+    priority = 1500;
+  };
+}
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.enable
+
+
+
+Whether to enable NeoForge loader\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.clientArguments
+
+
+
+Loader specific game arguments for the client\.
+
+
+
+*Type:*
+list of string *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule) *(read only)*
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule) *(read only)*
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.installerJar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or absolute path *(read only)*
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.meta\.isLegacy
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean *(read only)*
+
+
+
+*Default:*
+
+```nix
+(config.meta.loaders.installer or null) == null
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.meta\.loaders
+
+
+
+Metadata for the selected loader version\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.sources.loaders.${config.version}
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.meta\.mainClass
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.mainClass or "io.github.zekerzhayard.forgewrapper.installer.Main"
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.meta\.server\.installMarker
+
+
+
+Path (relative to the instance dir) that exists once the server is installed\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.meta\.server\.javaArguments
+
+
+
+Java arguments (relative to the instance dir) that launch the installed server\.
+
+
+
+*Type:*
+list of string *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.meta\.sources
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.minecraftVersion
+
+
+
+Minecraft version, or one of: latest-release, latest-snapshot
+
+
+
+*Type:*
+one of “latest-release”, “latest-snapshot” or (Minecraft version)
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.version
+
+
+
+NeoForge loader version, or ‘latest’
+
+
+
+*Type:*
+value “latest” (singular enum) or (NeoForge loader version)
 
 
 
@@ -2896,27 +3599,6 @@ absolute path
 
 
 
-## client\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.name
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-string *(read only)*
-
-
-
-*Default:*
-
-```nix
-"‹name›"
-```
-
-
-
 ## client\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.native
 
 
@@ -3010,12 +3692,20 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-This option has no description\.
+Quilt loader version, or ‘latest’
 
 
 
 *Type:*
-non-empty string
+value “latest” (singular enum) or (Quilt loader version)
+
+
+
+*Default:*
+
+```nix
+"latest"
+```
 
 
 
@@ -3482,8 +4172,6 @@ submodule
 
 ## server\.dir
 
-
-
 This option has no description\.
 
 
@@ -3913,27 +4601,6 @@ true
 
 
 
-## server\.instances\.\<name>\.fabricLoader\._impurePackage
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-package *(read only)*
-
-
-
-*Default:*
-
-```nix
-"package"
-```
-
-
-
 ## server\.instances\.\<name>\.fabricLoader\.finalLibraries
 
 
@@ -3986,27 +4653,6 @@ This option has no description\.
 
 *Type:*
 absolute path
-
-
-
-## server\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.name
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-string *(read only)*
-
-
-
-*Default:*
-
-```nix
-"‹name›"
-```
 
 
 
@@ -4103,12 +4749,20 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-This option has no description\.
+Fabric loader version, or ‘latest’
 
 
 
 *Type:*
-non-empty string
+value “latest” (singular enum) or (Fabric loader version)
+
+
+
+*Default:*
+
+```nix
+"latest"
+```
 
 
 
@@ -4205,6 +4859,8 @@ attribute set
 
 
 ## server\.instances\.\<name>\.files\.\<name>\.fileName
+
+
 
 This option has no description\.
 
@@ -4510,27 +5166,6 @@ absolute path
 
 
 
-## server\.instances\.\<name>\.finalLibraries\.\<name>\.name
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-string *(read only)*
-
-
-
-*Default:*
-
-```nix
-"‹name›"
-```
-
-
-
 ## server\.instances\.\<name>\.finalLibraries\.\<name>\.native
 
 
@@ -4603,7 +5238,6 @@ submodule
 
 ```nix
 {
-  _instanceType = "server";
   enable = false;
   minecraftVersion = {
     _type = "override";
@@ -4644,7 +5278,28 @@ true
 
 
 
-## server\.instances\.\<name>\.forgeLoader\.hash
+## server\.instances\.\<name>\.forgeLoader\.clientArguments
+
+
+
+Loader specific game arguments for the client\.
+
+
+
+*Type:*
+list of string *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries
 
 
 
@@ -4653,14 +5308,326 @@ This option has no description\.
 
 
 *Type:*
-non-empty string
+attribute set of (submodule) *(read only)*
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
 
 
 
 *Default:*
 
 ```nix
-"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule) *(read only)*
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.installerJar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or absolute path *(read only)*
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.meta\.isLegacy
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean *(read only)*
+
+
+
+*Default:*
+
+```nix
+(config.meta.loaders.installer or null) == null
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.meta\.loaders
+
+
+
+Metadata for the selected loader version\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.sources.loaders.${config.version}
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.meta\.mainClass
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.mainClass or "io.github.zekerzhayard.forgewrapper.installer.Main"
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.meta\.server\.installMarker
+
+
+
+Path (relative to the instance dir) that exists once the server is installed\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.meta\.server\.javaArguments
+
+
+
+Java arguments (relative to the instance dir) that launch the installed server\.
+
+
+
+*Type:*
+list of string *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.meta\.sources
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+{ }
 ```
 
 
@@ -4678,37 +5645,16 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-## server\.instances\.\<name>\.forgeLoader\.parsedForgeLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-attribute set *(read only)*
-
-
-
-*Default:*
-
-```nix
-"parsedForgeLoader"
-```
-
-
-
 ## server\.instances\.\<name>\.forgeLoader\.version
 
 
 
-This option has no description\.
+Forge loader version, or ‘latest’
 
 
 
 *Type:*
-non-empty string
+value “latest” (singular enum) or (Forge loader version)
 
 
 
@@ -4810,7 +5756,7 @@ This option has no description\.
 
 
 *Type:*
-non-empty string *(read only)*
+string *(read only)*
 
 
 
@@ -5278,35 +6224,12 @@ true
 
 ## server\.instances\.\<name>\.libraries\.\<name>\.jar
 
-
-
 This option has no description\.
 
 
 
 *Type:*
 absolute path
-
-
-
-## server\.instances\.\<name>\.libraries\.\<name>\.name
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-string *(read only)*
-
-
-
-*Default:*
-
-```nix
-"‹name›"
-```
 
 
 
@@ -5381,7 +6304,7 @@ attribute set *(read only)*
 *Default:*
 
 ```nix
-"versionData"
+"sources.mojang.versions.\${config.version}"
 ```
 
 
@@ -5523,7 +6446,7 @@ This option has no description\.
 
 
 *Type:*
-null or non-empty string
+null or (Fabric loader version)
 
 
 
@@ -5599,7 +6522,7 @@ This option has no description\.
 
 
 *Type:*
-null or non-empty string
+null or (Quilt loader version)
 
 
 
@@ -5608,6 +6531,474 @@ null or non-empty string
 ```nix
 null
 ```
+
+
+
+## server\.instances\.\<name>\.mutableLibrariesDir
+
+
+
+Whether to enable placing libraries in the instance’s mutable libraries directory
+and using those paths on the classpath
+\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{
+  enable = false;
+  minecraftVersion = {
+    _type = "override";
+    content = "26.3";
+    priority = 1500;
+  };
+}
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.enable
+
+
+
+Whether to enable NeoForge loader\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.clientArguments
+
+
+
+Loader specific game arguments for the client\.
+
+
+
+*Type:*
+list of string *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule) *(read only)*
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set of (submodule) *(read only)*
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.enable
+
+
+
+Whether to enable library ‹name›\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.jar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+absolute path
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.native
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.relativePath
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or relative path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.installerJar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or absolute path *(read only)*
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.meta\.isLegacy
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+boolean *(read only)*
+
+
+
+*Default:*
+
+```nix
+(config.meta.loaders.installer or null) == null
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.meta\.loaders
+
+
+
+Metadata for the selected loader version\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.sources.loaders.${config.version}
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.meta\.mainClass
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.mainClass or "io.github.zekerzhayard.forgewrapper.installer.Main"
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.meta\.server\.installMarker
+
+
+
+Path (relative to the instance dir) that exists once the server is installed\.
+
+
+
+*Type:*
+string *(read only)*
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.meta\.server\.javaArguments
+
+
+
+Java arguments (relative to the instance dir) that launch the installed server\.
+
+
+
+*Type:*
+list of string *(read only)*
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.meta\.sources
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.minecraftVersion
+
+
+
+Minecraft version, or one of: latest-release, latest-snapshot
+
+
+
+*Type:*
+one of “latest-release”, “latest-snapshot” or (Minecraft version)
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.version
+
+
+
+NeoForge loader version, or ‘latest’
+
+
+
+*Type:*
+value “latest” (singular enum) or (NeoForge loader version)
 
 
 
@@ -5743,7 +7134,7 @@ This option has no description\.
 
 
 *Type:*
-non-empty string
+signed integer or non-empty string
 
 
 
@@ -5960,27 +7351,6 @@ absolute path
 
 
 
-## server\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.name
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-string *(read only)*
-
-
-
-*Default:*
-
-```nix
-"‹name›"
-```
-
-
-
 ## server\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.native
 
 
@@ -6074,12 +7444,20 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
 
 
-This option has no description\.
+Quilt loader version, or ‘latest’
 
 
 
 *Type:*
-non-empty string
+value “latest” (singular enum) or (Quilt loader version)
+
+
+
+*Default:*
+
+```nix
+"latest"
+```
 
 
 
@@ -6267,6 +7645,8 @@ submodule
 
 
 ## server\.instances\.\<name>\.service\.enable
+
+
 
 Whether to enable systemd user service\.
 
