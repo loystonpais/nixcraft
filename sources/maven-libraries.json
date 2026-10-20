@@ -4830,5 +4830,9 @@
   "org.ow2.asm:asm-tree:9.11": {
     "url": "https://maven.fabricmc.net/",
     "sha256": "da8ad24d0bf7efb0674a906f59a7d441692b641718371f3bce6762b191a169fd"
+  },
+  "net.fabricmc:fabric-loader:0.20.1": {
+    "url": "https://maven.fabricmc.net",
+    "sha256": "d0c5a082e07410aaff9de7ab196aa6b4236002870f9ba3ad5c1260fcce5110ad"
   }
 }

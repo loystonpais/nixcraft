@@ -2033,5 +2033,24 @@
       "client": "net.fabricmc.loader.impl.launch.knot.KnotClient",
       "server": "net.fabricmc.loader.impl.launch.knot.KnotServer"
     }
+  },
+  "0.20.1": {
+    "name": "net.fabricmc:fabric-loader:0.20.1",
+    "dependencies": {
+      "client": [],
+      "common": [
+        "org.ow2.asm:asm:9.10.1",
+        "org.ow2.asm:asm-analysis:9.10.1",
+        "org.ow2.asm:asm-commons:9.10.1",
+        "org.ow2.asm:asm-tree:9.10.1",
+        "org.ow2.asm:asm-util:9.10.1",
+        "net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7"
+      ],
+      "server": []
+    },
+    "mainClass": {
+      "client": "net.fabricmc.loader.impl.launch.knot.KnotClient",
+      "server": "net.fabricmc.loader.impl.launch.knot.KnotServer"
+    }
   }
 }
