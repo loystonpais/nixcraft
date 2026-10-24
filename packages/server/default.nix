@@ -95,6 +95,11 @@
     };
     paper = withPaper;
 
+    withPurpur = withConfig {
+      purpur.enable = true;
+    };
+    purpur = withPurpur;
+
     withLazymc = withConfig {
       lazymc.enable = true;
     };

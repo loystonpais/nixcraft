@@ -391,14 +391,18 @@ in
       {
         envVars.PATH = lib.makeBinPath config.runtimePrograms;
 
-        # Add utils to runtime programs (needed for init script)
         runtimePrograms = with pkgs; [
+          # Add utils to runtime programs (needed for init script)
           bash
           coreutils
           findutils
           gnugrep
           gnused
           gawk
+
+          # Some modded client / server seem to need this
+          # Fixes: WARNING: Unable to retrieve infocmp for type xterm-kitty
+          ncurses
         ];
       }
 

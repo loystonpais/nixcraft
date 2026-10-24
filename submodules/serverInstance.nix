@@ -3,6 +3,7 @@
   pkgs,
   genericInstanceModule,
   paperServerModule,
+  purpurServerModule,
   sources,
   ...
 }: {
@@ -22,6 +23,13 @@
 
     paper = lib.mkOption {
       type = lib.types.submodule paperServerModule;
+      default = {
+        enable = false;
+      };
+    };
+
+    purpur = lib.mkOption {
+      type = lib.types.submodule purpurServerModule;
       default = {
         enable = false;
       };
@@ -164,6 +172,7 @@
       );
 
       paper.minecraftVersion = config.version;
+      purpur.minecraftVersion = config.version;
 
       runtimeLibs = with pkgs; [udev];
 
@@ -186,6 +195,12 @@
       java.mainClass = lib.mkForce null;
       java.jar = config.mainJar;
       mainJar = config.paper._serverJar;
+    })
+
+    (lib.mkIf config.purpur.enable {
+      java.mainClass = lib.mkForce null;
+      java.jar = config.mainJar;
+      mainJar = config.purpur._serverJar;
     })
 
     (lib.mkIf config.fabricLoader.enable {
@@ -280,22 +295,31 @@
       prefixMsg = "instance '${config.name}'";
     in {
       _module.check = lib.all (a: a) [
-        # if paper is enabled along with other mod loaders then fail
+        # Paper and Purpur are alternative server implementations, not loaders to combine.
         (
-          lib.assertMsg (config.paper.enable
+          lib.assertMsg (!(config.paper.enable && config.purpur.enable))
+          "${prefixMsg}: Paper and Purpur can't both be enabled."
+        )
+
+        (
+          lib.assertMsg ((config.paper.enable || config.purpur.enable)
             -> (
-              config.forgeLoader.enable
-              == false
+              config.forgeLoader.enable == false
               && config.neoForgeLoader.enable == false
               && config.fabricLoader.enable == false
               && config.quiltLoader.enable == false
             ))
-          "${prefixMsg}: can't have paper server enabled while mod loaders are enabled."
+          "${prefixMsg}: can't have Paper or Purpur enabled while mod loaders are enabled."
         )
 
         (
           lib.assertMsg (config.paper.enable -> (builtins.elem config.paper.minecraftVersion sources.paper.versions))
           "${prefixMsg}: Paper server does not support Minecraft version '${config.paper.minecraftVersion}'."
+        )
+
+        (
+          lib.assertMsg (config.purpur.enable -> (builtins.elem config.purpur.minecraftVersion sources.purpur.versions))
+          "${prefixMsg}: Purpur server does not support Minecraft version '${config.purpur.minecraftVersion}'."
         )
       ];
     })

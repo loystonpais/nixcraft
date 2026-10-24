@@ -7238,6 +7238,121 @@ strings concatenated with “\\n”
 
 
 
+## server\.instances\.\<name>\.purpur
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{
+  enable = false;
+}
+```
+
+
+
+## server\.instances\.\<name>\.purpur\.enable
+
+
+
+Whether to enable Purpur\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+
+
+## server\.instances\.\<name>\.purpur\._serverJar
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+package *(read only)*
+
+
+
+*Default:*
+
+```nix
+"serverJar"
+```
+
+
+
+## server\.instances\.\<name>\.purpur\.meta
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+"meta"
+```
+
+
+
+## server\.instances\.\<name>\.purpur\.minecraftVersion
+
+
+
+Minecraft version, or one of: latest-release, latest-snapshot
+
+
+
+*Type:*
+one of “latest-release”, “latest-snapshot” or (Minecraft version)
+
+
+
+*Default:*
+
+```nix
+"<inferred>"
+```
+
+
+
 ## server\.instances\.\<name>\.quiltLoader
 
 
