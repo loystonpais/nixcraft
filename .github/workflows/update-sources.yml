@@ -3,7 +3,7 @@ name: Update Sources
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *" # Daily at 00:00
+    - cron: "0 1 * * *" # Daily at 01:00 UTC, one hour after minecraft-sources
 
 jobs:
   update:
@@ -20,26 +20,13 @@ jobs:
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Update sources
-        run: |
-          nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-version-manifest-v2
-
-          if git diff --quiet sources/version_manifest_v2.json; then
-            echo "Manifest unchanged. Skipping asset SHA updates."
-          else
-            echo "Manifest changed. Running SHA update scripts..."
-            nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-asset-sha256-all
-          fi
-
-          nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-data-versions
-          nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-paper-servers
-          nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-modloader-locks
-          nix run .#legacyPackages.x86_64-linux.runInRepoRoot.update-modrinth-sources
+        run: nix flake update sources
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sources/
+          git add flake.lock
           if git diff --cached --quiet; then
             echo "No changes."
           else
