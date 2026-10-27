@@ -5,7 +5,9 @@ result-*
 
 # Custom
 ignored
-/logs/test-runs/
+/logs/
+.pi
+docs/codemie
 
 # Misc
 .mypy_cache
@@ -21,5 +23,3 @@ devenv.local.nix
 
 # pre-commit
 .pre-commit-config.yaml
-
-.pi
