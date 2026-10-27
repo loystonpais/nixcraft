@@ -149,6 +149,10 @@
       renice.enable = true;
     };
 
+    mcsr = withConfig {
+      mcsr.enable = true;
+    };
+
     online = withConfig {
       account = {
         offline = false;

@@ -7,6 +7,7 @@
   mrpackModule,
   javaSettingsModule,
   genericInstanceModule,
+  mcsrModule,
   waywallModule,
   minecraftAccountModule,
   sources,
@@ -29,7 +30,7 @@ in
     externalAssetsLookupPaths ? [],
     ...
   }: {
-    imports = [genericInstanceModule];
+    imports = [genericInstanceModule mcsrModule];
 
     options = {
       enable =
