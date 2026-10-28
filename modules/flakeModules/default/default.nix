@@ -17,22 +17,18 @@
     nixcraft = nixcraftLib;
   });
 
+  args = flakeModuleArgs // {
+    localFlake = self;
+    inherit sources;
+    lib = extendedLib;
+  };
+
   homeModules = {
-    default = flake-parts-lib.importApply "${self}/modules/homeModules/default" ({
-        localFlake = self;
-        inherit sources;
-        lib = extendedLib;
-      }
-      // flakeModuleArgs);
+    default = flake-parts-lib.importApply "${self}/modules/homeModules/default" args;
   };
 
   nixosModules = {
-    default = flake-parts-lib.importApply "${self}/modules/nixosModules/default" ({
-        localFlake = self;
-        inherit sources;
-        lib = extendedLib;
-      }
-      // flakeModuleArgs);
+    default = flake-parts-lib.importApply "${self}/modules/nixosModules/default" args;
   };
 in {
   config = {
