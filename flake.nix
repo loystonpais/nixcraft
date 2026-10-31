@@ -7,18 +7,26 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
+    import-tree = {
+      url = "github:denful/import-tree";
+    };
+
     sources = {
       url = "github:loystonpais/minecraft-sources/nixcraft";
       flake = false;
     };
   };
 
-  outputs = inputs @ {flake-parts, ...}:
+  outputs = inputs @ {
+    flake-parts,
+    import-tree,
+    ...
+  }:
     flake-parts.lib.mkFlake {
       inherit inputs;
     } {
       imports = [
-        ./modules/flakeModules/default
+        (import-tree ./nix)
       ];
     };
 }

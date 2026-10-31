@@ -1,0 +1,76 @@
+{config, ...}: {
+  nixcraft.lib.builders = {
+    mkLibDir = pkgs: {
+      normalizedLibraries ? null,
+      versionDataLibraries ? null,
+    }: let
+      libs =
+        if normalizedLibraries != null
+        then normalizedLibraries
+        else if versionDataLibraries != null
+        then config.nixcraft.lib.maven.mkNormalizedMinecraftLibraryAttrs pkgs.stdenv.hostPlatform pkgs versionDataLibraries
+        else throw "mkLibDir: either 'normalizedLibraries' or 'versionDataLibraries' must be provided";
+
+      enabledNonNativeLibs = builtins.filter (
+        l:
+          l.enable && !l.native
+      ) (builtins.attrValues libs);
+
+      toLinkEntry = l: {
+        name = l.relativePath;
+        value = l.jar;
+      };
+
+      librariesLinkTree = builtins.listToAttrs (map toLinkEntry enabledNonNativeLibs);
+    in
+      pkgs.linkFarm "minecraft-lib-dir" librariesLinkTree;
+
+    mkNativeLibDir = pkgs: {
+      normalizedLibraries ? null,
+      versionDataLibraries ? null,
+      runCommandLocal ? pkgs.runCommandLocal,
+      unzip ? pkgs.unzip,
+    }: let
+      inherit (pkgs.lib) concatMapStringsSep;
+
+      libs =
+        if normalizedLibraries != null
+        then normalizedLibraries
+        else if versionDataLibraries != null
+        then config.nixcraft.lib.maven.mkNormalizedMinecraftLibraryAttrs pkgs.stdenv.hostPlatform pkgs versionDataLibraries
+        else throw "mkNativeLibDir: either 'normalizedLibraries' or 'versionDataLibraries' must be provided";
+
+      enabledNativeLibs =
+        map (l: l.jar) (builtins.filter (l: l.enable && l.native) (builtins.attrValues libs));
+
+      placeNativeLibs =
+        concatMapStringsSep "\n" (nativeLibrary: ''
+          unzip -o ${nativeLibrary} -d $out
+        '')
+        enabledNativeLibs;
+
+      script = ''
+        mkdir -p $out
+        ${placeNativeLibs}
+        rm -rf $out/META-INF
+        rm -f $out/*.git
+        rm -f $out/*.sha1
+      '';
+    in
+      runCommandLocal "minecraft-native-lib-dir" {
+        nativeBuildInputs = [unzip];
+      }
+      script;
+  };
+
+  perSystem = {
+    flakeConfig,
+    pkgs,
+    ...
+  }: {
+    nixcraft.builders = {
+      mkLibDir = flakeConfig.nixcraft.lib.builders.mkLibDir pkgs;
+      mkNativeLibDir = flakeConfig.nixcraft.lib.builders.mkNativeLibDir pkgs;
+    };
+  };
+}
