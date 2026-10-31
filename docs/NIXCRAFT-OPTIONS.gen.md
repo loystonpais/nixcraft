@@ -1,7 +1,5 @@
 ## enable
 
-
-
 Whether to enable nixcraft\.
 
 
@@ -25,6 +23,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.module)
+
 
 
 ## activationShellScript
@@ -35,6 +36,9 @@ This option has no description\.
 
 *Type:*
 strings concatenated with “\\n”
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.module)
 
 
 
@@ -48,6 +52,9 @@ This option has no description\.
 
 *Type:*
 submodule
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.module)
 
 
 
@@ -70,6 +77,9 @@ null or non-empty string
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.client\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.client.module)
+
 
 
 ## client\.dir
@@ -91,6 +101,9 @@ absolute path
 "/(root)/.local/share/nixcraft/client/instances"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.client\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.client.module)
+
 
 
 ## client\.instances
@@ -103,6 +116,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.client\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.client.module)
 
 
 
@@ -133,6 +149,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.enableDriPrime
@@ -161,6 +180,9 @@ false
 ```nix
 true
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -191,6 +213,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.enableMangoHud
@@ -219,6 +244,9 @@ false
 ```nix
 true
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -249,6 +277,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.enableNvidiaOffload
@@ -278,6 +309,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\._classSettings
@@ -290,6 +324,9 @@ This option has no description\.
 
 *Type:*
 submodule
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -312,6 +349,9 @@ null or non-empty string
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\._classSettings\.assetsDir
@@ -332,6 +372,9 @@ null or absolute path
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -354,6 +397,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\._classSettings\.gameDir
@@ -374,6 +420,9 @@ null or non-empty string
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -396,6 +445,9 @@ null or (positive integer, meaning >0)
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\._classSettings\.userProperties
@@ -416,6 +468,9 @@ null or (attribute set)
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -438,6 +493,9 @@ null or non-empty string
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\._classSettings\.uuid
@@ -459,6 +517,9 @@ null or non-empty string
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\._classSettings\.version
@@ -471,6 +532,9 @@ This option has no description\.
 
 *Type:*
 non-empty string
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -493,6 +557,9 @@ null or (positive integer, meaning >0)
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.absoluteDir
@@ -513,6 +580,9 @@ absolute path
 ```nix
 "/(root)/.local/share/nixcraft/client/instances/‹name›"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -535,6 +605,9 @@ null or (submodule)
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.account\.authDir
@@ -555,6 +628,9 @@ string
 ```nix
 "/(root)/.local/share/nixcraft/client/auth"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -577,6 +653,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.account\.username
@@ -597,6 +676,9 @@ null or non-empty string
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -619,6 +701,9 @@ null or non-empty string
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.activationShellScript
@@ -640,6 +725,9 @@ strings concatenated with “\\n”
 ""
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.binEntry
@@ -652,6 +740,9 @@ This option has no description\.
 
 *Type:*
 submodule
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -682,6 +773,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.binEntry\.finalBin
@@ -703,6 +797,9 @@ package *(read only)*
 <derivation nixcraft-client--name->
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.binEntry\.name
@@ -715,6 +812,9 @@ This option has no description\.
 
 *Type:*
 non-empty string
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -736,6 +836,9 @@ submodule
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
 
 
 
@@ -766,6 +869,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.bwrap\.package
@@ -786,6 +892,9 @@ package
 ```nix
 <derivation nixcraft-bwrap>
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
 
 
 
@@ -808,6 +917,9 @@ list of non-empty string
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.bwrap\.mountOpenglDriver
@@ -828,6 +940,9 @@ boolean
 ```nix
 true
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
 
 
 
@@ -851,6 +966,9 @@ submodule
   enable = false;
 }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -881,6 +999,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.desktopEntry\.extraConfig
@@ -902,6 +1023,9 @@ attribute set
 { }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.desktopEntry\.name
@@ -922,6 +1046,9 @@ non-empty string
 ```nix
 "Nixcraft Instance ‹name›"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -954,6 +1081,9 @@ attribute set of (null or (list of (signed integer or string or absolute path)) 
 }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.externalAssetsDir
@@ -974,6 +1104,9 @@ null or absolute path
 ```nix
 "/(root)/.local/share/nixcraft/client/assets"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -996,6 +1129,9 @@ list of (string or absolute path)
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.extraArguments
@@ -1017,34 +1153,8 @@ list of non-empty string
 [ ]
 ```
 
-
-
-## client\.instances\.\<name>\.fabricLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  _instanceType = "client";
-  enable = false;
-  minecraftVersion = {
-    _type = "override";
-    content = "26.3";
-    priority = 1500;
-  };
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -1075,6 +1185,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.fabricLoader\.finalLibraries
@@ -1087,6 +1200,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -1117,6 +1233,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.jar
@@ -1129,6 +1248,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -1151,6 +1273,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.relativePath
@@ -1172,6 +1297,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.fabricLoader\.hash
@@ -1184,6 +1312,17 @@ This option has no description\.
 
 *Type:*
 non-empty string
+
+
+
+*Default:*
+
+```nix
+"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -1206,6 +1345,9 @@ attribute set *(read only)*
 "meta"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.fabricLoader\.minecraftVersion
@@ -1218,6 +1360,9 @@ Minecraft version, or one of: latest-release, latest-snapshot
 
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -1240,6 +1385,9 @@ value “latest” (singular enum) or (Fabric loader version)
 "latest"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.files
@@ -1260,6 +1408,9 @@ attribute set of (submodule)
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -1290,6 +1441,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.files\.\<name>\.dirName
@@ -1310,6 +1464,9 @@ unspecified value *(read only)*
 ```nix
 "."
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -1332,6 +1489,9 @@ attribute set
 { }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.files\.\<name>\.fileName
@@ -1353,6 +1513,9 @@ unspecified value *(read only)*
 "‹name›"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.files\.\<name>\.finalSource
@@ -1365,6 +1528,9 @@ This option has no description\.
 
 *Type:*
 absolute path *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -1386,6 +1552,9 @@ boolean
 ```nix
 false
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -1413,6 +1582,9 @@ one of “copy”, “copy-init”, “symlink”, “world”, “merge”
 "symlink"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.files\.\<name>\.source
@@ -1433,6 +1605,9 @@ null or absolute path
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -1455,6 +1630,9 @@ relative path *(read only)*
 "‹name›"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.files\.\<name>\.text
@@ -1475,6 +1653,9 @@ null or string
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -1499,6 +1680,9 @@ null or one of “json”, “toml”, “yaml”, “ini”, “txt-list”, �
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.files\.\<name>\.value
@@ -1512,6 +1696,9 @@ A value that will be transformed to the desired format when \.type is set
 *Type:*
 (list of anything) or attribute set of anything or anything
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.finalActivationShellScript
@@ -1524,6 +1711,9 @@ This option has no description\.
 
 *Type:*
 strings concatenated with “\\n” *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -1546,6 +1736,9 @@ non-empty string *(read only)*
 "--version 26.3 --assetsDir /nix/store/bz28gjiyjnld8z3qyk7hy5k5ayms6l6h-minecraft-assets-dir --assetIndex 34 --gameDir '/(root)/.local/share/nixcraft/client/instances/‹name›'"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.finalFilePlacementShellScript
@@ -1558,6 +1751,9 @@ This option has no description\.
 
 *Type:*
 strings concatenated with “\\n” *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -1572,6 +1768,9 @@ This option has no description\.
 *Type:*
 strings concatenated with “\\n” *(read only)*
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.finalLaunchShellScript
@@ -1585,6 +1784,9 @@ This option has no description\.
 *Type:*
 strings concatenated with “\\n” *(read only)*
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.finalLibraries
@@ -1597,6 +1799,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -1627,6 +1832,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.finalLibraries\.\<name>\.jar
@@ -1639,6 +1847,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -1661,6 +1872,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.finalLibraries\.\<name>\.relativePath
@@ -1682,6 +1896,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.finalPreLaunchShellScript
@@ -1695,33 +1912,8 @@ This option has no description\.
 *Type:*
 strings concatenated with “\\n” *(read only)*
 
-
-
-## client\.instances\.\<name>\.forgeLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  enable = false;
-  minecraftVersion = {
-    _type = "override";
-    content = "26.3";
-    priority = 1500;
-  };
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -1752,6 +1944,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.clientArguments
@@ -1773,6 +1968,9 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries
@@ -1785,6 +1983,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -1815,6 +2016,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.jar
@@ -1827,6 +2031,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -1849,6 +2056,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.relativePath
@@ -1870,6 +2080,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.finalLibraries
@@ -1882,6 +2095,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -1912,6 +2128,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.jar
@@ -1924,6 +2143,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -1946,6 +2168,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.relativePath
@@ -1966,6 +2191,9 @@ null or relative path
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -1988,6 +2216,9 @@ null or absolute path *(read only)*
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.meta\.isLegacy
@@ -2009,13 +2240,16 @@ boolean *(read only)*
 (config.meta.loaders.installer or null) == null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.meta\.loaders
 
 
 
-Metadata for the selected loader version\.
+This option has no description\.
 
 
 
@@ -2030,6 +2264,9 @@ attribute set *(read only)*
 config.meta.sources.loaders.${config.version}
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.meta\.mainClass
@@ -2041,15 +2278,69 @@ This option has no description\.
 
 
 *Type:*
-string *(read only)*
+null or non-empty string *(read only)*
 
 
 
 *Default:*
 
 ```nix
-config.meta.loaders.mainClass or "io.github.zekerzhayard.forgewrapper.installer.Main"
+if (config.meta.loaders.mainClass or null) != null
+then config.meta.loaders.mainClass
+else "io.github.zekerzhayard.forgewrapper.installer.Main"
+
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.meta\.rawInstallerLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.installerLibraries or {}
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
+
+
+## client\.instances\.\<name>\.forgeLoader\.meta\.rawLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.libraries
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -2063,6 +2354,9 @@ Path (relative to the instance dir) that exists once the server is installed\.
 
 *Type:*
 string *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -2085,6 +2379,9 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.meta\.sources
@@ -2101,8 +2398,11 @@ attribute set *(read only)*
 *Default:*
 
 ```nix
-{ }
+"loaderSources"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -2117,6 +2417,9 @@ Minecraft version, or one of: latest-release, latest-snapshot
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.forgeLoader\.version
@@ -2130,13 +2433,16 @@ Forge loader version, or ‘latest’
 *Type:*
 value “latest” (singular enum) or (Forge loader version)
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.java
 
 
 
-This option has no description\.
+Java runtime and execution settings\.
 
 
 
@@ -2145,16 +2451,30 @@ submodule
 
 
 
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
+
+
 ## client\.instances\.\<name>\.java\.package
 
 
 
-This option has no description\.
+Java runtime package to use\.
 
 
 
 *Type:*
 package
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
 
 
 
@@ -2177,13 +2497,16 @@ attribute set of (string or absolute path or package or signed integer or boolea
 { }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.java\.cp
 
 
 
-This option has no description\.
+Java classpath (-cp) entries\.
 
 
 
@@ -2198,13 +2521,16 @@ list of absolute path
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.java\.extraArguments
 
 
 
-This option has no description\.
+Extra JVM arguments\.
 
 
 
@@ -2219,13 +2545,16 @@ list of non-empty string
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.java\.finalArgumentShellString
 
 
 
-This option has no description\.
+Shell-escaped string of finalArguments\.
 
 
 
@@ -2240,13 +2569,16 @@ string *(read only)*
 ""
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.java\.finalArguments
 
 
 
-This option has no description\.
+Complete list of JVM arguments constructed from all Java options\.
 
 
 
@@ -2261,13 +2593,16 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.java\.jar
 
 
 
-This option has no description\.
+Main jar file to run with -jar\.
 
 
 
@@ -2282,13 +2617,16 @@ null or absolute path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.java\.mainClass
 
 
 
-This option has no description\.
+Main class to execute\.
 
 
 
@@ -2303,13 +2641,16 @@ null or non-empty string
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.java\.maxMemory
 
 
 
-This option has no description\.
+Maximum memory limit (in MB) for the JVM (-Xmx)\.
 
 
 
@@ -2323,6 +2664,9 @@ null or (Java memory size (in MBs))
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
 
 
 
@@ -2330,7 +2674,7 @@ null
 
 
 
-This option has no description\.
+Sets both minMemory and maxMemory to the same value\.
 
 
 
@@ -2344,6 +2688,9 @@ null or (Java memory size (in MBs))
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
 
 
 
@@ -2351,7 +2698,7 @@ null
 
 
 
-This option has no description\.
+Initial memory allocation (in MB) for the JVM (-Xms)\.
 
 
 
@@ -2365,6 +2712,9 @@ null or (Java memory size (in MBs))
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
 
 
 
@@ -2395,6 +2745,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.launchPrefix
@@ -2415,6 +2768,9 @@ attribute set of (submodule)
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -2445,6 +2801,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.launchPrefix\.\<name>\.command
@@ -2465,6 +2824,9 @@ list of (string or absolute path or package)
 ```nix
 [ ]
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -2497,6 +2859,9 @@ attribute set of (null or (list of (signed integer or string or absolute path)) 
 }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.launchPrefix\.\<name>\.name
@@ -2517,6 +2882,9 @@ string *(read only)*
 ```nix
 "‹name›"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -2539,6 +2907,9 @@ signed integer
 1000
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.launchPrefix\.\<name>\.separator
@@ -2560,6 +2931,9 @@ null or string
 "--"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.libraries
@@ -2580,6 +2954,9 @@ attribute set of (submodule)
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -2610,6 +2987,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.libraries\.\<name>\.jar
@@ -2622,6 +3002,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -2644,6 +3027,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.libraries\.\<name>\.relativePath
@@ -2664,6 +3050,9 @@ null or relative path
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -2686,6 +3075,9 @@ null or value “latest” (singular enum) or (LWJGL version)
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.mainJar
@@ -2698,6 +3090,41 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
+
+
+## client\.instances\.\<name>\.mcsr\.enable
+
+
+
+Whether to enable MCSR\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mcsr\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mcsr.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.extensions."[definition 1-entry 1]")
 
 
 
@@ -2720,6 +3147,9 @@ attribute set *(read only)*
 "sources.mojang.versions.\${config.version}"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.mods
@@ -2740,6 +3170,9 @@ list of (absolute path or package)
 ```nix
 [ ]
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -2768,6 +3201,9 @@ submodule
   };
 }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
 
 
 
@@ -2798,6 +3234,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.mrpack\.enableOptionalMods
@@ -2827,6 +3266,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.mrpack\._parsedMrpack
@@ -2847,6 +3289,9 @@ attribute set
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
 
 
 
@@ -2869,6 +3314,9 @@ null or (Fabric loader version)
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.mrpack\.file
@@ -2882,6 +3330,33 @@ This option has no description\.
 *Type:*
 package
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
+
+
+## client\.instances\.\<name>\.mrpack\.forgeLoaderVersion
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or (Forge loader version)
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.mrpack\.minecraftVersion
@@ -2894,6 +3369,33 @@ Minecraft version, or one of: latest-release, latest-snapshot
 
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
+
+
+## client\.instances\.\<name>\.mrpack\.neoforgeLoaderVersion
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or (NeoForge loader version)
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
 
 
 
@@ -2924,6 +3426,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.mrpack\.quiltLoaderVersion
@@ -2944,6 +3449,9 @@ null or (Quilt loader version)
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
 
 
 
@@ -2976,33 +3484,8 @@ false
 true
 ```
 
-
-
-## client\.instances\.\<name>\.neoForgeLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  enable = false;
-  minecraftVersion = {
-    _type = "override";
-    content = "26.3";
-    priority = 1500;
-  };
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -3033,6 +3516,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.clientArguments
@@ -3054,6 +3540,9 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries
@@ -3066,6 +3555,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -3096,6 +3588,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.jar
@@ -3108,6 +3603,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -3130,6 +3628,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.relativePath
@@ -3151,6 +3652,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.finalLibraries
@@ -3163,6 +3667,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -3193,6 +3700,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.jar
@@ -3205,6 +3715,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -3227,6 +3740,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.relativePath
@@ -3247,6 +3763,9 @@ null or relative path
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -3269,6 +3788,9 @@ null or absolute path *(read only)*
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.meta\.isLegacy
@@ -3290,13 +3812,16 @@ boolean *(read only)*
 (config.meta.loaders.installer or null) == null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.meta\.loaders
 
 
 
-Metadata for the selected loader version\.
+This option has no description\.
 
 
 
@@ -3311,6 +3836,9 @@ attribute set *(read only)*
 config.meta.sources.loaders.${config.version}
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.meta\.mainClass
@@ -3322,15 +3850,69 @@ This option has no description\.
 
 
 *Type:*
-string *(read only)*
+null or non-empty string *(read only)*
 
 
 
 *Default:*
 
 ```nix
-config.meta.loaders.mainClass or "io.github.zekerzhayard.forgewrapper.installer.Main"
+if (config.meta.loaders.mainClass or null) != null
+then config.meta.loaders.mainClass
+else "io.github.zekerzhayard.forgewrapper.installer.Main"
+
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.meta\.rawInstallerLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.installerLibraries or {}
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
+
+
+## client\.instances\.\<name>\.neoForgeLoader\.meta\.rawLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.libraries
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -3344,6 +3926,9 @@ Path (relative to the instance dir) that exists once the server is installed\.
 
 *Type:*
 string *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -3366,6 +3951,9 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.meta\.sources
@@ -3384,8 +3972,11 @@ attribute set *(read only)*
 *Default:*
 
 ```nix
-{ }
+"loaderSources"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -3400,6 +3991,9 @@ Minecraft version, or one of: latest-release, latest-snapshot
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.neoForgeLoader\.version
@@ -3412,6 +4006,9 @@ NeoForge loader version, or ‘latest’
 
 *Type:*
 value “latest” (singular enum) or (NeoForge loader version)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -3433,6 +4030,9 @@ null or (attribute set of anything)
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -3463,6 +4063,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.preLaunchShellScript
@@ -3484,34 +4087,8 @@ strings concatenated with “\\n”
 ""
 ```
 
-
-
-## client\.instances\.\<name>\.quiltLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  _instanceType = "client";
-  enable = false;
-  minecraftVersion = {
-    _type = "override";
-    content = "26.3";
-    priority = 1500;
-  };
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -3542,6 +4119,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.quiltLoader\.finalLibraries
@@ -3554,6 +4134,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -3584,6 +4167,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.jar
@@ -3596,6 +4182,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -3618,6 +4207,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.relativePath
@@ -3639,6 +4231,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.quiltLoader\.hash
@@ -3651,6 +4246,17 @@ This option has no description\.
 
 *Type:*
 non-empty string
+
+
+
+*Default:*
+
+```nix
+"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -3673,6 +4279,9 @@ attribute set *(read only)*
 "meta"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.quiltLoader\.minecraftVersion
@@ -3685,6 +4294,9 @@ Minecraft version, or one of: latest-release, latest-snapshot
 
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -3706,6 +4318,9 @@ value “latest” (singular enum) or (Quilt loader version)
 ```nix
 "latest"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -3736,6 +4351,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.renice\.priority
@@ -3756,6 +4374,9 @@ signed integer
 ```nix
 -20
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -3782,6 +4403,9 @@ list of absolute path
 ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.renice\.wrappedBinPath
@@ -3802,6 +4426,9 @@ absolute path
 ```nix
 "/run/wrappers/bin/nixcraft-renice"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -3824,6 +4451,9 @@ list of absolute path
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.runtimePrograms
@@ -3844,6 +4474,9 @@ list of absolute path
 ```nix
 [ ]
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -3869,6 +4502,9 @@ attribute set of absolute path
 { }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.skinsDir
@@ -3889,6 +4525,9 @@ null or absolute path
 ```nix
 "/(root)/.local/share/nixcraft/client/skins"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
 
 
 
@@ -3919,6 +4558,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.module)
+
 
 
 ## client\.instances\.\<name>\.version
@@ -3940,6 +4582,9 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 "latest-release"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## client\.instances\.\<name>\.waywall
@@ -3952,6 +4597,9 @@ This option has no description\.
 
 *Type:*
 submodule
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -3982,6 +4630,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.waywall\.package
@@ -3994,6 +4645,9 @@ This option has no description\.
 
 *Type:*
 package
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -4029,6 +4683,9 @@ null
 ''
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.waywall\.configText
@@ -4049,6 +4706,9 @@ null or non-empty string
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -4071,6 +4731,9 @@ list of non-empty string
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.instances\.\<name>\.waywall\.noEnvReexec
@@ -4091,6 +4754,9 @@ boolean
 ```nix
 true
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -4121,6 +4787,9 @@ null
 "foo"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.clientInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/waywall.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.clientInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## client\.shared
@@ -4142,6 +4811,9 @@ attribute set
 { }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.client\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/client.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.client.module)
+
 
 
 ## finalActivationShellScript
@@ -4157,6 +4829,21 @@ strings concatenated with “\\n” *(read only)*
 
 
 
+*Default:*
+
+```nix
+''
+  # Nixcraft activation script
+  
+  
+''
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.module)
+
+
+
 ## server
 
 
@@ -4168,9 +4855,14 @@ This option has no description\.
 *Type:*
 submodule
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/nixcraft.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.module)
+
 
 
 ## server\.dir
+
+
 
 This option has no description\.
 
@@ -4187,6 +4879,9 @@ absolute path
 "/(root)/.local/share/nixcraft/server/instances"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.server\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.server.module)
+
 
 
 ## server\.instances
@@ -4199,6 +4894,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.server\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.server.module)
 
 
 
@@ -4229,6 +4927,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.module)
+
 
 
 ## server\.instances\.\<name>\.absoluteDir
@@ -4250,6 +4951,9 @@ absolute path
 "/(root)/.local/share/nixcraft/server/instances/‹name›"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.activationShellScript
@@ -4270,6 +4974,9 @@ strings concatenated with “\\n”
 ```nix
 ""
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -4300,6 +5007,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.module)
+
 
 
 ## server\.instances\.\<name>\.binEntry
@@ -4312,6 +5022,9 @@ This option has no description\.
 
 *Type:*
 submodule
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -4342,6 +5055,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.binEntry\.finalBin
@@ -4363,6 +5079,9 @@ package *(read only)*
 <derivation nixcraft-server--name->
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.binEntry\.name
@@ -4375,6 +5094,9 @@ This option has no description\.
 
 *Type:*
 non-empty string
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -4396,6 +5118,9 @@ submodule
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
 
 
 
@@ -4426,6 +5151,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.bwrap\.package
@@ -4446,6 +5174,9 @@ package
 ```nix
 <derivation nixcraft-bwrap>
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
 
 
 
@@ -4468,6 +5199,9 @@ list of non-empty string
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.bwrap\.mountOpenglDriver
@@ -4488,6 +5222,9 @@ boolean
 ```nix
 true
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/bwrap.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 1-entry 1]")
 
 
 
@@ -4520,6 +5257,9 @@ attribute set of (null or (list of (signed integer or string or absolute path)) 
 }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.extraArguments
@@ -4541,34 +5281,8 @@ list of non-empty string
 [ ]
 ```
 
-
-
-## server\.instances\.\<name>\.fabricLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  _instanceType = "server";
-  enable = false;
-  minecraftVersion = {
-    _type = "override";
-    content = "26.3";
-    priority = 1500;
-  };
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -4599,6 +5313,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.fabricLoader\.finalLibraries
@@ -4611,6 +5328,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -4641,6 +5361,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.jar
@@ -4653,6 +5376,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -4675,6 +5401,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.fabricLoader\.finalLibraries\.\<name>\.relativePath
@@ -4696,6 +5425,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.fabricLoader\.hash
@@ -4708,6 +5440,17 @@ This option has no description\.
 
 *Type:*
 non-empty string
+
+
+
+*Default:*
+
+```nix
+"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -4730,6 +5473,9 @@ attribute set *(read only)*
 "meta"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.fabricLoader\.minecraftVersion
@@ -4742,6 +5488,9 @@ Minecraft version, or one of: latest-release, latest-snapshot
 
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -4764,6 +5513,9 @@ value “latest” (singular enum) or (Fabric loader version)
 "latest"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/fabric.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.files
@@ -4784,6 +5536,9 @@ attribute set of (submodule)
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -4814,6 +5569,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.files\.\<name>\.dirName
@@ -4834,6 +5592,9 @@ unspecified value *(read only)*
 ```nix
 "."
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -4856,6 +5617,9 @@ attribute set
 { }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.files\.\<name>\.fileName
@@ -4877,6 +5641,9 @@ unspecified value *(read only)*
 "‹name›"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.files\.\<name>\.finalSource
@@ -4889,6 +5656,9 @@ This option has no description\.
 
 *Type:*
 absolute path *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -4910,6 +5680,9 @@ boolean
 ```nix
 false
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -4937,6 +5710,9 @@ one of “copy”, “copy-init”, “symlink”, “world”, “merge”
 "symlink"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.files\.\<name>\.source
@@ -4957,6 +5733,9 @@ null or absolute path
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -4979,6 +5758,9 @@ relative path *(read only)*
 "‹name›"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.files\.\<name>\.text
@@ -4999,6 +5781,9 @@ null or string
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -5023,6 +5808,9 @@ null or one of “json”, “toml”, “yaml”, “ini”, “txt-list”, �
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.files\.\<name>\.value
@@ -5036,6 +5824,9 @@ A value that will be transformed to the desired format when \.type is set
 *Type:*
 (list of anything) or attribute set of anything or anything
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.finalActivationShellScript
@@ -5048,6 +5839,9 @@ This option has no description\.
 
 *Type:*
 strings concatenated with “\\n” *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -5070,6 +5864,9 @@ string *(read only)*
 "nogui"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.module)
+
 
 
 ## server\.instances\.\<name>\.finalFilePlacementShellScript
@@ -5082,6 +5879,9 @@ This option has no description\.
 
 *Type:*
 strings concatenated with “\\n” *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -5096,6 +5896,9 @@ This option has no description\.
 *Type:*
 strings concatenated with “\\n” *(read only)*
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.finalLaunchShellScript
@@ -5109,6 +5912,9 @@ This option has no description\.
 *Type:*
 strings concatenated with “\\n” *(read only)*
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.finalLibraries
@@ -5121,6 +5927,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -5151,6 +5960,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.finalLibraries\.\<name>\.jar
@@ -5163,6 +5975,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -5185,6 +6000,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.finalLibraries\.\<name>\.relativePath
@@ -5206,6 +6024,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.finalPreLaunchShellScript
@@ -5219,33 +6040,8 @@ This option has no description\.
 *Type:*
 strings concatenated with “\\n” *(read only)*
 
-
-
-## server\.instances\.\<name>\.forgeLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  enable = false;
-  minecraftVersion = {
-    _type = "override";
-    content = "26.3";
-    priority = 1500;
-  };
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -5276,6 +6072,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.clientArguments
@@ -5297,6 +6096,9 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries
@@ -5309,6 +6111,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -5339,6 +6144,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.jar
@@ -5351,6 +6159,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -5373,6 +6184,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.finalInstallerLibraries\.\<name>\.relativePath
@@ -5394,6 +6208,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.finalLibraries
@@ -5406,6 +6223,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -5436,6 +6256,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.jar
@@ -5448,6 +6271,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -5470,6 +6296,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.finalLibraries\.\<name>\.relativePath
@@ -5490,6 +6319,9 @@ null or relative path
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -5512,6 +6344,9 @@ null or absolute path *(read only)*
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.meta\.isLegacy
@@ -5533,13 +6368,16 @@ boolean *(read only)*
 (config.meta.loaders.installer or null) == null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.meta\.loaders
 
 
 
-Metadata for the selected loader version\.
+This option has no description\.
 
 
 
@@ -5554,6 +6392,9 @@ attribute set *(read only)*
 config.meta.sources.loaders.${config.version}
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.meta\.mainClass
@@ -5565,15 +6406,69 @@ This option has no description\.
 
 
 *Type:*
-string *(read only)*
+null or non-empty string *(read only)*
 
 
 
 *Default:*
 
 ```nix
-config.meta.loaders.mainClass or "io.github.zekerzhayard.forgewrapper.installer.Main"
+if (config.meta.loaders.mainClass or null) != null
+then config.meta.loaders.mainClass
+else "io.github.zekerzhayard.forgewrapper.installer.Main"
+
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.meta\.rawInstallerLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.installerLibraries or {}
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
+
+
+## server\.instances\.\<name>\.forgeLoader\.meta\.rawLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.libraries
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -5587,6 +6482,9 @@ Path (relative to the instance dir) that exists once the server is installed\.
 
 *Type:*
 string *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -5609,6 +6507,9 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.meta\.sources
@@ -5627,8 +6528,11 @@ attribute set *(read only)*
 *Default:*
 
 ```nix
-{ }
+"loaderSources"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
 
 
 
@@ -5643,6 +6547,9 @@ Minecraft version, or one of: latest-release, latest-snapshot
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.forgeLoader\.version
@@ -5656,13 +6563,16 @@ Forge loader version, or ‘latest’
 *Type:*
 value “latest” (singular enum) or (Forge loader version)
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 4-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/forge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 4-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.java
 
 
 
-This option has no description\.
+Java runtime and execution settings\.
 
 
 
@@ -5671,16 +6581,30 @@ submodule
 
 
 
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
+
+
 ## server\.instances\.\<name>\.java\.package
 
 
 
-This option has no description\.
+Java runtime package to use\.
 
 
 
 *Type:*
 package
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
 
 
 
@@ -5703,13 +6627,16 @@ attribute set of (string or absolute path or package or signed integer or boolea
 { }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.java\.cp
 
 
 
-This option has no description\.
+Java classpath (-cp) entries\.
 
 
 
@@ -5724,13 +6651,16 @@ list of absolute path
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.java\.extraArguments
 
 
 
-This option has no description\.
+Extra JVM arguments\.
 
 
 
@@ -5745,13 +6675,16 @@ list of non-empty string
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.java\.finalArgumentShellString
 
 
 
-This option has no description\.
+Shell-escaped string of finalArguments\.
 
 
 
@@ -5766,13 +6699,16 @@ string *(read only)*
 ""
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.java\.finalArguments
 
 
 
-This option has no description\.
+Complete list of JVM arguments constructed from all Java options\.
 
 
 
@@ -5787,13 +6723,16 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.java\.jar
 
 
 
-This option has no description\.
+Main jar file to run with -jar\.
 
 
 
@@ -5808,13 +6747,16 @@ null or absolute path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.java\.mainClass
 
 
 
-This option has no description\.
+Main class to execute\.
 
 
 
@@ -5829,13 +6771,16 @@ null or non-empty string
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.java\.maxMemory
 
 
 
-This option has no description\.
+Maximum memory limit (in MB) for the JVM (-Xmx)\.
 
 
 
@@ -5849,6 +6794,9 @@ null or (Java memory size (in MBs))
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
 
 
 
@@ -5856,7 +6804,7 @@ null
 
 
 
-This option has no description\.
+Sets both minMemory and maxMemory to the same value\.
 
 
 
@@ -5870,6 +6818,9 @@ null or (Java memory size (in MBs))
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
 
 
 
@@ -5877,7 +6828,7 @@ null
 
 
 
-This option has no description\.
+Initial memory allocation (in MB) for the JVM (-Xms)\.
 
 
 
@@ -5891,6 +6842,9 @@ null or (Java memory size (in MBs))
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 5-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/java.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 5-entry 1]")
 
 
 
@@ -5921,6 +6875,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.launchPrefix
@@ -5941,6 +6898,9 @@ attribute set of (submodule)
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -5971,6 +6931,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.launchPrefix\.\<name>\.command
@@ -5991,6 +6954,9 @@ list of (string or absolute path or package)
 ```nix
 [ ]
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -6023,6 +6989,9 @@ attribute set of (null or (list of (signed integer or string or absolute path)) 
 }
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.launchPrefix\.\<name>\.name
@@ -6043,6 +7012,9 @@ string *(read only)*
 ```nix
 "‹name›"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -6065,6 +7037,9 @@ signed integer
 1000
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.launchPrefix\.\<name>\.separator
@@ -6086,6 +7061,9 @@ null or string
 "--"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.lazymc
@@ -6098,6 +7076,9 @@ This option has no description\.
 
 *Type:*
 submodule
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/lazymc\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/lazymc.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 1-entry 1]")
 
 
 
@@ -6128,6 +7109,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/lazymc\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/lazymc.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 1-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.lazymc\.package
@@ -6149,11 +7133,12 @@ package
 <derivation lazymc-0.2.11>
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/lazymc\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/lazymc.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 1-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.lazymc\.settings
-
-
 
 This option has no description\.
 
@@ -6169,6 +7154,9 @@ attribute set
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/lazymc\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 1-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/lazymc.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 1-entry 1]")
 
 
 
@@ -6190,6 +7178,9 @@ attribute set of (submodule)
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -6220,9 +7211,14 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.libraries\.\<name>\.jar
+
+
 
 This option has no description\.
 
@@ -6230,6 +7226,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -6252,6 +7251,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.libraries\.\<name>\.relativePath
@@ -6273,6 +7275,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.mainJar
@@ -6285,6 +7290,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -6307,6 +7315,9 @@ attribute set *(read only)*
 "sources.mojang.versions.\${config.version}"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.mods
@@ -6327,6 +7338,9 @@ list of (absolute path or package)
 ```nix
 [ ]
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -6355,6 +7369,9 @@ submodule
   };
 }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
 
 
 
@@ -6385,6 +7402,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.mrpack\.enableOptionalMods
@@ -6414,6 +7434,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.mrpack\._parsedMrpack
@@ -6434,6 +7457,9 @@ attribute set
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
 
 
 
@@ -6456,6 +7482,9 @@ null or (Fabric loader version)
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.mrpack\.file
@@ -6469,6 +7498,33 @@ This option has no description\.
 *Type:*
 package
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
+
+
+## server\.instances\.\<name>\.mrpack\.forgeLoaderVersion
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or (Forge loader version)
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.mrpack\.minecraftVersion
@@ -6481,6 +7537,33 @@ Minecraft version, or one of: latest-release, latest-snapshot
 
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
+
+
+## server\.instances\.\<name>\.mrpack\.neoforgeLoaderVersion
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+null or (NeoForge loader version)
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
 
 
 
@@ -6511,6 +7594,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.mrpack\.quiltLoaderVersion
@@ -6531,6 +7617,9 @@ null or (Quilt loader version)
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 6-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/mrpack.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 6-entry 1]")
 
 
 
@@ -6563,33 +7652,8 @@ false
 true
 ```
 
-
-
-## server\.instances\.\<name>\.neoForgeLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  enable = false;
-  minecraftVersion = {
-    _type = "override";
-    content = "26.3";
-    priority = 1500;
-  };
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -6620,6 +7684,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.clientArguments
@@ -6641,6 +7708,9 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries
@@ -6653,6 +7723,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -6683,6 +7756,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.jar
@@ -6695,6 +7771,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -6717,6 +7796,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.finalInstallerLibraries\.\<name>\.relativePath
@@ -6738,6 +7820,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.finalLibraries
@@ -6750,6 +7835,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -6780,6 +7868,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.jar
@@ -6792,6 +7883,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -6814,6 +7908,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.finalLibraries\.\<name>\.relativePath
@@ -6834,6 +7931,9 @@ null or relative path
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -6856,6 +7956,9 @@ null or absolute path *(read only)*
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.meta\.isLegacy
@@ -6877,13 +7980,16 @@ boolean *(read only)*
 (config.meta.loaders.installer or null) == null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.meta\.loaders
 
 
 
-Metadata for the selected loader version\.
+This option has no description\.
 
 
 
@@ -6898,6 +8004,9 @@ attribute set *(read only)*
 config.meta.sources.loaders.${config.version}
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.meta\.mainClass
@@ -6909,15 +8018,69 @@ This option has no description\.
 
 
 *Type:*
-string *(read only)*
+null or non-empty string *(read only)*
 
 
 
 *Default:*
 
 ```nix
-config.meta.loaders.mainClass or "io.github.zekerzhayard.forgewrapper.installer.Main"
+if (config.meta.loaders.mainClass or null) != null
+then config.meta.loaders.mainClass
+else "io.github.zekerzhayard.forgewrapper.installer.Main"
+
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.meta\.rawInstallerLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.installerLibraries or {}
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
+
+
+## server\.instances\.\<name>\.neoForgeLoader\.meta\.rawLibraries
+
+
+
+This option has no description\.
+
+
+
+*Type:*
+attribute set *(read only)*
+
+
+
+*Default:*
+
+```nix
+config.meta.loaders.libraries
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -6931,6 +8094,9 @@ Path (relative to the instance dir) that exists once the server is installed\.
 
 *Type:*
 string *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -6953,6 +8119,9 @@ list of string *(read only)*
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.meta\.sources
@@ -6971,8 +8140,11 @@ attribute set *(read only)*
 *Default:*
 
 ```nix
-{ }
+"loaderSources"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -6987,6 +8159,9 @@ Minecraft version, or one of: latest-release, latest-snapshot
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.neoForgeLoader\.version
@@ -6999,6 +8174,9 @@ NeoForge loader version, or ‘latest’
 
 *Type:*
 value “latest” (singular enum) or (NeoForge loader version)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 7-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/neoforge.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 7-entry 1]")
 
 
 
@@ -7029,28 +8207,8 @@ true
 true
 ```
 
-
-
-## server\.instances\.\<name>\.paper
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  enable = false;
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.module)
 
 
 
@@ -7081,6 +8239,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.paper\._mainClass
@@ -7101,6 +8262,9 @@ non-empty string *(read only)*
 ```nix
 "<inferred>"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -7123,6 +8287,9 @@ package *(read only)*
 "serverJar"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.paper\.buildNumber
@@ -7143,6 +8310,9 @@ signed integer or non-empty string
 ```nix
 "<inferred>"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -7165,6 +8335,9 @@ attribute set *(read only)*
 "meta"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 2-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.paper\.minecraftVersion
@@ -7185,6 +8358,9 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 ```nix
 "<inferred>"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 2-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/paper.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 2-entry 1]")
 
 
 
@@ -7215,6 +8391,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/file.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.preLaunchShellScript
@@ -7236,28 +8415,8 @@ strings concatenated with “\\n”
 ""
 ```
 
-
-
-## server\.instances\.\<name>\.purpur
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  enable = false;
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -7288,6 +8447,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/purpur\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/purpur.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.purpur\._serverJar
@@ -7308,6 +8470,9 @@ package *(read only)*
 ```nix
 "serverJar"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/purpur\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/purpur.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -7330,6 +8495,9 @@ attribute set *(read only)*
 "meta"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/purpur\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/purpur.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 3-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.purpur\.minecraftVersion
@@ -7351,34 +8519,8 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 "<inferred>"
 ```
 
-
-
-## server\.instances\.\<name>\.quiltLoader
-
-
-
-This option has no description\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{
-  _instanceType = "server";
-  enable = false;
-  minecraftVersion = {
-    _type = "override";
-    content = "26.3";
-    priority = 1500;
-  };
-}
-```
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/purpur\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.extensions\."\[definition 3-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/purpur.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.extensions."[definition 3-entry 1]")
 
 
 
@@ -7409,6 +8551,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.quiltLoader\.finalLibraries
@@ -7421,6 +8566,9 @@ This option has no description\.
 
 *Type:*
 attribute set of (submodule) *(read only)*
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -7451,6 +8599,9 @@ true
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.jar
@@ -7463,6 +8614,9 @@ This option has no description\.
 
 *Type:*
 absolute path
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -7485,6 +8639,9 @@ boolean
 false
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.quiltLoader\.finalLibraries\.\<name>\.relativePath
@@ -7506,6 +8663,9 @@ null or relative path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.quiltLoader\.hash
@@ -7518,6 +8678,17 @@ This option has no description\.
 
 *Type:*
 non-empty string
+
+
+
+*Default:*
+
+```nix
+"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -7540,6 +8711,9 @@ attribute set *(read only)*
 "meta"
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
+
 
 
 ## server\.instances\.\<name>\.quiltLoader\.minecraftVersion
@@ -7552,6 +8726,9 @@ Minecraft version, or one of: latest-release, latest-snapshot
 
 *Type:*
 one of “latest-release”, “latest-snapshot” or (Minecraft version)
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -7573,6 +8750,9 @@ value “latest” (singular enum) or (Quilt loader version)
 ```nix
 "latest"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.extensions\."\[definition 8-entry 1]"](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/extensions/quilt.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.extensions."[definition 8-entry 1]")
 
 
 
@@ -7603,6 +8783,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.renice\.priority
@@ -7623,6 +8806,9 @@ signed integer
 ```nix
 -20
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -7649,6 +8835,9 @@ list of absolute path
 ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.renice\.wrappedBinPath
@@ -7669,6 +8858,9 @@ absolute path
 ```nix
 "/run/wrappers/bin/nixcraft-renice"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -7691,6 +8883,9 @@ list of absolute path
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.runtimePrograms
@@ -7712,6 +8907,9 @@ list of absolute path
 [ ]
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
+
 
 
 ## server\.instances\.\<name>\.serverProperties
@@ -7732,6 +8930,9 @@ null or (attribute set of (null or boolean or signed integer or string))
 ```nix
 null
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.module)
 
 
 
@@ -7756,6 +8957,9 @@ submodule
   enable = false;
 }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.module)
 
 
 
@@ -7786,6 +8990,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.module)
+
 
 
 ## server\.instances\.\<name>\.service\.autoStart
@@ -7815,6 +9022,9 @@ false
 true
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.module)
+
 
 
 ## server\.instances\.\<name>\.version
@@ -7835,6 +9045,9 @@ one of “latest-release”, “latest-snapshot” or (Minecraft version)
 ```nix
 "latest-release"
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.genericInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/generic-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.genericInstance.module)
 
 
 
@@ -7857,6 +9070,9 @@ null or absolute path
 null
 ```
 
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.serverInstance\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server-instance.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.serverInstance.module)
+
 
 
 ## server\.shared
@@ -7877,5 +9093,8 @@ attribute set
 ```nix
 { }
 ```
+
+*Declared by:*
+ - [/nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server\.nix, via option perSystem, via option perSystem\.x86_64-linux\.nixcraft\.server\.module](file:///nix/store/kzn51gypd542v0xw85fjxkbdjfsq6vna-source/modules/server.nix, via option perSystem, via option perSystem.x86_64-linux.nixcraft.server.module)
 
 

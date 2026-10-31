@@ -1,10 +1,8 @@
 {
   pkgs,
   lib,
-  submodules,
+  nixcraftModule ? (builtins.getFlake (toString ../..)).nixosModules.default,
 }: let
-  inherit (submodules) clientInstanceModule nixcraftModule;
-
   evaluated = lib.evalModules {
     modules = [
       nixcraftModule
