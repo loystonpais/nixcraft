@@ -13,7 +13,7 @@
   ...
 }: let
   inherit (config.nixcraft) sources;
-  inherit (config.nixcraft.lib) maven minecraftVersion options types;
+  inherit (config.nixcraft.lib) maven minecraftVersion options types forgeLike;
 in {
   nixcraft.lib.forgeLike = {
     # Shared logic generator for Forge-like loaders (Forge, NeoForge).
@@ -207,14 +207,6 @@ in {
 
               finalInstallerLibraries = mkLibraries (loader.meta.loaders.installerDependencies or []);
 
-              installerJar =
-                if loader.meta.isLegacy
-                then null
-                else
-                  pkgs.fetchurl {
-                    inherit (sources.libraries.${loader.meta.loaders.installer}) url hash;
-                  };
-
               clientArguments =
                 if loader.meta.isLegacy
                 then lib.optionals (loader.legacy.tweakClass != null) ["--tweakClass" loader.legacy.tweakClass]
@@ -259,15 +251,10 @@ in {
                 (l: l.enable && !l.native)
                 (builtins.attrValues config.finalLibraries));
 
-            # Place installer libraries in mutable libraries dir
             files = let
               enabledLibs =
                 builtins.filter (l: l.enable && !l.native)
-                (builtins.attrValues (
-                  if loader.meta.isLegacy
-                  then {}
-                  else loader.finalInstallerLibraries
-                ));
+                (builtins.attrValues loader.finalInstallerLibraries);
             in
               builtins.listToAttrs (
                 map (l:
@@ -277,6 +264,102 @@ in {
                 enabledLibs
               );
           }
+
+          # All this for hermeticity
+          (lib.mkMerge [
+            {
+              ${loaderName}.installerJar =
+                if loader.meta.isLegacy
+                then null
+                else
+                  forgeLike.patchInstallerJar {
+                    inherit pkgs;
+                    installerJar = pkgs.fetchurl {
+                      inherit (sources.libraries.${loader.meta.loaders.installer}) url hash;
+                    };
+                    version = loader.version;
+                  };
+            }
+
+            (lib.mkIf (!loader.meta.isLegacy) (let
+              # Mappings version (e.g. 20230612.114412 or 20240808.144430)
+              mcpVersion =
+                loader.meta.loaders.minecraftArguments."--fml.mcpVersion"
+                or loader.meta.loaders.minecraftArguments."--fml.neoFormVersion"
+                or null;
+
+              mappingsVersion =
+                if mcpVersion != null
+                then "${loader.minecraftVersion}-${mcpVersion}"
+                else null;
+
+              srgutilsLib = lib.findFirst (l: lib.hasInfix "srgutils" l.relativePath) null (builtins.attrValues loader.finalInstallerLibraries);
+            in
+              lib.mkMerge [
+                # Legacy Proguard .txt mappings (<= 1.20.x)
+                (lib.mkIf (mappingsVersion != null && config.meta.versionData.downloads ? server_mappings) {
+                  files."libraries/net/minecraft/server/${mappingsVersion}/server-${mappingsVersion}-mappings.txt".source = pkgs.fetchurl {
+                    inherit (config.meta.versionData.downloads.server_mappings) url sha1;
+                  };
+                })
+                (lib.mkIf (mappingsVersion != null && config.meta.versionData.downloads ? client_mappings) {
+                  files."libraries/net/minecraft/client/${mappingsVersion}/client-${mappingsVersion}-mappings.txt".source = pkgs.fetchurl {
+                    inherit (config.meta.versionData.downloads.client_mappings) url sha1;
+                  };
+                })
+
+                # Converted TSRG mappings (1.21+)
+                (lib.mkIf (mappingsVersion == null && srgutilsLib != null && config.meta.versionData.downloads ? server_mappings) {
+                  files."libraries/net/minecraft/server/${loader.minecraftVersion}/server-${loader.minecraftVersion}-mappings.tsrg".source = forgeLike.convertToTsrg {
+                    inherit pkgs;
+                    javaPackage = config.java.package;
+                    srgutilsJar = srgutilsLib.jar;
+                    name = "server-${loader.minecraftVersion}";
+                    txtFile = pkgs.fetchurl {
+                      inherit (config.meta.versionData.downloads.server_mappings) url sha1;
+                    };
+                  };
+                })
+                (lib.mkIf (mappingsVersion == null && srgutilsLib != null && config.meta.versionData.downloads ? client_mappings) {
+                  files."libraries/net/minecraft/client/${loader.minecraftVersion}/client-${loader.minecraftVersion}-mappings.tsrg".source = forgeLike.convertToTsrg {
+                    inherit pkgs;
+                    javaPackage = config.java.package;
+                    srgutilsJar = srgutilsLib.jar;
+                    name = "client-${loader.minecraftVersion}";
+                    txtFile = pkgs.fetchurl {
+                      inherit (config.meta.versionData.downloads.client_mappings) url sha1;
+                    };
+                  };
+                })
+
+                # Server vanilla jars for offline installer
+                (lib.mkIf (config._instanceType == "server") {
+                  files = {
+                    "libraries/net/minecraft/server/${loader.minecraftVersion}/server-${loader.minecraftVersion}.jar".source = config.mainJar;
+                    "libraries/net/minecraft/server/${loader.minecraftVersion}/server-${loader.minecraftVersion}-bundled.jar".source = config.mainJar;
+                    "minecraft_server.${loader.minecraftVersion}.jar".source = config.mainJar;
+                  };
+                })
+              ]))
+          ])
+
+          # Forge 36.2.34 (1.16.5) server installer requires Log4j 2.15.0 hotfix libraries
+          (lib.mkIf (loader.minecraftVersion == "1.16.5") {
+            files = {
+              "libraries/org/apache/logging/log4j/log4j-api/2.15.0/log4j-api-2.15.0.jar".source = pkgs.fetchurl {
+                url = "https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.15.0/log4j-api-2.15.0.jar";
+                sha256 = "0m8admb2sbcjj9p54r516zczyb09qg4al36gd6p6sj85irz3xhy8";
+              };
+              "libraries/org/apache/logging/log4j/log4j-core/2.15.0/log4j-core-2.15.0.jar".source = pkgs.fetchurl {
+                url = "https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-core/2.15.0/log4j-core-2.15.0.jar";
+                sha256 = "02r2d95dv7dhfh24p41bap4yam0j6q6n4gpkyjsbfwari498b6j1";
+              };
+              "libraries/org/apache/logging/log4j/log4j-slf4j18-impl/2.15.0/log4j-slf4j18-impl-2.15.0.jar".source = pkgs.fetchurl {
+                url = "https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-slf4j18-impl/2.15.0/log4j-slf4j18-impl-2.15.0.jar";
+                sha256 = "0ql8bcarrm6ivvz3qkd83ch87m6w3v78i5h36l1nj021f2p1pzjr";
+              };
+            };
+          })
 
           {
             # These files bug when they are symlinks, so copy them instead
@@ -352,7 +435,7 @@ in {
                   echo "Installing ${loader.version} server..."
                   (cd ${lib.escapeShellArg config.absoluteDir} && \
                     ${lib.escapeShellArg "${config.java.package}/bin/java"} -jar ${lib.escapeShellArg loader.installerJar} \
-                      --installServer ${lib.escapeShellArg config.absoluteDir})
+                      --installServer ${lib.escapeShellArg config.absoluteDir} --offline)
                 fi
               '';
             })
