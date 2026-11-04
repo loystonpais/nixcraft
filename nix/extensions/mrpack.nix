@@ -2,7 +2,9 @@
   config,
   lib,
   ...
-} @ flakeArgs: {
+} @ flakeArgs: let
+  inherit (config.nixcraft) sources;
+in {
   nixcraft.instance.extensions = [
     ({
       name,
@@ -68,11 +70,25 @@
             }
 
             {
-              forgeLoaderVersion = lib.mkOptionDefault config._parsedMrpack.forgeLoaderVersion;
+              forgeLoaderVersion = lib.mkOptionDefault (
+                if config._parsedMrpack.forgeLoaderVersion != null
+                then
+                  if builtins.elem config._parsedMrpack.forgeLoaderVersion sources.forge.versions
+                  then config._parsedMrpack.forgeLoaderVersion
+                  else sources.forge.game_versions.${config.minecraftVersion} or null
+                else null
+              );
             }
 
             {
-              neoforgeLoaderVersion = lib.mkOptionDefault config._parsedMrpack.neoforgeLoaderVersion;
+              neoforgeLoaderVersion = lib.mkOptionDefault (
+                if config._parsedMrpack.neoforgeLoaderVersion != null
+                then
+                  if builtins.elem config._parsedMrpack.neoforgeLoaderVersion sources.neoforge.versions
+                  then config._parsedMrpack.neoforgeLoaderVersion
+                  else sources.neoforge.game_versions.${config.minecraftVersion} or null
+                else null
+              );
             }
           ];
         };
