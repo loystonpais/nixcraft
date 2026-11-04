@@ -4,6 +4,18 @@
   ...
 }: let
   inherit (config.nixcraft) sources;
+
+  toSet = list: lib.genAttrs list (_: true);
+  lwjglVersionSet = toSet sources.lwjgl.versions;
+  fabricVersionSet = toSet sources.fabric.versions;
+  quiltVersionSet = toSet sources.quilt.versions;
+  forgeVersionSet = toSet sources.forge.versions;
+  neoforgeVersionSet = toSet sources.neoforge.versions;
+  paperVersionSet = toSet sources.paper.versions;
+  foliaVersionSet = toSet sources.folia.versions;
+  purpurVersionSet = toSet sources.purpur.versions;
+  velocityVersionSet = toSet sources.velocity.versions;
+  waterfallVersionSet = toSet sources.waterfall.versions;
 in {
   nixcraft.lib.types = rec {
     minecraftVersion = lib.mkOptionType {
@@ -21,7 +33,7 @@ in {
       description = "LWJGL version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && (builtins.elem version sources.lwjgl.versions || builtins.hasAttr version sources.lwjgl.components))
+        (builtins.isString version && (lwjglVersionSet ? ${version} || sources.lwjgl.components ? ${version}))
         "LWJGL version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -31,7 +43,7 @@ in {
       description = "Fabric loader version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.elem version sources.fabric.versions)
+        (builtins.isString version && fabricVersionSet ? ${version})
         "Fabric loader version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -41,7 +53,7 @@ in {
       description = "Quilt loader version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.elem version sources.quilt.versions)
+        (builtins.isString version && quiltVersionSet ? ${version})
         "Quilt loader version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -51,7 +63,7 @@ in {
       description = "Forge loader version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.elem version sources.forge.versions)
+        (builtins.isString version && forgeVersionSet ? ${version})
         "Forge loader version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -61,7 +73,7 @@ in {
       description = "NeoForge loader version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.elem version sources.neoforge.versions)
+        (builtins.isString version && neoforgeVersionSet ? ${version})
         "NeoForge loader version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -71,7 +83,7 @@ in {
       description = "Paper server Minecraft version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.elem version sources.paper.versions)
+        (builtins.isString version && paperVersionSet ? ${version})
         "Paper server Minecraft version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -81,7 +93,7 @@ in {
       description = "Folia server Minecraft version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.elem version sources.folia.versions)
+        (builtins.isString version && foliaVersionSet ? ${version})
         "Folia server Minecraft version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -91,7 +103,7 @@ in {
       description = "Purpur server Minecraft version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.elem version sources.purpur.versions)
+        (builtins.isString version && purpurVersionSet ? ${version})
         "Purpur server Minecraft version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -101,7 +113,7 @@ in {
       description = "Velocity proxy version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.elem version sources.velocity.versions)
+        (builtins.isString version && velocityVersionSet ? ${version})
         "Velocity proxy version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
@@ -111,7 +123,7 @@ in {
       description = "Waterfall proxy version";
       check = version:
         lib.assertMsg
-        (builtins.isString version && builtins.elem version sources.waterfall.versions)
+        (builtins.isString version && waterfallVersionSet ? ${version})
         "Waterfall proxy version '${toString version}' does not exist.";
       merge = loc: defs: (lib.head defs).value;
     };
