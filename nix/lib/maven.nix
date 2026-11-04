@@ -170,19 +170,20 @@ in {
         then lib.mapAttrsToList (name: libDef: libDef // {inherit name;}) libraries
         else libraries;
     in
-      builtins.foldl' (
-        acc: raw:
+      builtins.listToAttrs (
+        builtins.concatMap (raw:
           if raw ? relativePath && raw ? jar
-          then
-            acc
-            // {
-              ${raw.name} = {
+          then [
+            {
+              name = raw.name;
+              value = {
                 enable = raw.enable or true;
                 native = raw.native or false;
                 relativePath = raw.relativePath;
                 jar = raw.jar;
               };
             }
+          ]
           else let
             allowed = (isOsAllowed p (raw.rules or [])) && (isNativeArchAllowed p raw.name);
 
@@ -194,22 +195,23 @@ in {
               || (lib.hasInfix "linux-" raw.name)
               || (lib.hasInfix "osx-" raw.name)
               || (lib.hasInfix "windows-" raw.name);
-
-            entry =
-              if libInfo != null
-              then {
-                ${raw.name} = {
+          in
+            if libInfo != null
+            then [
+              {
+                name = raw.name;
+                value = {
                   enable = allowed;
                   native = isNative;
                   relativePath = mkLibPath raw.name;
                   jar = fetchLib libInfo;
                 };
               }
-              else {};
-          in
-            acc // entry
-      ) {}
-      rawLibrariesList;
+            ]
+            else []
+        )
+        rawLibrariesList
+      );
 
     parseMavenCoord = coord: let
       parts = lib.splitString ":" coord;
