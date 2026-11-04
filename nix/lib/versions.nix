@@ -4,6 +4,10 @@
   ...
 }: let
   inherit (config.nixcraft) sources;
+
+  versionIndexMap = lib.listToAttrs (
+    lib.imap0 (i: v: lib.nameValuePair v i) sources.mojang.meta.versions
+  );
 in {
   nixcraft.lib.versions = rec {
     compare = v1: v2: builtins.compareVersions v1 v2;
@@ -98,9 +102,8 @@ in {
 
   nixcraft.lib.minecraftVersion = rec {
     compare = v1: v2: let
-      versionList = sources.mojang.meta.versions;
-      index1 = lib.lists.findFirstIndex (x: x == v1) (-1) versionList;
-      index2 = lib.lists.findFirstIndex (x: x == v2) (-1) versionList;
+      index1 = versionIndexMap.${v1} or (-1);
+      index2 = versionIndexMap.${v2} or (-1);
     in
       if index1 == -1 || index2 == -1
       then throw "Invalid minecraft versions '${v1}' or '${v2}'"
@@ -110,8 +113,8 @@ in {
     gr = v1: v2: (compare v1 v2) == -1;
     ls = v1: v2: (compare v1 v2) == 1;
 
-    grEq = v1: v2: gr v1 v2 || eq v1 v2;
-    lsEq = v1: v2: ls v1 v2 || eq v1 v2;
+    grEq = v1: v2: let c = compare v1 v2; in c == -1 || c == 0;
+    lsEq = v1: v2: let c = compare v1 v2; in c == 1 || c == 0;
   };
 
   nixcraft.lib.versionManifestV2 = {
