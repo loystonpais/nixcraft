@@ -236,48 +236,35 @@ in {
       libraries,
       priorityLibraries ? {},
     }: let
+      libNames = builtins.attrNames libraries;
+      prioNames = builtins.attrNames priorityLibraries;
+
+      # Memoize parsed coordinates for all libraries involved
+      parsedMap = lib.genAttrs (lib.unique (libNames ++ prioNames)) parseMavenCoord;
+
       # 1. Coordinate keys from priority libraries (e.g. loader libraries)
       prioKeys = lib.listToAttrs (map (
-        name: let
-          parsed = parseMavenCoord name;
-        in
-          lib.nameValuePair parsed.coordKey name
-      ) (builtins.attrNames priorityLibraries));
+        name: lib.nameValuePair parsedMap.${name}.coordKey name
+      ) prioNames);
 
       # 2. Group enabled libraries by coordKey to compare versions if needed
-      grouped = lib.foldl' (
-        acc: name: let
-          parsed = parseMavenCoord name;
-          libDef = libraries.${name};
-        in
-          if !(libDef.enable or true)
-          then acc
-          else let
-            key = parsed.coordKey;
-            current = acc.${key} or [];
-          in
-            acc
-            // {
-              ${key} =
-                current
-                ++ [
-                  {
-                    inherit name;
-                    version = parsed.version;
-                  }
-                ];
-            }
-      ) {} (builtins.attrNames libraries);
+      enabledNames = builtins.filter (name: libraries.${name}.enable or true) libNames;
+      grouped = lib.groupBy (name: parsedMap.${name}.coordKey) enabledNames;
 
       # Determine which library wins for each coordKey
       winningNames =
         lib.mapAttrs (
-          key: items:
+          key: names:
             if prioKeys ? ${key}
             then prioKeys.${key}
             else
               (lib.foldl' (
-                  best: curr:
+                  best: name: let
+                    curr = {
+                      inherit name;
+                      version = parsedMap.${name}.version;
+                    };
+                  in
                     if best == null
                     then curr
                     else if curr.version != null && best.version != null && (builtins.compareVersions curr.version best.version) > 0
@@ -285,7 +272,7 @@ in {
                     else best
                 )
                 null
-                items).name
+                names).name
         )
         grouped;
 
@@ -293,8 +280,7 @@ in {
     in
       lib.mapAttrs (
         name: libDef: let
-          parsed = parseMavenCoord name;
-          key = parsed.coordKey;
+          key = parsedMap.${name}.coordKey;
           hasCollision = (builtins.length (grouped.${key} or [])) > 1 || (prioKeys ? ${key} && prioKeys.${key} != name);
         in
           if hasCollision && !(winningSet ? ${name})
