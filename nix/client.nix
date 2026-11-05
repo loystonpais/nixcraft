@@ -199,8 +199,19 @@ in {
         waywall.enable = true;
       };
 
-      withMcsr = withConfig {
+      mcsr = withConfig {
         mcsr.enable = true;
+      };
+      withMcsr = mcsr;
+
+      mcsrGlfw3-4 = withConfig {
+        mcsr.enable = true;
+        mcsr.glfwVersion = "3.4";
+      };
+
+      mcsrGlfw3-5-1 = withConfig {
+        mcsr.enable = true;
+        mcsr.glfwVersion = "3.5.1";
       };
 
       withBwrap = withConfig {
