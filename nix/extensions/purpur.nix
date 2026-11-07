@@ -56,6 +56,13 @@ in {
             java.jar = config.mainJar;
             mainJar = config.purpur._serverJar;
           }
+
+          (lib.mkIf (config.purpur.meta.build ? server) {
+            files."cache/${config.purpur.meta.build.server.filename}".source = pkgs.fetchurl {
+              name = config.purpur.meta.build.server.filename;
+              inherit (config.purpur.meta.build.server) url hash;
+            };
+          })
         ]))
 
         (let

@@ -70,6 +70,13 @@ in {
             java.jar = config.mainJar;
             mainJar = config.paper._serverJar;
           }
+
+          (lib.mkIf (config.paper.meta.build ? server) {
+            files."cache/${config.paper.meta.build.server.filename}".source = pkgs.fetchurl {
+              name = config.paper.meta.build.server.filename;
+              inherit (config.paper.meta.build.server) url hash;
+            };
+          })
         ]))
 
         (let
