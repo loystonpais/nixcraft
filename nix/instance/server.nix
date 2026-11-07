@@ -181,21 +181,29 @@ in {
           prefixMsg = "instance '${config.name}'";
         in {
           _module.check = lib.all (a: a) [
-            # Paper and Purpur are alternative server implementations, not loaders to combine.
+            # Paper, Purpur, and Folia are alternative server implementations, not loaders to combine.
             (
-              lib.assertMsg (!(config.paper.enable && config.purpur.enable))
-              "${prefixMsg}: Paper and Purpur can't both be enabled."
+              let
+                enabledCount =
+                  lib.count (x: x) [
+                    config.paper.enable
+                    config.purpur.enable
+                    config.folia.enable
+                  ];
+              in
+                lib.assertMsg (enabledCount <= 1)
+                "${prefixMsg}: Only one of Paper, Purpur, or Folia can be enabled."
             )
 
             (
-              lib.assertMsg ((config.paper.enable || config.purpur.enable)
+              lib.assertMsg ((config.paper.enable || config.purpur.enable || config.folia.enable)
                 -> (
                   config.forgeLoader.enable == false
                   && config.neoForgeLoader.enable == false
                   && config.fabricLoader.enable == false
                   && config.quiltLoader.enable == false
                 ))
-              "${prefixMsg}: can't have Paper or Purpur enabled while mod loaders are enabled."
+              "${prefixMsg}: can't have Paper, Purpur, or Folia enabled while mod loaders are enabled."
             )
           ];
         })

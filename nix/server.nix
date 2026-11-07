@@ -138,6 +138,11 @@ in {
       };
       purpur = withPurpur;
 
+      withFolia = withConfig {
+        folia.enable = true;
+      };
+      folia = withFolia;
+
       withLazymc = withConfig {
         lazymc.enable = true;
       };
