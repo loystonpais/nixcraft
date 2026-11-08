@@ -56,4 +56,30 @@
       ];
     })
   ];
+
+  nixcraft.docs.examples.server.lazymc = {
+    version = "1.21.1";
+    agreeToEula = true;
+    paper.enable = true;
+    lazymc = {
+      enable = true;
+    };
+    service = {
+      enable = true;
+      autoStart = true;
+    };
+  };
+
+  nixcraft.docs.readme.sections.lazymc = {
+    order = 65;
+    template = ''
+      ### Lazymc
+
+      Run server with lazymc:
+
+      ```nix
+      nixcraft.server.instances.lazymc = {{ examples.server.lazymc | to_nix }};
+      ```
+    '';
+  };
 }

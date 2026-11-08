@@ -70,4 +70,25 @@ in {
       ];
     })
   ];
+
+  nixcraft.docs.examples.client.forge = {
+    version = "1.20.1";
+    forgeLoader.enable = true;
+    java.memory = 6144;
+  };
+
+  nixcraft.docs.readme.sections.forge = {
+    order = 62;
+    template = ''
+      ### Forge
+
+      Enables Minecraft Forge for client or server instances. The right Forge version for your Minecraft version is picked automatically.
+
+      ```nix
+      { ... }: {
+        nixcraft.client.instances.forge = {{ examples.client.forge | to_nix | indent(2) }};
+      }
+      ```
+    '';
+  };
 }

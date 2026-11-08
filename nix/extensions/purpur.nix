@@ -69,4 +69,28 @@ in {
       ];
     })
   ];
+
+  nixcraft.docs.examples.server.purpur = {
+    version = "1.21.1";
+    agreeToEula = true;
+    purpur.enable = true;
+    java.memory = 4096;
+    serverProperties = {
+      motd = "Purpur Server";
+      "max-players" = 50;
+    };
+  };
+
+  nixcraft.docs.readme.sections.purpur = {
+    order = 64;
+    template = ''
+      ### Purpur Server
+
+      Runs a Purpur server:
+
+      ```nix
+      nixcraft.server.instances.purpur = {{ examples.server.purpur | to_nix }};
+      ```
+    '';
+  };
 }

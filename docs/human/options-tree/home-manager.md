@@ -1,0 +1,439 @@
+# Nixcraft Options Tree: Home Manager module (`homeManagerModules.default`)
+
+> 382 options for Home Manager module (`homeManagerModules.default`).
+
+Options are under `nixcraft`; paths shown here use a representative evaluation context.
+
+---
+
+- **`nixcraft`** *(`submodule`)*
+  - **`activationShellScript`** *(`strings concatenated with "\n"`)*
+  - **`client`** *(`submodule`)*
+    - **`auth`**
+      - **`uuid`** *(`null or non-empty string`)* *(default: `null`)* — Default player UUID for client authentication.
+    - **`dir`** *(`absolute path`)* *(default: `"/(root)/.local/share/nixcraft/client/instances"`)*
+    - **`instances`** *(`attrsOf submodule`)*
+      - **`<name>`**
+        - **`_classSettings`** *(`submodule`)*
+          - **`assetIndex`** *(`null or non-empty string`)* *(default: `null`)*
+          - **`assetsDir`** *(`null or absolute path`)* *(default: `null`)*
+          - **`fullscreen`** *(`boolean`)* *(default: `false`)*
+          - **`gameDir`** *(`null or non-empty string`)* *(default: `null`)*
+          - **`height`** *(`null or (positive integer, meaning >0)`)* *(default: `null`)*
+          - **`userProperties`** *(`null or (attribute set)`)* *(default: `null`)*
+          - **`username`** *(`null or non-empty string`)* *(default: `null`)*
+          - **`uuid`** *(`null or non-empty string`)* *(default: `null`)*
+          - **`version`** *(`non-empty string`)*
+          - **`width`** *(`null or (positive integer, meaning >0)`)* *(default: `null`)*
+        - **`absoluteDir`** *(`absolute path`)* *(default: `"/(root)/.local/share/nixcraft/client/instances/‹name›"`)*
+        - **`account`** *(`null or (submodule)`)* *(default: `null`)*
+          - **`authDir`** *(`string`)* *(default: `"/(root)/.local/share/nixcraft/client/auth"`)* — Path to nixcraft auth cache directory.
+          - **`offline`** *(`boolean`)* *(default: `false`)* — Whether this account is offline (unauthenticated).
+          - **`username`** *(`null or non-empty string`)* *(default: `null`)* — Player username. For online accounts, used to verify against authenticated profile.
+          - **`uuid`** *(`null or non-empty string`)* *(default: `null`)* — Player UUID.
+        - **`activationShellScript`** *(`strings concatenated with "\n"`)*
+        - **`binEntry`** *(`submodule`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable bin entry.
+          - **`finalBin`** *(`package`)* *(default: `<derivation nixcraft-client--name->`)*
+          - **`name`** *(`non-empty string`)*
+        - **`bwrap`** *(`submodule`)* *(default: `{ }`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable bwrap.
+          - **`extraArguments`** *(`list of non-empty string`)* *(default: `[ ]`)*
+          - **`mountOpenglDriver`** *(`boolean`)* *(default: `true`)*
+          - **`package`** *(`package`)* *(default: `<derivation nixcraft-bwrap>`)*
+        - **`desktopEntry`** *(`submodule`)* *(default: `{ ...`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable desktop entry.
+          - **`extraConfig`** *(`attribute set`)* *(default: `{ }`)*
+          - **`name`** *(`non-empty string`)* *(default: `"Nixcraft Instance ‹name›"`)*
+        - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable client instance.
+        - **`enableDriPrime`** *(`boolean`)* *(default: `false`)* — Whether to enable dri prime (mesa).
+        - **`enableExternalAssets`** *(`boolean`)* *(default: `true`)* — Whether to enable external asset management via fetchAssets script.
+        - **`enableMangoHud`** *(`boolean`)* *(default: `false`)* — Whether to enable mangohud.
+        - **`enableNixGL`** *(`boolean`)* *(default: `false`)* — Whether to enable nixGL.
+        - **`enableNvidiaOffload`** *(`boolean`)* *(default: `false`)* — Whether to enable nvidia offload.
+        - **`envVars`** *(`attribute set of (null or (list of (signed integer or string or absolute path)) or signed integer or string or absolute path)`)* *(default: `{ }`)*
+        - **`externalAssetsDir`** *(`null or absolute path`)* *(default: `"/(root)/.local/share/nixcraft/client/assets"`)* — Path to external assets directory
+        - **`externalAssetsExtraLookupPaths`** *(`list of (string or absolute path)`)* *(default: `[ ]`)* — Extra paths to read/lookup cached assets from when fetching external assets.
+        - **`extraArguments`** *(`list of non-empty string`)* *(default: `[ ]`)*
+        - **`fabricLoader`**
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable fabric loader.
+          - **`finalLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`hash`** *(`non-empty string`)* *(default: `"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="`)*
+          - **`meta`** *(`attribute set`)* *(default: `"meta"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`version`** *(`value "latest" (singular enum) or (Fabric loader version)`)* *(default: `"latest"`)* — Fabric loader version, or 'latest'
+        - **`files`** *(`attrsOf submodule`)* *(default: `{ }`)*
+          - **`<name>`**
+            - **`dirName`** *(`unspecified value`)* *(default: `"."`)*
+            - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable ‹name›.
+            - **`extraConfig`** *(`attribute set`)* *(default: `{ }`)*
+            - **`fileName`** *(`unspecified value`)* *(default: `"‹name›"`)*
+            - **`finalSource`** *(`absolute path`)*
+            - **`force`** *(`boolean`)* *(default: `false`)* — Overwrite previously existing file/symlink/dir
+            - **`method`** *(`one of "copy", "copy-init", "symlink", "world", "merge"`)* *(default: `"symlink"`)* — Method to place the file in target location
+            - **`source`** *(`null or absolute path`)* *(default: `null`)*
+            - **`target`** *(`relative path`)* *(default: `"‹name›"`)*
+            - **`text`** *(`null or string`)* *(default: `null`)*
+            - **`type`** *(`null or one of "json", "toml", "yaml", "ini", "txt-list", "properties", "options-txt"`)* *(default: `null`)* — Type of the file. This is used while converting passed value to the
+            - **`value`** *(`(list of anything) or attribute set of anything or anything`)* — A value that will be transformed to the desired format when .type is set
+        - **`finalActivationShellScript`** *(`strings concatenated with "\n"`)*
+        - **`finalArgumentShellString`** *(`non-empty string`)* *(default: `"--version 26.3 --assetsDir /nix/store/bz28gjiyjnld8z3qyk... ...`)*
+        - **`finalFilePlacementShellScript`** *(`strings concatenated with "\n"`)*
+        - **`finalLaunchShellCommandString`** *(`strings concatenated with "\n"`)*
+        - **`finalLaunchShellScript`** *(`strings concatenated with "\n"`)*
+        - **`finalLibraries`** *(`attrsOf submodule`)*
+          - **`<name>`**
+            - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+            - **`jar`** *(`absolute path`)*
+            - **`native`** *(`boolean`)* *(default: `false`)*
+            - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+        - **`finalPreLaunchShellScript`** *(`strings concatenated with "\n"`)*
+        - **`forgeLoader`**
+          - **`clientArguments`** *(`list of string`)* *(default: `[ ]`)* — Loader specific game arguments for the client.
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable forge loader.
+          - **`finalInstallerLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`finalLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`installerJar`** *(`null or absolute path`)* *(default: `null`)*
+          - **`meta`**
+            - **`isLegacy`** *(`boolean`)* *(default: `(config.meta.loaders.installer or null) == null`)*
+            - **`loaders`** *(`attribute set`)* *(default: `config.meta.sources.loaders.${config.version}`)*
+            - **`mainClass`** *(`null or non-empty string`)* *(default: `if (config.meta.loaders.mainClass or null) != null ...`)*
+            - **`rawInstallerLibraries`** *(`attribute set`)* *(default: `config.meta.loaders.installerLibraries or {}`)*
+            - **`rawLibraries`** *(`attribute set`)* *(default: `config.meta.loaders.libraries`)*
+            - **`server`**
+              - **`installMarker`** *(`string`)* — Path (relative to the instance dir) that exists once the server is installed.
+              - **`javaArguments`** *(`list of string`)* *(default: `[ ]`)* — Java arguments (relative to the instance dir) that launch the installed server.
+            - **`sources`** *(`attribute set`)* *(default: `"loaderSources"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`version`** *(`value "latest" (singular enum) or (Forge loader version)`)* — Forge loader version, or 'latest'
+        - **`java`** *(`submodule`)* *(default: `{ }`)* — Java runtime and execution settings.
+          - **`D`** *(`attribute set of (string or absolute path or package or signed integer or boolean or floating point number)`)* *(default: `{ }`)* — Java system properties (-D flags) to pass to the JVM.
+          - **`cp`** *(`list of absolute path`)* *(default: `[ ]`)* — Java classpath (-cp) entries.
+          - **`extraArguments`** *(`list of non-empty string`)* *(default: `[ ]`)* — Extra JVM arguments.
+          - **`finalArgumentShellString`** *(`string`)* — Shell-escaped string of finalArguments.
+          - **`finalArguments`** *(`list of string`)* *(default: `[ ]`)* — Complete list of JVM arguments constructed from all Java options.
+          - **`jar`** *(`null or absolute path`)* *(default: `null`)* — Main jar file to run with -jar.
+          - **`mainClass`** *(`null or non-empty string`)* *(default: `null`)* — Main class to execute.
+          - **`maxMemory`** *(`null or (Java memory size (in MBs))`)* *(default: `null`)* — Maximum memory limit (in MB) for the JVM (-Xmx).
+          - **`memory`** *(`null or (Java memory size (in MBs))`)* *(default: `null`)* — Sets both minMemory and maxMemory to the same value.
+          - **`minMemory`** *(`null or (Java memory size (in MBs))`)* *(default: `null`)* — Initial memory allocation (in MB) for the JVM (-Xms).
+          - **`package`** *(`package`)* — Java runtime package to use.
+        - **`jemalloc`**
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable jemalloc.
+        - **`launchPrefix`** *(`attrsOf submodule`)* *(default: `{ }`)*
+          - **`<name>`**
+            - **`command`** *(`list of (string or absolute path or package)`)* *(default: `[ ]`)*
+            - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable launch prefix entry.
+            - **`envVars`** *(`attribute set of (null or (list of (signed integer or string or absolute path)) or signed integer or string or absolute path)`)* *(default: `{ }`)*
+            - **`name`** *(`string`)* *(default: `"‹name›"`)*
+            - **`priority`** *(`signed integer`)* *(default: `1000`)*
+            - **`separator`** *(`null or string`)* *(default: `"--"`)*
+        - **`libraries`** *(`attrsOf submodule`)* *(default: `{ }`)*
+          - **`<name>`**
+            - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+            - **`jar`** *(`absolute path`)*
+            - **`native`** *(`boolean`)* *(default: `false`)*
+            - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+        - **`lwjgl`**
+          - **`version`** *(`null or value "latest" (singular enum) or (LWJGL version)`)* *(default: `null`)*
+        - **`mainJar`** *(`absolute path`)*
+        - **`mcsr`**
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable MCSR.
+          - **`glfwVersion`** *(`one of "3.4", "3.5.1"`)* *(default: `"3.4"`)* — Approved GLFW version for MCSR.
+        - **`meta`**
+          - **`versionData`** *(`attribute set`)* *(default: `"sources.mojang.versions.\${config.version}"`)*
+        - **`mods`** *(`list of (absolute path or package)`)* *(default: `[ ]`)*
+        - **`mrpack`** *(`submodule`)* *(default: `{ ...`)*
+          - **`_parsedMrpack`** *(`attribute set`)* *(default: `{ }`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable enable mrpack.
+          - **`enableOptionalMods`** *(`boolean`)* *(default: `true`)* — Whether to enable optional mods.
+          - **`fabricLoaderVersion`** *(`null or (Fabric loader version)`)* *(default: `null`)*
+          - **`file`** *(`package`)*
+          - **`forgeLoaderVersion`** *(`null or (Forge loader version)`)* *(default: `null`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`neoforgeLoaderVersion`** *(`null or (NeoForge loader version)`)* *(default: `null`)*
+          - **`placeOverrides`** *(`boolean`)* *(default: `true`)* — Whether to enable placing overrides.
+          - **`quiltLoaderVersion`** *(`null or (Quilt loader version)`)* *(default: `null`)*
+        - **`mutableLibrariesDir`** *(`boolean`)* *(default: `false`)* — Whether to enable placing libraries in the instance's mutable libraries directory
+        - **`neoForgeLoader`**
+          - **`clientArguments`** *(`list of string`)* *(default: `[ ]`)* — Loader specific game arguments for the client.
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable NeoForge loader.
+          - **`finalInstallerLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`finalLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`installerJar`** *(`null or absolute path`)* *(default: `null`)*
+          - **`meta`**
+            - **`isLegacy`** *(`boolean`)* *(default: `(config.meta.loaders.installer or null) == null`)*
+            - **`loaders`** *(`attribute set`)* *(default: `config.meta.sources.loaders.${config.version}`)*
+            - **`mainClass`** *(`null or non-empty string`)* *(default: `if (config.meta.loaders.mainClass or null) != null ...`)*
+            - **`rawInstallerLibraries`** *(`attribute set`)* *(default: `config.meta.loaders.installerLibraries or {}`)*
+            - **`rawLibraries`** *(`attribute set`)* *(default: `config.meta.loaders.libraries`)*
+            - **`server`**
+              - **`installMarker`** *(`string`)* — Path (relative to the instance dir) that exists once the server is installed.
+              - **`javaArguments`** *(`list of string`)* *(default: `[ ]`)* — Java arguments (relative to the instance dir) that launch the installed server.
+            - **`sources`** *(`attribute set`)* *(default: `"loaderSources"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`version`** *(`value "latest" (singular enum) or (NeoForge loader version)`)* — NeoForge loader version, or 'latest'
+        - **`optionsTxt`** *(`null or (attribute set of anything)`)* *(default: `null`)*
+        - **`placeFilesAtActivation`** *(`boolean`)* *(default: `false`)* — Whether to enable placing files during activation.
+        - **`preLaunchShellScript`** *(`strings concatenated with "\n"`)*
+        - **`quiltLoader`**
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable quilt loader.
+          - **`finalLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`hash`** *(`non-empty string`)* *(default: `"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="`)*
+          - **`meta`** *(`attribute set`)* *(default: `"meta"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`version`** *(`value "latest" (singular enum) or (Quilt loader version)`)* *(default: `"latest"`)* — Quilt loader version, or 'latest'
+        - **`renice`**
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable renicing the instance process before launch.
+          - **`priority`** *(`signed integer`)* *(default: `-20`)* — Niceness priority value (between -20 and 19). Lower values mean higher priority.
+          - **`sudoLookupPaths`** *(`list of absolute path`)* *(default: `[ ...`)*
+          - **`wrappedBinPath`** *(`absolute path`)* *(default: `"/run/wrappers/bin/nixcraft-renice"`)*
+        - **`runtimeLibs`** *(`list of absolute path`)* *(default: `[ ]`)* — Libraries available at runtime
+        - **`runtimePrograms`** *(`list of absolute path`)* *(default: `[ ]`)*
+        - **`saves`** *(`attribute set of absolute path`)* *(default: `{ }`)* — World saves. Placed only if the directory already doesn't exist
+        - **`skinsDir`** *(`null or absolute path`)* *(default: `"/(root)/.local/share/nixcraft/client/skins"`)* — Path to writable directory where client skins are cached/stored.
+        - **`useDiscreteGPU`** *(`boolean`)* *(default: `true`)* — Whether to enable discrete GPU.
+        - **`version`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* *(default: `"latest-release"`)* — Minecraft version, or one of: latest-release, latest-snapshot
+        - **`waywall`** *(`submodule`)*
+          - **`configDir`** *(`null or absolute path`)* *(default: `null`)* — Path to a dir containing waywall scripts such as init.lua
+          - **`configText`** *(`null or non-empty string`)* *(default: `null`)* — Lua script passed as init.lua
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable waywall.
+          - **`extraArguments`** *(`list of non-empty string`)* *(default: `[ ]`)*
+          - **`noEnvReexec`** *(`boolean`)* *(default: `true`)*
+          - **`package`** *(`package`)*
+          - **`profile`** *(`null or non-empty string`)* *(default: `null`)*
+    - **`shared`** *(`attribute set`)* *(default: `{ }`)*
+  - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable ‹name›.
+  - **`finalActivationShellScript`** *(`strings concatenated with "\n"`)* *(default: `'' ...`)*
+  - **`server`** *(`submodule`)*
+    - **`dir`** *(`absolute path`)* *(default: `"/(root)/.local/share/nixcraft/server/instances"`)*
+    - **`instances`** *(`attrsOf submodule`)*
+      - **`<name>`**
+        - **`absoluteDir`** *(`absolute path`)* *(default: `"/(root)/.local/share/nixcraft/server/instances/‹name›"`)*
+        - **`activationShellScript`** *(`strings concatenated with "\n"`)*
+        - **`agreeToEula`** *(`boolean`)* *(default: `false`)* — Whether to enable agree to EULA.
+        - **`binEntry`** *(`submodule`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable bin entry.
+          - **`finalBin`** *(`package`)* *(default: `<derivation nixcraft-server--name->`)*
+          - **`name`** *(`non-empty string`)*
+        - **`bwrap`** *(`submodule`)* *(default: `{ }`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable bwrap.
+          - **`extraArguments`** *(`list of non-empty string`)* *(default: `[ ]`)*
+          - **`mountOpenglDriver`** *(`boolean`)* *(default: `true`)*
+          - **`package`** *(`package`)* *(default: `<derivation nixcraft-bwrap>`)*
+        - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable server instance.
+        - **`envVars`** *(`attribute set of (null or (list of (signed integer or string or absolute path)) or signed integer or string or absolute path)`)* *(default: `{ }`)*
+        - **`extraArguments`** *(`list of non-empty string`)* *(default: `[ ]`)*
+        - **`fabricLoader`**
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable fabric loader.
+          - **`finalLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`hash`** *(`non-empty string`)* *(default: `"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="`)*
+          - **`meta`** *(`attribute set`)* *(default: `"meta"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`version`** *(`value "latest" (singular enum) or (Fabric loader version)`)* *(default: `"latest"`)* — Fabric loader version, or 'latest'
+        - **`files`** *(`attrsOf submodule`)* *(default: `{ }`)*
+          - **`<name>`**
+            - **`dirName`** *(`unspecified value`)* *(default: `"."`)*
+            - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable ‹name›.
+            - **`extraConfig`** *(`attribute set`)* *(default: `{ }`)*
+            - **`fileName`** *(`unspecified value`)* *(default: `"‹name›"`)*
+            - **`finalSource`** *(`absolute path`)*
+            - **`force`** *(`boolean`)* *(default: `false`)* — Overwrite previously existing file/symlink/dir
+            - **`method`** *(`one of "copy", "copy-init", "symlink", "world", "merge"`)* *(default: `"symlink"`)* — Method to place the file in target location
+            - **`source`** *(`null or absolute path`)* *(default: `null`)*
+            - **`target`** *(`relative path`)* *(default: `"‹name›"`)*
+            - **`text`** *(`null or string`)* *(default: `null`)*
+            - **`type`** *(`null or one of "json", "toml", "yaml", "ini", "txt-list", "properties", "options-txt"`)* *(default: `null`)* — Type of the file. This is used while converting passed value to the
+            - **`value`** *(`(list of anything) or attribute set of anything or anything`)* — A value that will be transformed to the desired format when .type is set
+        - **`finalActivationShellScript`** *(`strings concatenated with "\n"`)*
+        - **`finalArgumentShellString`** *(`string`)* *(default: `"nogui"`)*
+        - **`finalFilePlacementShellScript`** *(`strings concatenated with "\n"`)*
+        - **`finalLaunchShellCommandString`** *(`strings concatenated with "\n"`)*
+        - **`finalLaunchShellScript`** *(`strings concatenated with "\n"`)*
+        - **`finalLibraries`** *(`attrsOf submodule`)*
+          - **`<name>`**
+            - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+            - **`jar`** *(`absolute path`)*
+            - **`native`** *(`boolean`)* *(default: `false`)*
+            - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+        - **`finalPreLaunchShellScript`** *(`strings concatenated with "\n"`)*
+        - **`forgeLoader`**
+          - **`clientArguments`** *(`list of string`)* *(default: `[ ]`)* — Loader specific game arguments for the client.
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable forge loader.
+          - **`finalInstallerLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`finalLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`installerJar`** *(`null or absolute path`)* *(default: `null`)*
+          - **`meta`**
+            - **`isLegacy`** *(`boolean`)* *(default: `(config.meta.loaders.installer or null) == null`)*
+            - **`loaders`** *(`attribute set`)* *(default: `config.meta.sources.loaders.${config.version}`)*
+            - **`mainClass`** *(`null or non-empty string`)* *(default: `if (config.meta.loaders.mainClass or null) != null ...`)*
+            - **`rawInstallerLibraries`** *(`attribute set`)* *(default: `config.meta.loaders.installerLibraries or {}`)*
+            - **`rawLibraries`** *(`attribute set`)* *(default: `config.meta.loaders.libraries`)*
+            - **`server`**
+              - **`installMarker`** *(`string`)* — Path (relative to the instance dir) that exists once the server is installed.
+              - **`javaArguments`** *(`list of string`)* *(default: `[ ]`)* — Java arguments (relative to the instance dir) that launch the installed server.
+            - **`sources`** *(`attribute set`)* *(default: `"loaderSources"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`version`** *(`value "latest" (singular enum) or (Forge loader version)`)* — Forge loader version, or 'latest'
+        - **`java`** *(`submodule`)* *(default: `{ }`)* — Java runtime and execution settings.
+          - **`D`** *(`attribute set of (string or absolute path or package or signed integer or boolean or floating point number)`)* *(default: `{ }`)* — Java system properties (-D flags) to pass to the JVM.
+          - **`cp`** *(`list of absolute path`)* *(default: `[ ]`)* — Java classpath (-cp) entries.
+          - **`extraArguments`** *(`list of non-empty string`)* *(default: `[ ]`)* — Extra JVM arguments.
+          - **`finalArgumentShellString`** *(`string`)* — Shell-escaped string of finalArguments.
+          - **`finalArguments`** *(`list of string`)* *(default: `[ ]`)* — Complete list of JVM arguments constructed from all Java options.
+          - **`jar`** *(`null or absolute path`)* *(default: `null`)* — Main jar file to run with -jar.
+          - **`mainClass`** *(`null or non-empty string`)* *(default: `null`)* — Main class to execute.
+          - **`maxMemory`** *(`null or (Java memory size (in MBs))`)* *(default: `null`)* — Maximum memory limit (in MB) for the JVM (-Xmx).
+          - **`memory`** *(`null or (Java memory size (in MBs))`)* *(default: `null`)* — Sets both minMemory and maxMemory to the same value.
+          - **`minMemory`** *(`null or (Java memory size (in MBs))`)* *(default: `null`)* — Initial memory allocation (in MB) for the JVM (-Xms).
+          - **`package`** *(`package`)* — Java runtime package to use.
+        - **`jemalloc`**
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable jemalloc.
+        - **`launchPrefix`** *(`attrsOf submodule`)* *(default: `{ }`)*
+          - **`<name>`**
+            - **`command`** *(`list of (string or absolute path or package)`)* *(default: `[ ]`)*
+            - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable launch prefix entry.
+            - **`envVars`** *(`attribute set of (null or (list of (signed integer or string or absolute path)) or signed integer or string or absolute path)`)* *(default: `{ }`)*
+            - **`name`** *(`string`)* *(default: `"‹name›"`)*
+            - **`priority`** *(`signed integer`)* *(default: `1000`)*
+            - **`separator`** *(`null or string`)* *(default: `"--"`)*
+        - **`lazymc`** *(`submodule`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable lazymc.
+          - **`package`** *(`package`)* *(default: `<derivation lazymc-0.2.11>`)*
+          - **`settings`** *(`attribute set`)* *(default: `{ }`)*
+        - **`libraries`** *(`attrsOf submodule`)* *(default: `{ }`)*
+          - **`<name>`**
+            - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+            - **`jar`** *(`absolute path`)*
+            - **`native`** *(`boolean`)* *(default: `false`)*
+            - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+        - **`mainJar`** *(`absolute path`)*
+        - **`meta`**
+          - **`versionData`** *(`attribute set`)* *(default: `"sources.mojang.versions.\${config.version}"`)*
+        - **`mods`** *(`list of (absolute path or package)`)* *(default: `[ ]`)*
+        - **`mrpack`** *(`submodule`)* *(default: `{ ...`)*
+          - **`_parsedMrpack`** *(`attribute set`)* *(default: `{ }`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable enable mrpack.
+          - **`enableOptionalMods`** *(`boolean`)* *(default: `true`)* — Whether to enable optional mods.
+          - **`fabricLoaderVersion`** *(`null or (Fabric loader version)`)* *(default: `null`)*
+          - **`file`** *(`package`)*
+          - **`forgeLoaderVersion`** *(`null or (Forge loader version)`)* *(default: `null`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`neoforgeLoaderVersion`** *(`null or (NeoForge loader version)`)* *(default: `null`)*
+          - **`placeOverrides`** *(`boolean`)* *(default: `true`)* — Whether to enable placing overrides.
+          - **`quiltLoaderVersion`** *(`null or (Quilt loader version)`)* *(default: `null`)*
+        - **`mutableLibrariesDir`** *(`boolean`)* *(default: `false`)* — Whether to enable placing libraries in the instance's mutable libraries directory
+        - **`neoForgeLoader`**
+          - **`clientArguments`** *(`list of string`)* *(default: `[ ]`)* — Loader specific game arguments for the client.
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable NeoForge loader.
+          - **`finalInstallerLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`finalLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`installerJar`** *(`null or absolute path`)* *(default: `null`)*
+          - **`meta`**
+            - **`isLegacy`** *(`boolean`)* *(default: `(config.meta.loaders.installer or null) == null`)*
+            - **`loaders`** *(`attribute set`)* *(default: `config.meta.sources.loaders.${config.version}`)*
+            - **`mainClass`** *(`null or non-empty string`)* *(default: `if (config.meta.loaders.mainClass or null) != null ...`)*
+            - **`rawInstallerLibraries`** *(`attribute set`)* *(default: `config.meta.loaders.installerLibraries or {}`)*
+            - **`rawLibraries`** *(`attribute set`)* *(default: `config.meta.loaders.libraries`)*
+            - **`server`**
+              - **`installMarker`** *(`string`)* — Path (relative to the instance dir) that exists once the server is installed.
+              - **`javaArguments`** *(`list of string`)* *(default: `[ ]`)* — Java arguments (relative to the instance dir) that launch the installed server.
+            - **`sources`** *(`attribute set`)* *(default: `"loaderSources"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`version`** *(`value "latest" (singular enum) or (NeoForge loader version)`)* — NeoForge loader version, or 'latest'
+        - **`noGui`** *(`boolean`)* *(default: `true`)* — Whether to enable no gui.
+        - **`paper`**
+          - **`_mainClass`** *(`non-empty string`)* *(default: `"<inferred>"`)*
+          - **`_serverJar`** *(`package`)* *(default: `"serverJar"`)*
+          - **`buildNumber`** *(`signed integer or non-empty string`)* *(default: `"<inferred>"`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable paper.
+          - **`meta`** *(`attribute set`)* *(default: `"meta"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* *(default: `"<inferred>"`)* — Minecraft version, or one of: latest-release, latest-snapshot
+        - **`placeFilesAtActivation`** *(`boolean`)* *(default: `false`)* — Whether to enable placing files during activation.
+        - **`preLaunchShellScript`** *(`strings concatenated with "\n"`)*
+        - **`purpur`**
+          - **`_serverJar`** *(`package`)* *(default: `"serverJar"`)*
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable Purpur.
+          - **`meta`** *(`attribute set`)* *(default: `"meta"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* *(default: `"<inferred>"`)* — Minecraft version, or one of: latest-release, latest-snapshot
+        - **`quiltLoader`**
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable quilt loader.
+          - **`finalLibraries`** *(`attrsOf submodule`)*
+            - **`<name>`**
+              - **`enable`** *(`boolean`)* *(default: `true`)* — Whether to enable library ‹name›.
+              - **`jar`** *(`absolute path`)*
+              - **`native`** *(`boolean`)* *(default: `false`)*
+              - **`relativePath`** *(`null or relative path`)* *(default: `null`)*
+          - **`hash`** *(`non-empty string`)* *(default: `"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="`)*
+          - **`meta`** *(`attribute set`)* *(default: `"meta"`)*
+          - **`minecraftVersion`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* — Minecraft version, or one of: latest-release, latest-snapshot
+          - **`version`** *(`value "latest" (singular enum) or (Quilt loader version)`)* *(default: `"latest"`)* — Quilt loader version, or 'latest'
+        - **`renice`**
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable renicing the instance process before launch.
+          - **`priority`** *(`signed integer`)* *(default: `-20`)* — Niceness priority value (between -20 and 19). Lower values mean higher priority.
+          - **`sudoLookupPaths`** *(`list of absolute path`)* *(default: `[ ...`)*
+          - **`wrappedBinPath`** *(`absolute path`)* *(default: `"/run/wrappers/bin/nixcraft-renice"`)*
+        - **`runtimeLibs`** *(`list of absolute path`)* *(default: `[ ]`)* — Libraries available at runtime
+        - **`runtimePrograms`** *(`list of absolute path`)* *(default: `[ ]`)*
+        - **`serverProperties`** *(`null or (attribute set of (null or boolean or signed integer or string))`)* *(default: `null`)*
+        - **`service`** *(`submodule`)* *(default: `{ ...`)*
+          - **`autoStart`** *(`boolean`)* *(default: `false`)* — Whether to enable enables by default.
+          - **`enable`** *(`boolean`)* *(default: `false`)* — Whether to enable systemd user service.
+        - **`version`** *(`one of "latest-release", "latest-snapshot" or (Minecraft version)`)* *(default: `"latest-release"`)* — Minecraft version, or one of: latest-release, latest-snapshot
+        - **`world`** *(`null or absolute path`)* *(default: `null`)* — Path to world dir. Only placed if the directory doesn't exist
+    - **`shared`** *(`attribute set`)* *(default: `{ }`)*

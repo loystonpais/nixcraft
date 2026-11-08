@@ -1,0 +1,222 @@
+format: TOON
+spec: https://github.com/toon-format/spec
+description: Standalone client package instance hierarchical options tree
+options:
+  _classSettings (submodule):
+    assetIndex (null or non-empty string)
+    assetsDir (null or absolute path)
+    fullscreen (boolean) =false
+    gameDir (null or non-empty string)
+    height (null or (positive integer, meaning >0))
+    userProperties (null or (attribute set))
+    username (null or non-empty string)
+    uuid (null or non-empty string)
+    version (non-empty string)
+    width (null or (positive integer, meaning >0))
+  absoluteDir (absolute path)
+  account (null or (submodule)):
+    authDir (string) ="/tmp/nixcraft-client-auth" -- Path to nixcraft auth cache directory.
+    offline (boolean) =false -- Whether this account is offline (unauthenticated).
+    username (null or non-empty string) -- Player username. For online accounts, used to verify against authenticated profile.
+    uuid (null or non-empty string) -- Player UUID.
+  activationShellScript (strings concatenated with "\n")
+  binEntry (submodule):
+    enable (boolean) =false -- Whether to enable bin entry.
+    finalBin (package) =<derivation nixcraft-client-default>
+    name (non-empty string)
+  bwrap (submodule) ={ }:
+    enable (boolean) =false -- Whether to enable bwrap.
+    extraArguments (list of non-empty string) =[ ]
+    mountOpenglDriver (boolean) =true
+    package (package) =<derivation nixcraft-bwrap>
+  desktopEntry (submodule) ={ ...:
+    enable (boolean) =false -- Whether to enable desktop entry.
+    extraConfig (attribute set) ={ }
+    name (non-empty string) ="Nixcraft Instance default"
+  enable (boolean) =true -- Whether to enable client instance.
+  enableDriPrime (boolean) =false -- Whether to enable dri prime (mesa).
+  enableExternalAssets (boolean) =true -- Whether to enable external asset management via fetchAssets script.
+  enableMangoHud (boolean) =false -- Whether to enable mangohud.
+  enableNixGL (boolean) =false -- Whether to enable nixGL.
+  enableNvidiaOffload (boolean) =false -- Whether to enable nvidia offload.
+  envVars (attribute set of (null or (list of (signed integer or string or absolute path)) or signed integer or string or absolute path)) ={ }
+  externalAssetsDir (null or absolute path) ="/tmp/nixcraft-client-assets" -- Path to external assets directory
+  externalAssetsExtraLookupPaths (list of (string or absolute path)) =[ ] -- Extra paths to read/lookup cached assets from when fetching external assets.
+  extraArguments (list of non-empty string) =[ ]
+  fabricLoader:
+    enable (boolean) =false -- Whether to enable fabric loader.
+    finalLibraries (attrsOf submodule):
+      <name>:
+        enable (boolean) =true -- Whether to enable library ‹name›.
+        jar (absolute path)
+        native (boolean) =false
+        relativePath (null or relative path)
+    hash (non-empty string) ="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    meta (attribute set) ="meta"
+    minecraftVersion (one of "latest-release", "latest-snapshot" or (Minecraft version)) -- Minecraft version, or one of: latest-release, latest-snapshot
+    version (value "latest" (singular enum) or (Fabric loader version)) ="latest" -- Fabric loader version, or 'latest'
+  files (attrsOf submodule) ={ }:
+    <name>:
+      dirName (unspecified value) ="."
+      enable (boolean) =true -- Whether to enable ‹name›.
+      extraConfig (attribute set) ={ }
+      fileName (unspecified value) ="‹name›"
+      finalSource (absolute path)
+      force (boolean) =false -- Overwrite previously existing file/symlink/dir
+      method (one of "copy", "copy-init", "symlink", "world", "merge") ="symlink" -- Method to place the file in target location
+      source (null or absolute path)
+      target (relative path) ="‹name›"
+      text (null or string)
+      type (null or one of "json", "toml", "yaml", "ini", "txt-list", "properties", "options-txt") -- Type of the file. This is used while converting passed value to the
+      value ((list of anything) or attribute set of anything or anything) -- A value that will be transformed to the desired format when .type is set
+  finalActivationShellScript (strings concatenated with "\n")
+  finalArgumentShellString (non-empty string) ="--version 26.3 --assetsDir /nix/store/r68hg0l2hwcvf3ljs9... ...
+  finalFilePlacementShellScript (strings concatenated with "\n")
+  finalLaunchShellCommandString (strings concatenated with "\n")
+  finalLaunchShellScript (strings concatenated with "\n")
+  finalLibraries (attrsOf submodule):
+    <name>:
+      enable (boolean) =true -- Whether to enable library ‹name›.
+      jar (absolute path)
+      native (boolean) =false
+      relativePath (null or relative path)
+  finalPreLaunchShellScript (strings concatenated with "\n")
+  forgeLoader:
+    clientArguments (list of string) =[ ] -- Loader specific game arguments for the client.
+    enable (boolean) =false -- Whether to enable forge loader.
+    finalInstallerLibraries (attrsOf submodule):
+      <name>:
+        enable (boolean) =true -- Whether to enable library ‹name›.
+        jar (absolute path)
+        native (boolean) =false
+        relativePath (null or relative path)
+    finalLibraries (attrsOf submodule):
+      <name>:
+        enable (boolean) =true -- Whether to enable library ‹name›.
+        jar (absolute path)
+        native (boolean) =false
+        relativePath (null or relative path)
+    installerJar (null or absolute path)
+    meta:
+      isLegacy (boolean) =(config.meta.loaders.installer or null) == null
+      loaders (attribute set) =config.meta.sources.loaders.${config.version}
+      mainClass (null or non-empty string) =if (config.meta.loaders.mainClass or null) != null ...
+      rawInstallerLibraries (attribute set) =config.meta.loaders.installerLibraries or {}
+      rawLibraries (attribute set) =config.meta.loaders.libraries
+      server:
+        installMarker (string) -- Path (relative to the instance dir) that exists once the server is installed.
+        javaArguments (list of string) =[ ] -- Java arguments (relative to the instance dir) that launch the installed server.
+      sources (attribute set) ="loaderSources"
+    minecraftVersion (one of "latest-release", "latest-snapshot" or (Minecraft version)) -- Minecraft version, or one of: latest-release, latest-snapshot
+    version (value "latest" (singular enum) or (Forge loader version)) -- Forge loader version, or 'latest'
+  java (submodule) ={ } -- Java runtime and execution settings.:
+    D (attribute set of (string or absolute path or package or signed integer or boolean or floating point number)) ={ } -- Java system properties (-D flags) to pass to the JVM.
+    cp (list of absolute path) =[ ] -- Java classpath (-cp) entries.
+    extraArguments (list of non-empty string) =[ ] -- Extra JVM arguments.
+    finalArgumentShellString (string) -- Shell-escaped string of finalArguments.
+    finalArguments (list of string) =[ ] -- Complete list of JVM arguments constructed from all Java options.
+    jar (null or absolute path) -- Main jar file to run with -jar.
+    mainClass (null or non-empty string) -- Main class to execute.
+    maxMemory (null or (Java memory size (in MBs))) -- Maximum memory limit (in MB) for the JVM (-Xmx).
+    memory (null or (Java memory size (in MBs))) -- Sets both minMemory and maxMemory to the same value.
+    minMemory (null or (Java memory size (in MBs))) -- Initial memory allocation (in MB) for the JVM (-Xms).
+    package (package) -- Java runtime package to use.
+  jemalloc:
+    enable (boolean) =false -- Whether to enable jemalloc.
+  launchPrefix (attrsOf submodule) ={ }:
+    <name>:
+      command (list of (string or absolute path or package)) =[ ]
+      enable (boolean) =true -- Whether to enable launch prefix entry.
+      envVars (attribute set of (null or (list of (signed integer or string or absolute path)) or signed integer or string or absolute path)) ={ }
+      name (string) ="‹name›"
+      priority (signed integer) =1000
+      separator (null or string) ="--"
+  libraries (attrsOf submodule) ={ }:
+    <name>:
+      enable (boolean) =true -- Whether to enable library ‹name›.
+      jar (absolute path)
+      native (boolean) =false
+      relativePath (null or relative path)
+  lwjgl:
+    version (null or value "latest" (singular enum) or (LWJGL version))
+  mainJar (absolute path)
+  mcsr:
+    enable (boolean) =false -- Whether to enable MCSR.
+    glfwVersion (one of "3.4", "3.5.1") ="3.4" -- Approved GLFW version for MCSR.
+  meta:
+    versionData (attribute set) ="sources.mojang.versions.\${config.version}"
+  mods (list of (absolute path or package)) =[ ]
+  mrpack (submodule) ={ ...:
+    _parsedMrpack (attribute set) ={ }
+    enable (boolean) =false -- Whether to enable enable mrpack.
+    enableOptionalMods (boolean) =true -- Whether to enable optional mods.
+    fabricLoaderVersion (null or (Fabric loader version))
+    file (package)
+    forgeLoaderVersion (null or (Forge loader version))
+    minecraftVersion (one of "latest-release", "latest-snapshot" or (Minecraft version)) -- Minecraft version, or one of: latest-release, latest-snapshot
+    neoforgeLoaderVersion (null or (NeoForge loader version))
+    placeOverrides (boolean) =true -- Whether to enable placing overrides.
+    quiltLoaderVersion (null or (Quilt loader version))
+  mutableLibrariesDir (boolean) =false -- Whether to enable placing libraries in the instance's mutable libraries directory
+  neoForgeLoader:
+    clientArguments (list of string) =[ ] -- Loader specific game arguments for the client.
+    enable (boolean) =false -- Whether to enable NeoForge loader.
+    finalInstallerLibraries (attrsOf submodule):
+      <name>:
+        enable (boolean) =true -- Whether to enable library ‹name›.
+        jar (absolute path)
+        native (boolean) =false
+        relativePath (null or relative path)
+    finalLibraries (attrsOf submodule):
+      <name>:
+        enable (boolean) =true -- Whether to enable library ‹name›.
+        jar (absolute path)
+        native (boolean) =false
+        relativePath (null or relative path)
+    installerJar (null or absolute path)
+    meta:
+      isLegacy (boolean) =(config.meta.loaders.installer or null) == null
+      loaders (attribute set) =config.meta.sources.loaders.${config.version}
+      mainClass (null or non-empty string) =if (config.meta.loaders.mainClass or null) != null ...
+      rawInstallerLibraries (attribute set) =config.meta.loaders.installerLibraries or {}
+      rawLibraries (attribute set) =config.meta.loaders.libraries
+      server:
+        installMarker (string) -- Path (relative to the instance dir) that exists once the server is installed.
+        javaArguments (list of string) =[ ] -- Java arguments (relative to the instance dir) that launch the installed server.
+      sources (attribute set) ="loaderSources"
+    minecraftVersion (one of "latest-release", "latest-snapshot" or (Minecraft version)) -- Minecraft version, or one of: latest-release, latest-snapshot
+    version (value "latest" (singular enum) or (NeoForge loader version)) -- NeoForge loader version, or 'latest'
+  optionsTxt (null or (attribute set of anything))
+  placeFilesAtActivation (boolean) =false -- Whether to enable placing files during activation.
+  preLaunchShellScript (strings concatenated with "\n")
+  quiltLoader:
+    enable (boolean) =false -- Whether to enable quilt loader.
+    finalLibraries (attrsOf submodule):
+      <name>:
+        enable (boolean) =true -- Whether to enable library ‹name›.
+        jar (absolute path)
+        native (boolean) =false
+        relativePath (null or relative path)
+    hash (non-empty string) ="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    meta (attribute set) ="meta"
+    minecraftVersion (one of "latest-release", "latest-snapshot" or (Minecraft version)) -- Minecraft version, or one of: latest-release, latest-snapshot
+    version (value "latest" (singular enum) or (Quilt loader version)) ="latest" -- Quilt loader version, or 'latest'
+  renice:
+    enable (boolean) =false -- Whether to enable renicing the instance process before launch.
+    priority (signed integer) =-20 -- Niceness priority value (between -20 and 19). Lower values mean higher priority.
+    sudoLookupPaths (list of absolute path) =[ ...
+    wrappedBinPath (absolute path) ="/run/wrappers/bin/nixcraft-renice"
+  runtimeLibs (list of absolute path) =[ ] -- Libraries available at runtime
+  runtimePrograms (list of absolute path) =[ ]
+  saves (attribute set of absolute path) ={ } -- World saves. Placed only if the directory already doesn't exist
+  skinsDir (null or absolute path) ="/tmp/nixcraft-client-skins" -- Path to writable directory where client skins are cached/stored.
+  useDiscreteGPU (boolean) =true -- Whether to enable discrete GPU.
+  version (one of "latest-release", "latest-snapshot" or (Minecraft version)) ="latest-release" -- Minecraft version, or one of: latest-release, latest-snapshot
+  waywall (submodule):
+    configDir (null or absolute path) -- Path to a dir containing waywall scripts such as init.lua
+    configText (null or non-empty string) -- Lua script passed as init.lua
+    enable (boolean) =false -- Whether to enable waywall.
+    extraArguments (list of non-empty string) =[ ]
+    noEnvReexec (boolean) =true
+    package (package)
+    profile (null or non-empty string)

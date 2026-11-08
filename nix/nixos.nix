@@ -150,4 +150,18 @@
       ))
     ];
   };
+
+  nixcraft.docs.examples.quickstart.nixos = {
+    enable = true;
+    server.instances.smp = {
+      version = "1.21.1";
+      agreeToEula = true;
+      paper.enable = true;
+      java.memory = 4096;
+      service = {
+        enable = true;
+        autoStart = true;
+      };
+    };
+  };
 }

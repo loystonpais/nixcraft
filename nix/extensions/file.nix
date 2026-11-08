@@ -401,4 +401,92 @@
       ];
     })
   ];
+
+  nixcraft.docs.examples.client.files = {
+    version = "1.21.1";
+    files = {
+      # Default method: an immutable symlink into the Nix store
+      "config/welcome.txt".text = "Welcome to my instance!";
+
+      "resourcepacks/faithful.zip" = {
+        method = "symlink";
+        source = {
+          _type = "raw";
+          text = "./faithful.zip";
+        };
+      };
+
+      # Re-copied on every rebuild
+      "notes/changelog.md" = {
+        method = "copy";
+        text = "# Changelog";
+      };
+
+      # Copied once, later in-game edits are kept
+      "config/starter-kit.json" = {
+        method = "copy-init";
+        text = {
+          _type = "raw";
+          text = "''\n{ \"kit\": \"basic\" }''";
+        };
+      };
+
+      # With `type` set, write `value` as Nix data instead of `text` or `source`
+      "config/hud.json" = {
+        type = "json";
+        value = {
+          showFps = true;
+          scale = 1.5;
+        };
+      };
+    };
+  };
+
+  nixcraft.docs.examples.client.fileMergePlain = {
+    version = "1.21.1";
+    files."config/example-mod.json" = {
+      method = "merge";
+      type = "json";
+      value = {
+        maxThreads = 4;
+        enableFeature = true;
+        tuning.cacheSize = 256;
+      };
+    };
+  };
+
+  nixcraft.docs.readme.sections.fileMerge = {
+    order = 67;
+    template = ''
+      ### Declarative Files (`files`)
+
+      Manages any file inside an instance directory. Each entry takes either `.source` (a path or derivation) or `.text`, and a placement `method`:
+
+      ```nix
+      { ... }: {
+        nixcraft.client.instances.customized = {{ examples.client.files | to_nix | indent(2) }};
+      }
+      ```
+
+      - `symlink` (default): An immutable symlink into the Nix store, refreshed on every activation. Ideal for read-only static files.
+      - `copy`: Re-copies the file fresh on every rebuild.
+      - `copy-init`: Copies the file once on initial setup and never overwrites later in-game edits. Ideal for starter configs and modpack defaults.
+      - `merge`: Deep-merges structured data into an existing file at runtime (see below).
+
+      Instead of `.text` or `.source`, you can set `.type` and provide `.value` as plain Nix data, and Nixcraft serializes it for you (like `config/hud.json` above). This works with every method, not just `merge`. Supported types: `json`, `toml`, `ini`, `properties`, `options-txt`, and `txt-list`.
+
+      #### Merging structured files
+
+      `merge` supports JSON, TOML, YAML, INI, `.properties`, and `options.txt`. Set `type` and give a `value`; keys you specify are written, everything else in the existing file (including values the game or the user changed) is left alone:
+
+      ```nix
+      { ... }: {
+        nixcraft.client.instances.customized = {{ examples.client.fileMergePlain | to_nix | indent(2) }};
+      }
+      ```
+
+      > [!NOTE]
+      > When providing static content via `.source` or `.text`, omit `.type` unless you need format conversion or validation. Specifying `.type` triggers evaluation-time deserialization and Import-From-Derivation (IFD).
+    '';
+  };
 }

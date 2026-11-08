@@ -202,4 +202,37 @@ in {
         ];
       })
     ];
+
+  nixcraft.docs.examples.client.optimized = {
+    mrpack = {
+      enable = true;
+      file = {
+        _type = "raw";
+        text = ''
+          pkgs.fetchurl {
+            url = "https://cdn.modrinth.com/data/BYfVnHa7/versions/vZZwrcPm/Simply%20Optimized-1.21.1-5.0.mrpack";
+            hash = "sha256-n2BxHMmqpOEMsvDqRRYFfamcDCCT4ophUw7QAJQqXmg=";
+          }'';
+      };
+    };
+    desktopEntry = {
+      enable = true;
+      name = "Simply Optimized";
+    };
+  };
+
+  nixcraft.docs.readme.sections.mrpack = {
+    order = 59;
+    template = ''
+      ### Modrinth Modpack Support (`.mrpack`)
+
+      Point to any `.mrpack` file and Nixcraft automatically extracts the pack index, downloads all required and optional mods via Nix fetchers, applies bundled configuration overrides, and infers the target Minecraft and modloader versions.
+
+      ```nix
+      { pkgs, ... }: {
+        nixcraft.client.instances.optimized = {{ examples.client.optimized | to_nix | indent(2) }};
+      }
+      ```
+    '';
+  };
 }

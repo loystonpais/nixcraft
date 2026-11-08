@@ -1,0 +1,13 @@
+# Nixcraft Options Tree: {{ context_name }}
+
+> {{ total_options }} options for {{ context_name }}.
+
+{% if context_key in ("nixos", "home-manager") %}
+Options are under `nixcraft`; paths shown here use a representative evaluation context.
+{% else %}
+Options are relative to a single instance. The package builders also supply `mkDefault` values that may not appear as option declaration defaults below.
+{% endif %}
+
+---
+
+{{ options_tree }}

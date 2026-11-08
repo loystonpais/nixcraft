@@ -60,4 +60,65 @@
         ];
     })
   ];
+
+  nixcraft.docs.examples.client.rsg = {
+    version = "1.16.1";
+    mcsr.enable = true;
+    waywall.enable = true;
+    mrpack = {
+      enable = true;
+      file = {
+        _type = "raw";
+        text = ''
+          pkgs.fetchurl {
+            url = "https://cdn.modrinth.com/data/1uJaMUOm/versions/jIrVgBRv/SpeedrunPack-mc1.16.1-v5.3.0.mrpack";
+            hash = "sha256-uH/fGFrqP2UpyCupyGjzFB87LRldkPkcab3MzjucyPQ=";
+          }'';
+      };
+    };
+    saves = {
+      "Practice Map" = {
+        _type = "raw";
+        text = ''
+          pkgs.fetchzip {
+            url = "https://github.com/Dibedy/The-MCSR-Practice-Map/releases/download/1.0.1/MCSR.Practice.v1.0.1.zip";
+            stripRoot = false;
+            hash = "sha256-ukedZCk6T+KyWqEtFNP1soAQSFSSzsbJKB3mU3kTbqA=";
+          }'';
+      };
+    };
+    java = {
+      package = {
+        _type = "raw";
+        text = "pkgs.jdk17";
+      };
+      minMemory = 3500;
+      maxMemory = 3500;
+      extraArguments = [
+        "-XX:+UseZGC"
+        "-XX:+AlwaysPreTouch"
+        "-Dgraal.TuneInlinerExploration=1"
+        "-XX:NmethodSweepActivity=1"
+      ];
+    };
+    binEntry = {
+      enable = true;
+      name = "rsg";
+    };
+  };
+
+  nixcraft.docs.readme.sections.mcsr = {
+    order = 68;
+    template = ''
+      ### Minecraft Speedrunning (MCSR) & Waywall
+
+      For MCSR speedrunning with Waywall overlays, practice map loading, official leaderboard-approved GLFW binaries (`mcsr.enable = true`).
+
+      ```nix
+      { pkgs, ... }: {
+        nixcraft.client.instances.rsg = {{ examples.client.rsg | to_nix | indent(2) }};
+      }
+      ```
+    '';
+  };
 }

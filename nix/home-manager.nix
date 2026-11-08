@@ -164,4 +164,21 @@
     homeManagerModules.default = hmModule;
     homeModules.default = hmModule;
   };
+
+  nixcraft.docs.examples.quickstart.homeManager = {
+    enable = true;
+    client = {
+      shared = {
+        enableExternalAssets = true;
+        account = {
+          username = "nixcrafter";
+          offline = true;
+        };
+      };
+      instances.survival = {
+        version = "1.21.1";
+        desktopEntry.enable = true;
+      };
+    };
+  };
 }

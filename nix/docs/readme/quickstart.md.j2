@@ -1,0 +1,220 @@
+## Quick Start
+
+### Supported Platforms
+
+| Platform | Support |
+|---|---|
+| x86_64-linux | ✅ First class |
+| aarch64-linux | ✅ First class |
+| aarch64-darwin (Apple Silicon macOS) | ✅ First class |
+| WSL, FreeBSD (Linuxulator) | 🧪 Lightly tested, lower priority |
+| Intel macOS (x86_64-darwin) | ❔ May work, untested |
+
+### Where do I start?
+
+- ⚡ **[Just want to try it?](#try-it-with-nix-run)** No install needed
+  - 🚀 [Run with `nix run`](#try-it-with-nix-run)
+  - 📦 [Keep everything in one portable folder (`.pwd`)](#portable-game-directories-pwd)
+- 🐧 **NixOS**
+  - 🖥️ Hosting a server → [NixOS module](#nixos-module)
+  - 🎮 Playing → [Home Manager](#home-manager) or [nix profile](#nix-profile)
+- 🐧 **Other Linux** (Ubuntu, Arch, Fedora…) → [Install Nix](#install-nix), then [nix profile](#nix-profile)
+- 🍎 **macOS (Apple Silicon)** → [Install Nix](#install-nix), then [nix profile](#nix-profile)
+- 🏠 **Already use Home Manager?** → [Home Manager](#home-manager)
+
+### Install Nix
+
+*Skip this on NixOS.* On other Linux distributions and macOS, install Nix with the Determinate installer (flakes are enabled by default):
+
+```bash
+curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+```
+
+Restart your shell, then check with `nix --version`.
+
+### nix profile
+
+The recommended path for most non-NixOS users. Installs an instance into your user environment without touching system files or writing any config.
+
+> [!IMPORTANT]
+> `--impure` is required so Nix can read `$HOME` and `$PWD`. Without it, instance data falls back to `/tmp/nixcraft-...`.
+
+Pass your configuration with `--expr`. `.withConfig` takes the same [options](#options-reference) you would write in Home Manager or the NixOS module, so the config looks the same everywhere:
+
+```bash
+# Install a client (adds binary to $PATH; on Linux also a desktop menu shortcut)
+nix profile add --impure --expr '
+(builtins.getFlake "github:loystonpais/nixcraft").packages.${builtins.currentSystem}.client
+  .withConfig {
+    name = "survival";
+    version = "1.21.1";
+  }
+'
+
+# Install a Paper server
+nix profile add --impure --expr '
+(builtins.getFlake "github:loystonpais/nixcraft").packages.${builtins.currentSystem}.server
+  .withConfig {
+    name = "creative-hub";
+    version = "1.21.1";
+    agreeToEula = true;
+    paper.enable = true;
+    serverProperties = {
+      "max-players" = 10;
+      gamemode = "creative";
+    };
+  }
+'
+```
+
+> [!TIP]
+> The name decides what the instance is called everywhere: the profile entry is `nixcraft-client-<name>` / `nixcraft-server-<name>`, and the server's systemd user service has the same name. Give each instance a different name to install several side by side. Without `name` it is `default`, so a second install would clash with the first.
+
+> [!IMPORTANT]
+> **Non-NixOS Linux, clients only:** enable `bwrap` (its `mountOpenglDriver` option is on by default) so the game picks up your system's GPU drivers. Without it, graphics may fall back to software rendering or the wrong GPU. Add this to the client's `.withConfig`:
+>
+> ```nix
+> bwrap.enable = true;
+> ```
+>
+> Or, for quick runs, use the `withBwrap` combinator: `client.withBwrap`.
+
+**Linux only:** when a server is added via `nix profile`, a systemd user service is automatically included. Manage it with `systemctl --user`:
+
+```bash
+# Start or enable the server user service
+systemctl --user start nixcraft-server-creative-hub
+systemctl --user enable nixcraft-server-creative-hub
+
+# Stop or disable it
+systemctl --user stop nixcraft-server-creative-hub
+systemctl --user disable nixcraft-server-creative-hub
+```
+
+To uninstall an instance:
+
+```bash
+nix profile remove nixcraft-server-creative-hub # or nixcraft-client-survival
+```
+
+> [!NOTE]
+> On macOS there is no service integration yet. To run a server, use [`nix run`](#try-it-with-nix-run).
+
+### Home Manager
+
+Works on any OS for both clients and servers. If you already use Home Manager, start here.
+
+Add Nixcraft to your `flake.nix` inputs:
+
+```nix
+{{ examples.quickstart.flakeInputs | to_nix }}
+```
+
+Import `inputs.nixcraft.homeModules.default` in your Home Manager configuration:
+
+```nix
+# home.nix
+{ config, pkgs, inputs, ... }: {
+  imports = [
+    inputs.nixcraft.homeModules.default
+  ];
+
+  nixcraft = {{ examples.quickstart.homeManager | to_nix | indent(2) }};
+}
+```
+
+### NixOS Module
+
+For dedicated **servers only**, run as system-level systemd services.
+
+Import `inputs.nixcraft.nixosModules.default` in your `configuration.nix` to declare system-level servers running under systemd:
+
+```nix
+# configuration.nix
+{ config, pkgs, inputs, ... }: {
+  imports = [
+    inputs.nixcraft.nixosModules.default
+  ];
+
+  nixcraft = {{ examples.quickstart.nixos | to_nix | indent(2) }};
+}
+```
+
+> [!TIP]
+> The instance name (the attribute under `nixcraft.server.instances`, or its `name` option) becomes the systemd service name: `nixcraft-server-<name>`. Different names give different services, e.g. `systemctl status nixcraft-server-creative-hub`.
+
+### Try it with `nix run`
+
+Run an instance immediately without installing anything. Works on Linux and Apple Silicon macOS once [Nix is installed](#install-nix).
+
+> [!IMPORTANT]
+> `--impure` is required (see [nix profile](#nix-profile)).
+
+```bash
+# Run client on 1.21.1
+nix run --impure github:loystonpais/nixcraft#client.v1-21-1
+
+# Run a dedicated Paper server on 1.21.1
+nix run --impure github:loystonpais/nixcraft#server.agreeToEula.paper.v1-21-1
+```
+
+#### Simple runs with combinators
+
+For simple things, chain combinators with dot-notation right in the flake reference:
+
+```bash
+# Paper server + EULA + offline mode + version
+nix run --impure github:loystonpais/nixcraft#server.agreeToEula.paper.offlineMode.v1-21-1
+```
+
+> [!TIP]
+> Don't memorize them. Type `nix run --impure github:loystonpais/nixcraft#client.` and press <kbd>Tab</kbd> to autocomplete the available combinators.
+
+#### Anything more: `--expr`
+
+When combinators aren't enough, use `--expr` with `.withConfig`, the same config you would write in Home Manager or the NixOS module (see [nix profile](#nix-profile)):
+
+```bash
+nix run --impure --expr '
+(builtins.getFlake "github:loystonpais/nixcraft").packages.${builtins.currentSystem}.server
+  .withConfig {
+    name = "creative-hub";
+    version = "1.21.1";
+    agreeToEula = true;
+    paper.enable = true;
+    serverProperties = {
+      "max-players" = 10;
+      gamemode = "creative";
+    };
+  }
+'
+```
+
+### Portable Game Directories (`.pwd`)
+
+`pwd` is a combinator that sets the instance's game directory to your current working directory (`$PWD`). If a `nixcraft.nix` file exists in that directory, it is automatically picked up and applied as the instance configuration.
+
+This means you can keep your `nixcraft.nix` configuration, world data, mods, and all game files together in a single self-contained folder and move it between machines.
+
+Create a folder with a `nixcraft.nix` inside:
+
+```nix
+# ./nixcraft.nix
+{{ examples.quickstart.portable | to_nix }}
+```
+
+Then `cd` into the directory and run:
+
+```bash
+# For a server
+nix run --impure github:loystonpais/nixcraft#server.pwd
+
+# For a client
+nix run --impure github:loystonpais/nixcraft#client.pwd
+```
+
+All game files and world data stay inside that directory. `pwd` can be combined with other combinators, but it must always be **last** in the chain:
+
+```bash
+nix run --impure github:loystonpais/nixcraft#server.withLazymc.pwd
+```

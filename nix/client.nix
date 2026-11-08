@@ -264,4 +264,57 @@ in {
       inherit sources evalPackage extraCombinators;
     }) {};
   };
+
+  # Normal attrs for flake-parts; only evaluated when docs are generated!
+  nixcraft.docs.examples.client = {
+    vanilla-survival = {
+      version = "1.21.1";
+      desktopEntry.enable = true;
+    };
+    fabric-speedrun = {
+      version = "1.16.1";
+      fabricLoader = {
+        enable = true;
+        version = "0.15.11";
+      };
+      waywall.enable = true;
+      java = {
+        minMemory = 3500;
+        maxMemory = 3500;
+      };
+      binEntry = {
+        enable = true;
+        name = "rsg";
+      };
+    };
+    shared = {
+      useDiscreteGPU = true;
+      files."screenshots".source = {
+        _type = "raw";
+        text = ''"''${config.home.homeDirectory}/Pictures/Minecraft"'';
+      };
+      account = {
+        username = "nixcrafter";
+        offline = true;
+      };
+      binEntry = {
+        enable = true;
+      };
+    };
+  };
+
+  nixcraft.docs.readme.sections.clientShared = {
+    order = 69;
+    template = ''
+      ### Shared Client Configuration
+
+      Define shared options inherited by all client instances, including offline/online accounts, common desktop shortcuts, persistent file links, and discrete GPU offloading (`useDiscreteGPU = true`).
+
+      ```nix
+      { config, ... }: {
+        nixcraft.client.shared = {{ examples.client.shared | to_nix | indent(2) }};
+      }
+      ```
+    '';
+  };
 }

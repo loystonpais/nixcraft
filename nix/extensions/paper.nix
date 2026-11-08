@@ -83,4 +83,37 @@ in {
       ];
     })
   ];
+
+  nixcraft.docs.examples.server.survival-smp = {
+    version = "1.21.1";
+    agreeToEula = true;
+    paper.enable = true;
+    java = {
+      memory = 4096;
+    };
+    serverProperties = {
+      motd = "Welcome to Nixcraft SMP";
+      "max-players" = 20;
+      "difficulty" = "hard";
+      "online-mode" = true;
+      "server-port" = 25565;
+    };
+    service = {
+      enable = true;
+      autoStart = true;
+    };
+  };
+
+  nixcraft.docs.readme.sections.paper = {
+    order = 63;
+    template = ''
+      ### Paper Dedicated Server
+
+      Runs a dedicated Paper server:
+
+      ```nix
+      nixcraft.server.instances.survival-smp = {{ examples.server["survival-smp"] | to_nix }};
+      ```
+    '';
+  };
 }

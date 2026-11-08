@@ -105,4 +105,28 @@ in {
       ];
     })
   ];
+
+  nixcraft.docs.examples.client.fabric = {
+    version = "1.21.1";
+    fabricLoader = {
+      enable = true;
+      version = "latest";
+    };
+    desktopEntry.enable = true;
+  };
+
+  nixcraft.docs.readme.sections.fabric = {
+    order = 60;
+    template = ''
+      ### Fabric Mod Loader
+
+      Enables Fabric mod loading for client or server instances. Setting `fabricLoader.version = "latest"` automatically resolves the latest compatible loader for your Minecraft version.
+
+      ```nix
+      { ... }: {
+        nixcraft.client.instances.fabric = {{ examples.client.fabric | to_nix | indent(2) }};
+      }
+      ```
+    '';
+  };
 }

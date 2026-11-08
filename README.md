@@ -7,18 +7,23 @@
 [![Flake](https://img.shields.io/badge/Nix-Flakes-5277C3?style=flat-square&logo=nixos&logoColor=white)](https://nixos.org)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS-informational?style=flat-square)](https://github.com/loystonpais/nixcraft)
 
-[Features](#features) • [Quick Start](#quick-start) • [External Assets](#external-assets-recommended) • [Authentication](#authentication) • [Configuration Recipes](#configuration-recipes) • [Options Reference](#options-reference)
+[Features](#features) • [Quick Start](#quick-start) • [Authentication](#authentication) • [Feature Showcase](#feature-showcase) • [Options Reference](#options-reference)
 
 </div>
 
 ---
 
+> [!NOTE]
+> **For Humans**: Browse the [options trees](docs/human/SUMMARY.md) for NixOS, Home Manager, or standalone packages.
+> **For AI Agents**: Ingest the matching [TOON options tree](docs/agent/options-tree/) for token-efficient context.
+
 Nixcraft lets you build and run Minecraft clients and dedicated servers using Nix. Instead of managing instances through graphical launchers or manually copying files into mod folders, you define your instances in Nix code, including mod loaders, Modrinth packs, JVM flags, speedrunning tools (Waywall), and systemd services.
+
 
 ## Features
 
 - **Client and server support**: Manage desktop client instances and dedicated servers from one consistent module system.
-- **Mod loader support**: Built-in support for Fabric, Quilt, and Paper servers.
+- **Mod loader and modding platform support**: Built-in support for Fabric, Quilt, Forge, and NeoForge, plus Paper, Purpur, and other server software.
 - **Modrinth modpacks (.mrpack)**: Point to an `.mrpack` file and Nixcraft downloads the mods, applies overrides, and figures out the right Minecraft and modloader versions automatically.
 - **Zero-rebuild installs**: Run or install standalone instances using `nix run` or `nix profile add` without touching your system config or running `nixos-rebuild`.
 - **Speedrunning (MCSR) support**: Built-in support for Waywall, practice map loading, standard settings injection, and GraalVM or ZGC tuning.
@@ -28,33 +33,131 @@ Nixcraft lets you build and run Minecraft clients and dedicated servers using Ni
 > [!WARNING]
 > This project is a work in progress. While mostly functional, expect potential breaking changes on updates.
 
+
 ## Quick Start
 
-Nixcraft can be used in several ways: it can be installed via **Home Manager**, as a **NixOS module** (for servers only), via **`nix profile`**, or simply run on the fly with **`nix run`**.
+### Supported Platforms
+
+| Platform | Support |
+|---|---|
+| x86_64-linux | ✅ First class |
+| aarch64-linux | ✅ First class |
+| aarch64-darwin (Apple Silicon macOS) | ✅ First class |
+| WSL, FreeBSD (Linuxulator) | 🧪 Lightly tested, lower priority |
+| Intel macOS (x86_64-darwin) | ❔ May work, untested |
+
+### Where do I start?
+
+- ⚡ **[Just want to try it?](#try-it-with-nix-run)** No install needed
+  - 🚀 [Run with `nix run`](#try-it-with-nix-run)
+  - 📦 [Keep everything in one portable folder (`.pwd`)](#portable-game-directories-pwd)
+- 🐧 **NixOS**
+  - 🖥️ Hosting a server → [NixOS module](#nixos-module)
+  - 🎮 Playing → [Home Manager](#home-manager) or [nix profile](#nix-profile)
+- 🐧 **Other Linux** (Ubuntu, Arch, Fedora…) → [Install Nix](#install-nix), then [nix profile](#nix-profile)
+- 🍎 **macOS (Apple Silicon)** → [Install Nix](#install-nix), then [nix profile](#nix-profile)
+- 🏠 **Already use Home Manager?** → [Home Manager](#home-manager)
+
+### Install Nix
+
+*Skip this on NixOS.* On other Linux distributions and macOS, install Nix with the Determinate installer (flakes are enabled by default):
+
+```bash
+curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+```
+
+Restart your shell, then check with `nix --version`.
+
+### nix profile
+
+The recommended path for most non-NixOS users. Installs an instance into your user environment without touching system files or writing any config.
 
 > [!IMPORTANT]
-> When using `nix run` or `nix profile`, **`--impure` must be set**. This is only needed so Nix can read environment variables like `$HOME` and `$PWD` at evaluation time. Without it, Nix cannot determine your home or current directory, and all instance data will fall back to `/tmp/nixcraft-...`.
+> `--impure` is required so Nix can read `$HOME` and `$PWD`. Without it, instance data falls back to `/tmp/nixcraft-...`.
 
-### 1. Home Manager (For Both Clients and Servers)
+Pass your configuration with `--expr`. `.withConfig` takes the same [options](#options-reference) you would write in Home Manager or the NixOS module, so the config looks the same everywhere:
+
+```bash
+# Install a client (adds binary to $PATH; on Linux also a desktop menu shortcut)
+nix profile add --impure --expr '
+(builtins.getFlake "github:loystonpais/nixcraft").packages.${builtins.currentSystem}.client
+  .withConfig {
+    name = "survival";
+    version = "1.21.1";
+  }
+'
+
+# Install a Paper server
+nix profile add --impure --expr '
+(builtins.getFlake "github:loystonpais/nixcraft").packages.${builtins.currentSystem}.server
+  .withConfig {
+    name = "creative-hub";
+    version = "1.21.1";
+    agreeToEula = true;
+    paper.enable = true;
+    serverProperties = {
+      "max-players" = 10;
+      gamemode = "creative";
+    };
+  }
+'
+```
+
+> [!TIP]
+> The name decides what the instance is called everywhere: the profile entry is `nixcraft-client-<name>` / `nixcraft-server-<name>`, and the server's systemd user service has the same name. Give each instance a different name to install several side by side. Without `name` it is `default`, so a second install would clash with the first.
+
+> [!IMPORTANT]
+> **Non-NixOS Linux, clients only:** enable `bwrap` (its `mountOpenglDriver` option is on by default) so the game picks up your system's GPU drivers. Without it, graphics may fall back to software rendering or the wrong GPU. Add this to the client's `.withConfig`:
+>
+> ```nix
+> bwrap.enable = true;
+> ```
+>
+> Or, for quick runs, use the `withBwrap` combinator: `client.withBwrap`.
+
+**Linux only:** when a server is added via `nix profile`, a systemd user service is automatically included. Manage it with `systemctl --user`:
+
+```bash
+# Start or enable the server user service
+systemctl --user start nixcraft-server-creative-hub
+systemctl --user enable nixcraft-server-creative-hub
+
+# Stop or disable it
+systemctl --user stop nixcraft-server-creative-hub
+systemctl --user disable nixcraft-server-creative-hub
+```
+
+To uninstall an instance:
+
+```bash
+nix profile remove nixcraft-server-creative-hub # or nixcraft-client-survival
+```
+
+> [!NOTE]
+> On macOS there is no service integration yet. To run a server, use [`nix run`](#try-it-with-nix-run).
+
+### Home Manager
+
+Works on any OS for both clients and servers. If you already use Home Manager, start here.
 
 Add Nixcraft to your `flake.nix` inputs:
 
 ```nix
 # flake.nix
-{
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    nixcraft = {
-      url = "github:loystonpais/nixcraft";
-      inputs.nixpkgs.follows = "nixpkgs";
+  {
+    inputs = {
+      nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+      home-manager.url = "github:nix-community/home-manager";
+      nixcraft = {
+        url = "github:loystonpais/nixcraft";
+        inputs.nixpkgs.follows = "nixpkgs";
+      };
     };
-  };
-
-  outputs = { nixpkgs, home-manager, nixcraft, ... }: {
-    # Home Manager configuration
-  };
-}
+  
+    outputs = { nixpkgs, home-manager, nixcraft, ... }: {
+      # Home Manager configuration
+    };
+  }
 ```
 
 Import `inputs.nixcraft.homeModules.default` in your Home Manager configuration:
@@ -67,27 +170,31 @@ Import `inputs.nixcraft.homeModules.default` in your Home Manager configuration:
   ];
 
   nixcraft = {
-    enable = true;
-
     client = {
-      shared = {
-        enableExternalAssets = true;
-        account = {
-          username = "nixcrafter";
-          offline = true;
+      instances = {
+        survival = {
+          desktopEntry = {
+            enable = true;
+          };
+          version = "1.21.1";
         };
       };
-
-      instances.survival = {
-        version = "1.21.1";
-        desktopEntry.enable = true;
+      shared = {
+        account = {
+          offline = true;
+          username = "nixcrafter";
+        };
+        enableExternalAssets = true;
       };
     };
+    enable = true;
   };
 }
 ```
 
-### 2. NixOS Module (Servers Only)
+### NixOS Module
+
+For dedicated **servers only**, run as system-level systemd services.
 
 Import `inputs.nixcraft.nixosModules.default` in your `configuration.nix` to declare system-level servers running under systemd:
 
@@ -100,71 +207,76 @@ Import `inputs.nixcraft.nixosModules.default` in your `configuration.nix` to dec
 
   nixcraft = {
     enable = true;
-
-    server.instances.smp = {
-      version = "1.21.1";
-      agreeToEula = true;
-      paper.enable = true;
-      java.memory = 4096;
-
-      service = {
-        enable = true;
-        autoStart = true;
+    server = {
+      instances = {
+        smp = {
+          agreeToEula = true;
+          java = {
+            memory = 4096;
+          };
+          paper = {
+            enable = true;
+          };
+          service = {
+            autoStart = true;
+            enable = true;
+          };
+          version = "1.21.1";
+        };
       };
     };
   };
 }
 ```
 
-### 3. Standalone with `nix profile`
+> [!TIP]
+> The instance name (the attribute under `nixcraft.server.instances`, or its `name` option) becomes the systemd service name: `nixcraft-server-<name>`. Different names give different services, e.g. `systemctl status nixcraft-server-creative-hub`.
 
-Install an instance directly into your user environment using simple combinators without modifying system files:
+### Try it with `nix run`
 
-```bash
-# Install a client instance (adds binary to $PATH and creates a desktop menu shortcut)
-nix profile add --impure github:loystonpais/nixcraft#client.withExternalAssets.v1-21-1
+Run an instance immediately without installing anything. Works on Linux and Apple Silicon macOS once [Nix is installed](#install-nix).
 
-# Install a Paper server
-nix profile add --impure github:loystonpais/nixcraft#server.agreeToEula.paper.v1-21-1
-```
-
-When a server is added via `nix profile`, a systemd user service is automatically included. You can enable or disable it using standard `systemctl --user`:
+> [!IMPORTANT]
+> `--impure` is required (see [nix profile](#nix-profile)).
 
 ```bash
-# Start or enable the server user service
-systemctl --user start nixcraft-server-default
-systemctl --user enable nixcraft-server-default
-
-# Stop or disable it
-systemctl --user stop nixcraft-server-default
-systemctl --user disable nixcraft-server-default
-```
-
-To uninstall an instance:
-
-```bash
-nix profile remove nixcraft-client-default # or nixcraft-server-default
-```
-
-### 4. Run on the fly with `nix run`
-
-Run an instance immediately without installing anything permanently:
-
-```bash
-# Run client on 1.21.1 with external assets
-nix run --impure github:loystonpais/nixcraft#client.withExternalAssets.v1-21-1
+# Run client on 1.21.1
+nix run --impure github:loystonpais/nixcraft#client.v1-21-1
 
 # Run a dedicated Paper server on 1.21.1
 nix run --impure github:loystonpais/nixcraft#server.agreeToEula.paper.v1-21-1
 ```
 
-#### Chaining Multiple Combinators
+#### Simple runs with combinators
 
-Multiple combinators can be chained together via dot-notation:
+For simple things, chain combinators with dot-notation right in the flake reference:
 
 ```bash
 # Paper server + EULA + offline mode + version
 nix run --impure github:loystonpais/nixcraft#server.agreeToEula.paper.offlineMode.v1-21-1
+```
+
+> [!TIP]
+> Don't memorize them. Type `nix run --impure github:loystonpais/nixcraft#client.` and press <kbd>Tab</kbd> to autocomplete the available combinators.
+
+#### Anything more: `--expr`
+
+When combinators aren't enough, use `--expr` with `.withConfig`, the same config you would write in Home Manager or the NixOS module (see [nix profile](#nix-profile)):
+
+```bash
+nix run --impure --expr '
+(builtins.getFlake "github:loystonpais/nixcraft").packages.${builtins.currentSystem}.server
+  .withConfig {
+    name = "creative-hub";
+    version = "1.21.1";
+    agreeToEula = true;
+    paper.enable = true;
+    serverProperties = {
+      "max-players" = 10;
+      gamemode = "creative";
+    };
+  }
+'
 ```
 
 ### Portable Game Directories (`.pwd`)
@@ -178,14 +290,16 @@ Create a folder with a `nixcraft.nix` inside:
 ```nix
 # ./nixcraft.nix
 {
-  name = "survival-smp";
-  version = "1.21.1";
   agreeToEula = true;
-  paper.enable = true;
-  serverProperties = {
-    motd = "My Portable Nixcraft Server";
-    difficulty = "hard";
+  name = "survival-smp";
+  paper = {
+    enable = true;
   };
+  serverProperties = {
+    difficulty = "hard";
+    motd = "My Portable Nixcraft Server";
+  };
+  version = "1.21.1";
 }
 ```
 
@@ -199,61 +313,12 @@ nix run --impure github:loystonpais/nixcraft#server.pwd
 nix run --impure github:loystonpais/nixcraft#client.pwd
 ```
 
-All game files and world data stay inside that directory. Since `pwd` is just another combinator, it composes with others the same way:
+All game files and world data stay inside that directory. `pwd` can be combined with other combinators, but it must always be **last** in the chain:
 
 ```bash
-nix run --impure github:loystonpais/nixcraft#server.pwd.withLazymc
+nix run --impure github:loystonpais/nixcraft#server.withLazymc.pwd
 ```
 
-### Advanced Customization with `--expr`
-
-For more advanced customizations or quick one-off tweaks, use `--expr` to define arbitrary configurations:
-
-```bash
-nix run --impure --expr '
-(builtins.getFlake "github:loystonpais/nixcraft").packages.x86_64-linux.server
-  .agreeToEula
-  .paper
-  .named "creative-hub"
-  .withConfig {
-    version = "1.21.1";
-    serverProperties = {
-      "max-players" = 10;
-      gamemode = "creative";
-    };
-  }
-'
-```
-
-## External Assets (Recommended)
-
-A typical Minecraft installation contains thousands of individual asset files like sounds, textures, and fonts. If Nix downloads and hashes each one into the `/nix/store`, evaluations and builds slow down significantly.
-
-To prevent this, Nixcraft includes an external asset fetcher that runs outside the Nix store:
-
-```nix
-nixcraft.client.shared = {
-  enableExternalAssets = true;
-};
-```
-
-### How It Works
-
-```mermaid
-flowchart TD
-    A["Check Local Asset Caches<br>• ~/.local/share/PrismLauncher/assets<br>• ~/.minecraft/assets"] --> B{"Found in Cache?"}
-    B -- "Yes" --> C["Hardlink / Copy to Nixcraft's asset directory"]
-    B -- "No" --> D["Download to Nixcraft's asset directory"]
-```
-
-When `enableExternalAssets` is enabled:
-
-1. Nix only downloads the small version asset index JSON file.
-2. Before launching the game, Nixcraft downloads any missing assets directly to `~/.local/share/nixcraft/client/assets`.
-3. If you already have assets downloaded from Prism Launcher or the official Minecraft launcher, it reuses those files directly instead of downloading them again.
-
-> [!TIP]
-> Set `enableExternalAssets = true` under `nixcraft.client.shared` to avoid duplicating the option for each instance.
 
 ## Authentication
 
@@ -267,7 +332,6 @@ For offline play or local testing, set `offline = true` and specify a username:
 nixcraft.client.shared.account = {
   offline = true;
   username = "nixcrafter";
-  # uuid = "..."; # Optional account UUID
 };
 ```
 
@@ -278,17 +342,18 @@ For connecting to online servers and Realms, set `offline = false`. Nixcraft use
 ```nix
 nixcraft.client.shared.account = {
   offline = false;
-  uuid = "..."; # Account UUID
-  # username = "..."; # Optional username for verification
+  uuid = "your-account-uuid";
 };
 ```
 
 When `uuid` is not provided in online mode, it will automatically be picked up from the `NIXCRAFT_CLIENT_AUTH_UUID` environment variable.
 
-In both Home Manager and NixOS, you can set this variable declaratively:
+In Home Manager, you can set this variable declaratively:
 
 ```nix
-nixcraft.client.auth.uuid = "your-account-uuid";
+nixcraft.client.auth = {
+  uuid = "your-account-uuid";
+};
 ```
 
 Or export it directly in your shell:
@@ -297,151 +362,417 @@ Or export it directly in your shell:
 export NIXCRAFT_CLIENT_AUTH_UUID="your-account-uuid"
 ```
 
-## Configuration Recipes
 
-### 1. Modrinth Modpack (`.mrpack`)
+## Feature Showcase
 
-When values can be known from other places, they will be inferred. For example, Nixcraft can extract `.mrpack` files directly: it downloads all the listed mods, copies overrides, and infers the right Minecraft and mod loader versions automatically:
+
+### Modrinth Modpack Support (`.mrpack`)
+
+Point to any `.mrpack` file and Nixcraft automatically extracts the pack index, downloads all required and optional mods via Nix fetchers, applies bundled configuration overrides, and infers the target Minecraft and modloader versions.
 
 ```nix
 { pkgs, ... }: {
   nixcraft.client.instances.optimized = {
-    enableExternalAssets = true;
-
-    mrpack = {
-      enable = true;
-      file = pkgs.fetchurl {
-        url = "https://cdn.modrinth.com/data/BYfVnHa7/versions/vZZwrcPm/Simply%20Optimized-1.21.1-5.0.mrpack";
-        hash = "sha256-n2BxHMmqpOEMsvDqRRYFfamcDCCT4ophUw7QAJQqXmg=";
-      };
-    };
-
     desktopEntry = {
       enable = true;
       name = "Simply Optimized";
+    };
+    mrpack = {
+      enable = true;
+      file = pkgs.fetchurl {
+          url = "https://cdn.modrinth.com/data/BYfVnHa7/versions/vZZwrcPm/Simply%20Optimized-1.21.1-5.0.mrpack";
+          hash = "sha256-n2BxHMmqpOEMsvDqRRYFfamcDCCT4ophUw7QAJQqXmg=";
+        };
     };
   };
 }
 ```
 
-### 2. Dedicated Paper or Fabric Server with Systemd
 
-Run a dedicated Paper or Fabric server in the background using systemd:
+### Fabric Mod Loader
+
+Enables Fabric mod loading for client or server instances. Setting `fabricLoader.version = "latest"` automatically resolves the latest compatible loader for your Minecraft version.
+
+```nix
+{ ... }: {
+  nixcraft.client.instances.fabric = {
+    desktopEntry = {
+      enable = true;
+    };
+    fabricLoader = {
+      enable = true;
+      version = "latest";
+    };
+    version = "1.21.1";
+  };
+}
+```
+
+
+### Quilt Mod Loader
+
+Enables Quilt mod loading for client or server instances.
+
+```nix
+{ ... }: {
+  nixcraft.client.instances.quilt = {
+    desktopEntry = {
+      enable = true;
+    };
+    quiltLoader = {
+      enable = true;
+      version = "latest";
+    };
+    version = "1.21.1";
+  };
+}
+```
+
+
+### Forge
+
+Enables Minecraft Forge for client or server instances. The right Forge version for your Minecraft version is picked automatically.
+
+```nix
+{ ... }: {
+  nixcraft.client.instances.forge = {
+    forgeLoader = {
+      enable = true;
+    };
+    java = {
+      memory = 6144;
+    };
+    version = "1.20.1";
+  };
+}
+```
+
+
+### NeoForge
+
+Enables NeoForge for client or server instances. The right NeoForge version for your Minecraft version is picked automatically.
+
+```nix
+{ ... }: {
+  nixcraft.client.instances.neoforge = {
+    java = {
+      memory = 6144;
+    };
+    neoForgeLoader = {
+      enable = true;
+    };
+    version = "1.21.1";
+  };
+}
+```
+
+
+### Paper Dedicated Server
+
+Runs a dedicated Paper server:
 
 ```nix
 nixcraft.server.instances.survival-smp = {
-  version = "1.21.1";
   agreeToEula = true;
-
-  paper.enable = true; # Or set fabricLoader.enable = true;
-
   java = {
     memory = 4096;
-    extraArguments = [
-      # Extra JVM flags can be added here
-    ];
   };
-
-  serverProperties = {
-    motd = "Welcome to Nixcraft SMP";
-    "max-players" = 20;
-    "difficulty" = "hard";
-    "online-mode" = true;
-    "server-port" = 25565;
-  };
-
-  # Creates and manages nixcraft-server-survival-smp.service
-  service = {
+  paper = {
     enable = true;
-    autoStart = true;
   };
+  serverProperties = {
+    difficulty = "hard";
+    max-players = 20;
+    motd = "Welcome to Nixcraft SMP";
+    online-mode = true;
+    server-port = 25565;
+  };
+  service = {
+    autoStart = true;
+    enable = true;
+  };
+  version = "1.21.1";
 };
 ```
 
-### 3. Speedrunning (MCSR) with Waywall
 
-For Minecraft Speedrunning on Linux, you can enable Waywall, automatically extract practice maps, inject your config files, and tune Java:
+### Purpur Server
+
+Runs a Purpur server:
+
+```nix
+nixcraft.server.instances.purpur = {
+  agreeToEula = true;
+  java = {
+    memory = 4096;
+  };
+  purpur = {
+    enable = true;
+  };
+  serverProperties = {
+    max-players = 50;
+    motd = "Purpur Server";
+  };
+  version = "1.21.1";
+};
+```
+
+
+### Lazymc
+
+Run server with lazymc:
+
+```nix
+nixcraft.server.instances.lazymc = {
+  agreeToEula = true;
+  lazymc = {
+    enable = true;
+  };
+  paper = {
+    enable = true;
+  };
+  service = {
+    autoStart = true;
+    enable = true;
+  };
+  version = "1.21.1";
+};
+```
+
+
+### Client Options & Worlds (`optionsTxt`, `saves`)
+
+`optionsTxt` merges the given keys into the instance's `options.txt`; anything you don't set stays as the player configured it in-game. `saves` copies world directories into `saves/` **only if they don't exist yet**, so your in-game progress is never overwritten.
+
+```nix
+{ ... }: {
+  nixcraft.client.instances.survival = {
+    optionsTxt = {
+      fullscreen = false;
+      guiScale = 2;
+      lang = "en_us";
+      maxFps = 120;
+      renderDistance = 16;
+    };
+    saves = {
+      "My World" = ./worlds/my-world;
+    };
+    version = "1.21.1";
+  };
+}
+```
+
+
+### Server Properties & World (`serverProperties`, `world`)
+
+`serverProperties` is merged into `server.properties`, and `world` places a world directory the first time (it is never overwritten once it exists).
+
+```nix
+{ ... }: {
+  nixcraft.server.instances.survival = {
+    agreeToEula = true;
+    paper = {
+      enable = true;
+    };
+    serverProperties = {
+      difficulty = "hard";
+      max-players = 10;
+      motd = "My Nixcraft Server";
+      pvp = false;
+    };
+    version = "1.21.1";
+    world = ./worlds/survival;
+  };
+}
+```
+
+
+### Mods (`mods`)
+
+Mods are plain jar files, either from the `mods` list (each is linked into `mods/` under its own file name) or placed explicitly through [`files`](#declarative-files-files), which is handy when you want a specific target name or method.
+
+```nix
+{ pkgs, ... }: {
+  nixcraft.client.instances.modded = {
+    fabricLoader = {
+      enable = true;
+    };
+    files = {
+      "mods/lithium.jar" = {
+        source = pkgs.fetchurl {
+            url = "https://example.com/lithium.jar";
+            hash = "sha256-...";
+          };
+      };
+    };
+    mods = [
+        (pkgs.fetchurl {
+          url = "https://example.com/sodium.jar";
+          hash = "sha256-...";
+        })
+        ./mods/local-mod.jar
+      ];
+    version = "1.21.1";
+  };
+}
+```
+
+Both work for clients and servers.
+
+
+### Declarative Files (`files`)
+
+Manages any file inside an instance directory. Each entry takes either `.source` (a path or derivation) or `.text`, and a placement `method`:
+
+```nix
+{ ... }: {
+  nixcraft.client.instances.customized = {
+    files = {
+      "config/hud.json" = {
+        type = "json";
+        value = {
+          scale = 1.5;
+          showFps = true;
+        };
+      };
+      "config/starter-kit.json" = {
+        method = "copy-init";
+        text = ''
+          { "kit": "basic" }'';
+      };
+      "config/welcome.txt" = {
+        text = "Welcome to my instance!";
+      };
+      "notes/changelog.md" = {
+        method = "copy";
+        text = "# Changelog";
+      };
+      "resourcepacks/faithful.zip" = {
+        method = "symlink";
+        source = ./faithful.zip;
+      };
+    };
+    version = "1.21.1";
+  };
+}
+```
+
+- `symlink` (default): An immutable symlink into the Nix store, refreshed on every activation. Ideal for read-only static files.
+- `copy`: Re-copies the file fresh on every rebuild.
+- `copy-init`: Copies the file once on initial setup and never overwrites later in-game edits. Ideal for starter configs and modpack defaults.
+- `merge`: Deep-merges structured data into an existing file at runtime (see below).
+
+Instead of `.text` or `.source`, you can set `.type` and provide `.value` as plain Nix data, and Nixcraft serializes it for you (like `config/hud.json` above). This works with every method, not just `merge`. Supported types: `json`, `toml`, `ini`, `properties`, `options-txt`, and `txt-list`.
+
+#### Merging structured files
+
+`merge` supports JSON, TOML, YAML, INI, `.properties`, and `options.txt`. Set `type` and give a `value`; keys you specify are written, everything else in the existing file (including values the game or the user changed) is left alone:
+
+```nix
+{ ... }: {
+  nixcraft.client.instances.customized = {
+    files = {
+      "config/example-mod.json" = {
+        method = "merge";
+        type = "json";
+        value = {
+          enableFeature = true;
+          maxThreads = 4;
+          tuning = {
+            cacheSize = 256;
+          };
+        };
+      };
+    };
+    version = "1.21.1";
+  };
+}
+```
+
+> [!NOTE]
+> When providing static content via `.source` or `.text`, omit `.type` unless you need format conversion or validation. Specifying `.type` triggers evaluation-time deserialization and Import-From-Derivation (IFD).
+
+
+### Minecraft Speedrunning (MCSR) & Waywall
+
+For MCSR speedrunning with Waywall overlays, practice map loading, official leaderboard-approved GLFW binaries (`mcsr.enable = true`).
 
 ```nix
 { pkgs, ... }: {
   nixcraft.client.instances.rsg = {
-    enableExternalAssets = true;
-
-    version = "1.16.1";
-
-    waywall.enable = true;
-
-    mrpack = {
+    binEntry = {
       enable = true;
-      file = pkgs.fetchurl {
-        url = "https://cdn.modrinth.com/data/1uJaMUOm/versions/jIrVgBRv/SpeedrunPack-mc1.16.1-v5.3.0.mrpack";
-        hash = "sha256-uH/fGFrqP2UpyCupyGjzFB87LRldkPkcab3MzjucyPQ=";
-      };
+      name = "rsg";
     };
-
-    # Automatically fetch and extract practice maps
-    saves."Practice Map" = pkgs.fetchzip {
-      url = "https://github.com/Dibedy/The-MCSR-Practice-Map/releases/download/1.0.1/MCSR.Practice.v1.0.1.zip";
-      stripRoot = false;
-      hash = "sha256-ukedZCk6T+KyWqEtFNP1soAQSFSSzsbJKB3mU3kTbqA=";
-    };
-
-    # Place custom configs or extra mod jars directly in the instance (optional)
-    # files = {
-    #   "config/mcsr/standardsettings.json".source = ./standardsettings.json;
-    #   "options.txt".source = ./options.txt;
-    # };
-
-    # JVM optimization
     java = {
-      package = pkgs.jdk17;
-      minMemory = 3500;
-      maxMemory = 3500;
       extraArguments = [
         "-XX:+UseZGC"
         "-XX:+AlwaysPreTouch"
         "-Dgraal.TuneInlinerExploration=1"
         "-XX:NmethodSweepActivity=1"
       ];
+      maxMemory = 3500;
+      minMemory = 3500;
+      package = pkgs.jdk17;
     };
-
-    binEntry = {
+    mcsr = {
       enable = true;
-      name = "rsg";
+    };
+    mrpack = {
+      enable = true;
+      file = pkgs.fetchurl {
+          url = "https://cdn.modrinth.com/data/1uJaMUOm/versions/jIrVgBRv/SpeedrunPack-mc1.16.1-v5.3.0.mrpack";
+          hash = "sha256-uH/fGFrqP2UpyCupyGjzFB87LRldkPkcab3MzjucyPQ=";
+        };
+    };
+    saves = {
+      "Practice Map" = pkgs.fetchzip {
+          url = "https://github.com/Dibedy/The-MCSR-Practice-Map/releases/download/1.0.1/MCSR.Practice.v1.0.1.zip";
+          stripRoot = false;
+          hash = "sha256-ukedZCk6T+KyWqEtFNP1soAQSFSSzsbJKB3mU3kTbqA=";
+        };
+    };
+    version = "1.16.1";
+    waywall = {
+      enable = true;
     };
   };
 }
 ```
 
-### 4. Shared Client Settings and GPU Offloading
 
-Use `client.shared` so you do not have to repeat account info or GPU settings across multiple instances:
+### Shared Client Configuration
+
+Define shared options inherited by all client instances, including offline/online accounts, common desktop shortcuts, persistent file links, and discrete GPU offloading (`useDiscreteGPU = true`).
 
 ```nix
 { config, ... }: {
   nixcraft.client.shared = {
-    enableExternalAssets = true;
-
-    # GPU acceleration
-    useDiscreteGPU = true;
-
-    # Symlink screenshots from all instances into your Pictures folder
-    files."screenshots".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/Pictures/Minecraft";
-
-    # Common account profile
     account = {
-      username = "nixcrafter";
       offline = true;
+      username = "nixcrafter";
     };
-
-    binEntry.enable = true;
+    binEntry = {
+      enable = true;
+    };
+    files = {
+      screenshots = {
+        source = "${config.home.homeDirectory}/Pictures/Minecraft";
+      };
+    };
+    useDiscreteGPU = true;
   };
 }
 ```
 
+
 ## Options Reference
 
-Every configuration option exposed by Nixcraft is documented with descriptions, types, and defaults.
+Nixcraft offers context-specific options for system and user modules as well as standalone client and server packages. Choose the reference matching how you use Nixcraft:
 
-- See [docs/NIXCRAFT-OPTIONS.gen.md](docs/NIXCRAFT-OPTIONS.gen.md) for the full generated options reference.
+- **[NixOS options](docs/human/options-tree/nixos.md)**
+- **[Home Manager options](docs/human/options-tree/home-manager.md)**
+- **[Standalone client options](docs/human/options-tree/client.md)**
+- **[Standalone server options](docs/human/options-tree/server.md)**
+
+Token-efficient [agent references](docs/agent/options-tree/) are available for the same four contexts.

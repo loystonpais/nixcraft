@@ -100,4 +100,28 @@ in {
       ];
     })
   ];
+
+  nixcraft.docs.examples.client.quilt = {
+    version = "1.21.1";
+    quiltLoader = {
+      enable = true;
+      version = "latest";
+    };
+    desktopEntry.enable = true;
+  };
+
+  nixcraft.docs.readme.sections.quilt = {
+    order = 61;
+    template = ''
+      ### Quilt Mod Loader
+
+      Enables Quilt mod loading for client or server instances.
+
+      ```nix
+      { ... }: {
+        nixcraft.client.instances.quilt = {{ examples.client.quilt | to_nix | indent(2) }};
+      }
+      ```
+    '';
+  };
 }
