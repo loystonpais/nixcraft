@@ -1,12 +1,9 @@
 ## Features
 
-- **Client and server support**: Manage desktop client instances and dedicated servers from one consistent module system.
-- **Mod loader and modding platform support**: Built-in support for Fabric, Quilt, Forge, and NeoForge, plus Paper, Purpur, and other server software.
+- **Mod loader**: Built-in support for Fabric, Quilt, Forge, and NeoForge, plus Paper, Purpur, and other server software.
 - **Modrinth modpacks (.mrpack)**: Point to an `.mrpack` file and Nixcraft downloads the mods, applies overrides, and figures out the right Minecraft and modloader versions automatically.
 - **Zero-rebuild installs**: Run or install standalone instances using `nix run` or `nix profile add` without touching your system config or running `nixos-rebuild`.
-- **Speedrunning (MCSR) support**: Built-in support for Waywall, practice map loading, standard settings injection, and GraalVM or ZGC tuning.
-- **Efficiency and caching**: Reuses existing game assets from Prism Launcher and Vanilla Minecraft to avoid redundant downloads.
-- **Systemd integration**: Run headless servers as user or system systemd services with auto-restart.
+- **Speedrunning (MCSR) support**: Built-in support for Waywall, world installation, settings injection, java tuning.
 
 > [!WARNING]
 > This project is a work in progress. While mostly functional, expect potential breaking changes on updates.

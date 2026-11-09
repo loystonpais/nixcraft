@@ -499,6 +499,8 @@ def main():
                 readme_j2, repo_root, context, verify_nix=(not args.no_verify_nix)
             )
             target = repo_root / "README.md"
+            if not rendered.endswith("\n"):
+                rendered += "\n"
             target.write_text(rendered, encoding="utf-8")
             print(f"Successfully generated and verified {target}")
         else:

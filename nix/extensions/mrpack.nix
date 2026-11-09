@@ -226,7 +226,7 @@ in {
     template = ''
       ### Modrinth Modpack Support (`.mrpack`)
 
-      Point to any `.mrpack` file and Nixcraft automatically extracts the pack index, downloads all required and optional mods via Nix fetchers, applies bundled configuration overrides, and infers the target Minecraft and modloader versions.
+      Point to any `.mrpack` file and Nixcraft handles everything.
 
       ```nix
       { pkgs, ... }: {

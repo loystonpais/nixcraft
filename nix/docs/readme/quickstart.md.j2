@@ -12,19 +12,18 @@
 
 ### Where do I start?
 
-- ⚡ **[Just want to try it?](#try-it-with-nix-run)** No install needed
+- ⚡ **Just want to try it?** No install needed!
   - 🚀 [Run with `nix run`](#try-it-with-nix-run)
   - 📦 [Keep everything in one portable folder (`.pwd`)](#portable-game-directories-pwd)
-- 🐧 **NixOS**
-  - 🖥️ Hosting a server → [NixOS module](#nixos-module)
-  - 🎮 Playing → [Home Manager](#home-manager) or [nix profile](#nix-profile)
-- 🐧 **Other Linux** (Ubuntu, Arch, Fedora…) → [Install Nix](#install-nix), then [nix profile](#nix-profile)
-- 🍎 **macOS (Apple Silicon)** → [Install Nix](#install-nix), then [nix profile](#nix-profile)
 - 🏠 **Already use Home Manager?** → [Home Manager](#home-manager)
+- 🐧 **NixOS user?**
+  - 🎮 Clients and servers → [Home Manager](#home-manager) or [nix profile](#nix-profile)
+  - 🖥️ Servers → [NixOS module](#nixos-module)
+- 🐧 **Any Linus disto like Arch, Fedora, Ubuntu.. or 🍎 MacOS** → [Install Nix](#install-nix), then [nix profile](#nix-profile)
 
-### Install Nix
+### First time to Nix? Install it.
 
-*Skip this on NixOS.* On other Linux distributions and macOS, install Nix with the Determinate installer (flakes are enabled by default):
+On non-NixOS Linux disros and MacOS, install Nix with the Determinate installer (flakes are enabled by default):
 
 ```bash
 curl -fsSL https://install.determinate.systems/nix | sh -s -- install
@@ -71,10 +70,13 @@ nix profile add --impure --expr '
 > The name decides what the instance is called everywhere: the profile entry is `nixcraft-client-<name>` / `nixcraft-server-<name>`, and the server's systemd user service has the same name. Give each instance a different name to install several side by side. Without `name` it is `default`, so a second install would clash with the first.
 
 > [!IMPORTANT]
-> **Non-NixOS Linux, clients only:** enable `bwrap` (its `mountOpenglDriver` option is on by default) so the game picks up your system's GPU drivers. Without it, graphics may fall back to software rendering or the wrong GPU. Add this to the client's `.withConfig`:
+> **Non-NixOS Linux, clients only:** enable `bwrap` and `mountOpenglDriver` so the game picks up your system's GPU drivers. Without it, graphics may fall back to software rendering or the wrong GPU. Add this to the client's `.withConfig`:
 >
 > ```nix
-> bwrap.enable = true;
+> bwrap = {
+>   enable = true;
+>   mountOpenglDriver = true;
+> };
 > ```
 >
 > Or, for quick runs, use the `withBwrap` combinator: `client.withBwrap`.
