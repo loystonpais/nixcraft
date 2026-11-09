@@ -14,21 +14,19 @@
 ---
 
 > [!NOTE]
-> **For Humans**: Browse the [options trees](docs/human/SUMMARY.md) for NixOS, Home Manager, or standalone packages.
 > **For AI Agents**: Ingest the matching [TOON options tree](docs/agent/options-tree/) for token-efficient context.
 
 Nixcraft lets you build and run Minecraft clients and dedicated servers using Nix. Instead of managing instances through graphical launchers or manually copying files into mod folders, you define your instances in Nix code, including mod loaders, Modrinth packs, JVM flags, speedrunning tools (Waywall), and systemd services.
 
+Nixcraft is a Minecraft client launcher and a server manager. Instead of managing instances though graphical launchers or manually copying files into mod folders, you take advantage of Nix's powerful module system to declare your instance. One config that sets up clients and servers; reproducible across multiple machines.
+
 
 ## Features
 
-- **Client and server support**: Manage desktop client instances and dedicated servers from one consistent module system.
-- **Mod loader and modding platform support**: Built-in support for Fabric, Quilt, Forge, and NeoForge, plus Paper, Purpur, and other server software.
+- **Mod loader**: Built-in support for Fabric, Quilt, Forge, and NeoForge, plus Paper, Purpur, and other server software.
 - **Modrinth modpacks (.mrpack)**: Point to an `.mrpack` file and Nixcraft downloads the mods, applies overrides, and figures out the right Minecraft and modloader versions automatically.
 - **Zero-rebuild installs**: Run or install standalone instances using `nix run` or `nix profile add` without touching your system config or running `nixos-rebuild`.
-- **Speedrunning (MCSR) support**: Built-in support for Waywall, practice map loading, standard settings injection, and GraalVM or ZGC tuning.
-- **Efficiency and caching**: Reuses existing game assets from Prism Launcher and Vanilla Minecraft to avoid redundant downloads.
-- **Systemd integration**: Run headless servers as user or system systemd services with auto-restart.
+- **Speedrunning (MCSR) support**: Built-in support for Waywall, world installation, settings injection, java tuning.
 
 > [!WARNING]
 > This project is a work in progress. While mostly functional, expect potential breaking changes on updates.
@@ -48,19 +46,18 @@ Nixcraft lets you build and run Minecraft clients and dedicated servers using Ni
 
 ### Where do I start?
 
-- ⚡ **[Just want to try it?](#try-it-with-nix-run)** No install needed
+- ⚡ **Just want to try it?** No install needed!
   - 🚀 [Run with `nix run`](#try-it-with-nix-run)
   - 📦 [Keep everything in one portable folder (`.pwd`)](#portable-game-directories-pwd)
-- 🐧 **NixOS**
-  - 🖥️ Hosting a server → [NixOS module](#nixos-module)
-  - 🎮 Playing → [Home Manager](#home-manager) or [nix profile](#nix-profile)
-- 🐧 **Other Linux** (Ubuntu, Arch, Fedora…) → [Install Nix](#install-nix), then [nix profile](#nix-profile)
-- 🍎 **macOS (Apple Silicon)** → [Install Nix](#install-nix), then [nix profile](#nix-profile)
 - 🏠 **Already use Home Manager?** → [Home Manager](#home-manager)
+- 🐧 **NixOS user?**
+  - 🎮 Clients and servers → [Home Manager](#home-manager) or [nix profile](#nix-profile)
+  - 🖥️ Servers → [NixOS module](#nixos-module)
+- 🐧 **Any Linus disto like Arch, Fedora, Ubuntu.. or 🍎 MacOS** → [Install Nix](#install-nix), then [nix profile](#nix-profile)
 
-### Install Nix
+### First time to Nix? Install it.
 
-*Skip this on NixOS.* On other Linux distributions and macOS, install Nix with the Determinate installer (flakes are enabled by default):
+On non-NixOS Linux disros and MacOS, install Nix with the Determinate installer (flakes are enabled by default):
 
 ```bash
 curl -fsSL https://install.determinate.systems/nix | sh -s -- install
@@ -107,10 +104,13 @@ nix profile add --impure --expr '
 > The name decides what the instance is called everywhere: the profile entry is `nixcraft-client-<name>` / `nixcraft-server-<name>`, and the server's systemd user service has the same name. Give each instance a different name to install several side by side. Without `name` it is `default`, so a second install would clash with the first.
 
 > [!IMPORTANT]
-> **Non-NixOS Linux, clients only:** enable `bwrap` (its `mountOpenglDriver` option is on by default) so the game picks up your system's GPU drivers. Without it, graphics may fall back to software rendering or the wrong GPU. Add this to the client's `.withConfig`:
+> **Non-NixOS Linux, clients only:** enable `bwrap` and `mountOpenglDriver` so the game picks up your system's GPU drivers. Without it, graphics may fall back to software rendering or the wrong GPU. Add this to the client's `.withConfig`:
 >
 > ```nix
-> bwrap.enable = true;
+> bwrap = {
+>   enable = true;
+>   mountOpenglDriver = true;
+> };
 > ```
 >
 > Or, for quick runs, use the `withBwrap` combinator: `client.withBwrap`.
@@ -368,7 +368,7 @@ export NIXCRAFT_CLIENT_AUTH_UUID="your-account-uuid"
 
 ### Modrinth Modpack Support (`.mrpack`)
 
-Point to any `.mrpack` file and Nixcraft automatically extracts the pack index, downloads all required and optional mods via Nix fetchers, applies bundled configuration overrides, and infers the target Minecraft and modloader versions.
+Point to any `.mrpack` file and Nixcraft handles everything.
 
 ```nix
 { pkgs, ... }: {
