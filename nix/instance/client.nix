@@ -630,6 +630,34 @@ in {
             }))
           ]))
 
+        # Linux ARM64 LWJGL native replacements. Keep these explicit MC-version
+        # ranges aligned with LWJGL's version changes and the ARM64 source catalog.
+        (with flakeArgs.config.nixcraft.lib.minecraftVersion;
+          lib.mkIf
+          (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isAarch64)
+          (lib.mkMerge [
+            # LWJGL 3.3.1 has Linux ARM64 natives.
+            (lib.mkIf ((grEq config.version "1.19") && (ls config.version "1.20.2")) {
+              lwjgl.version = lib.mkDefault "3.3.1";
+            })
+
+            # 1.20.2 uses LWJGL 3.3.2, which has no Linux ARM64 component here.
+            # LWJGL 3.3.3 (used by 1.21.x) does.
+            (lib.mkIf ((grEq config.version "1.21") && (ls config.version "26.1")) {
+              lwjgl.version = lib.mkDefault "3.3.3";
+            })
+
+            # Minecraft 26.1/26.2 use LWJGL 3.4.1; 26.1.2 is confirmed working.
+            (lib.mkIf ((grEq config.version "26.1") && (ls config.version "26.3")) {
+              lwjgl.version = lib.mkDefault "3.4.1";
+            })
+
+            # Minecraft 26.3 uses LWJGL 3.4.3, with Linux ARM64 natives available.
+            (lib.mkIf ((grEq config.version "26.3") && (ls config.version "26.4")) {
+              lwjgl.version = lib.mkDefault "3.4.3";
+            })
+          ]))
+
         (lib.mkIf (config.account != null) (lib.mkMerge [
           (lib.mkIf config.account.offline {
             _classSettings.uuid = lib.mkIf (config.account.uuid != null) config.account.uuid;
