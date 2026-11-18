@@ -141,7 +141,10 @@
 
                 {
                   _module.check =
-                    lib.assertMsg ((javaConfig.mainClass != null -> javaConfig.jar == null) && (javaConfig.jar != null -> javaConfig.mainClass == null))
+                    lib.assertMsg (
+                      (javaConfig.mainClass != null && javaConfig.jar == null)
+                      || (javaConfig.jar != null && javaConfig.mainClass == null)
+                    )
                     "Either .jar or .mainClass needs to be provided not both";
                 }
               ];
