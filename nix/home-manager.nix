@@ -1,7 +1,4 @@
-{
-  config,
-  ...
-} @ top: {
+{config, ...} @ top: {
   flake = let
     hmModule = {
       pkgs,

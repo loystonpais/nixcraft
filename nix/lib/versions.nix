@@ -18,8 +18,14 @@ in {
     grEq = v1: v2: gr v1 v2 || eq v1 v2;
     lsEq = v1: v2: ls v1 v2 || eq v1 v2;
 
-    min = v1: v2: if ls v1 v2 then v1 else v2;
-    max = v1: v2: if gr v1 v2 then v1 else v2;
+    min = v1: v2:
+      if ls v1 v2
+      then v1
+      else v2;
+    max = v1: v2:
+      if gr v1 v2
+      then v1
+      else v2;
 
     sort = list: lib.sort (a: b: gr a b) list;
     sortAsc = list: lib.sort (a: b: ls a b) list;
@@ -36,8 +42,10 @@ in {
         len = builtins.length list;
         targetIdx = idx + n;
       in
-        if idx == -1 then null
-        else if targetIdx < 0 || targetIdx >= len then null
+        if idx == -1
+        then null
+        else if targetIdx < 0 || targetIdx >= len
+        then null
         else builtins.elemAt list targetIdx;
 
       stepOlder = list: n: stepVersion list n;
@@ -58,15 +66,19 @@ in {
       bumpUp = list: target: let
         matches = builtins.filter (v: grEq v target) list;
       in
-        if list == [] then null
-        else if matches != [] then lib.last matches
+        if list == []
+        then null
+        else if matches != []
+        then lib.last matches
         else builtins.head list;
 
       bumpDown = list: target: let
         matches = builtins.filter (v: lsEq v target) list;
       in
-        if list == [] then null
-        else if matches != [] then builtins.head matches
+        if list == []
+        then null
+        else if matches != []
+        then builtins.head matches
         else lib.last list;
 
       closest = {
@@ -74,14 +86,19 @@ in {
         target,
         direction ? "up",
       }:
-        if list == [] then null
-        else if builtins.elem target list then target
-        else if direction == "up" then bumpUp list target
-        else if direction == "down" then bumpDown list target
+        if list == []
+        then null
+        else if builtins.elem target list
+        then target
+        else if direction == "up"
+        then bumpUp list target
+        else if direction == "down"
+        then bumpDown list target
         else throw "Unknown direction '${direction}'; expected 'up' or 'down'";
     };
 
-    inherit (list)
+    inherit
+      (list)
       indexOf
       has
       stepVersion
@@ -92,12 +109,15 @@ in {
       nextVersion
       prevVersion
       nextVersionN
-      prevVersionN;
+      prevVersionN
+      ;
 
-    inherit (semver)
+    inherit
+      (semver)
       bumpUp
       bumpDown
-      closest;
+      closest
+      ;
   };
 
   nixcraft.lib.minecraftVersion = rec {

@@ -1,7 +1,4 @@
-{
-  config,
-  ...
-} @ top: {
+{config, ...} @ top: {
   flake.nixosModules.default = {
     pkgs,
     config,

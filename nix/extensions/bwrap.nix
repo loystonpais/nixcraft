@@ -1,6 +1,4 @@
-{
-  ...
-} @ flakeArgs: {
+{...} @ flakeArgs: {
   nixcraft.instance.extensions = [
     ({
       config,

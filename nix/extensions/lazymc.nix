@@ -1,6 +1,4 @@
-{
-  ...
-}: {
+{...}: {
   nixcraft.server.instance.extensions = [
     ({
       config,

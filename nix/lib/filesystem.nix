@@ -14,7 +14,7 @@ in {
 
     filterFiles = filterAttrsByValue (v: v == "regular");
 
-    hasExtension = extension: lib.strings.hasSuffix (".${extension}");
+    hasExtension = extension: lib.strings.hasSuffix ".${extension}";
 
     isNixFile = hasExtension "nix";
 

@@ -1,7 +1,4 @@
-{
-  lib,
-  ...
-} @ flakeArgs: {
+{lib, ...} @ flakeArgs: {
   nixcraft.module = {
     name,
     config,

@@ -4,7 +4,7 @@
       src,
       postUnpack ? "",
     }:
-      # Some zips have weird permissions, so we need to fix them
+    # Some zips have weird permissions, so we need to fix them
       pkgs.runCommandLocal "mrpack-unpacked" {
         nativeBuildInputs = [pkgs.unzip];
       } ''

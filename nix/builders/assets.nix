@@ -65,7 +65,7 @@
       skinsDir ? null,
       versionData,
       assetType ? versionData.assets,
-      assetIndex ? config.nixcraft.lib.readJSON (pkgs.fetchurl { inherit (versionData.assetIndex) url sha1; }),
+      assetIndex ? config.nixcraft.lib.readJSON (pkgs.fetchurl {inherit (versionData.assetIndex) url sha1;}),
       objects ? assetIndex.objects,
       runCommandLocal ? pkgs.runCommandLocal,
       fetchAssetsPyArgs ? {},

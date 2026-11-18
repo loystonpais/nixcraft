@@ -171,44 +171,45 @@ in {
         else libraries;
     in
       builtins.listToAttrs (
-        builtins.concatMap (raw:
-          if raw ? relativePath && raw ? jar
-          then [
-            {
-              name = raw.name;
-              value = {
-                enable = raw.enable or true;
-                native = raw.native or false;
-                relativePath = raw.relativePath;
-                jar = raw.jar;
-              };
-            }
-          ]
-          else let
-            allowed = (isOsAllowed p (raw.rules or [])) && (isNativeArchAllowed p raw.name);
-
-            libInfo = sources.libraries.${raw.name} or null;
-            isNative =
-              (raw.native or false)
-              || (raw ? extract)
-              || (lib.hasInfix "natives" raw.name)
-              || (lib.hasInfix "linux-" raw.name)
-              || (lib.hasInfix "osx-" raw.name)
-              || (lib.hasInfix "windows-" raw.name);
-          in
-            if libInfo != null
+        builtins.concatMap (
+          raw:
+            if raw ? relativePath && raw ? jar
             then [
               {
                 name = raw.name;
                 value = {
-                  enable = allowed;
-                  native = isNative;
-                  relativePath = mkLibPath raw.name;
-                  jar = fetchLib libInfo;
+                  enable = raw.enable or true;
+                  native = raw.native or false;
+                  relativePath = raw.relativePath;
+                  jar = raw.jar;
                 };
               }
             ]
-            else []
+            else let
+              allowed = (isOsAllowed p (raw.rules or [])) && (isNativeArchAllowed p raw.name);
+
+              libInfo = sources.libraries.${raw.name} or null;
+              isNative =
+                (raw.native or false)
+                || (raw ? extract)
+                || (lib.hasInfix "natives" raw.name)
+                || (lib.hasInfix "linux-" raw.name)
+                || (lib.hasInfix "osx-" raw.name)
+                || (lib.hasInfix "windows-" raw.name);
+            in
+              if libInfo != null
+              then [
+                {
+                  name = raw.name;
+                  value = {
+                    enable = allowed;
+                    native = isNative;
+                    relativePath = mkLibPath raw.name;
+                    jar = fetchLib libInfo;
+                  };
+                }
+              ]
+              else []
         )
         rawLibrariesList
       );
@@ -246,8 +247,9 @@ in {
 
       # 1. Coordinate keys from priority libraries (e.g. loader libraries)
       prioKeys = lib.listToAttrs (map (
-        name: lib.nameValuePair parsedMap.${name}.coordKey name
-      ) prioNames);
+          name: lib.nameValuePair parsedMap.${name}.coordKey name
+        )
+        prioNames);
 
       # 2. Group enabled libraries by coordKey to compare versions if needed
       enabledNames = builtins.filter (name: libraries.${name}.enable or true) libNames;

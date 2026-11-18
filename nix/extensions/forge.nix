@@ -54,17 +54,17 @@ in {
           (lib.mkIf (config._instanceType == "client") (lib.mkMerge [
             # Forge client on Minecraft 26.1 under Linux
             (lib.mkIf (
-              config.fixBugs
-              && pkgs.stdenv.hostPlatform.isLinux
-              && (config.version == "26.1")
-              && !config.waywall.enable
-            ) {
-              # Forge 62.0.9's early window on MC 26.1 uses LWJGL 3.4.1 (GLFW 3.4) and initializes
-              # without specifying the X11 platform hint. This causes GLFW to pick native Wayland,
-              # fail on window positioning, and crash vanilla's GLX._initGlfw pre-flight check.
-              envVars.XDG_SESSION_TYPE = lib.mkDefault "x11";
-              envVars.GDK_BACKEND = lib.mkDefault "x11";
-            })
+                config.fixBugs
+                && pkgs.stdenv.hostPlatform.isLinux
+                && (config.version == "26.1")
+                && !config.waywall.enable
+              ) {
+                # Forge 62.0.9's early window on MC 26.1 uses LWJGL 3.4.1 (GLFW 3.4) and initializes
+                # without specifying the X11 platform hint. This causes GLFW to pick native Wayland,
+                # fail on window positioning, and crash vanilla's GLX._initGlfw pre-flight check.
+                envVars.XDG_SESSION_TYPE = lib.mkDefault "x11";
+                envVars.GDK_BACKEND = lib.mkDefault "x11";
+              })
           ]))
         ]))
       ];
