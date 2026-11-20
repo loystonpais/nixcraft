@@ -62,11 +62,11 @@
     "sources": {
       "flake": false,
       "locked": {
-        "lastModified": 1795064484,
-        "narHash": "sha256-5FO5SHHPeaSG0D538Yt/u2FQvAr/ao4Zlh+1XgDnOf0=",
+        "lastModified": 1795150338,
+        "narHash": "sha256-lrVgYN2qrNz06LGZY/jeWGXTP24x/1YWdQptxEnflIw=",
         "owner": "loystonpais",
         "repo": "minecraft-sources",
-        "rev": "a0d38c72b7956f314313668f04f0280beb020c56",
+        "rev": "1732ee716772c0267ebac3bd8ab3eb0f5401296e",
         "type": "github"
       },
       "original": {
